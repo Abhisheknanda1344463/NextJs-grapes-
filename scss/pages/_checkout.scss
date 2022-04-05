@@ -1,0 +1,228 @@
+/*
+// .checkout
+*/
+
+@import "../variables";
+@import "../mixins/direction";
+.checkout {
+}
+
+.checkout__totals {
+  font-size: 15px;
+  line-height: 19px;
+  width: 100%;
+  margin-bottom: 30px;
+  th,
+  td {
+    padding: 4px 0;
+  }
+  th {
+    font-size: 18px;
+    font-weight: $font-weight-bold;
+  }
+  tr > :first-child {
+    @include direction {
+      #{$padding-inline-end}: 20px;
+    }
+  }
+  tr > :last-child {
+    @include direction {
+      text-align: $inline-end;
+      width: 40%;
+    }
+  }
+}
+
+.checkout__totals-header {
+  tr:last-child > * {
+    padding-bottom: 10px;
+  }
+}
+
+.checkout__totals-products {
+  tr > * {
+    padding-top: 20px;
+    border-bottom: 1px solid $card-divider-color;
+    font-size: 16px;
+    padding-bottom: 20px;
+  }
+
+  //tr:first-child>* {
+  //    padding-top: 20px;
+  //    border-top: 1px solid $card-divider-color;
+  //}
+  //tr:last-child>* {
+  //    padding-bottom: 20px;
+  //    border-bottom: 1px solid $card-divider-color;
+  //}
+}
+
+.checkout__totals-subtotals {
+  tr:first-child > * {
+    padding-top: 20px;
+  }
+  tr:last-child > * {
+    padding-bottom: 20px;
+    border-bottom: 1px solid $card-divider-color;
+  }
+}
+
+.checkout__totals-footer {
+  font-size: 24px;
+  th {
+    font-weight: $font-weight-medium;
+  }
+  tr:first-child > * {
+    padding-top: 20px;
+  }
+}
+
+.coupon-code {
+  margin-top: 15px;
+}
+
+.coupone-code__list {
+  margin-top: 20px;
+}
+
+.checkout-shipimg-title-fms th,
+td {
+  padding-top: 20px;
+}
+.shipping-methods__item-title-fms {
+  cursor: pointer;
+}
+.custom-style-for-long-adresses {
+  overflow: hidden;
+  white-space: nowrap;
+  width: calc(100% - 40px);
+  text-overflow: ellipsis;
+}
+.payment-methods {
+  margin-bottom: 30px;
+}
+
+.payment-methods__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.payment-methods__item {
+  border-radius: $payment-methods-border-radius;
+  background: $payment-methods-default-bg;
+  border: $payment-methods-default-border;
+  margin-bottom: 10px;
+  &:hover {
+    background: $payment-methods-hover-bg;
+    border: $payment-methods-hover-border;
+  }
+  & + & {
+    margin-top: 6px;
+  }
+}
+
+.payment-methods__item-header {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  height: 45px;
+  font-size: 15px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.payment-methods__item-radio {
+  @include direction {
+    #{$margin-inline-end}: 10px;
+  }
+}
+
+.payment-methods__item-container {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.2s;
+}
+
+.payment-methods__item-description {
+  font-size: 15px;
+  line-height: 20px;
+  padding: 2px 16px 13px 16px;
+}
+
+.payment-methods__item--active {
+  &,
+  &:hover {
+    background: $payment-methods-active-bg;
+    border: $payment-methods-active-border;
+  }
+  .payment-methods__item-container {
+    height: auto;
+  }
+}
+
+.checkout__agree {
+  margin-bottom: 5px;
+  a:hover {
+    text-decoration: underline;
+  }
+}
+.pay-side::after {
+  left: 5px;
+  top: 6.8px;
+}
+.form-group {
+  &.checkout-style {
+    margin-bottom: 10px !important;
+  }
+  input {
+    height: 32px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+  }
+}
+.checkout-select.checkout-input {
+  height: 45px;
+}
+.custom-select-mark {
+  padding-left: 15px;
+  -webkit-appearance: none;
+  background-repeat: no-repeat;
+  background-size: 5px 5px, 5px 5px, 1px 1.9em;
+  background-image: linear-gradient(45deg, transparent 50%, #dcdee2 50%),
+    linear-gradient(135deg, #dcdee2 50%, transparent 50%),
+    linear-gradient(to right, #dcdee2, #dcdee2);
+  background-position: calc(100% - 18px) calc(1em + 6px),
+    calc(100% - 13px) calc(1em + 6px), calc(100% - 2.5em) 0.6em;
+}
+.c-pl-2 {
+  padding-left: 8px;
+}
+.c-pr-2 {
+  padding-right: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  .c-pl-2 {
+    padding-left: 15px !important;
+  }
+  .c-pr-2 {
+    padding-right: 15px !important;
+  }
+}
+
+.account-menu__form-forgot {
+  a {
+    font-size: 12px;
+    line-height: 16px;
+    text-align: right;
+    text-transform: capitalize;
+    color: #0d47a1;
+    margin-top: 8px;
+    height: 20px;
+    margin-left: auto;
+    width: 100%;
+  }
+}

@@ -1,0 +1,155 @@
+.order-header__title {
+  font-size: 18px;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-details-body-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.625rem 2rem 1.375rem;
+}
+
+.order-details-title {
+  color: #1a2238;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.order-details-info {
+  display: block;
+  padding: 0 5px;
+}
+
+.order-details-info-width {
+  max-width: 25%;
+  padding-right: 60px;
+  text-align: center;
+  &:first-child {
+    padding: 0;
+  }
+}
+
+.order-details-title-width {
+  width: 25%;
+}
+
+.order-details-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 560px) {
+  .order-details-desktop {
+    display: none;
+  }
+  .order-details-mobile {
+    display: block;
+  }
+}
+
+.order-details-bottom-info {
+  padding: 1.625rem 2rem 1.375rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.reorder-btn-parent {
+  margin-top: 10px;
+}
+
+.order-details-2nd-layer-title {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  justify-items: center;
+  padding: 1.625rem 2rem 1.375rem;
+}
+
+.order-details-info-mobile {
+}
+
+.order-details-info-table {
+  max-width: 190px !important;
+  min-width: 20px !important;
+  margin-left: auto;
+}
+
+.mobile-orders-table {
+  & tr {
+    margin-bottom: 10px !important;
+  }
+}
+
+.order-details-info-table {
+  & tr {
+    line-height: 28px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+  }
+  & td {
+    text-align: left;
+  }
+  & th {
+    width: 200px;
+  }
+
+  tr {
+    text-align: right;
+    text-indent: 12px;
+  }
+}
+
+.reorder-btn-parent {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  //margin-right: 20px;
+}
+
+.reorder-btn {
+  max-width: 155px;
+  width: 100%;
+}
+
+@media screen and(max-width: 560px) {
+  .order-details-info-table-mobile {
+    max-width: 170px !important;
+    width: 100%;
+  }
+  .order-details-info-mobile {
+    padding: 60px 0;
+  }
+}
+
+.f14 {
+  font-size: 14px;
+}
+
+.orders-inner-details-mobile {
+  & > div {
+    margin-bottom: 10px;
+  }
+  & > div > .table-heading-descriptions {
+    margin-right: 15px;
+  }
+}
+
+.table-heading-descriptions {
+  color: #1a2238;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.order-details-name-width {
+}
+
+@media screen and(max-width: 390px) {
+  .order-details-name-width {
+    max-width: 120px;
+  }
+}

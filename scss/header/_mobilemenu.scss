@@ -1,0 +1,225 @@
+/*
+// .mobilemenu
+*/
+@import "../variables";
+@import "../mixins/direction";
+
+$local-transition-duration: 0.3s;
+
+.mobilemenu {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  transition: visibility 0s $local-transition-duration;
+
+  @include direction {
+    #{$inset-inline-start}: 0;
+  }
+}
+.mobilemenu__backdrop {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: $mobilemenu-backdrop-bg;
+  opacity: 0;
+  transition: opacity $local-transition-duration;
+
+  @include direction {
+    #{$inset-inline-start}: 0;
+  }
+}
+.mobilemenu__body {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: $mobilemenu-bg;
+  box-shadow: $mobilemenu-shadow;
+  transition: transform $local-transition-duration;
+  display: flex;
+  flex-direction: column;
+
+  @include direction {
+    #{$inset-inline-start}: 0;
+    transform: translateX(
+      calc(-100% * #{$transform-direction} - 30px * #{$transform-direction})
+    );
+  }
+}
+.mobilemenu__header {
+  height: $mobilemenu-header-height + 1px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  border-bottom: 1px solid $mobilemenu-divider-color;
+}
+.mobilemenu__title {
+  padding: 0 20px;
+  font-weight: $font-weight-bold;
+  flex-grow: 1;
+}
+.mobilemenu__close {
+  border: none;
+  background: transparent;
+  height: $mobilemenu-header-height;
+  width: $mobilemenu-header-height + 1px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  fill: $mobilemenu-close-button-default-color;
+  transition: fill 0.2s;
+
+  @include direction {
+    #{$border-inline-start}: 1px solid $mobilemenu-divider-color;
+  }
+
+  &:focus {
+    outline: none;
+  }
+  &:focus,
+  &:hover {
+    fill: $mobilemenu-close-button-hover-color;
+  }
+}
+.mobilemenu__content {
+  flex-grow: 1;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-links__item-sub-links {
+  visibility: hidden !important;
+}
+.mobilemenu--open {
+  visibility: visible;
+  transition-delay: 0s;
+
+  .mobilemenu__backdrop {
+    opacity: 0.9;
+  }
+  .mobile-links__item-sub-links {
+    visibility: visible !important;
+  }
+  .mobilemenu__body {
+    @include direction {
+      transform: translateX(0);
+    }
+  }
+}
+.mobilemenu__content {
+  margin: 0 10px 80px;
+}
+.mobile-header__panel .mobile-header__menu-button svg {
+  fill: black;
+}
+
+.mobileMenuFooter-fms {
+  padding: 0 10px;
+  background: rgba(13, 71, 161, 0.05);
+  .menu {
+    width: unset;
+    box-shadow: unset !important;
+    background: unset;
+    li {
+      border-bottom: 1px solid white;
+    }
+    .menu__icon {
+      position: unset;
+      padding-right: 10px;
+    }
+  }
+  .topbar-dropdown__body {
+    right: unset;
+    transition: unset !important;
+    div {
+      // height: 54px;
+    }
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      padding-left: 0 !important;
+    }
+  }
+  .topbar-dropdown__btn {
+    padding-left: unset !important;
+    span {
+      display: block;
+    }
+    .mobileversion-lang {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      padding-left: 3px;
+      span {
+        margin-left: 10px;
+        padding: 0 !important;
+      }
+    }
+  }
+  .null-icon-fms {
+    margin-left: unset;
+  }
+  .topbar-dropdown__btn {
+    svg {
+      margin-right: 10px;
+    }
+  }
+  .footer-newsletter__social-links {
+    margin-top: unset;
+  }
+  .mobile-footer-dropdown-divs {
+    min-height: 45px;
+    border-bottom: 1px solid white;
+    font-size: 15px;
+    color: #3d464d;
+    display: flex;
+    align-items: center;
+  }
+  .mobile-footer-dropdown-last-divs {
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+  }
+  .topbar-dropdown,
+  .site-footer__widget,
+  .site-footer__widget {
+    width: 100%;
+  }
+  .topbar-dropdown,
+  .footer-newsletter__social-links {
+    padding: 0 10px;
+  }
+  .footer-title {
+    padding: 0 10px;
+    margin-right: 10px;
+    .contacts-path-fms {
+      margin-right: 10px;
+      path {
+        fill: #3d464d !important;
+      }
+    }
+  }
+  .footer-contacts__contacts {
+    padding: 0 40px;
+  }
+  .topbar-dropdown--opened {
+    .topbar-dropdown__btn {
+      margin-top: 10px;
+    }
+    .topbar-dropdown__body {
+      padding-top: unset;
+    }
+    .menu {
+      margin-bottom: 0;
+    }
+  }
+  .social-links__item {
+    margin-right: 15px !important;
+  }
+}

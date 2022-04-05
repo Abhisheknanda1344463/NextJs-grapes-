@@ -1,0 +1,3 @@
+export const CUSTOMER_TOKEN = 'CUSTOMER_TOKEN';
+export const AUTHENTICATED = 'AUTHENTICATED';
+export const CUSTOMER_ID = 'CUSTOMER_ID';

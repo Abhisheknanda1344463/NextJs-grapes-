@@ -1,0 +1,54 @@
+@import "../variables";
+@import "../mixins/direction";
+
+.orders-page-desktop {
+}
+.orders-page-mobile {
+  display: none;
+}
+@media screen and (max-width: 550px) {
+  .orders-page-desktop {
+    display: none;
+  }
+  .orders-page-mobile {
+    display: block;
+  }
+}
+
+.order-history-card-mobile {
+  margin: 20px 0;
+}
+
+.order-history-card-mobile th {
+  font-size: 16px;
+  color: #241f23;
+}
+
+.order-history-card-mobile tr {
+  display: flex;
+  justify-content: space-between;
+  margin: 11px 0;
+  padding: 0 10px;
+}
+
+.order-card-mobile-title {
+  margin-left: auto;
+  margin-right: auto;
+  border-bottom: 1px solid black;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.signUp-position-relative {
+  .css-i44wyl {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+}
+.login-ss {
+  .account-menu__form-forgot-link {
+    a {
+      margin-left: 0 !important;
+    }
+  }
+}

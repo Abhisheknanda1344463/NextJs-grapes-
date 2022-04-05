@@ -1,0 +1,172 @@
+/*
+// .account-menu
+*/
+@import "../variables";
+@import "../mixins/hacks";
+@import "../mixins/direction";
+
+.account-menu {
+  box-shadow: 0 5px 10px rgb(0 0 0 / 10%);
+  border-radius: 10px;
+  background: #fff;
+  color: #3d464d;
+  width: 280px;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+
+  // without it IE renders a blurred menu
+  @include only-ie() {
+    box-shadow: 0 0 0 1px rgba(#000, 0.15);
+  }
+}
+.account-menu__form {
+  padding: 0 30px 32px;
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+}
+.account-menu__form-title {
+  text-align: center;
+  padding: 30px 0 26px;
+  font-weight: $font-weight-bold;
+}
+.account-menu__form-button {
+  margin-top: 32px;
+  text-align: center;
+
+  .btn {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+}
+
+.account-menu__form-link {
+  font-size: 14px;
+  text-align: center;
+  margin-left: unset !important;
+
+  a {
+    color: $account-menu-font-alt-color;
+    transition: color 0.1s;
+  }
+  a:hover {
+    color: inherit;
+  }
+}
+.account-menu__form-forgot {
+  position: relative;
+  a {
+    margin-left: 125px !important;
+  }
+}
+.account-menu__form-forgot-link {
+  $local-offset: 5px;
+
+  //position: relative;
+  //top: $local-offset;
+  //bottom: $local-offset;
+  border-radius: 2px;
+  font-size: 15px;
+  font-weight: $font-weight-medium;
+  background: $btn-light-bg-color;
+  color: $btn-light-font-color;
+  //display: flex;
+  //align-items: center;
+  padding: 0 7px;
+  transition: background 0.1s, color 0.1s;
+  text-decoration: underline;
+  display: block;
+  margin-top: 30px;
+  max-width: max-content;
+  width: 100%;
+
+  @include direction {
+    #{$inset-inline-end}: $local-offset;
+  }
+
+  &:hover {
+    background: $btn-light-hover-bg-color;
+    color: $btn-light-hover-font-color;
+  }
+  &:active {
+    background: $btn-light-active-bg-color;
+    color: $btn-light-active-font-color;
+  }
+}
+media-class-for-height {
+}
+@media screen and(max-width: 991px) {
+  .account-menu__form-forgot-link {
+    margin-top: 15px;
+  }
+  .media-class-for-height {
+    margin-bottom: 10px;
+  }
+  .account-menu__form-button {
+    margin-top: 25px;
+  }
+}
+.account-menu__divider {
+  height: 1px;
+  background: $account-menu-divider-color;
+}
+.account-menu__user {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  color: inherit;
+
+  &:hover {
+    color: inherit;
+    background: $account-menu-item-hover-bg;
+  }
+}
+.account-menu__user-avatar {
+  width: 44px;
+  flex-shrink: 0;
+
+  @include direction {
+    #{$margin-inline-end}: 14px;
+  }
+
+  img {
+    border-radius: 100%;
+    max-width: 100%;
+  }
+}
+.account-menu__user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.account-menu__user-name {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: $font-weight-medium;
+}
+.account-menu__user-email {
+  font-size: 14px;
+  line-height: 18px;
+  color: $account-menu-font-muted-color;
+  margin-top: 1px;
+}
+.account-menu__links {
+  list-style: none;
+  padding: 12px 0;
+  margin: 0;
+
+  a {
+    display: block;
+    color: inherit;
+    font-size: 15px;
+    padding: 5px 20px;
+    font-weight: $font-weight-medium;
+  }
+  a:hover {
+    background: $account-menu-item-hover-bg;
+  }
+}

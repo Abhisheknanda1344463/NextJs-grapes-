@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>https://zega-accessories.zegashop.com/</loc>
+        <lastmod>2021-09-09T11:33:35+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://zega-accessories.zegashop.com/account/login</loc>
+        <lastmod>2021-09-09T11:33:35+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://zega-accessories.zegashop.com/contact</loc>
+        <lastmod>2021-09-09T11:33:35+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://zega-accessories.zegashop.com/forgot/password</loc>
+        <lastmod>2021-09-09T11:33:35+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://zega-accessories.zegashop.com/page/blogs</loc>
+        <lastmod>2021-09-09T11:33:35+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://zega-accessories.zegashop.com/tracking</loc>
+        <lastmod>2021-09-09T11:33:35+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+</urlset>

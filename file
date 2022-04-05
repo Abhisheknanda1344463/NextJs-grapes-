@@ -1,0 +1,19 @@
+@REM 33 5 * * * (/usr/local/cpanel/scripts/fix-cpanel-perl; /usr/local/cpanel/scripts/upcp --cron > /dev/null)
+@REM 0 2 * * * /usr/local/cpanel/bin/backup
+@REM 35 * * * * /usr/bin/test -x /usr/local/cpanel/bin/tail-check && /usr/local/cpanel/bin/tail-check
+@REM 0 6 * * * /usr/local/cpanel/scripts/exim_tidydb > /dev/null 2>&1
+@REM 30 5 * * * /usr/local/cpanel/scripts/optimize_eximstats > /dev/null 2>&1
+@REM 22 22 * * 7 /usr/local/cpanel/scripts/send_api_notifications > /dev/null 2>&1
+@REM 5,20,35,50 * * * * /usr/local/cpanel/scripts/eximstats_spam_check 2>&1
+@REM 45 */4 * * * /usr/bin/test -x /usr/local/cpanel/scripts/update_mailman_cache && /usr/local/cpanel/scripts/update_mailman_cache
+@REM 15 */6 * * * /usr/local/cpanel/scripts/autorepair recoverymgmt >/dev/null 2>&1
+@REM */5 * * * * /usr/local/cpanel/scripts/dcpumon-wrapper >/dev/null 2>&1
+@REM 0 */2 * * * /usr/local/cpanel/scripts/shrink_modsec_ip_database -x 2>&1
+@REM 24 23 * * * /usr/local/cpanel/whostmgr/docroot/cgi/cpaddons_report.pl --notify
+@REM 30 */4 * * * /usr/bin/test -x /usr/local/cpanel/scripts/update_db_cache && /usr/local/cpanel/scripts/update_db_cache
+@REM 25 */2 * * * /usr/local/cpanel/bin/mysqluserstore >/dev/null 2>&1
+@REM 15 */2 * * * /usr/local/cpanel/bin/dbindex >/dev/null 2>&1
+@REM 09,39 * * * * /usr/local/cpanel/scripts/clean_user_php_sessions > /dev/null 2>&1
+@REM 5,20,35,50 * * * * /usr/local/cpanel/whostmgr/bin/dnsqueue > /dev/null 2>&1
+@REM @reboot /usr/local/cpanel/bin/onboot_handler
+@REM 5 2 * * * /usr/local/cpanel/scripts/gather_update_log_stats --logfile /var/cpanel/updatelogs/last --upload > /dev/null 2>&1

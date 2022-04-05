@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="17.5" height="17.5" viewBox="0 0 17.5 17.5">
+  <g id="shopping-cart" transform="translate(0.75 0.75)">
+    <g id="shopping-cart-2" dataName="shopping-cart">
+      <path id="Path_17" dataName="Path 17" d="M4.8,12.8a1.6,1.6,0,1,0,1.6,1.6A1.6,1.6,0,0,0,4.8,12.8ZM0,0V1.6H1.6L4.48,7.68,3.36,9.6a2.842,2.842,0,0,0-.16.8A1.6,1.6,0,0,0,4.8,12h9.6V10.4H5.12a.172.172,0,0,1-.16-.16v-.08L5.68,8.8H11.6A1.459,1.459,0,0,0,12.96,8l2.88-5.2A.44.44,0,0,0,16,2.4a.756.756,0,0,0-.8-.8H3.36L2.64,0ZM12.8,12.8a1.6,1.6,0,1,0,1.6,1.6A1.6,1.6,0,0,0,12.8,12.8Z" fill="none" stroke="" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

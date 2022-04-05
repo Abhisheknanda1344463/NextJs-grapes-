@@ -1,0 +1,2 @@
+export const LOCALE_CHANGE = "LOCALE_CHANGE";
+export const SET_LOCALE_LIST = "SET_LOCALE_LIST";

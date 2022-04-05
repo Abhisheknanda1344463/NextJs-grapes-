@@ -1,0 +1,154 @@
+/*
+// .footer-contacts
+*/
+@import "../variables";
+@import "../functions";
+@import "../mixins/direction";
+
+.footer-contacts {
+  display: flex;
+  justify-content: center;
+}
+.footer-contacts__title {
+  margin-bottom: 25px;
+}
+.footer-contacts__text {
+  font-size: 15px;
+  line-height: 22px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  @include direction {
+    #{$padding-inline-end}: 20px;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+.footer-contacts__contacts {
+  font-size: 15px;
+  list-style: none;
+  padding: 0;
+  text-align: left;
+
+  a {
+    color: inherit;
+  }
+
+  li {
+    position: relative;
+  }
+  .contatsAddress {
+    padding: 0;
+    line-height: 19px;
+  }
+  .middleAddress.contatsAddress {
+    margin: 10px 0;
+  }
+}
+.footer-contacts__icon {
+  display: inline-block;
+  text-align: center;
+  width: 22px;
+
+  @include direction {
+    #{$margin-inline-end}: 2px;
+  }
+}
+
+@media (max-width: breakpoint(sm-end)) {
+  .footer-contacts {
+    text-align: center;
+    //margin-top: 30px;
+  }
+  .footer-contacts__title {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+  .footer-contacts__text {
+    padding: 0;
+  }
+}
+
+// .mobile-footer-navs-fms {
+//   bottom: 0;
+//   position: fixed;
+//   background-color: white;
+//   width: 100%;
+// }
+// .account-logo-svg {
+//   path {
+//     fill: black;
+//   }
+// }
+
+.mobile-footer__body {
+  display: flex;
+  align-items: center;
+  height: $nav-panel-height;
+  border-top: 1 px solid silver;
+
+  .header__logo {
+    a {
+      img {
+        height: 40px !important;
+        @media (max-width: 500px) {
+          height: 35px !important;
+        }
+        @media (max-width: 410px) {
+          height: 25px !important;
+        }
+        @media (max-width: 320px) {
+          height: 20px !important;
+        }
+      }
+    }
+  }
+}
+
+.mobile-footer__indicators {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.mobile-footer__panel .container {
+  max-width: unset;
+  margin-right: unset;
+  margin-left: unset;
+}
+
+.mobile-footer__indicators > div {
+  width: 24.5%;
+  display: flex;
+  justify-content: center;
+  height: 60px;
+  align-items: center;
+}
+
+.fieldset-params-fms {
+  .MuiTextField-root {
+    height: 45px;
+  }
+  .MuiInputBase-formControl {
+    height: 45px;
+    border-radius: 9px;
+  }
+  .css-igs3ac {
+    top: 2px;
+  }
+  .css-u9osun {
+    top: 5px;
+  }
+  .css-1x5jdmq {
+    margin-top: 5px;
+  }
+}
+.required {
+  .MuiInputBase-formControl {
+    border-radius: 9px;
+  }
+  margin-bottom: 40px;
+}

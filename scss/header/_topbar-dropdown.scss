@@ -1,0 +1,103 @@
+/*
+// .topbar-dropdown
+*/
+@import "../variables";
+@import "../mixins/direction";
+
+$local-transition-duration: 0.2s;
+$local-button-padding: 10px;
+
+.topbar-dropdown {
+  height: 100%;
+
+  position: relative;
+}
+.topbar-dropdown__btn {
+  height: 100%;
+  width: 100%;
+  border: none;
+  padding: 0px;
+  cursor: pointer;
+  transition: all 0.1s;
+  background: $topbar-dropdown-bg;
+  color: $topbar-dropdown-font-color;
+  fill: $topbar-dropdown-arrow-color;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-right: 10px;
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: auto 20px 10px;
+
+  /*
+    /*@include direction {
+        #{$padding-inline-start}: $local-button-padding;
+        #{$padding-inline-end}: #{11px + $local-button-padding - 1px};
+    }
+*/
+  &:focus {
+    outline: none;
+  }
+}
+
+.topbar-dropdown__body {
+  position: absolute;
+  z-index: 201 !important;
+  top: 100%;
+  right: -25px;
+  visibility: hidden;
+  transform-origin: top;
+  transform: rotateX(60deg);
+  opacity: 0;
+  transition: transform $local-transition-duration,
+    opacity $local-transition-duration, visibility 0s $local-transition-duration;
+
+  @include direction {
+    #{$inset-inline-end}: 0;
+  }
+}
+
+.topbar-dropdown--opened .topbar-dropdown__btn,
+.topbar-dropdown__btn:hover,
+.topbar-dropdown__btn:focus {
+  //background: $topbar-dropdown-hover-bg;
+  //color: $topbar-dropdown-hover-font-color;
+  //fill: $topbar-dropdown-hover-arrow-color;
+  .topbar__item-value {
+    color: $topbar-dropdown-hover-value-color;
+  }
+}
+
+.topbar-dropdown--opened {
+  .topbar-dropdown__body {
+    z-index: 201;
+    transition-delay: 0s, 0s, 0s;
+    opacity: 1;
+    visibility: visible;
+    transform: rotateX(0deg);
+  }
+}
+
+.account-menu_loginAndpass {
+  input {
+    padding: 9px;
+  }
+  .css-i44wyl {
+    width: 100%;
+    margin-top: 15px;
+  }
+  .css-p0rm37 {
+    top: -9px;
+  }
+  a {
+    // margin-left: 125px !important;
+
+    font-size: 12px;
+    line-height: 16px;
+
+    text-transform: capitalize;
+    color: #0d47a1;
+    margin-top: 8px;
+  }
+}

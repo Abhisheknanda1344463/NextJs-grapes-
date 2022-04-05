@@ -1,0 +1,114 @@
+/*
+// .footer-newsletter
+*/
+@import "../variables";
+@import "../functions";
+@import "../mixins/direction";
+
+.footer-newsletter {
+}
+.footer-newsletter__title {
+  margin-bottom: 16px;
+  color: #2c2c2c;
+  font-size: 18px;
+}
+.footer-newsletter__text {
+  font-size: 15px;
+  line-height: 22px;
+  margin-bottom: 14px;
+}
+.footer-newsletter__text--social {
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+.footer-newsletter__social-links {
+  display: flex;
+  margin-top: 8px;
+}
+.footer-newsletter__form {
+  display: flex;
+  // max-width: 320px;
+  flex-direction: column;
+}
+.footer-newsletter__form-input {
+  min-width: 0;
+  padding: 20px;
+  font-size: 15px;
+  border-radius: 9px;
+  &::placeholder {
+    font-size: 14px;
+  }
+}
+.footer-newsletter__form-button {
+  @include direction {
+    // #{$margin-inline-start}: 6px;
+  }
+}
+
+@media (max-width: breakpoint(md-end)) {
+  .footer-newsletter {
+    margin-top: 42px;
+    max-width: 420px;
+  }
+  .footer-newsletter__title {
+    margin-bottom: 16px;
+  }
+}
+@media (max-width: breakpoint(sm-end)) {
+  .footer-newsletter {
+    text-align: center;
+
+    @include direction {
+      #{$margin-inline-start}: auto;
+      #{$margin-inline-end}: auto;
+    }
+  }
+  .footer-newsletter__title {
+    font-size: 18px;
+  }
+  // .footer-newsletter__form {
+  //   margin: 0 auto;
+  // }
+  .footer-newsletter__social-links {
+    margin-top: 16px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: breakpoint(xs-end)) {
+  .mobile-footer-newsletter {
+    width: 100%;
+  }
+  .mobile-footer-dropdowns-list {
+    width: 100%;
+    // max-width: 420px;
+    // margin: 0 auto;
+  }
+  .mobile-footer-dropdown {
+    border-bottom: 1px solid silver;
+    width: 100%;
+  }
+  .footer-title span {
+    margin-left: auto;
+  }
+  .footer-title {
+    margin-top: 10px;
+  }
+}
+
+.footer-newsletter-container {
+  .MuiInputBase-formControl {
+    border-radius: 9px;
+  }
+  .MuiTextField-root {
+    background: white;
+    border-radius: 9px;
+  }
+  .css-1x5jdmq {
+    padding: 9px;
+  }
+  .css-p0rm37 {
+    top: -9px;
+  }
+}

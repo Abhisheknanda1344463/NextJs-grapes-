@@ -1,0 +1,22 @@
+
+@import '../variables';
+@import '../mixins/direction';
+
+
+.address-page-body{
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  padding: 30px;
+}
+
+.address-page-title{
+   margin-bottom: 33px;
+}
+
+.add-new-address-body{
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  padding: 30px;
+}
+
+.checkout-select{
+  width: 100%;
+  }

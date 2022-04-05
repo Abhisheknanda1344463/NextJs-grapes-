@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="411" height="411" viewBox="0 0 411 411">
+  <g id="Сгруппировать_105" data-name="Сгруппировать 105" transform="translate(-592 -251)">
+    <path id="Контур_3645" data-name="Контур 3645" d="M205.5,0C318.995,0,411,92.005,411,205.5S318.995,411,205.5,411,0,318.995,0,205.5,92.005,0,205.5,0Z" transform="translate(592 251)" fill="#f2f5f8"/>
+    <g id="Сгруппировать_104" data-name="Сгруппировать 104" transform="translate(-5626.5 -1413)">
+      <g id="Эллипс_5" data-name="Эллипс 5" transform="translate(6346.5 1798)" fill="none" stroke="#353642" stroke-width="3">
+        <ellipse cx="77.5" cy="77" rx="77.5" ry="77" stroke="none"/>
+        <ellipse cx="77.5" cy="77" rx="76" ry="75.5" fill="none"/>
+      </g>
+      <ellipse id="Эллипс_6" data-name="Эллипс 6" cx="8.5" cy="10" rx="8.5" ry="10" transform="translate(6389.5 1858)" fill="#151723"/>
+      <ellipse id="Эллипс_7" data-name="Эллипс 7" cx="8" cy="10" rx="8" ry="10" transform="translate(6440.5 1858)" fill="#151723"/>
+      <g id="Layer_2" data-name="Layer 2" transform="translate(6389.439 1894.698)">
+        <g id="Objects" transform="translate(0 0)">
+          <path id="Контур_3644" data-name="Контур 3644" d="M69.121,22.449A76.982,76.982,0,0,0,53.314,9.214a39.734,39.734,0,0,0-18.94-6.337,29.66,29.66,0,0,0-9.829,1.279,36.328,36.328,0,0,0-4.7,1.739,42.238,42.238,0,0,0-4.426,2.457A73.691,73.691,0,0,0,0,22.018,53.846,53.846,0,0,1,14.183,6.5,32.635,32.635,0,0,1,34.489,0,38.2,38.2,0,0,1,54.521,7.332a55.01,55.01,0,0,1,8.047,6.883,52.9,52.9,0,0,1,6.553,8.234Z" transform="translate(0 0.006)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

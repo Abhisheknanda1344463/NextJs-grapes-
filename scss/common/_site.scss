@@ -1,0 +1,30 @@
+/*
+// .site
+*/
+@import "../variables";
+
+.site {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.site__header {
+  flex-shrink: 0;
+}
+.site__body {
+  flex-grow: 1;
+  min-height: 500px;
+}
+
+.site__body .block-products:nth-child(3) {
+  margin-bottom: 22px;
+}
+
+.site__body .block-products:nth-child(4) {
+  margin-bottom: 0px;
+}
+
+.site__footer {
+  flex-shrink: 0;
+  margin-top: 58px;
+}

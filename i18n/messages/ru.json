@@ -1,0 +1,17 @@
+{
+  "topbar.phone1": "374 93 99-10-93",
+  "topbar.phone2": "+374 10 35-11-00",
+  "topbar.storeLocation": "Магазин",
+  "topbar.trackOrder": "Статус заказа",
+  "topbar.blog": "Блог",
+  "topbar.myAccount": "Аккаунт",
+  "topbar.currency": "Валюта",
+  "topbar.language": "Язык",
+
+
+  "topbar.login":"Մուտք",
+  "topbar.forgot":"Մոռացե՞լ եք գաղտնաբառը",
+
+  "header.phoneLabel": "Звонок бесплатный",
+  "header.phone": "(800) 060-0730"
+}

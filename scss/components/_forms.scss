@@ -1,0 +1,119 @@
+/*
+// forms
+*/
+@import "../variables";
+@import "../svg";
+@import "../mixins/direction";
+.sign-up-fms {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 90px !important;
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  min-height: 42px;
+}
+
+.bg-blue {
+  background-color: rgb(232, 240, 254);
+}
+.form-check {
+  @include direction {
+    #{$padding-inline-start}: 1.5rem;
+  }
+}
+.form-check-input {
+  position: absolute;
+  margin-top: 0.1875rem;
+
+  @include direction {
+    #{$margin-inline-start}: -1.5rem;
+  }
+}
+
+@media (max-width: breakpoint(sm-end)) {
+  .form-group {
+    margin-bottom: 1.125rem;
+  }
+}
+
+.form-control {
+  border-radius: 2px;
+  line-height: 1.25;
+}
+.form-control-sm {
+  height: calc(1.875rem + 2px);
+  line-height: 1.25;
+  padding: 0.3125rem 0.5rem;
+}
+.form-control-lg {
+  height: calc(2.75rem + 2px);
+  line-height: 1.25;
+}
+
+.form-control:valid,
+.form-control.is-valid,
+.form-control:invalid,
+.form-control.is-invalid {
+  background-image: none;
+}
+
+// select
+@mixin local-select-define-size($size: "") {
+  @if ($size != "") {
+    $size: "-" + $size;
+  }
+
+  select.form-control#{$size},
+  select.form-control#{$size}:valid,
+  select.form-control#{$size}.is-valid,
+  select.form-control#{$size}:invalid,
+  select.form-control#{$size}.is-invalid {
+    @content;
+  }
+}
+select.form-control {
+  // -webkit-appearance: none;
+  -moz-appearance: none;
+
+  &::-ms-expand {
+    display: none;
+  }
+}
+
+@include local-select-define-size() {
+  //  background-image: url(svg-select-arrow($form-control-select-arrow-color));
+  background-repeat: no-repeat;
+  background-size: 5px 10px;
+
+  @include direction {
+    background-position: $inline-end 0.75rem center;
+    #{$padding-inline-end}: calc(0.75rem * 2 + 5px);
+  }
+}
+@include local-select-define-size("sm") {
+  @include direction {
+    background-position: $inline-end 0.5rem center;
+    #{$padding-inline-end}: calc(0.5rem * 2 + 5px);
+  }
+}
+@include local-select-define-size("lg") {
+  @include direction {
+    background-position: $inline-end 1rem center;
+    #{$padding-inline-end}: calc(1rem * 2 + 5px);
+  }
+}
+.position-absalute {
+  position: absolute;
+}
+.red-light-fms {
+  padding-left: 70px;
+  margin-top: 7px;
+  position: absolute;
+  color: red;
+}

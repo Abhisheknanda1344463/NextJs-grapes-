@@ -1,0 +1,30 @@
+/*
+// .block-features
+*/
+@import "../variables";
+
+.block-empty {
+  display: flex;
+  justify-content: center;
+  // padding-right: 15%;
+}
+.block-empty__body {
+  text-align: center;
+  padding: 20px 0px 50px;
+}
+.block-empty__message {
+  font-size: 17px;
+}
+.d-flex-fms {
+  display: flex;
+  justify-content: space-between;
+}
+.block-empty__actions {
+  display: flex;
+  justify-content: space-between;
+
+  align-items: start;
+}
+.block-empty-fms {
+  padding: 20px 0px 20px;
+}

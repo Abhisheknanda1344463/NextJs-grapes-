@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+<<<<<<< HEAD
+      <webServer id="9476b022-efd5-46be-80a2-f2e7261e9d3c" name="Zegashop">
+        <fileTransfer accessType="SFTP" host="62.171.153.38" port="22" sshConfigId="3ffb6a61-f07d-4b26-a281-c4ed9b6d6dd7" sshConfig="root@62.171.153.38:22 password">
+=======
+      <webServer id="83a57218-2920-4459-a015-72194b815fd1" name="Zegashop">
+        <fileTransfer accessType="SFTP" host="62.171.153.38" port="22" sshConfigId="2ca06c18-952d-4cb4-9040-37fdc95e30d2" sshConfig="root@62.171.153.38:22 password">
+>>>>>>> d4d95df9657567dc238367c5722c2458b986baa6
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
