@@ -7,7 +7,7 @@ export const url = {
 
   catalog: () => "/catalog",
 
-  category: (category) => `/catalog/${category.slug}`,
+  category: (category) => `/catalog/${category.slug}?cat_id=${category.id}`,
 
   product: (product) => {
     return `/products/${product.url_key}`;
@@ -32,8 +32,10 @@ export function runFbPixelEvent(eventData) {
   }, 500);
 }
 
-export async function ApiCustomSettingsAsync(locale) {
+export async function ApiCustomSettingsAsync(locale, dbName) {
   const settingsResponse = await fetch(`${originalUrl}/db/custom-settingss`);
+  // const translations = await shopApi.translations;
+  // await fetch(`${originalUrl}/db/translations`);
   const customSettingsData = await settingsResponse.json();
   // store.createStore();
 
@@ -45,7 +47,7 @@ export async function ApiCustomSettingsAsync(locale) {
       setDomain: customSettingsData?.folder_name || false,
       setSocial: customSettingsData?.social || false,
       setFbPixel: customSettingsData?.store_info?.facebook_pixel_id || false,
-      setTranslations: customSettingsData?.translations || false,
+      ///  setTranslations: customSettingsData?.translations || false,
     },
     clientSide: {
       setPopup: customSettingsData?.popup || false,
@@ -65,6 +67,7 @@ export async function ApiCustomSettingsAsync(locale) {
       locale != "catchAll" ? locale : default_locale_id;
     dispatches["clientSide"]["setCurrencies"] = currencies || false;
     dispatches["clientSide"]["changeCurrency"] = base_currency_id || false;
+
     data = {
       locale: locales.find((item) => {
         if (locale != "catchAll") {
@@ -75,6 +78,11 @@ export async function ApiCustomSettingsAsync(locale) {
       }),
       currency: currencies.find((currency) => currency.id === base_currency_id),
     };
+  }
+  if (channel_info && data.locale.code && dbName) {
+    const translations = await shopApi.translations(data.locale.code, dbName);
+
+    dispatches["serverSide"]["setTranslations"] = translations || false;
   }
 
   return {
@@ -140,14 +148,14 @@ export function genereateReadyArray(array) {
     return Object.values(product)[0];
   });
 }
-export async function generalProcessForAnyPage(locale) {
+export async function generalProcessForAnyPage(locale, dbName) {
   /// let locale = null;
   let currency = null;
   let dispatches = null;
 
   ////////TODO FIX THIS PART
   ////console.log(locale);
-  const settingsResponse = await ApiCustomSettingsAsync(locale);
+  const settingsResponse = await ApiCustomSettingsAsync(locale, dbName);
   // console.log(
   //   locale !== "catchAll" ? locale : settingsResponse.data.locale.code,
   //   "asdsads"

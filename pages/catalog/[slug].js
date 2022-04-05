@@ -40,10 +40,11 @@ export default function Catlog(props) {
 }
 
 export async function getServerSideProps({
-  query: { slug },
+  ///query: { slug },
   locale,
   locales,
   req,
+  query,
   res,
 }) {
   // res.setHeader(
@@ -57,7 +58,7 @@ export async function getServerSideProps({
     currency,
     dispatches: generalDispatches,
   } = await generalProcessForAnyPage(locale);
-
+  console.log(query, "queryquery");
   const selectedLocale = locale != "catchAll" ? locale : defaultLocaleSelected;
   let categoryId,
     categoryTitle,
@@ -80,7 +81,7 @@ export async function getServerSideProps({
 
   function getItems(array) {
     array.forEach((e, i) => {
-      if (e.slug == slug && e.children?.length === 0) {
+      if (e.slug == query.slug && e.children?.length === 0) {
         categoryId = e.id;
         categoryTitle = e.name;
         return false;
@@ -89,13 +90,13 @@ export async function getServerSideProps({
       }
     });
   }
-
+  console.log(categoryId, query.cat_id, "categoriesResponsecategoriesResponse");
   if (categoriesResponse?.categories) {
-    getItems(categoriesResponse.categories);
+    getItems(categoriesResponse.categories[0].children);
   }
 
   await shopApi
-    .getFilters(categoryId, {
+    .getFilters(categoryId ? categoryId : query.cat_id, {
       lang: selectedLocale,
       currency: { code: settingsResponse.data.currency.code },
       limit: 8,
@@ -113,7 +114,7 @@ export async function getServerSideProps({
       filters: {},
       location: "",
       dbName: dbName,
-      catID: categoryId,
+      catID: categoryId ? categoryId : query.cat_id,
       window: null,
       limit: 6,
     })

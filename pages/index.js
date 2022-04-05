@@ -56,12 +56,12 @@ export async function getServerSideProps({ locale, locales, req, res }) {
   console.log(req.domainName, dbName, "reqreqreq");
 
   const selectedLocale = locale !== "catchAll" ? locale : defaultLocaleSelected;
-  console.log(
-    domainUrl(
-      dbName + `/db/home-products?locale=${selectedLocale}&currency=${currency}`
-    ),
-    "asdsads"
-  );
+  // console.log(
+  //   domainUrl(
+  //     dbName + `/db/home-products?locale=${selectedLocale}&currency=${currency}`
+  //   ),
+  //   "asdsads"
+  // );
   const response = await fetch(
     domainUrl(
       dbName + `/db/home-products?locale=${selectedLocale}&currency=${currency}`

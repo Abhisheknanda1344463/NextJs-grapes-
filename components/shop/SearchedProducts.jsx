@@ -107,7 +107,11 @@ export default function SearchedProducts(props) {
   const [products, setProducts] = useState();
 
   useEffect(() => {
-    const options = { lang: currentLanguage, currency: currency.current.code };
+    const options = {
+      lang: currentLanguage,
+      currency: currency.current.code,
+      dbName: props.dbName,
+    };
     shopApi.getSeachProducts(searchedItem, options).then((items) => {
       setProducts(items);
     });

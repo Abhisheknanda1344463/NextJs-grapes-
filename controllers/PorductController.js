@@ -465,6 +465,11 @@ function Get_Product_list(options) {
             name: { $regex: Object.values(buildQueryParams)[0], $options: "i" },
             // name: { $regex: ".*" + Object.values(buildQueryParams)[0] + ".*" },
           }).then((data) => {
+            console.log(data, "data in product controller");
+            console.log(
+              Object.values(buildQueryParams)[0],
+              "Object.values(buildQueryParams)[0] in product controller"
+            );
             data.map((item) => {
               ProductImages.find({ product_id: item.product_id }).then(
                 (res) => {

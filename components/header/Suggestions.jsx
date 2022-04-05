@@ -29,13 +29,13 @@ function Suggestions(props) {
   const apiToken = useSelector((state) => state.general.apiToken);
 
   useEffect(() => {
-    setToken(apiToken);
-    fetch(apiUrlWithStore("/api/checkout/cart/token"))
-      .then((responce) => responce.json())
-      .then((res) => {
-        setToken(res);
-      })
-      .catch((err) => console.error(err));
+    ///setToken(apiToken);
+    // fetch(apiUrlWithStore("/api/checkout/cart/token"))
+    //   .then((responce) => responce.json())
+    //   .then((res) => {
+    //     setToken(res);
+    //   })
+    //   .catch((err) => console.error(err));
   }, [apiToken]);
 
   const list =
@@ -100,13 +100,13 @@ function Suggestions(props) {
             <div className="suggestions__item-meta">SKU: {product.sku}</div>
           </div>
           <div className="suggestions__item-price">
-            {console.log(product, "productproduct")}
-            Դ {" "}
+            {console.log(product, "productproduct")}Դ{" "}
             <Currency
               value={
                 product.formatted_special_price
                   ? product.formatted_special_price
-                  : product.formatted_price || Number(product.min_price).toFixed(2)
+                  : product.formatted_price ||
+                    Number(product.min_price).toFixed(2)
               }
             />
           </div>

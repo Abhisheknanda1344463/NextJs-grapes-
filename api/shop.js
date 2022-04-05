@@ -153,6 +153,7 @@ const shopApi = {
       string += `&${key}=${value}`;
     }
 
+    console.log(string, slug, "stringstringstring");
     return fetch(`${url}/db/filters?category_id=${slug}${string}`).then(
       (response) => response.json()
     );
@@ -195,9 +196,9 @@ const shopApi = {
     if (options.currency) {
       currency = options.currency.code;
     }
-
+    console.log(query, url, options.dbName, "queryqueryquery");
     return fetch(
-      `${url}/db/products?search=${query}&locale=${locale}&currency=${currency}`
+      `/db/products?search=${query}&locale=${locale}&currency=${currency}`
     ).then((response) => response.json());
   },
   getProductsList: ({
@@ -233,9 +234,9 @@ const shopApi = {
     if (options.savings == "") {
       delete options.savings;
     }
-    console.log(url, domain, dbName, "getProductsList");
-    const categoryId = catId || catID;
 
+    const categoryId = catId || catID;
+    console.log(url, domain, categoryId, "getProductsList");
     if (
       qs.stringify(options) == "" &&
       qs.stringify(filters) == "" &&
@@ -500,6 +501,12 @@ const shopApi = {
       locale = options.locale;
     }
     return fetch(`${url}/db/search?search=${query}&locale=${locale}`)
+      .then((response) => response.json())
+      .catch((err) => console.error(err));
+  },
+  translations: (locale, dbName) => {
+    console.log(domainUrl(`${dbName}/db/translations?locale=${locale}`));
+    return fetch(domainUrl(`${dbName}/db/translations?locale=${locale}`))
       .then((response) => response.json())
       .catch((err) => console.error(err));
   },

@@ -60,6 +60,11 @@ router.get("/cms/page/:pageSlug", function (req, res) {
 
 // ###################################################################### products
 
+router.get("/translations", function (req, res) {
+  SettingsController.Get_Translations(req.query).then((response) =>
+    res.send(response)
+  );
+});
 router.get("/products", function (req, res) {
   ProductControllers.Get_Product_list(req.query).then((response) =>
     res.send(response)

@@ -8,7 +8,7 @@ import { apiImageUrl } from "../../helper";
 import AppLink from "../shared/AppLink";
 import Image from "components/hoc/Image";
 import { ArrowRoundedRight6x9Svg } from "../../svg";
-
+import { url } from "../../services/utils";
 function Menu(props) {
   const { layout, withIcons, items, onClick, symbol } = props;
   ///console.log(onClick, "onClickonClick");
@@ -20,7 +20,7 @@ function Menu(props) {
       link = (
         <AppLink
           {...item.props}
-          href={`/catalog/${item.slug}`}
+          href={url.category(item)}
           onClick={() => onClick(item)}
         >
           <a>{content}</a>

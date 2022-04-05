@@ -3,6 +3,7 @@ const ChannelInfo = require("../models/ChannelInfo.js");
 const Sliders = require("../models/Sliders.js");
 const CoreConfig = require("../models/CoreConfig.js");
 const Social = require("../models/Social.js");
+const Translations = require("../models/Translations.js");
 // const fetch = require('node-fetch');
 const https = require("https");
 const { domainUrl, url } = require("../helper");
@@ -22,16 +23,16 @@ function Get_Settings(fullUrl, urlStore) {
       .catch((err) => reject(err));
   });
 
-  const p3 = new Promise((resolve, reject) => {
-    ////// console.log(fullUrl, urlStore, "fullUrlfullUrl");
-    let rawdata = fetch(
-      domainUrl(
-        `${urlStore}/storage/${storeName}/cached/translations/translations.json`
-      )
-    );
-    ////  let translations = JSON.parse(rawdata)
-    resolve({ rawdata });
-  });
+  // const p3 = new Promise((resolve, reject) => {
+  //   ////// console.log(fullUrl, urlStore, "fullUrlfullUrl");
+  //   let rawdata = fetch(
+  //     domainUrl(
+  //       `${urlStore}/storage/${storeName}/cached/translations/translations.json`
+  //     )
+  //   );
+  //   ////  let translations = JSON.parse(rawdata)
+  //   resolve({ rawdata });
+  // });
 
   const p4 = new Promise((resolve, reject) => {
     CoreConfig.find({
@@ -73,7 +74,7 @@ function Get_Settings(fullUrl, urlStore) {
   });
 
   return new Promise((resolve, reject) => {
-    Promise.all([p1, p2, p3, p4, p5]).then((responseArray) => {
+    Promise.all([p1, p2, p4, p5]).then((responseArray) => {
       // console.log(responseArray, 'responseArrayresponseArray')
       let customSettingsCollection = responseArray.reduce((acc, next) => {
         const [key] = Object.keys(next);
@@ -122,5 +123,15 @@ function Get_Core_Config() {
   });
 }
 
+function Get_Translations(query) {
+  return new Promise((resolve, reject) => {
+    console.log(query.locale, "aaaaaaaaaaaaa");
+    Translations.findOne({ lang: query.locale }).then((res) => {
+      console.log(res, "aaaaaaaaaaaaa");
+      resolve({ [query.locale]: { translations: res.data } });
+    });
+  });
+}
+exports.Get_Translations = Get_Translations;
 exports.Get_Settings = Get_Settings;
 exports.Get_Core_Config = Get_Core_Config;
