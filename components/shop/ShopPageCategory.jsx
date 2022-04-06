@@ -220,7 +220,7 @@ function ShopPageCategory(props) {
     brandList,
     categorySlug,
     productsList: allProduct,
-    domain,
+    dbName,
     sidebarPosition,
     initialMaxPrice,
     initialMinPrice,
@@ -293,27 +293,34 @@ function ShopPageCategory(props) {
     setMinPrice(allProduct.dispatches.setInitialMinPrice);
   }, [router.locale, categorySlug, state.options]);
 
-  useEffect(() => {
+  async function categoryData  () {
     const query = buildQuery({ ...state.options, page: page }, state.filters);
-    shopApi
-      .getProductsList({
-        options: {
-          ...state.options,
-          page: page,
-          currency: currency,
-          locale: router.locale,
-        },
-        domain: domain,
-        filters: { ...state.filters },
-        history: history.search,
-        catID: catID,
-        window: null,
-        limit: 6,
-      })
-      .then((items) => {
-        setProductsList(items);
-      });
-  }, [categorySlug, state.options, state.filters]);
+    const location = `${window.location.pathname}${query ? "?" : ""}${query}`;
+
+console.log(dbName);
+    await shopApi
+    .getProductsList({
+      options: {
+        ...state.options,
+        page: page,
+        currency: currency,
+        locale: props.locale,
+      },
+      domain: dbName,
+      filters: { ...state.filters },
+      history: history.search,
+      location:location,
+      catID: catID,
+      window: null,
+      limit: 6,
+    })
+    .then((items) => {
+      setProductsList(items);
+    });
+  }
+  useEffect(() => {
+    categoryData()
+  }, [categorySlug, state.options, state.filters,page]);
 
   if (state.productsListIsLoading && !productsList) {
     return <BlockLoader />;

@@ -236,14 +236,14 @@ const shopApi = {
     }
 
     const categoryId = catId || catID;
-    console.log(url, domain, categoryId, "getProductsList");
+    console.log(domain ? `https://` + domain : url, "getProductsList");
     if (
       qs.stringify(options) == "" &&
       qs.stringify(filters) == "" &&
       !location
     ) {
       return fetch(
-        `${url}/db/products?limit=20&currency=${currency}&locale=${
+        `${domain ? `https://` + domain : url}/db/products?limit=20&currency=${currency}&locale=${
           options.locale
         }${categoryId ? `&category_id=${categoryId}` : ""}`
       ).then((responce) => responce.json());
