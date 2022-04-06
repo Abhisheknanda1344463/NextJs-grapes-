@@ -95,6 +95,16 @@ const ShopPageCart = (props) => {
       let options
       let id
 
+      const specialPriceValues = (
+        item?.product.special_price &&
+          date_now >= date_from &&
+          date_now <= date_to
+          ? Number(item.product.special_price).toFixed(0) * item.quantity
+          : item?.product.special_price
+            ? Number(item.product.special_price).toFixed(0) * item.quantity
+            : Number(item.product.price).toFixed(0) * item.quantity
+      )
+
       const maxQty = bOrder ? 50000 : item.product.qty
       if (item.product.images && item.product.images.length > 0) {
         id = cart.items[index].cartItemId
@@ -234,6 +244,21 @@ const ShopPageCart = (props) => {
             }
           </div>
         )
+      } else if (product?.special_price) {
+        price = (
+          <div className="product-card__prices">
+            <span className="product-card__new-price">
+              <span className="product-card__symbol">֏</span>
+              <Currency value={Number(product.special_price).toFixed(0)} />
+            </span>
+            {
+              <span className="product-card__old-price">
+                <span className="product-card__symbol">֏</span>
+                <Currency value={Number(product.price).toFixed(0)} />
+              </span>
+            }
+          </div>
+        )
       } else if (product?.product?.type === 'configurable') {
         price = (
           <div className="product-card__prices">
@@ -363,12 +388,13 @@ const ShopPageCart = (props) => {
               {/*need to refactor when start working in currency*/}
               <Currency
                 value={
-                  item?.product.special_price &&
-                  date_now >= date_from &&
-                  date_now <= date_to
-                    ? Number(item.product.special_price).toFixed(0) *
-                    item.quantity
-                    : Number(item.product.price).toFixed(0) * item.quantity
+                  // item?.product.special_price &&
+                  // date_now >= date_from &&
+                  // date_now <= date_to
+                  //   ? Number(item.product.special_price).toFixed(0) *
+                  //   item.quantity
+                  //   : Number(item.product.price).toFixed(0) * item.quantity
+                  specialPriceValues
                 }
               />
               <span className="product-card__symbol">֏</span>

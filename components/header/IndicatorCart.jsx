@@ -121,6 +121,21 @@ function IndicatorCart(props) {
           }
         </div>
       );
+    } else if (product?.special_price) {
+      price = (
+        <div className="product-card__prices">
+          <span className="product-card__new-price">
+            <span className="product-card__symbol">֏</span>
+            <Currency value={Number(product.special_price).toFixed(0)} />
+          </span>
+          {
+            <span className="product-card__old-price">
+              <span className="product-card__symbol">֏</span>
+              <Currency value={Number(product.price).toFixed(0)} />
+            </span>
+          }
+        </div>
+      );
     }
     //comented by Manvel in David code tis code actual in this case in my working time
     // else if (

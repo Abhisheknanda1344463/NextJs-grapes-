@@ -447,6 +447,30 @@ class Product extends PureComponent {
                       </span>
                     </span>
                   </>
+                ) : product.data.special_price ? (
+                  <>
+                    <span className="product-card__new-price">
+                      <Currency
+                        value={Number(product.data.special_price).toFixed(0)}
+                      />
+                      <span
+                        className="product-card__symbol"
+                        style={{ marginLeft: '5px' }}
+                      >
+                        ֏
+                      </span>
+                    </span>
+
+                    <span className="product-card__old-price">
+                      <Currency value={Number(product.data.price).toFixed(0)} />
+                      <span
+                        className="product-card__symbol"
+                        style={{ marginLeft: '5px' }}
+                      >
+                        ֏
+                      </span>
+                    </span>
+                  </>
                 ) : (
                   <span>
                     <span

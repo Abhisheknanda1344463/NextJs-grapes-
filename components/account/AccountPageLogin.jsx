@@ -15,8 +15,7 @@ import theme                    from '../../data/theme'
 import { useRouter }            from 'next/router'
 import { toast }                from 'react-toastify'
 // import AccountLogin from "./AccountLogin";
-import { CheckToastSvg }        from 'svg'
-
+import { CheckToastSvg, FailSvg }        from 'svg'
 
 
 export default function AccountPageLogin () {
@@ -86,11 +85,35 @@ export default function AccountPageLogin () {
           )
         } else {
           if (res.email) {
-            alert(res.email[0])
+            // alert(res.email[0])
+            toast(
+              <span className="d-flex chek-fms">
+                <FailSvg />
+                <FormattedMessage
+                  id="type_valid_data"
+                  defaultMessage={res.email[0]}
+                />
+              </span>,
+              {
+                hideProgressBar: true,
+              }
+            )
           }
 
           if (res.password) {
-            alert(res.password[0])
+            // alert(res.password[0])
+            toast(
+              <span className="d-flex chek-fms">
+                <FailSvg />
+                <FormattedMessage
+                  id="type_valid_data"
+                  defaultMessage={res.password[0]}
+                />
+              </span>,
+              {
+                hideProgressBar: true,
+              }
+            )
           }
         }
       })

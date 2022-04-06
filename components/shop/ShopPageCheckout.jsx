@@ -5,7 +5,7 @@ import { url, apiUrlWithStore } from "../../helper";
 import shopApi from "../../api/shop";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
-import { Check9x7Svg,IdramPosSVG ,TelcellPosSVG} from "../../svg";
+import { Check9x7Svg, IdramPosSVG, TelcellPosSVG, PaypalPosSVG } from "../../svg";
 import Currency from "../shared/Currency";
 import Collapse from "../shared/Collapse";
 import PageHeader from "../shared/PageHeader";
@@ -385,7 +385,8 @@ class ShopPageCheckout extends React.Component {
           date_now >= item.product.product.special_price_from &&
           date_now <= item.product.product.special_price_to ? (
             <Currency value={Number(item.product.special_price).toFixed(0)} />
-          ) : (
+          ) : item.product.product?.special_price
+            ? <Currency value={Number(item.product.special_price).toFixed(0)} /> : (
             <Currency value={Number(item.product.price).toFixed(0)} />
           )}
           {/*{item.product.formatted_price*/}
@@ -471,6 +472,7 @@ class ShopPageCheckout extends React.Component {
                 ? <CreditCartSvg/>
                 : payment.method == "idram_vpos" ? <IdramPosSVG />
                 : payment.method == "telcell_vpos" ? <TelcellPosSVG />
+                // : payment.method == "paypal_vpos" ? <PaypalPosSVG />
                : (
                 <FormattedMessage
                   id={payment.key}

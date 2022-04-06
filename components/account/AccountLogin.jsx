@@ -1,5 +1,6 @@
 // react
 import React, { useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 // third-party
 import  Link from "next/link";
@@ -12,6 +13,7 @@ import { cartAddItemAfterLogin } from "../../store/cart";
 import { cartRemoveItemAfterLogin } from "../../store/cart";
 import { Helmet } from "react-helmet-async";
 import PageHeader from "components/shared/PageHeader";
+import { FailSvg } from "svg";
 
 export default function AccountLogin() {
   const history = useRouter();
@@ -77,11 +79,35 @@ export default function AccountLogin() {
               })
               .catch((err) => console.error(err));
           } else {
-            alert(res.error);
+            // alert(res.error);
+            toast(
+              <span className="d-flex chek-fms">
+                <FailSvg />
+                <FormattedMessage
+                  id="type_valid_data"
+                  defaultMessage={res.error}
+                />
+              </span>,
+              {
+                hideProgressBar: true,
+              }
+            )
           }
         });
     } else {
-      alert("Type valid data");
+      // alert("Type valid data");
+      toast(
+        <span className="d-flex chek-fms">
+          <FailSvg />
+          <FormattedMessage
+            id="type_valid_data"
+            defaultMessage="Type valid data"
+          />
+        </span>,
+        {
+          hideProgressBar: true,
+        }
+      )
     }
   };
 
