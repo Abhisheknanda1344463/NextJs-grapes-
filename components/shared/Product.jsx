@@ -16,7 +16,7 @@ import ProductGallery from "./ProductGallery";
 import { cartAddItem } from "../../store/cart";
 import { AddCartToken } from "../../store/token";
 import { compareAddItem } from "../../store/compare";
-import { wishlistAddItem } from "../../store/wishlist";
+import { wishlistAddItem } from "../../store/wishlist"
 
 useRouter;
 import {
@@ -512,6 +512,7 @@ class Product extends PureComponent {
                   )}
                 />
               </div>
+              {console.log("this state",this.state)}
               {this.state?.configurablesData?.attributes && (
                 <ConfigurableFilters
                   locale={this.state.locale}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Dropdown from "./Dropdown";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
@@ -8,15 +8,18 @@ import { useRouter } from "next/router";
 
 function DropdownLanguage(props) {
   const locale = useSelector((state) => state.locale);
+  const router = useRouter();
+  const [newLocal, setNewLocal] = useState(router.locale === 'catchAll' ? locale.code : router.locale)
+
   if (!props.languages) {
     return null;
   }
-  const router = useRouter();
   // const { pathname, asPath, query } = router;
   const { languages } = props;
 
   const handleRoute = (locale) => {
     ///  changeLocale(locale);
+    setNewLocal(() => locale)
     router.push(
       router.asPath != "/" ? router.asPath : "",
       router.asPath != "/" ? router.asPath : "",
@@ -38,6 +41,7 @@ function DropdownLanguage(props) {
       for={"language"}
       title={title}
       locale={locale}
+      newLocal={newLocal}
       items={languages}
       onClick={(item) => handleRoute(item.code)}
     />

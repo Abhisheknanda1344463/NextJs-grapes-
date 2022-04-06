@@ -190,7 +190,7 @@
 
 // *************** Functional Component ******************** //
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useSelector }                from 'react-redux'
 
 // third-party
@@ -208,6 +208,7 @@ import { ArrowRoundedDown7x5Svg } from '../../svg'
 const Dropdown = (props) => {
   const [open, setOpen] = useState(false)
   const domain = useSelector(state => state.general.domain)
+  const wrapperRef = useRef(null)
 
   useEffect(() => {
     document.addEventListener('mousedown', handleOutsideClick)
@@ -217,14 +218,14 @@ const Dropdown = (props) => {
     }
   }, [])
 
-  let wrapperRef
+
   const setWrapperRef = (node) => {
-    wrapperRef = node
+    wrapperRef.current = node
   }
 
   const handleOutsideClick = (event) => {
 
-    if (wrapperRef && !wrapperRef.contains(event.target)) {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
       setOpen(() => false)
     }
   }
@@ -245,13 +246,13 @@ const Dropdown = (props) => {
     }
   }
 
-  const { title, withIcons, items, locale } = props
+  const { title, withIcons, items, locale, newLocal } = props
   let local = null
   const classes = classNames('topbar-dropdown', {
     'topbar-dropdown--opened': open,
   })
   if (locale && locale.list.length > 0) {
-    local = locale.list.find(item => item.code === locale.code)
+    local = locale.list.find(item => item.code === newLocal)
   }
 
   if (props.for == 'language') {
@@ -264,14 +265,14 @@ const Dropdown = (props) => {
             onClick={handleButtonClick}
           >
               <span style={{ paddingBottom: '3px', paddingRight: '10px' }}>
-                {local?.name}
+                {local && local?.name}
               </span>
             <Image
               height={16}
               width={20}
               alt="language"
               src={
-                local?.locale_image
+                local && local?.locale_image
                   ? `${apiImageUrl}/storage/${domain}/${local?.locale_image}`
                   : '../../vendor/webkul/ui/assets/images/flag_' +
                   local?.code +
@@ -289,14 +290,14 @@ const Dropdown = (props) => {
             onClick={handleButtonClick}
           >
               <span style={{ paddingBottom: '3px', paddingRight: '10px' }}>
-                {local?.name}
+                {local && local?.name}
               </span>
             <Image
               height={16}
               width={20}
               alt="language"
               src={
-                local?.locale_image
+                local && local?.locale_image
                   ? `${apiImageUrl}/storage/${domain}/${local?.locale_image}`
                   : '../../vendor/webkul/ui/assets/images/flag_' +
                   local?.code +
