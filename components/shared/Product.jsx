@@ -16,7 +16,7 @@ import ProductGallery from "./ProductGallery";
 import { cartAddItem } from "../../store/cart";
 import { AddCartToken } from "../../store/token";
 import { compareAddItem } from "../../store/compare";
-import { wishlistAddItem } from "../../store/wishlist"
+import { wishlistAddItem } from "../../store/wishlist";
 
 useRouter;
 import {
@@ -80,14 +80,14 @@ class Product extends PureComponent {
     }
 
     if (this.props.cartToken.cartToken === "") {
-      fetch(apiImageUrl("/api/checkout/cart/token"))
-        .then((responce) => responce.json())
-        .then((res) => {
-          if (res.api_token) {
-            this.props.AddCartToken(res.api_token);
-          }
-        })
-        .catch((err) => console.error(err));
+      // fetch(apiImageUrl("/api/checkout/cart/token"))
+      //   .then((responce) => responce.json())
+      //   .then((res) => {
+      //     if (res.api_token) {
+      //       this.props.AddCartToken(res.api_token);
+      //     }
+      //   })
+      //   .catch((err) => console.error(err));
     }
   };
 
@@ -455,7 +455,7 @@ class Product extends PureComponent {
                       />
                       <span
                         className="product-card__symbol"
-                        style={{ marginLeft: '5px' }}
+                        style={{ marginLeft: "5px" }}
                       >
                         ֏
                       </span>
@@ -465,7 +465,7 @@ class Product extends PureComponent {
                       <Currency value={Number(product.data.price).toFixed(0)} />
                       <span
                         className="product-card__symbol"
-                        style={{ marginLeft: '5px' }}
+                        style={{ marginLeft: "5px" }}
                       >
                         ֏
                       </span>
@@ -512,7 +512,7 @@ class Product extends PureComponent {
                   )}
                 />
               </div>
-              {console.log("this state",this.state)}
+              {console.log("this state", this.state)}
               {this.state?.configurablesData?.attributes && (
                 <ConfigurableFilters
                   locale={this.state.locale}
