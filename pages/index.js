@@ -22,7 +22,7 @@ function Home({
     for (let actionKey in dispatchesNew) {
       dispatch(allActions[actionKey](dispatchesNew[actionKey]));
     }
-  }, []);
+  }, [locale]);
 
   return (
     <div>
@@ -55,7 +55,7 @@ export async function getServerSideProps({ locale, locales, req, res }) {
   } = await generalProcessForAnyPage(locale, dbName);
   console.log(req.domainName, dbName, "reqreqreq");
 
-  const selectedLocale = locale !== "catchAll" ? locale : defaultLocaleSelected;
+  const selectedLocale = locale != "catchAll" ? locale : defaultLocaleSelected;
   // console.log(
   //   domainUrl(
   //     dbName + `/db/home-products?locale=${selectedLocale}&currency=${currency}`
