@@ -509,7 +509,7 @@ console.log(dbName);
             <div className="posts-view__pagination">
               {productsList &&
               //////FIXME CHANGE TO LIMIT
-              productsList.data.length < 20 ? (
+              productsList.data.length < 20  && page == 1 ? (
                 <></>
               ) : (
                 <Pagination

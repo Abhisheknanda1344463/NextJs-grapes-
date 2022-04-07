@@ -100,7 +100,8 @@ function Suggestions(props) {
             <div className="suggestions__item-meta">SKU: {product.sku}</div>
           </div>
           <div className="suggestions__item-price">
-            {console.log(product, "productproduct")}Դ{" "}
+            {console.log(product, "productproduct")}
+            Դ{" "}
             <Currency
               value={
                 product.formatted_special_price
@@ -137,7 +138,7 @@ function Suggestions(props) {
         </li>
       ) : (
         <div className="search__fm_dr_Message">
-          {console.log(product.id, "productId in Suggestion")}
+          {/*{console.log(product.id, "productId in Suggestion")}*/}
           <FormattedMessage
             id="noMatching"
             defaultMessage="No matching items"

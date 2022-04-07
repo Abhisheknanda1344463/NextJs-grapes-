@@ -171,20 +171,23 @@ export function cartAddItem(
   bundleProductInfo = null,
   pageFrom = ""
 ) {
+  console.log(product, "product")
   let body;
   if (customer && customer.token) {
     body = {
       api_token: cartToken.cartToken,
-      product_id: product.id,
+      product_id: product.product_id,
       quantity: quantity,
       token: customer.token,
     };
+    console.log(body.product_id,"with customer")
   } else {
     body = {
       api_token: cartToken.cartToken,
-      product_id: product.id,
+      product_id: product.product_id,
       quantity: quantity,
     };
+    console.log(body.product_id, "else")
   }
 
   if (bundleProductInfo) {

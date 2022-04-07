@@ -92,7 +92,13 @@ function build({ flatProducts, locale, resolve, ...rest }) {
           .catch((err) => reject3(err));
       });
 
-      return Promise.all([p1, p2, p3])
+      const p4 = new Promise((resolve, reject4) => {
+        Products.find({ id: productId })
+          .then((res) => resolve({ Products: res }))
+          .catch((err) => reject4(err));
+      })
+
+      return Promise.all([p1, p2, p3, p4])
         .then((response) => {
           const collection = arrayConvertToObject(response);
           const imagesData = parseClone(collection.ProductImages);
@@ -100,12 +106,15 @@ function build({ flatProducts, locale, resolve, ...rest }) {
           const inventoriesData = parseClone(
             collection.ProductInventories[0] || []
           );
+          const allProducts = parseClone(collection.Products[0] || [])
+          console.log(allProducts, "all products")
           if (imagesData[0] && imagesData[0].path) {
             const { path } = imagesData[0];
             const base_imag = makeImageClone(path);
             const images = imagesData.map((e) => makeImageClone(e.path));
 
             const obj = {
+              ...allProducts,
               ...product,
               ...flatData,
               ...inventoriesData,
@@ -283,7 +292,7 @@ function Get_New_And_Futured_Products({ locale, limit, currency, ...rest }) {
 
 function Get_Product_list(options) {
   //limit, category_id, currency,
-  const { locale, limit, page } = options;
+  const { locale, limit, page, ...rest } = options;
 
   let searchKeys = {};
   for (let key in options) {
@@ -372,6 +381,7 @@ function Get_Product_list(options) {
                 date_now = new Date(`${year}-${month}-${day}`).getTime();
                 date_now = "" + date_now;
                 date_now = parseInt(date_now.slice(0, -3));
+                console.log(date_now,"date now in product")
 
                 object = {
                   ...object,
@@ -464,34 +474,9 @@ function Get_Product_list(options) {
           ProductFlat.find({
             name: { $regex: Object.values(buildQueryParams)[0], $options: "i" },
             // name: { $regex: ".*" + Object.values(buildQueryParams)[0] + ".*" },
-          }).then((data) => {
-            console.log(data, "data in product controller");
-            console.log(
-              Object.values(buildQueryParams)[0],
-              "Object.values(buildQueryParams)[0] in product controller"
-            );
-            data.map((item) => {
-              ProductImages.find({ product_id: item.product_id }).then(
-                (res) => {
-                  let image = res;
-                  let product = [item, image];
-                  // console.log(image, '44444444')
-                  // let newData = { ...item,image }
-                  ///  console.log(product, "productproductproductproductproductproduct")
-                  // return newData
-
-                  data = product;
-                }
-              );
-
-              // const ids = data
-              //   .map((item) => parseInt(item.id))
-              //   .filter((e) => e);
-              resolve({
-                data,
-              });
-            });
-          });
+          }).then((flatProducts) => {
+            build({ flatProducts, locale, resolve,type: "data", ...rest});
+          })
         }
       }
     );
