@@ -164,7 +164,7 @@ function HomePageOne(props) {
           <p>{messageIntro !== "" && messageIntro}</p>
         </div>
       ) : null}
-
+      {console.log(bestsellers, "bestsellers in hompage")}
       {bestsellers?.length ? (
         <BlockProducts
           layout="large-first"
@@ -187,6 +187,7 @@ function HomePageOne(props) {
               return;
           }
         })} */}
+      {console.log(featured, "featured in hompage")}
       {featured?.length ? (
         <BlockProducts
           layout="large-first"

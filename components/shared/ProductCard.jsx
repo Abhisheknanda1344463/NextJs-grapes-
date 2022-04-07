@@ -85,9 +85,12 @@ function ProductCard(props) {
             <div className="product-image__body product-image__body-fms">
               <div className="item_overlay hide-for-tablet"></div>
               <div className="img_btn_wrapper">
-                {product?.product &&
-                product?.product?.type === "configurable" ? (
+                {console.log(product?.type, "product type in product card")}
+
+                {product && product?.type === "configurable" ? (
+
                   <Link href={url.product(product)}>
+                    {/*{console.log(url.product(product), "url.product(product)")}*/}
                     <button
                       type="button"
                       className={classNames(

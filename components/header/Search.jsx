@@ -101,13 +101,18 @@ function Search(props) {
           if (canceled) {
             return;
           }
-          console.log(products.data, "products.data");
-          let newProduct = products.data;
-
+          // console.log(products.data.filter(item => item !== Array.isArray(item)), "products.data");
+          let newProduct = products.data.filter(item => {
+            if(item.length === 0 ) {
+              return
+            }
+            return item
+          });
+console.log(newProduct,"ttttttttt")
           // let x =
           // const newProducts.data = [image,...item]
           // console.log(newProducts,"products in query")
-          if (newProduct.length) {
+          if (newProduct.length > 0) {
             setSuggestedProducts(newProduct);
             setHasSuggestions(newProduct.length > 0);
             setSuggestionsOpen(true);
