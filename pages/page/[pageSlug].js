@@ -21,7 +21,7 @@ export default function Page(props) {
     for (let actionKey in props.dispatches) {
       dispatch(allActions[actionKey](props.dispatches[actionKey]));
     }
-  }, []);
+  }, [props.locale]);
 
   if (query.pageSlug == "blogs") {
     return <BlogPageCategory blog={props.blog} pageSlug={query.pageSlug} />;

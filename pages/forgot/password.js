@@ -10,7 +10,7 @@ export default function forgotPassword(props) {
     for (let actionKey in props.dispatches) {
       dispatch(allActions[actionKey](props.dispatches[actionKey]));
     }
-  }, []);
+  }, [props.locale]);
   return <AccountForgotPassword />;
 }
 export async function getServerSideProps({ locale, locales, req, res, query }) {

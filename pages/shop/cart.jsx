@@ -22,7 +22,7 @@ function Cart({ locale, dispatches }) {
     for (let actionKey in dispatches) {
       dispatch(allActions[actionKey](dispatches[actionKey]));
     }
-  }, []);
+  }, [locale]);
   return <ShopPageCart />;
 }
 

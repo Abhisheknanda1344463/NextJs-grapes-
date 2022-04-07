@@ -12,7 +12,7 @@ function Checkout({ locale, dispatches, payments }) {
     for (let actionKey in dispatches) {
       dispatch(allActions[actionKey](dispatches[actionKey]));
     }
-  }, []);
+  }, [locale]);
 
   return <PageCheckout payments={payments} />;
 }

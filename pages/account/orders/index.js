@@ -10,7 +10,7 @@ function Orders({ locale, dispatches }) {
     for (let actionKey in dispatches) {
       dispatch(allActions[actionKey](dispatches[actionKey]));
     }
-  }, []);
+  }, [props.locale]);
   return <AccountPageOrders />;
 }
 

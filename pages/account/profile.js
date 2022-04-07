@@ -9,7 +9,7 @@ function Profile({ locale, dispatches }) {
     for (let actionKey in dispatches) {
       dispatch(allActions[actionKey](dispatches[actionKey]));
     }
-  }, []);
+  }, [props.locale]);
   return <AccountPageProfile />;
 }
 

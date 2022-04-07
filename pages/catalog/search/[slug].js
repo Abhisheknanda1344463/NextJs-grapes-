@@ -12,7 +12,7 @@ export default function Catlog(props) {
     for (let actionKey in props.dispatches) {
       dispatch(allActions[actionKey](props.dispatches[actionKey]));
     }
-  }, []);
+  }, [props.locale]);
 
   return (
     <SearchedProducts

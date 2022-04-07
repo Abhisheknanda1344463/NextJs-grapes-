@@ -11,7 +11,7 @@ export default function Wishlist(props) {
     for (let actionKey in props.dispatches) {
       dispatch(allActions[actionKey](props.dispatches[actionKey]));
     }
-  }, []);
+  }, [props.locale]);
   return <PageWishlist />;
 }
 
