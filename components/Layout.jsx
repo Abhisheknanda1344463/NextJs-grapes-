@@ -68,32 +68,32 @@ function Layout(props) {
     }
   }, [customJs]);
 
-  const getCategories = () => {
-    try {
-      fetch(apiUrlWithStore(`/db/categories?locale=${router.locale}`))
-        .then((response) => response.json())
-        .then((res) => {
-          dispatch(setCatgoies(res.categories));
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  const getMenuList = () => {
-    try {
-      fetch(apiUrlWithStore(`/db/cms/menus?locale=${router.locale}`))
-        .then((response) => response.json())
-        .then((res) => {
-          setMenuList(res.data);
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  useEffect(() => {
-    getCategories();
-    getMenuList();
-  }, [router.locale]);
+  // const getCategories = () => {
+  //   try {
+  //     fetch(apiUrlWithStore(`/db/categories?locale=${router.locale}`))
+  //       .then((response) => response.json())
+  //       .then((res) => {
+  //         dispatch(setCatgoies(res.categories));
+  //       });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+  // const getMenuList = () => {
+  //   try {
+  //     fetch(apiUrlWithStore(`/db/cms/menus?locale=${router.locale}`))
+  //       .then((response) => response.json())
+  //       .then((res) => {
+  //         setMenuList(res.data);
+  //       });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getCategories();
+  //   getMenuList();
+  // }, [router.locale]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -109,18 +109,18 @@ function Layout(props) {
     };
   }, [customer.token]);
 
-  useEffect(() => {
-    if (!props?.cartToken?.cartToken) {
-      fetch(`/api/checkout/cart/token`)
-        .then((responce) => responce.json())
-        .then((res) => {
-          if (res.api_token) {
-            props.AddCartToken(res.api_token);
-          }
-        })
-        .catch((err) => console.error(err));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!props?.cartToken?.cartToken) {
+  //     fetch(`/api/checkout/cart/token`)
+  //       .then((responce) => responce.json())
+  //       .then((res) => {
+  //         if (res.api_token) {
+  //           props.AddCartToken(res.api_token);
+  //         }
+  //       })
+  //       .catch((err) => console.error(err));
+  //   }
+  // }, []);
 
   let isMobile = false;
   if (width !== undefined && width > 991) {

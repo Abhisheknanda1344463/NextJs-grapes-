@@ -39,13 +39,17 @@ const shopApi = {
     }).then((response) => response.json());
   },
   getMenues: (options = {}) => {
-    let locale = "";
-    if (options?.locale) {
-      locale = `locale=${options.locale}`;
+    if (options.locale !== "catchAll") {
+      let locale = "";
+      if (options?.locale) {
+        locale = `locale=${options.locale}`;
+      }
+      return fetch(`${url}/db/cms/menus?locale=${options.locale}`).then(
+        (response) => response.json()
+      );
+    } else {
+      return [];
     }
-    return fetch(`${url}/db/cms/menus?locale=${options.locale}`).then(
-      (response) => response.json()
-    );
   },
   getBlogs: ({ locale, page, limit }) => {
     return fetch(
@@ -243,9 +247,11 @@ const shopApi = {
       !location
     ) {
       return fetch(
-        `${domain ? `https://` + domain : url}/db/products?limit=20&currency=${currency}&locale=${
-          options.locale
-        }${categoryId ? `&category_id=${categoryId}` : ""}`
+        `${
+          domain ? `https://` + domain : url
+        }/db/products?limit=20&currency=${currency}&locale=${options.locale}${
+          categoryId ? `&category_id=${categoryId}` : ""
+        }`
       ).then((responce) => responce.json());
     } else {
       let string = `limit=20`;

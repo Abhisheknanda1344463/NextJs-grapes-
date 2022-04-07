@@ -121,26 +121,29 @@ export function ApiCustomSettings(customSettingsData) {
 }
 
 export async function ApiCategoriesAndMenues(locale) {
-  const getCategories = await shopApi.getCategories({ locale: locale });
-  let getMenues = await shopApi.getMenues({ locale: locale });
-  const getPages = await shopApi.getPagesByIdsArray({
-    locale: locale,
-    ids: getMenues.data.map((e) => e.page_id).join(),
-  });
-  getMenues.data = getMenues.data.map((menu) => {
-    const foundPage = getPages.find((page) => page.id == menu.page_id);
-    if (foundPage) menu.url_key = foundPage.url_key;
+  console.log(locale, "locale");
+  if (locale !== "catchAll") {
+    const getCategories = await shopApi.getCategories({ locale: locale });
+    const getMenues = await shopApi.getMenues({ locale: locale });
+    const pageIds = getMenues.data.map((e) => e.page_id).join();
 
-    return menu;
-  });
+    const getPages = await shopApi.getPagesByIdsArray({
+      locale: locale,
+      ids: pageIds,
+    });
+    getMenues.data = getMenues.data.map((menu) => {
+      const foundPage = getPages.find((page) => page.id == menu.page_id);
+      if (foundPage) menu.url_key = foundPage.url_key;
 
-  return {
-    setCatgoies: getCategories.categories || false,
-    // setMenuList: getMenues.data   || false,
-    setMenuList:
-      [...new Map(getMenues.data.map((item) => [item["id"], item])).values()] ||
-      false,
-  };
+      return menu;
+    });
+
+    return {
+      setCatgoies: getCategories.categories || false,
+      // setMenuList: getMenues.data   || false,
+      setMenuList: getMenues.data || false,
+    };
+  }
 }
 
 export function genereateReadyArray(array) {

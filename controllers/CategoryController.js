@@ -75,15 +75,21 @@ function Get_Categoryes(props) {
     ru: CategoriesRu,
   };
 
-  const Module = modulesInfo[props.locale];
-  // console.log(props.locale, "props.locale");
-  return new Promise((resolve, reject) => {
-    Module.find()
-      .then((res) => {
-        resolve(res[0].data);
-      })
-      .catch((err) => reject(err));
-  });
+  if (props.locale !== "catchAll") {
+    const Module = modulesInfo[props.locale];
+    console.log(props.locale, "props.locale");
+    return new Promise((resolve, reject) => {
+      Module.find()
+        .then((res) => {
+          resolve(res[0].data);
+        })
+        .catch((err) => reject(err));
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      resolve([]);
+    });
+  }
 }
 
 exports.Get_Menus = Get_Menus;
