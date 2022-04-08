@@ -13,7 +13,7 @@ function Addresses({ locale, dispatches }) {
       dispatch(allActions[actionKey](dispatches[actionKey]));
       // dispatch(allActions[actionKey](props.dispatches[actionKey]));
     }
-  }, [props.locale]);
+  }, [locale]);
   const { query } = useRouter();
 
   return <AccountPageNewAddresses addressId={query.addressId} />;

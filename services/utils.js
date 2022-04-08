@@ -38,8 +38,11 @@ export async function ApiCustomSettingsAsync(locale, dbName) {
   // await fetch(`${originalUrl}/db/translations`);
   const customSettingsData = await settingsResponse.json();
   // store.createStore();
-
+  const seettingData = await fetch(
+    `${originalUrl}/db/core-conf?locale=${locale}`
+  );
   let data = {};
+  const seettingDataCore = await seettingData.json();
   const { channel_info } = customSettingsData;
   //// console.log(customSettingsData?.translations, "aaaaaaaaaaaaaaa");
   let dispatches = {
@@ -51,6 +54,7 @@ export async function ApiCustomSettingsAsync(locale, dbName) {
     },
     clientSide: {
       setPopup: customSettingsData?.popup || false,
+      setCoreConfigs: seettingDataCore || false,
       setCustomJs: customSettingsData?.custom_js || false,
       setBackorders: customSettingsData?.store_info?.Backorders || false,
       setCasheVersion: customSettingsData?.store_info?.cash_version || false,
@@ -137,7 +141,7 @@ export async function ApiCategoriesAndMenues(locale) {
 
       return menu;
     });
-    console.log(getMenues.data, "poxos")
+    console.log(getMenues.data, "poxos");
 
     // [...new Map(getMenues.data.map(item => [item["id"], item])).values()]
 
@@ -145,7 +149,10 @@ export async function ApiCategoriesAndMenues(locale) {
       setCatgoies: getCategories.categories || false,
       // setMenuList: getMenues.data   || false,
       // FIX ME......... for FUTURE
-      setMenuList: [...new Map(getMenues.data.map(item => [item["id"], item])).values()] || false,
+      setMenuList:
+        [
+          ...new Map(getMenues.data.map((item) => [item["id"], item])).values(),
+        ] || false,
     };
   }
 }

@@ -9,7 +9,7 @@ import theme from "../../data/theme";
 
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { url, apiUrlWithStore } from "../../helper";
+import { url, domainUrl } from "../../helper";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { ChangepasSvg } from "svg";
@@ -38,9 +38,12 @@ function AccountPageProfile(props) {
     const abortController = new AbortController();
     const single = abortController.single;
     if (customer.token) {
-      fetch(apiUrlWithStore("/api/customer/get?token=" + customer.token), {
-        single: single
-      })
+      fetch(
+        domainUrl(`${props.dbName}/api/customer/get?token=${customer.token}`),
+        {
+          single: single,
+        }
+      )
         .then((responce) => responce.json())
         .then((res) => {
           if (res) {
@@ -65,7 +68,7 @@ function AccountPageProfile(props) {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
 
       body: JSON.stringify({
@@ -81,11 +84,11 @@ function AccountPageProfile(props) {
         password_confirmation: input.password,
         gender: input.gender !== undefined ? input.gender : address.gender,
         phone: input.phone !== undefined ? input.phone : address.phone,
-        date_of_birth: input.birth
-      })
+        date_of_birth: input.birth,
+      }),
     };
 
-    fetch(`${url}/api/customer/profile`, option)
+    fetch(`https://${props.dbName}/api/customer/profile`, option)
       .then((response) => response.json())
       .then((res) => {
         setLoading(false);
@@ -98,7 +101,6 @@ function AccountPageProfile(props) {
         }
       });
   };
-
 
   return (
     <div className="card input-fields-parent">
@@ -247,9 +249,11 @@ function AccountPageProfile(props) {
                 />
               </label>
 
-              <FormattedMessage id="ChangePassword" defaultMessage="Change password" >
-              {
-                val => 
+              <FormattedMessage
+                id="ChangePassword"
+                defaultMessage="Change password"
+              >
+                {(val) => (
                   <input
                     onChange={handleChange}
                     value={val}
@@ -257,18 +261,18 @@ function AccountPageProfile(props) {
                     type="button"
                     className="form-control border-input-light f16"
                     id="password-current"
-                    style={{ textAlign: "start", backgroundColor: "#ebe9e9"}}
+                    style={{ textAlign: "start", backgroundColor: "#ebe9e9" }}
                     onClick={(e) => {
                       setPopup(true);
                       setPopupName("passwordChange");
                     }}
                   />
-                }
+                )}
               </FormattedMessage>
-              
+
               <button
                 className="button-change-password"
-                style={{ background: "transparent"}}
+                style={{ background: "transparent" }}
                 // onClick={(e) => {
                 //   setPopup(true);
                 //   setPopupName("passwordChange");
@@ -316,7 +320,7 @@ function AccountPageProfile(props) {
 const mapStateToProps = () => ({});
 const mapDispatchToProps = {
   setPopup,
-  setPopupName
+  setPopupName,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountPageProfile);

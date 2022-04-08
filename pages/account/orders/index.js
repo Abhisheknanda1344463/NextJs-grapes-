@@ -4,14 +4,14 @@ import AccountPageOrders from "../../../components/account/AccountPageOrders";
 import allActions from "../../../services/actionsArray";
 import { generalProcessForAnyPage } from "../../../services/utils";
 import store from "../../../store";
-function Orders({ locale, dispatches }) {
+function Orders({ locale, dispatches, dbName }) {
   const { dispatch } = store;
   useEffect(() => {
     for (let actionKey in dispatches) {
       dispatch(allActions[actionKey](dispatches[actionKey]));
     }
-  }, [props.locale]);
-  return <AccountPageOrders />;
+  }, [locale]);
+  return <AccountPageOrders dbName={dbName} />;
 }
 
 export async function getServerSideProps({ locale, locales, req, res }) {
@@ -24,6 +24,7 @@ export async function getServerSideProps({ locale, locales, req, res }) {
     currency,
     dispatches: generalDispatches,
   } = await generalProcessForAnyPage(locale);
+  const dbName = req.headers["x-forwarded-host"];
   const selectedLocale = locale !== "catchAll" ? locale : defaultLocaleSelected;
 
   // const parsedMetas = await metas.data.json();
@@ -35,6 +36,7 @@ export async function getServerSideProps({ locale, locales, req, res }) {
     props: {
       locale: selectedLocale,
       dispatches,
+      dbName: dbName,
     },
   };
 }

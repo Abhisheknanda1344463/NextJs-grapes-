@@ -11,6 +11,7 @@ import {
   setCasheVersion,
   setTranslations,
   setStoreConfigs,
+  setCoreConfigs,
   setInitialMinPrice,
   setInitialMaxPrice,
 } from "../store/general";
@@ -27,6 +28,7 @@ export default {
   setBackorders,
   setSlideImages,
   setCasheVersion,
+  setCoreConfigs,
   setTranslations,
   setStoreConfigs,
   AddCartToken,

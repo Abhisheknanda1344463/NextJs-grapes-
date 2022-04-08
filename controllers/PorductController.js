@@ -183,7 +183,7 @@ function buildProductsListCollection({ flat, savings, price, ...rest }) {
     if (price) {
       const [from, to] = price.split(",");
 
-      console.log(from, to, prices, rest, "prices");
+      /// console.log(from, to, prices, rest, "prices");
       const flatProductsFiltered = flatProducts.filter((flatProduct) => {
         console.log(flatProduct.price, "flatProduct.price");
         if (
@@ -311,6 +311,7 @@ function Get_Product_list(options) {
     locale = defaultLocale;
   }
   let searchKeys = {};
+  console.log(options, "options");
   for (let key in options) {
     if (
       key != "limit" &&
@@ -344,7 +345,7 @@ function Get_Product_list(options) {
         const productIdsByCategory = res.map((e) => e.product_id);
         console.log(searchKeys, "searchKeys");
         const paramsArray = Object.keys(JSON.parse(JSON.stringify(searchKeys)));
-
+        console.log(paramsArray, "searchKeys");
         const buildQueryParams = paramsArray.reduce((acc, next) => {
           if (
             typeof searchKeys[next] == "object" &&
@@ -362,15 +363,16 @@ function Get_Product_list(options) {
 
         if (Object.keys(buildQueryParams)[0] !== "text_value") {
           var productIds;
+          console.log(buildQueryParams, "buildQueryParams");
           ProductAttributeValues.find({ ...buildQueryParams }).then((res) => {
-            console.log(buildQueryParams, "productIdsByCategory");
+            console.log(productIdsByCategory, "productIdsByCategory");
             productIds = productIdsByCategory.filter((id) => {
               const find = res.find((e) => e.product_id == id);
               if (find) {
                 return id;
               }
             });
-
+            console.log(productIds, "productIds");
             const productsPromise = new Promise((resolve, reject) => {
               Products.find({ id: { $in: productIds } }).then((products) =>
                 resolve({ products })
@@ -382,12 +384,20 @@ function Get_Product_list(options) {
                *  @info: Min max price Only category Id , wihtout all filtered attributes, need to overwrite
                *
                * */
-
+              let object;
               let date_now = null;
-              let object = {
-                locale: locale,
-                product_id: { $in: productIds },
-              };
+              console.log(productIds, "aaaaaaaaaaaa");
+              if (productIds.length > 0) {
+                object = {
+                  locale: locale,
+                  product_id: { $in: productIds },
+                };
+              } else {
+                object = {
+                  locale: locale,
+                };
+              }
+              console.log(productIds.length, object, "aaaaaaaaaaaa");
               // console.log(options["price"], 'options["price"]options["price"]');
               if (options["price"]) {
                 const [from, to] = options["price"].split(",");
@@ -418,25 +428,24 @@ function Get_Product_list(options) {
                   special_price: { $ne: null },
                 };
 
-                ProductFlat
-                  ///.where("special_price_from")
-                  // .lte(date_now)
-                  // .where("special_price_to")
-                  // .gte(date_now)
+                ProductFlat.where("special_price_from")
+                  .lte(date_now)
+                  .where("special_price_to")
+                  .gte(date_now)
                   .countDocuments({ ...object })
                   .exec((count_error, count) => {
-                    // const pageCount = Math.ceil(count / limit);
-                    // const skip = (+page - 1) * limit;
-                    // console.log(object, "object");
+                    const pageCount = Math.ceil(count / limit);
+                    const skip = (+page - 1) * limit;
+                    console.log(count, "count");
                     ProductFlat.find({
                       ...object,
                     })
-                      /// .skip(skip)
-                      ///  .limit(+limit)
-                      // .where("special_price_from")
-                      // .lte(date_now)
-                      // .where("special_price_to")
-                      // .gte(date_now)
+                      .skip(skip)
+                      .limit(+limit)
+                      .where("special_price_from")
+                      .lte(date_now)
+                      .where("special_price_to")
+                      .gte(date_now)
                       .then((flatProducts) => {
                         const prices = flatProducts
                           .map((item) => parseInt(item.price))
