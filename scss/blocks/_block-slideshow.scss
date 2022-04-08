@@ -113,7 +113,7 @@ $local-dot-size: $local-dots-height - $local-dots-padding * 2;
   margin-bottom: 240px;
   margin-right: auto;
   margin-left: auto;
-  opacity: 0;
+  //opacity: 0;
   transition: all 1s 0.4s;
 }
 .block-slideshow .correct-slick-active {
