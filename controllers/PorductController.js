@@ -96,7 +96,7 @@ function build({ flatProducts, locale, resolve, ...rest }) {
         Products.find({ id: productId })
           .then((res) => resolve({ Products: res }))
           .catch((err) => reject4(err));
-      })
+      });
 
       return Promise.all([p1, p2, p3, p4])
         .then((response) => {
@@ -106,8 +106,8 @@ function build({ flatProducts, locale, resolve, ...rest }) {
           const inventoriesData = parseClone(
             collection.ProductInventories[0] || []
           );
-          const allProducts = parseClone(collection.Products[0] || [])
-          console.log(allProducts, "all products")
+          const allProducts = parseClone(collection.Products[0] || []);
+          /// console.log(allProducts, "all products");
           if (imagesData[0] && imagesData[0].path) {
             const { path } = imagesData[0];
             const base_imag = makeImageClone(path);
@@ -179,20 +179,27 @@ function buildProductsListCollection({ flat, savings, price, ...rest }) {
 
   if (flat) {
     const { prices, flatProducts } = rest;
-    ///  console.log(rest, "restrestrestrest");
-    const flatProductsFiltered = flatProducts.filter((flatProduct) => {
-      if (
-        flatProduct.price >= prices[0] &&
-        flatProduct.price <= prices[prices.length - 1]
-      ) {
-        return flatProduct;
-      }
-    });
+    let object;
+    if (price) {
+      const [from, to] = price.split(",");
 
-    build({
-      ...rest,
-      flatProducts: flatProductsFiltered,
-    });
+      console.log(from, to, prices, rest, "prices");
+      const flatProductsFiltered = flatProducts.filter((flatProduct) => {
+        console.log(flatProduct.price, "flatProduct.price");
+        if (
+          flatProduct.price >= from &&
+          flatProduct.price <= parseFloat(to) + 5
+        ) {
+          return flatProduct;
+        }
+      });
+      build({
+        ...rest,
+        flatProducts: flatProductsFiltered,
+      });
+    }
+
+    build(rest);
   } else {
     build(rest);
   }
@@ -292,8 +299,17 @@ function Get_New_And_Futured_Products({ locale, limit, currency, ...rest }) {
 
 function Get_Product_list(options) {
   //limit, category_id, currency,
-  const { locale, limit, page, ...rest } = options;
-
+  const { locale: defaultLocale, limit, page, ...rest } = options;
+  console.log(
+    defaultLocale,
+    "Get_Product_listGet_Product_listGet_Product_list"
+  );
+  var locale;
+  if (defaultLocale.length > 0) {
+    locale = defaultLocale[0];
+  } else {
+    locale = defaultLocale;
+  }
   let searchKeys = {};
   for (let key in options) {
     if (
@@ -305,7 +321,13 @@ function Get_Product_list(options) {
     ) {
       switch (key) {
         case "savings":
+          break;
         case "price":
+          // const [from, to] = options["price"].split(",");
+          // searchKeys = {
+          //   ...searchKeys,
+          //   prices: { $gte: from + ".0000", $lte: to + ".0000" },
+          // };
           break;
         default:
           searchKeys = {
@@ -315,11 +337,12 @@ function Get_Product_list(options) {
       }
     }
   }
-  /// console.log(options, "Get_Product_listGet_Product_listGet_Product_list");
+
   return new Promise((resolve, reject) => {
     ProductsCategories.find({ category_id: options.category_id }).then(
       (res) => {
         const productIdsByCategory = res.map((e) => e.product_id);
+        console.log(searchKeys, "searchKeys");
         const paramsArray = Object.keys(JSON.parse(JSON.stringify(searchKeys)));
 
         const buildQueryParams = paramsArray.reduce((acc, next) => {
@@ -332,13 +355,16 @@ function Get_Product_list(options) {
             return { ...acc, [next]: searchKeys[next] };
           }
         }, {});
-        // console.log(
-        //   buildQueryParams,
-        //   "buildQueryParamsbuildQueryParamsbuildQueryParams"
-        // );
+        console.log(
+          buildQueryParams,
+          "buildQueryParamsbuildQueryParamsbuildQueryParams"
+        );
+
         if (Object.keys(buildQueryParams)[0] !== "text_value") {
+          var productIds;
           ProductAttributeValues.find({ ...buildQueryParams }).then((res) => {
-            const productIds = productIdsByCategory.filter((id) => {
+            console.log(buildQueryParams, "productIdsByCategory");
+            productIds = productIdsByCategory.filter((id) => {
               const find = res.find((e) => e.product_id == id);
               if (find) {
                 return id;
@@ -362,15 +388,19 @@ function Get_Product_list(options) {
                 locale: locale,
                 product_id: { $in: productIds },
               };
-
+              // console.log(options["price"], 'options["price"]options["price"]');
               if (options["price"]) {
                 const [from, to] = options["price"].split(",");
+                // console.log(from, to);
                 object = {
                   ...object,
-                  price: { $gte: from + ".0000", $lte: to + ".0000" },
+                  price: {
+                    $gte: from + ".0000",
+                    $lte: parseFloat(to) + 10 + ".0000",
+                  },
                 };
               }
-
+              console.log(object);
               if (options["savings"]) {
                 const d = new Date(),
                   month = "" + (d.getMonth() + 1),
@@ -381,40 +411,42 @@ function Get_Product_list(options) {
                 date_now = new Date(`${year}-${month}-${day}`).getTime();
                 date_now = "" + date_now;
                 date_now = parseInt(date_now.slice(0, -3));
-                console.log(date_now,"date now in product")
+                /// console.log(date_now, "date now in product");
 
                 object = {
                   ...object,
                   special_price: { $ne: null },
                 };
 
-                ProductFlat.where("special_price_from")
-                  .lte(date_now)
-                  .where("special_price_to")
-                  .gte(date_now)
+                ProductFlat
+                  ///.where("special_price_from")
+                  // .lte(date_now)
+                  // .where("special_price_to")
+                  // .gte(date_now)
                   .countDocuments({ ...object })
                   .exec((count_error, count) => {
-                    const pageCount = Math.ceil(count / limit);
-                    const skip = (+page - 1) * limit;
-
+                    // const pageCount = Math.ceil(count / limit);
+                    // const skip = (+page - 1) * limit;
+                    // console.log(object, "object");
                     ProductFlat.find({
                       ...object,
                     })
-                      .skip(skip)
-                      .limit(+limit)
-                      .where("special_price_from")
-                      .lte(date_now)
-                      .where("special_price_to")
-                      .gte(date_now)
+                      /// .skip(skip)
+                      ///  .limit(+limit)
+                      // .where("special_price_from")
+                      // .lte(date_now)
+                      // .where("special_price_to")
+                      // .gte(date_now)
                       .then((flatProducts) => {
                         const prices = flatProducts
                           .map((item) => parseInt(item.price))
                           .filter((e) => e);
 
                         resolve({
-                          total: pageCount,
+                          total: 20,
                           flatProducts,
                           prices: [0, prices[prices.length - 1] || 1000],
+                          price: options["price"],
                         });
                       });
                   });
@@ -436,13 +468,14 @@ function Get_Product_list(options) {
                           total: pageCount,
                           flatProducts,
                           prices: [0, prices[prices.length - 1] || 1000],
+                          price: options["price"],
                         });
                       });
                   }
                 );
               }
             });
-            /// console.log(productsPromise, "optionsoptions");
+            //  console.log(productsPromise, "optionsoptions");
             return Promise.all([productsPromise, minMaxPricePromise]).then(
               (response) => {
                 const productsAndMinMaxPrice = arrayConvertToObject(
@@ -454,7 +487,7 @@ function Get_Product_list(options) {
                     locale,
                     resolve,
                     flat: true,
-                    price: options["price"],
+                    price: productsAndMinMaxPrice.price,
                     savings: options["savings"],
                     ...productsAndMinMaxPrice,
                   });
@@ -463,6 +496,7 @@ function Get_Product_list(options) {
                     page,
                     locale,
                     resolve,
+                    // price: options["price"],
                     flat: false,
                     ...productsAndMinMaxPrice,
                   });
@@ -475,8 +509,8 @@ function Get_Product_list(options) {
             name: { $regex: Object.values(buildQueryParams)[0], $options: "i" },
             // name: { $regex: ".*" + Object.values(buildQueryParams)[0] + ".*" },
           }).then((flatProducts) => {
-            build({ flatProducts, locale, resolve,type: "data", ...rest});
-          })
+            build({ flatProducts, locale, resolve, type: "data", ...rest });
+          });
         }
       }
     );

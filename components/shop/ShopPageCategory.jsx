@@ -284,43 +284,47 @@ function ShopPageCategory(props) {
   // console.log(categorySlug, "categorySlugcategorySlug");
 
   useEffect(() => {
-    const query = buildQuery({ ...state.options, page: page }, state.filters);
-    const location = `${window.location.pathname}${query ? "?" : ""}${query}`;
-    window.history.replaceState(null, "", location);
+    prevCategorySlugRef.current = categorySlug;
+    // prevStateOptionsRef.current = state.options;
+    ///prevStateFiltersRef.current = state.filters;
     setProductsList(allProduct);
     setBrands(brandList);
     setMaxPrice(allProduct.dispatches.setInitialMaxPrice);
     setMinPrice(allProduct.dispatches.setInitialMinPrice);
   }, [router.locale, categorySlug, state.options]);
 
-  async function categoryData  () {
+  ///console.log(prevCategorySlugRef.current, "prevCategorySlugRef.current");
+
+  async function categoryData() {
     const query = buildQuery({ ...state.options, page: page }, state.filters);
     const location = `${window.location.pathname}${query ? "?" : ""}${query}`;
-
-console.log(dbName);
-    await shopApi
-    .getProductsList({
-      options: {
-        ...state.options,
-        page: page,
-        currency: currency,
-        locale: props.locale,
-      },
-      domain: dbName,
-      filters: { ...state.filters },
-      history: history.search,
-      location:location,
-      catID: catID,
-      window: null,
-      limit: 6,
-    })
-    .then((items) => {
-      setProductsList(items);
-    });
+    if (prevStateOptionsRef.current != state.options) {
+      prevStateFiltersRef.current = state.filters;
+      prevStateOptionsRef.current = state.options;
+      await shopApi
+        .getProductsList({
+          options: {
+            ...state.options,
+            page: page,
+            currency: "AMD",
+            locale: props.locale,
+          },
+          domain: dbName,
+          filters: { ...state.filters },
+          history: history.search,
+          location: location,
+          catID: catID,
+          window: null,
+          limit: 6,
+        })
+        .then((items) => {
+          setProductsList(items);
+        });
+    }
   }
   useEffect(() => {
-    categoryData()
-  }, [categorySlug, state.options, state.filters,page]);
+    categoryData();
+  }, [state.options, state.filters, page]);
 
   if (state.productsListIsLoading && !productsList) {
     return <BlockLoader />;
@@ -509,7 +513,8 @@ console.log(dbName);
             <div className="posts-view__pagination">
               {productsList &&
               //////FIXME CHANGE TO LIMIT
-              productsList.data.length < 20  && page == 1 ? (
+              productsList.data.length < 20 &&
+              page == 1 ? (
                 <></>
               ) : (
                 <Pagination
