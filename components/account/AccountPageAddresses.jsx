@@ -9,14 +9,14 @@ import theme from "../../data/theme";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { url, apiUrlWithStore } from "../../helper";
+import { url, domainUrl } from "../../helper";
 import BlockLoader from "../blocks/BlockLoader";
 
 import { RemoveAddress, AddNewAddress, EditAddress } from "../../svg";
 
 import { FormattedMessage } from "react-intl";
 
-export default function AccountPageAddresses() {
+export default function AccountPageAddresses(props) {
   const customer = useSelector((state) => state.customer);
   const [address, setAddress] = useState();
   const [message, setMessage] = useState("");
@@ -27,9 +27,14 @@ export default function AccountPageAddresses() {
     const single = abortController.single;
 
     if (customer.token) {
-      fetch(apiUrlWithStore(`/api/addresses?pagination=0&token=` + customer.token), {
-        single: single,
-      })
+      fetch(
+        domainUrl(
+          `${props.dbName}/api/addresses?pagination=0&token=` + customer.token
+        ),
+        {
+          single: single,
+        }
+      )
         .then((responce) => responce.json())
         .then((res) => {
           if (res.data) {
@@ -58,7 +63,7 @@ export default function AccountPageAddresses() {
           token: customer.token,
         }),
       };
-      fetch(`${url}/api/addresses/${id}`, option)
+      fetch(domainUrl(`${props.dbName}/api/addresses/${id}`), option)
         .then((responce) => responce.json())
         .then((res) => {
           setMessage(res.message + id);

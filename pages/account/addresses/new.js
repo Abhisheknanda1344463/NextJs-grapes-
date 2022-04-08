@@ -5,7 +5,7 @@ import { generalProcessForAnyPage } from "../../../services/utils";
 import store from "../../../store";
 import { useRouter } from "next/router";
 
-function Addresses({ locale, dispatches }) {
+function Addresses({ locale, dispatches, dbName }) {
   const { dispatch } = store;
   useEffect(() => {
     // changeLocale(locale == "en" ? 1 : 6);
@@ -16,7 +16,9 @@ function Addresses({ locale, dispatches }) {
   }, [locale]);
   const { query } = useRouter();
 
-  return <AccountPageNewAddresses addressId={query.addressId} />;
+  return (
+    <AccountPageNewAddresses addressId={query.addressId} dbName={dbName} />
+  );
 }
 
 export async function getServerSideProps({ locale, locales, req, res }) {
@@ -24,6 +26,7 @@ export async function getServerSideProps({ locale, locales, req, res }) {
     "Cache-Control",
     "public, s-maxage=10, stale-while-revalidate=59"
   );
+  const dbName = req.headers["x-forwarded-host"];
   const {
     locale: defaultLocaleSelected,
     currency,
@@ -40,6 +43,7 @@ export async function getServerSideProps({ locale, locales, req, res }) {
     props: {
       locale: selectedLocale,
       dispatches,
+      dbName: dbName,
     },
   };
 }
