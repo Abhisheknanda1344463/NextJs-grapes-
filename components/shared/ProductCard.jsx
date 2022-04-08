@@ -85,7 +85,7 @@ function ProductCard(props) {
             <div className="product-image__body product-image__body-fms">
               <div className="item_overlay hide-for-tablet"></div>
               <div className="img_btn_wrapper">
-                {console.log(product?.type, "product type in product card")}
+                {/*{console.log(product?.type, "product type in product card")}*/}
 
                 {product && product?.type === "configurable" ? (
 
@@ -297,7 +297,7 @@ function ProductCard(props) {
       </div>
     );
     // console.log(product, "productCard")
-  } else if (product?.special_price) {
+  } else if (product?.special_price ) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__new-price">

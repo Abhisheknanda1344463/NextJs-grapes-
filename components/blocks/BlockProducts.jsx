@@ -14,7 +14,7 @@ import Head from "next/head";
 function BlockProducts(props) {
   const { customer, title, layout, featuredProduct, products, addInClass } =
     props;
-  console.log(products, "products in blockProducts")
+  // console.log(products, "products in blockProducts")
 
   let large = null;
   let smalls = null;

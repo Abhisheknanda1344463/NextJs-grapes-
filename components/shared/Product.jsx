@@ -75,6 +75,7 @@ class Product extends PureComponent {
         product: this.props.product,
         simpleProduct: this.props.product.data,
         imagesData: this.props.product.data.images,
+        configurablesData: null,
       });
       this.props.AddImages(this.props.product.data.images);
     }
@@ -98,13 +99,13 @@ class Product extends PureComponent {
   }
 
   componentDidUpdate(prProps, prState) {
-    console.log(
-      prProps.locale,
-      prState.locale,
-      this.props.locale,
-      this.state.locale,
-      "localelocale"
-    );
+    // console.log(
+    //   prProps.locale,
+    //   prState.locale,
+    //   this.props.locale,
+    //   this.state.locale,
+    //   "localelocale"
+    // );
     if (
       prProps.productSlug !== this.props.productSlug ||
       prProps.locale !== this.props.product.data.locale
@@ -447,7 +448,7 @@ class Product extends PureComponent {
                       </span>
                     </span>
                   </>
-                ) : product.data.special_price ? (
+                ) : product?.data.special_price ? (
                   <>
                     <span className="product-card__new-price">
                       <Currency
@@ -512,7 +513,7 @@ class Product extends PureComponent {
                   )}
                 />
               </div>
-              {console.log("this state", this.state)}
+              {/*{console.log("this state", this.state)}*/}
               {this.state?.configurablesData?.attributes && (
                 <ConfigurableFilters
                   locale={this.state.locale}

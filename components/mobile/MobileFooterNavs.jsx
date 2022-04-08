@@ -61,7 +61,7 @@ function MobileFooterNavs(props) {
           className="indicator--mobile"
           aria-label="go to shop card"
           url="/shop/cart"
-          value={cart.items.length}
+          value={cart.quantity}
           icon={<CartNewtSvg />}
         />
       ),
@@ -70,7 +70,7 @@ function MobileFooterNavs(props) {
           style={{ fontSize: "18px", color: "red" }}
           icon={<CartNewtSvg />}
           url="/shop/cart"
-          value={cart.items.length}
+          value={cart.quantity}
           aria-label="go to shop card"
         />
       ),

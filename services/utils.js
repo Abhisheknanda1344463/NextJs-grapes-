@@ -137,11 +137,15 @@ export async function ApiCategoriesAndMenues(locale) {
 
       return menu;
     });
+    console.log(getMenues.data, "poxos")
+
+    // [...new Map(getMenues.data.map(item => [item["id"], item])).values()]
 
     return {
       setCatgoies: getCategories.categories || false,
       // setMenuList: getMenues.data   || false,
-      setMenuList: getMenues.data || false,
+      // FIX ME......... for FUTURE
+      setMenuList: [...new Map(getMenues.data.map(item => [item["id"], item])).values()] || false,
     };
   }
 }

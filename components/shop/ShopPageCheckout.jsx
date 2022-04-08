@@ -380,12 +380,13 @@ class ShopPageCheckout extends React.Component {
       <tr key={item.id}>
         <td>{`${item.product.name}`}</td>
         <td className="responsive-checkout-text">
+          {console.log("item",item)}
           {`${item.quantity} ×`}
-          {item.product.product?.special_price &&
-          date_now >= item.product.product.special_price_from &&
-          date_now <= item.product.product.special_price_to ? (
+          {item.product?.special_price &&
+          date_now >= item.product.special_price_from &&
+          date_now <= item.product.special_price_to ? (
             <Currency value={Number(item.product.special_price).toFixed(0)} />
-          ) : item.product.product?.special_price
+          ) : item.product?.special_price
             ? <Currency value={Number(item.product.special_price).toFixed(0)} /> : (
             <Currency value={Number(item.product.price).toFixed(0)} />
           )}

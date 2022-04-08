@@ -283,7 +283,7 @@ function IndicatorCart(props) {
       openEd={open}
       open={open}
       dropdown={dropdown}
-      value={cart.items.length}
+      value={cart.quantity}
       icon={<CartFill />}
       title={<FormattedMessage id="cart" defaultMessage="Cart" />}
     />

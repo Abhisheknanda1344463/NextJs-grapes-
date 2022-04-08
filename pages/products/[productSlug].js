@@ -9,6 +9,7 @@ import ShopPageProduct from "../../components/shop/ShopPageProduct";
 
 export default function ProductInnerPage(props) {
   const query = useRouter();
+  console.log(props.product, "props product in product slug")
   const { dispatch } = store;
   useEffect(() => {
     window.history.replaceState(null, "", window.location.pathname);

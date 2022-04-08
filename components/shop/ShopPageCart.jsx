@@ -100,7 +100,7 @@ const ShopPageCart = (props) => {
           date_now >= date_from &&
           date_now <= date_to
           ? Number(item.product.special_price).toFixed(0) * item.quantity
-          : item?.product.special_price
+          : item?.product?.special_price
             ? Number(item.product.special_price).toFixed(0) * item.quantity
             : Number(item.product.price).toFixed(0) * item.quantity
       )
@@ -244,7 +244,7 @@ const ShopPageCart = (props) => {
             }
           </div>
         )
-      } else if (product?.special_price) {
+      } else if (product?.special_price ) {
         price = (
           <div className="product-card__prices">
             <span className="product-card__new-price">

@@ -108,7 +108,7 @@ function Search(props) {
             }
             return item
           });
-console.log(newProduct,"ttttttttt")
+// console.log(newProduct,"ttttttttt")
           // let x =
           // const newProducts.data = [image,...item]
           // console.log(newProducts,"products in query")
@@ -127,7 +127,7 @@ console.log(newProduct,"ttttttttt")
 
     setCancelFn(() => newCancelFn);
   };
-  console.log(props, "products datya");
+  // console.log(props, "products datya");
   const handleBlur = () => {
     setTimeout(() => {
       if (!document.activeElement || document.activeElement === document.body) {
