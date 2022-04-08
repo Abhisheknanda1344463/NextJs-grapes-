@@ -7,12 +7,12 @@ import { Helmet } from "react-helmet-async";
 // data stubs
 import theme from "../../data/theme";
 import { useEffect } from "react";
-import { url } from "../../helper";
+import { url, domainUrl } from "../../helper";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 
-export default function AccountPageEditAddress({ addressId }) {
+export default function AccountPageEditAddress({ addressId, dbName }) {
   const customer = useSelector((state) => state.customer);
   const [success, setSuccess] = useState(false);
   const [successData, setSuucessData] = useState();
@@ -23,13 +23,18 @@ export default function AccountPageEditAddress({ addressId }) {
     const abortController = new AbortController();
     const single = abortController.single;
     if (addressId && customer.token) {
-      fetch(url + `/api/addresses/${addressId}?token=` + customer.token, {
-        single: single,
-      })
+      fetch(
+        domainUrl(
+          `${dbName}/api/addresses/${addressId}?token=` + customer.token
+        ),
+        {
+          single: single,
+        }
+      )
         .then((responce) => responce.json())
         .then((res) => {
           if (res.data) {
-       //////     console.log(res, "oooo");
+            //////     console.log(res, "oooo");
             setInput({
               first_name: res.data.first_name,
               last_name: res.data.last_name,
@@ -54,7 +59,7 @@ export default function AccountPageEditAddress({ addressId }) {
   const [countryList, setCountryList] = useState();
 
   useEffect(() => {
-    fetch(`${url}/api/countries?pagination=0`)
+    fetch(domainUrl(`${dbName}/api/countries?pagination=0`))
       .then((res) => res.json())
       .then((res) => setCountryList(res.data.reverse()));
   }, []);
@@ -92,7 +97,7 @@ export default function AccountPageEditAddress({ addressId }) {
         apartment: input.apartment || address.apartment,
       }),
     };
-    fetch(`${url}/api/addresses/${addressId}`, option)
+    fetch(domainUrl(`${dbName}/api/addresses/${addressId}`), option)
       .then((response) => response.json())
       .then((res) => {
         setSuccess(true);

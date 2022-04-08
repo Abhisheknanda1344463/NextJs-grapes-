@@ -2,12 +2,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { url } from "../../helper";
+import { url, domainUrl } from "../../helper";
 import { useEffect, useRef } from "react";
 import { FormattedMessage } from "react-intl";
 import { useRouter } from "next/router";
 
-const AccountPageNewAddresses = () => {
+const AccountPageNewAddresses = (props) => {
   const form = useRef(null);
   const customer = useSelector((state) => state.customer);
   const [errors, setErrors] = useState();
@@ -31,7 +31,7 @@ const AccountPageNewAddresses = () => {
   }, [errors, success]);
 
   useEffect(() => {
-    fetch(`${url}/api/countries?pagination=0`)
+    fetch(domainUrl(`${props.dbName}/api/countries?pagination=0`))
       .then((res) => res.json())
       .then((res) => setCountryList(res.data.reverse()));
   }, []);
@@ -99,7 +99,7 @@ const AccountPageNewAddresses = () => {
       }),
     };
 
-    fetch(`${url}/api/addresses/create`, option)
+    fetch(domainUrl(`${props.dbName}/api/addresses/create`), option)
       .then((response) => response.json())
       .then((res) => {
         if (res.errors) {
@@ -125,7 +125,7 @@ const AccountPageNewAddresses = () => {
   };
 
   useEffect(() => {
-    fetch(`${url}/api/countries?pagination=0`)
+    fetch(domainUrl(`${props.dbName}/api/countries?pagination=0`))
       .then((res) => res.json())
       .then((res) => setCountryList(res.data.reverse()));
   }, []);
@@ -321,7 +321,7 @@ const AccountPageNewAddresses = () => {
                     >
                       {(placeholder) => (
                         <input
-                            onChange={handleChange}
+                          onChange={handleChange}
                           defaultValue=""
                           value={input.phone}
                           name="phone"

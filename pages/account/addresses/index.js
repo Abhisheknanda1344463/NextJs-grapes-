@@ -4,16 +4,14 @@ import { generalProcessForAnyPage } from "../../../services/utils";
 import store from "../../../store";
 import AccountPageAddresses from "../../../components/account/AccountPageAddresses";
 
-function Addresses({ locale, dispatches }) {
+function Addresses({ locale, dispatches, dbName }) {
   const { dispatch } = store;
   useEffect(() => {
-    // changeLocale(locale == "en" ? 1 : 6);
     for (let actionKey in dispatches) {
       dispatch(allActions[actionKey](dispatches[actionKey]));
-      // dispatch(allActions[actionKey](props.dispatches[actionKey]));
     }
   }, [locale]);
-  return <AccountPageAddresses />;
+  return <AccountPageAddresses dbName={dbName} />;
 }
 
 export async function getServerSideProps({ locale, locales, req, res }) {
@@ -21,11 +19,14 @@ export async function getServerSideProps({ locale, locales, req, res }) {
     "Cache-Control",
     "public, s-maxage=10, stale-while-revalidate=59"
   );
+
+  const dbName = req.headers["x-forwarded-host"];
   const {
     locale: defaultLocaleSelected,
     currency,
     dispatches: generalDispatches,
   } = await generalProcessForAnyPage(locale);
+
   const selectedLocale = locale !== "catchAll" ? locale : defaultLocaleSelected;
 
   // const parsedMetas = await metas.data.json();
@@ -37,6 +38,7 @@ export async function getServerSideProps({ locale, locales, req, res }) {
     props: {
       locale: selectedLocale,
       dispatches,
+      dbName: dbName,
     },
   };
 }

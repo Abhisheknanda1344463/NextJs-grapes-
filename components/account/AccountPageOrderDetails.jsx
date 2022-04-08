@@ -8,25 +8,28 @@ import Link from "next/link";
 // data stubs
 import theme from "../../data/theme";
 import { useEffect } from "react";
-import { url } from "../../helper";
+import { domainUrl } from "../../helper";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import BlockLoader from "../blocks/BlockLoader";
 import { FormattedMessage } from "react-intl";
 import { cartAddItem } from "../../store/cart";
 
-function AccountPageOrderDetails({ orderId, cartToken, cartAddItem }) {
+function AccountPageOrderDetails({ orderId, dbName }) {
   const customer = useSelector((state) => state.customer);
   const [order, setOrder] = useState();
 
   useEffect(() => {
     const abortController = new AbortController();
     const single = abortController.single;
-
+    ////fix it get from serverside
     if (orderId && customer.token) {
-      fetch(url + `/api/orders/${orderId}?token=` + customer.token, {
-        single: single,
-      })
+      fetch(
+        domainUrl(`${dbName}/api/orders/${orderId}?token=` + customer.token),
+        {
+          single: single,
+        }
+      )
         .then((responce) => responce.json())
         .then((res) => {
           if (res.data) {
@@ -278,10 +281,7 @@ function AccountPageOrderDetails({ orderId, cartToken, cartAddItem }) {
           {orderDetails}
           <div className="reorder-btn-parent">
             <button className="btn btn-primary f16 btn-primary-fms reorder-btn">
-              <FormattedMessage
-                id="reorder"
-                defaultMessage="Reorder"
-              />
+              <FormattedMessage id="reorder" defaultMessage="Reorder" />
             </button>
           </div>
         </div>
