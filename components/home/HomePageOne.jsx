@@ -52,26 +52,6 @@ function HomePageOne(props) {
   const messageTitle = homepage_title_text.props.defaultMessage;
   const messageIntro = homepage_intro_text.props.defaultMessage;
 
-  const checkQuantity = (obj) => {
-    return obj.filter((item, index) => {
-      if (item.qty === 0) {
-        if (
-          (hasBackorder === "1" && hasOutOfStock === "1") ||
-          (hasBackorder === "1" && hasOutOfStock !== "1")
-        ) {
-          // console.log("order - true, instock - true", index);
-          return 10;
-        } else if (hasBackorder !== "1" && hasOutOfStock !== "1") {
-          // console.log("display: none, index -", index);
-          return null || <></>;
-        } else if (hasBackorder !== "1" && hasOutOfStock === "1") {
-          // console.log("order - false, instock - false", index);
-          return 30;
-        }
-      }
-      return item;
-    });
-  };
   const getHomeProducts = () => {
     try {
       fetch(
@@ -113,36 +93,11 @@ function HomePageOne(props) {
       prevLocaleCodeRef.current = router.locale;
     }
     if (!firstLoad) {
-      getConfs();
       getHomeProducts();
     }
     setFirstLoad(false);
     ////  getFeaturedProducts();
   }, [router.locale]);
-
-  const getConfs = () => {
-    try {
-      fetch(
-        apiUrlWithStore(
-          `/db/core-conf?locale=${router.locale}&currency=AMD&limit=6`
-        )
-      )
-        .then((response) => response.json())
-        .then((res) => dispatch({ type: "SET_CONFIGS", payload: res }));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  // useEffect(() => {
-  //   if (
-  //     prevCurrencyCodeRef.current != currency.current.code ||
-  //     prevLocaleCodeRef.current != selectedData
-  //   ) {
-  //     prevCurrencyCodeRef.current = currency.current.code;
-  //     prevLocaleCodeRef.current = selectedData;
-  //   }
-  //   getConfs();
-  // }, [router.locale]);
 
   return (
     <React.Fragment>

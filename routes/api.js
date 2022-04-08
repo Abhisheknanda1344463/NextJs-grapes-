@@ -164,67 +164,65 @@ router.get("/home-products", function (req, res) {
       minPrices: products.status,
     });
   });
-
-  //create by Tigran (frontend Developer)
-
-  router.get("/get-meta", function (req, res) {
-    const options = {
-      locale: req.query.locale,
-    };
-    PageControllers.Get_Channels(options).then((meta) => {
-      // console.log(meta, "metametameta");
-      res.send({
-        data: meta.data,
-      });
-    });
-  });
-
-  //created by Manvel
-  // router.get('/get-crosell-upsell-products', function (req, res) {
-  //   const options = {
-  //     locale: req.query.locale,
-  //     product_id: req.query.product_id,
-  //     currency: req.query.currency,
-  //   };
-  //   ProductControllers.Get_UpSell_And_CrossSell_Products(options).then((products) => {
-  //     res.send(products)
-  //     // res.send({
-  //     //   // crossell: products.crossell,
-  //     //   // newProduct: products.new,
-  //     // });
-  //   })
-
-  // router.get('/setting-config', function (req, res) {
-  //   SettingsController
-  //     .then(test => {
-  //       console.log(test, 'kdaklsgjsfkaklsgafkl')
-  //       res.send(test)
-  //     })
-  // })
-
-  router.get("/product-type", function (req, res) {
-    ProductControllers.Get_Product_Type(req.query).then((resp) => {
-      res.send(resp);
-    });
-  });
-
-  /********** getting core configuration for enable/disable things *********/
-  router.get("/core-conf", function (req, res) {
-    SettingsController.Get_Core_Config(req.query).then((rep) => res.send(rep));
-  });
-
-  // ProductControllers.Get_New_Products(productsOptions).then(
-  //   (newProduct) => {
-  //     ProductControllers.Get_featured_Products(productsOptions).then(
-  //       (featuredProducts) => {
-  //         res.send({
-  //           featuredProducts,
-  //           newProduct,
-  //         });
-  //       }
-  //     );
-  //   }
-  // );
 });
+//create by Tigran (frontend Developer)
+
+router.get("/get-meta", function (req, res) {
+  const options = {
+    locale: req.query.locale,
+  };
+  PageControllers.Get_Channels(options).then((meta) => {
+    // console.log(meta, "metametameta");
+    res.send({
+      data: meta.data,
+    });
+  });
+});
+//created by Manvel
+// router.get('/get-crosell-upsell-products', function (req, res) {
+//   const options = {
+//     locale: req.query.locale,
+//     product_id: req.query.product_id,
+//     currency: req.query.currency,
+//   };
+//   ProductControllers.Get_UpSell_And_CrossSell_Products(options).then((products) => {
+//     res.send(products)
+//     // res.send({
+//     //   // crossell: products.crossell,
+//     //   // newProduct: products.new,
+//     // });
+//   })
+
+// router.get('/setting-config', function (req, res) {
+//   SettingsController
+//     .then(test => {
+//       console.log(test, 'kdaklsgjsfkaklsgafkl')
+//       res.send(test)
+//     })
+// })
+
+router.get("/product-type", function (req, res) {
+  ProductControllers.Get_Product_Type(req.query).then((resp) => {
+    res.send(resp);
+  });
+});
+
+/********** getting core configuration for enable/disable things *********/
+router.get("/core-conf", function (req, res) {
+  SettingsController.Get_Core_Config(req.query).then((rep) => res.send(rep));
+});
+
+// ProductControllers.Get_New_Products(productsOptions).then(
+//   (newProduct) => {
+//     ProductControllers.Get_featured_Products(productsOptions).then(
+//       (featuredProducts) => {
+//         res.send({
+//           featuredProducts,
+//           newProduct,
+//         });
+//       }
+//     );
+//   }
+// );
 
 module.exports = router;

@@ -9,7 +9,7 @@ function Login({ locale, dispatches }) {
     for (let actionKey in dispatches) {
       dispatch(allActions[actionKey](dispatches[actionKey]));
     }
-  }, [props.locale]);
+  }, [locale]);
 
   return <AccountPageLogin />;
 }

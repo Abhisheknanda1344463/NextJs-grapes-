@@ -120,7 +120,7 @@ export default function generalReducer(state = initialState, action) {
         social: action.payload,
       };
 
-    case "SET_CONFIGS" :
+    case SET_CONFIGS:
       return {
         ...state,
         coreConfigs: action.payload,
