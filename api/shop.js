@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-unused-vars
 import qs from "query-string";
 import { getCategoryBySlug } from "../fake-server/endpoints/categories";
-import { url, apiUrlWithStore, domainUrl } from "../helper";
+import { url, apiUrlWithStore, domainUrl ,megaUrl} from "../helper";
 import {
   getDiscountedProducts,
   getLatestProducts,
@@ -30,7 +30,7 @@ const shopApi = {
     );
   },
   customerResetPassword: (object) => {
-    return fetch(`${url}/db/customer/reset-password`, {
+    return fetch(`${megaUrl}/api/customer/reset-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -205,6 +205,7 @@ const shopApi = {
       `/db/products?search=${query}&locale=${locale}&currency=${currency}`
     ).then((response) => response.json());
   },
+
   getProductsList: ({
     options = {},
     filters = {},

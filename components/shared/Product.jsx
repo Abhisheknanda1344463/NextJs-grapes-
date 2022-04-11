@@ -718,6 +718,8 @@ Product.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
+  backorders: state.general.coreConfigs.catalog_inventory_stock_options_backorders,
+  outOfStock: state.general.coreConfigs.catalog_products_homepage_out_of_stock_items,
   locale: state.locale.code,
   cartToken: state.cartToken,
   token: state.cartToken,
