@@ -9,7 +9,11 @@ import ShopPageProduct from "../../components/shop/ShopPageProduct";
 
 export default function ProductInnerPage(props) {
   const query = useRouter();
-  console.log(props.product, "props product in product slug")
+  const prodID = props.product.data.product_id;
+  const cats = props.product.data.cats;
+
+  console.log(cats,"cats")
+  const checkRelatedProducts = props.relatedPproducts.filter(item => item.product_id !== prodID);
   const { dispatch } = store;
   useEffect(() => {
     window.history.replaceState(null, "", window.location.pathname);
@@ -24,7 +28,7 @@ export default function ProductInnerPage(props) {
     <ShopPageProduct
       layout="standard"
       productSlug={props.productSlug}
-      relatedPproducts={props.relatedPproducts}
+      relatedPproducts={checkRelatedProducts}
       product={props.product}
       dispatches={props.dispatches}
       configurableVariantes={props.configurableVariantes}

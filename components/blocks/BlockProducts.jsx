@@ -1,5 +1,6 @@
 // react
 import React from "react";
+import {useSelector} from "react-redux"
 
 // third-party
 import PropTypes from "prop-types";
@@ -14,12 +15,15 @@ import Head from "next/head";
 function BlockProducts(props) {
   const { customer, title, layout, featuredProduct, products, addInClass } =
     props;
-  // console.log(products, "products in blockProducts")
-
+  console.log(products, "products in blockProducts")
+  console.log(featuredProduct, "featuredProduct in blockProducts")
+  const backorders = useSelector(state => state.general.coreConfigs.catalog_inventory_stock_options_backorders)
+  const outOfStock = useSelector(state => state.general.coreConfigs.catalog_products_homepage_out_of_stock_items)
+  console.log(backorders, "backorders in blockProducts")
+  console.log(outOfStock, "outOfStock in blockProducts")
   let large = null;
   let smalls = null;
-  const backOrderAllow = null;
-  const outStockAllow = null;
+
   const arrayMeta = [];
 
 

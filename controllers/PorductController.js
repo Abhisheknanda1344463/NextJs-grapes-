@@ -672,16 +672,22 @@ function Get_Products_By_Slug(params, options) {
 
 function Get_Related_Products(options) {
   // currency: AMD / will work on it
-  const { locale, imit, currency, category_id } = options;
+  const { locale, limit, currency, category_id } = options;
+  console.log(category_id, "from options")
   return new Promise((resolve, reject) => {
+    // if()
     ProductsCategories.find({
       category_id: { $in: category_id.split(",") },
     }).then((res) => {
+      console.log(res, "res in test")
       const productIds = res.map((e) => e.product_id);
+      console.log(productIds, "product id in product controller")
       Products.find({ id: { $in: productIds } })
-        .limit(4)
+        .limit(8)
         .then((products) => {
           const promiseArray = products.map((item) => {
+            console.log(item, "item product in test")
+
             return new Promise((resolve, reject) => {
               const product = parseClone(item);
 
