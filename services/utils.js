@@ -125,7 +125,7 @@ export function ApiCustomSettings(customSettingsData) {
 }
 
 export async function ApiCategoriesAndMenues(locale) {
-  console.log(locale, "locale");
+  // console.log(locale, "locale");
   if (locale !== "catchAll") {
     const getCategories = await shopApi.getCategories({ locale: locale });
     const getMenues = await shopApi.getMenues({ locale: locale });
@@ -141,7 +141,7 @@ export async function ApiCategoriesAndMenues(locale) {
 
       return menu;
     });
-    console.log(getMenues.data, "poxos");
+    // console.log(getMenues.data, "poxos");
 
     // [...new Map(getMenues.data.map(item => [item["id"], item])).values()]
 

@@ -63,6 +63,10 @@ function ProductCard(props) {
   const selectedData = useSelector((state) => state.locale.code);
   const cartToken = useSelector((state) => state.cartToken);
   const signed = useSelector((state) => state.customer.authenticated);
+  const backorders = useSelector(state => state.general.coreConfigs.catalog_inventory_stock_options_backorders)
+  const outOfStock = useSelector(state => state.general.coreConfigs.catalog_products_homepage_out_of_stock_items)
+  console.log(backorders, 'backorders in blockProducts')
+  console.log(outOfStock, 'outOfStock in blockProducts')
   const CONFIG = "simple";
   const containerClasses = classNames("product-card", {
     "product-card--layout--grid product-card--size--sm": layout === "grid-sm",
@@ -71,6 +75,21 @@ function ProductCard(props) {
     "product-card--layout--list": layout === "list",
     "product-card--layout--horizontal": layout === "horizontal",
   });
+
+  const checkBackOrderAndOutOfStock = (product) => {
+    if(product.qty === 0) {
+      if(backorders && outOfStock || backorders && !outOfStock) {
+        return <ProductCard product={product} customer={customer}/>
+      }
+      if(!backorders && outOfStock) {
+        return <ProductCard product={product} customer={customer}/>
+      }
+      if(!backorders && !outOfStock) {
+        return <></>
+      }
+    }
+    return <ProductCard product={product} customer={customer}/>
+  }
 
   let badges = [];
   let image;
@@ -333,42 +352,48 @@ function ProductCard(props) {
   };
   return (
     <React.Fragment>
-      <div className={containerClasses}>
-        {badges}
-        {image}
-        <div className="d-flex product-card__info">
-          <div className="product-card__name">
-            <Link href={url.product(product)}>{product.name || ""}</Link>
-          </div>
-          <div className="product-card-description">
-            {product.short_description ? (
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: product.short_description.replace(/<\/?[^>]+>/gi, ""),
-                }}
-              />
-            ) : (
-              ""
-            )}{" "}
-          </div>
-        </div>
-        <div className="product-card__actions">
-          <div className="product-card__availability-mobile">
-            <div className="product-card__availability">
-              <FormattedMessage
-                id="availability"
-                defaultMessage="Availabiluty"
-              />{" "}
-              :
-              <span className="text-success">
+      {
+        product.qty === 0 && !backorders && !outOfStock
+          ? (
+            <>poxos</>
+            )
+          :(
+              <div className={containerClasses}>
+                {badges}
+                {image}
+                <div className="d-flex product-card__info">
+                  <div className="product-card__name">
+                    <Link href={url.product(product)}>{product.name || ""}</Link>
+                  </div>
+                  <div className="product-card-description">
+                    {product.short_description ? (
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: product.short_description.replace(/<\/?[^>]+>/gi, ""),
+                        }}
+                      />
+                    ) : (
+                      ""
+                    )}{" "}
+                  </div>
+                </div>
+                <div className="product-card__actions">
+                  <div className="product-card__availability-mobile">
+                    <div className="product-card__availability">
+                      <FormattedMessage
+                        id="availability"
+                        defaultMessage="Availabiluty"
+                      />{" "}
+                      :
+                      <span className="text-success">
                 <FormattedMessage id="instock" defaultMessage="In stock" />
               </span>
-            </div>
-            {price}
+                    </div>
+                    {price}
 
-            <div className="product-card__buttons">
-              {signed ? (
-                <span onClick={addAndRemoveWishList}>
+                    <div className="product-card__buttons">
+                      {signed ? (
+                        <span onClick={addAndRemoveWishList}>
                   <AsyncAction
                     action={() => wishlistAddItem(product, selectedData)}
                     render={({ run, loading }) => (
@@ -388,82 +413,85 @@ function ProductCard(props) {
                     )}
                   />
                 </span>
-              ) : (
-                <div
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toast(
-                      <span className="d-flex faild-toast-fms">
+                      ) : (
+                        <div
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toast(
+                              <span className="d-flex faild-toast-fms">
                         <FailSvg />
                         <FormattedMessage
                           id="sign-or-register"
                           defaultMessage="Please sign in or register"
                         />
                       </span>,
-                      {
-                        hideProgressBar: true,
-                        className: "wishlist-toast",
-                      }
-                    );
-                  }}
-                  className="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist"
-                >
-                  <Wishlist16Svg />
+                              {
+                                hideProgressBar: true,
+                                className: "wishlist-toast",
+                              }
+                            );
+                          }}
+                          className="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist"
+                        >
+                          <Wishlist16Svg />
+                        </div>
+                      )}
+                    </div>
+
+                    {/*<AsyncAction*/}
+                    {/*    action={() => cartAddItem(product,[], 1,cartToken,customer,selectedData)}*/}
+                    {/*    render={({ run, loading }) => (*/}
+                    {/*        <button*/}
+                    {/*            type="button"*/}
+                    {/*            onClick={run}*/}
+                    {/*            className={classNames('btn btn-light btn-svg-icon product-card-add show-for-tablet', {*/}
+                    {/*                'btn-loading': loading,*/}
+                    {/*            })}*/}
+                    {/*        >*/}
+                    {/*                <AddCart className="product-card-add" />*/}
+                    {/*        </button>*/}
+
+                    {/*    )}*/}
+                    {/*/>*/}
+                  </div>
+
+                  <AsyncAction
+                    action={() =>
+                      cartAddItem(
+                        product,
+                        [],
+                        1,
+                        cartToken,
+                        customer,
+                        selectedData,
+                        null,
+                        "homePage"
+                      )
+                    }
+                    render={({ run, loading }) => (
+                      <button
+                        type="button"
+                        onClick={run}
+                        className={classNames(
+                          "btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ",
+                          {
+                            "btn-loading": loading,
+                          }
+                        )}
+                      >
+                        <FormattedMessage
+                          id="add.tocart"
+                          defaultMessage="Add to cart"
+                        />
+                      </button>
+                    )}
+                  />
                 </div>
-              )}
-            </div>
+              </div>
+            )
+      }
 
-            {/*<AsyncAction*/}
-            {/*    action={() => cartAddItem(product,[], 1,cartToken,customer,selectedData)}*/}
-            {/*    render={({ run, loading }) => (*/}
-            {/*        <button*/}
-            {/*            type="button"*/}
-            {/*            onClick={run}*/}
-            {/*            className={classNames('btn btn-light btn-svg-icon product-card-add show-for-tablet', {*/}
-            {/*                'btn-loading': loading,*/}
-            {/*            })}*/}
-            {/*        >*/}
-            {/*                <AddCart className="product-card-add" />*/}
-            {/*        </button>*/}
-
-            {/*    )}*/}
-            {/*/>*/}
-          </div>
-
-          <AsyncAction
-            action={() =>
-              cartAddItem(
-                product,
-                [],
-                1,
-                cartToken,
-                customer,
-                selectedData,
-                null,
-                "homePage"
-              )
-            }
-            render={({ run, loading }) => (
-              <button
-                type="button"
-                onClick={run}
-                className={classNames(
-                  "btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ",
-                  {
-                    "btn-loading": loading,
-                  }
-                )}
-              >
-                <FormattedMessage
-                  id="add.tocart"
-                  defaultMessage="Add to cart"
-                />
-              </button>
-            )}
-          />
-        </div>
-      </div>
     </React.Fragment>
   );
 }
