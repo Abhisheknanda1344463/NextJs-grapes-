@@ -98,6 +98,7 @@ function Search(props) {
           options.category = category;
         }
         shopApi.getSeachProducts(query, options).then((products) => {
+          // console.log(products, "seached products in search")
           if (canceled) {
             return;
           }
@@ -108,7 +109,7 @@ function Search(props) {
             }
             return item
           });
-// console.log(newProduct,"ttttttttt")
+console.log(newProduct,"ttttttttt")
           // let x =
           // const newProducts.data = [image,...item]
           // console.log(newProducts,"products in query")
