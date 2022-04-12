@@ -143,7 +143,7 @@ class ShopPageCheckout extends React.Component {
       )
         .then((responce) => responce.json())
         .then((res) => {
-          this.setState({ email: res.data.email });
+          this.setState({ email: res.data[0].email });
         });
     }
   }

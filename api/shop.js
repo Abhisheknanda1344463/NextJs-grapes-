@@ -163,7 +163,7 @@ const shopApi = {
     );
   },
 
-  getRelatedProducts: (categoryId, options = {}) => {
+  getRelatedProducts: (categoryId, productId, options = {}) => {
     let lang = "en";
     let currency = "USD";
     if (options.lang) {
@@ -174,7 +174,7 @@ const shopApi = {
       currency = options.currency.code;
     }
     return fetch(
-      `${url}/db/related-products?limit=8&category_id=${categoryId}&locale=${lang}&currency=${currency}`
+      `${url}/db/related-products?limit=8&category_id=${categoryId}&product_id=${productId}&locale=${lang}&currency=${currency}`
     ).then((response) => response.json());
   },
   /**

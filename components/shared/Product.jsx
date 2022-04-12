@@ -1,86 +1,90 @@
 // react
-import React, { PureComponent, useState, USeEffect } from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import { connect, useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import { FormattedMessage } from "react-intl";
-import { Helmet } from "react-helmet-async";
-import { wishlistRemoveItem } from "../../store/wishlist";
-import { url, apiImageUrl } from "../../helper";
-import Currency from "./Currency";
-import AsyncAction from "./AsyncAction";
-import InputNumber from "./InputNumber";
-import { AddImages } from "../../store/image";
-import ProductGallery from "./ProductGallery";
-import { cartAddItem } from "../../store/cart";
-import { AddCartToken } from "../../store/token";
-import { compareAddItem } from "../../store/compare";
-import { wishlistAddItem } from "../../store/wishlist";
+import React, { PureComponent, useState, USeEffect } from 'react'
+import classNames                                    from 'classnames'
+import PropTypes                                     from 'prop-types'
+import { connect, useSelector, useDispatch }         from 'react-redux'
+import { toast }                                     from 'react-toastify'
+import { FormattedMessage }                          from 'react-intl'
+import { Helmet }                                    from 'react-helmet-async'
+import { wishlistRemoveItem }                        from '../../store/wishlist'
+import { url, apiImageUrl }                          from '../../helper'
+import Currency                                      from './Currency'
+import AsyncAction                                   from './AsyncAction'
+import InputNumber                                   from './InputNumber'
+import { AddImages }                                 from '../../store/image'
+import ProductGallery                                from './ProductGallery'
+import { cartAddItem }                               from '../../store/cart'
+import { AddCartToken }                              from '../../store/token'
+import { compareAddItem }                            from '../../store/compare'
+import { wishlistAddItem }                           from '../../store/wishlist'
 
-useRouter;
+
+
+useRouter
 import {
   CheckToastSvg,
   FailSvg,
   InnerWishlist,
   Wishlist16Svg,
-} from "../../svg";
-import moment from "moment";
-import ConfigurableFilters from "../configurableFilters";
-import BundleProducts from "components/shop/productBundleFikter/BundleProducts";
-import { useRouter } from "next/router";
+}                                                    from '../../svg'
+import moment                                        from 'moment'
+import ConfigurableFilters                           from '../configurableFilters'
+import BundleProducts                                from 'components/shop/productBundleFikter/BundleProducts'
+import { useRouter }                                 from 'next/router'
+
+
 
 class Product extends PureComponent {
-  checkAddProd = false;
-  cartProduct = null;
+  checkAddProd = false
+  cartProduct = null
 
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       quantity: 1,
       // configurImage: null,
-      bundleProducts: {},
-      selectedConfigs: {
-        RAM: null,
+      bundleProducts   : {},
+      selectedConfigs  : {
+        RAM   : null,
         Memory: null,
-        color: null,
+        color : null,
       },
-      locale: this.props.locale,
-      size: null,
-      imagesData: null,
-      simpleProduct: null,
+      locale           : this.props.locale,
+      size             : null,
+      imagesData       : null,
+      simpleProduct    : null,
       configurablesData: null,
-      colorCheck: false,
-      token: this.props.token,
-      locale: this.props.locale,
-      product: this.props.product,
-      customer: this.props.customer,
-      wishlist: this.props.wishlist,
-      IsOpen: "product-inner-long-description-click",
-    };
+      colorCheck       : false,
+      token            : this.props.token,
+      locale           : this.props.locale,
+      product          : this.props.product,
+      customer         : this.props.customer,
+      wishlist         : this.props.wishlist,
+      IsOpen           : 'product-inner-long-description-click',
+    }
   }
 
   renderProduct = () => {
-    if (this.props.product.data.type === "configurable") {
-      this.setInitialAndUpdatedData(this.props.configurableVariantes.data);
+    if (this.props.product.data.type === 'configurable') {
+      this.setInitialAndUpdatedData(this.props.configurableVariantes.data)
     }
 
-    if (this.props.cartToken.cartToken === "") {
-      this.props.AddCartToken(this.props.apiToken);
+    if (this.props.cartToken.cartToken === '') {
+      this.props.AddCartToken(this.props.apiToken)
     }
 
-    if (this.props.product.data.type !== "configurable") {
-      this.checkAddProd = true;
+    if (this.props.product.data.type !== 'configurable') {
+      this.checkAddProd = true
       this.setState({
-        product: this.props.product,
-        simpleProduct: this.props.product.data,
-        imagesData: this.props.product.data.images,
+        product          : this.props.product,
+        simpleProduct    : this.props.product.data,
+        imagesData       : this.props.product.data.images,
         configurablesData: null,
-      });
-      this.props.AddImages(this.props.product.data.images);
+      })
+      this.props.AddImages(this.props.product.data.images)
     }
 
-    if (this.props.cartToken.cartToken === "") {
+    if (this.props.cartToken.cartToken === '') {
       // fetch(apiImageUrl("/api/checkout/cart/token"))
       //   .then((responce) => responce.json())
       //   .then((res) => {
@@ -90,15 +94,15 @@ class Product extends PureComponent {
       //   })
       //   .catch((err) => console.error(err));
     }
-  };
-
-  componentDidMount() {
-    // hereeeeeeeeeeeeeeeeeeee
-    // here need variants in this reference "this.props.product.data.variants"
-    this.renderProduct();
   }
 
-  componentDidUpdate(prProps, prState) {
+  componentDidMount () {
+    // hereeeeeeeeeeeeeeeeeeee
+    // here need variants in this reference "this.props.product.data.variants"
+    this.renderProduct()
+  }
+
+  componentDidUpdate (prProps, prState) {
     // console.log(
     //   prProps.locale,
     //   prState.locale,
@@ -110,65 +114,65 @@ class Product extends PureComponent {
       prProps.productSlug !== this.props.productSlug ||
       prProps.locale !== this.props.product.data.locale
     ) {
-      this.renderProduct();
+      this.renderProduct()
     }
   }
 
-  createMarkup(item) {
-    return { __html: item };
+  createMarkup (item) {
+    return { __html: item }
   }
 
   handleChangeQuantity = (quantity) => {
-    this.setState({ quantity });
-  };
+    this.setState({ quantity })
+  }
 
-  setInitialAndUpdatedData(data) {
+  setInitialAndUpdatedData (data) {
     // this.props.configurableVariantes.data
-    if (this.props.product.data.type === "configurable") {
+    if (this.props.product.data.type === 'configurable') {
       if (data && Object.keys(data.index).length > 0) {
-        const { index, attributes } = data;
-        let collectionDefaultValues = {};
-        const [productId, defaultAttributesData] = Object.entries(index)[0];
+        const { index, attributes } = data
+        let collectionDefaultValues = {}
+        const [productId, defaultAttributesData] = Object.entries(index)[0]
         const oldVariants = JSON.parse(
-          JSON.stringify(this.props.product.data.variants)
-        );
+          JSON.stringify(this.props.product.data.variants),
+        )
         const product = {
           data: {
             ...this.props.product.data.variants.find((product) => {
-              return product.product_id == productId;
+              return product.product_id == productId
             }),
             variants: oldVariants,
           },
-        };
+        }
         this.setState({
           product: product,
-        });
+        })
         for (let attrId in defaultAttributesData) {
           const { options: defaultOptions, code } = attributes.find(
-            (attr) => attr.id == attrId
-          );
+            (attr) => attr.id == attrId,
+          )
           const defaultOption = defaultOptions.find((option) => {
-            return option.id == defaultAttributesData[attrId];
-          });
-          collectionDefaultValues[code] = { ...defaultOption, code: code };
+            return option.id == defaultAttributesData[attrId]
+          })
+          collectionDefaultValues[code] = { ...defaultOption, code: code }
         }
         this.setState({
           configurablesData: data,
-          selectedConfigs: { ...collectionDefaultValues },
-        });
+          selectedConfigs  : { ...collectionDefaultValues },
+        })
       }
     }
   }
 
   handleTakeProd = (elem, type) => {
-    if (type === "radio" || type === "select") {
+    if (type === 'radio' || type === 'select') {
       this.setState({
         ...this.state,
         bundleProducts: {
           ...this.state.bundleProducts,
           [type]: [{ ...elem, quantity: 1 }],
         },
-      });
+      })
     } else {
       this.setState({
         ...this.state,
@@ -178,9 +182,9 @@ class Product extends PureComponent {
             ? [...this.state.bundleProducts[type], { ...elem, quantity: 1 }]
             : [{ ...elem, quantity: 1 }],
         },
-      });
+      })
     }
-  };
+  }
 
   handleChangeConfig = (products, attrId, attrCode, option) => {
     /**
@@ -190,90 +194,90 @@ class Product extends PureComponent {
      *  optionId:   Object,   option code
      */
 
-    // changes radiocbutton
+      // changes radiocbutton
 
-    const attrLength = Object.keys(this.state.selectedConfigs).length;
+    const attrLength = Object.keys(this.state.selectedConfigs).length
     const changedConfig = {
       [attrCode]: {
         ...option,
         code: attrCode,
       },
-    };
+    }
 
     if (changedConfig) {
-      if (Object.keys(changedConfig) == "color") {
-        this.state.colorCheck = true;
+      if (Object.keys(changedConfig) == 'color') {
+        this.state.colorCheck = true
       } else {
-        this.state.colorCheck = false;
+        this.state.colorCheck = false
       }
     }
     const configsData = {
       ...this.state.selectedConfigs,
-    };
+    }
 
-    delete configsData[attrCode];
+    delete configsData[attrCode]
 
-    let productId = null;
+    let productId = null
 
     for (const option in changedConfig) {
       for (let i = 0; i < changedConfig[option].products.length; i++) {
-        let count = 1;
-        const prodId = changedConfig[option].products[i];
+        let count = 1
+        const prodId = changedConfig[option].products[i]
 
         for (let key in configsData) {
-          const { products } = configsData[key];
+          const { products } = configsData[key]
           if (products.includes(prodId)) {
-            count++;
+            count++
           }
         }
         if (count == attrLength) {
-          productId = prodId;
-          break;
+          productId = prodId
+          break
         }
       }
     }
 
     const dataProd = this.props.product.data.variants.find((product) => {
       if (productId === null) {
-        return true;
+        return true
       }
-      return product.product_id == productId;
-    });
+      return product.product_id == productId
+    })
 
-    let product;
+    let product
 
     if (dataProd === undefined) {
-      return true;
+      return true
     } else {
       product = {
         data: {
           ...dataProd,
           variants: JSON.parse(
-            JSON.stringify(this.state.product.data.variants)
+            JSON.stringify(this.state.product.data.variants),
           ),
         },
-      };
+      }
     }
 
     this.setState({
       product,
       selectedConfigs: { ...changedConfig, ...configsData },
-    });
-  };
+    })
+  }
 
   //////////////////////////////////////////////
 
   handleId = (elemId, typeId, PlusOrMinus) => {
-    let selectedItem = this.state.bundleProducts[typeId];
+    let selectedItem = this.state.bundleProducts[typeId]
     selectedItem = selectedItem.map((e) => {
       if (e.id == elemId) {
         return {
           ...e,
-          quantity: PlusOrMinus == "minus" ? e.quantity - 1 : e.quantity + 1,
-        };
+          quantity: PlusOrMinus == 'minus' ? e.quantity - 1 : e.quantity + 1,
+        }
       }
-      return e;
-    });
+      return e
+    })
 
     this.setState({
       ...this.state,
@@ -281,43 +285,43 @@ class Product extends PureComponent {
         ...this.state.bundleProducts,
         [typeId]: selectedItem,
       },
-    });
-  };
+    })
+  }
 
-  render() {
+  render () {
     const {
-      signed,
-      layout,
-      cartAddItem,
-      wishlistAddItem,
-      wishlist,
-      wishlistRemoveItem,
-      // AddCartToken,
-    } = this.props;
-    const { quantity, product } = this.state;
-    const maxQty = this.props.bOrder ? 50000 : product.data.qty;
+            signed,
+            layout,
+            cartAddItem,
+            wishlistAddItem,
+            wishlist,
+            wishlistRemoveItem,
+            // AddCartToken,
+          } = this.props
+    const { quantity, product } = this.state
+    const maxQty = this.props.bOrder ? 50000 : product.data.qty
     // let Addtocartdisabled = this.props.bOrder ? "" : "disabled";
-    let Addtocartdisabled = "";
-    let newDate = new Date();
+    let Addtocartdisabled = ''
+    let newDate = new Date()
     const date_from = moment
       .unix(product.data.special_price_from)
-      .format("YYYY-MM-DD");
-    const date_now = moment(newDate).format("YYYY-MM-DD");
+      .format('YYYY-MM-DD')
+    const date_now = moment(newDate).format('YYYY-MM-DD')
     const date_to = moment
       .unix(product.data.special_price_to)
-      .format("YYYY-MM-DD");
+      .format('YYYY-MM-DD')
     // if (product.data.qty) {
     //   Addtocartdisabled = "";
     // }
     let addAndRemoveWishList = () => {
       let wishlistChekArray = wishlist.find((x) => {
-        return x.id == product.data.id;
-      });
+        return x.id == product.data.id
+      })
 
       if (wishlistChekArray == undefined) {
         toast.success(
           <span className="d-flex chek-fms">
-            <CheckToastSvg />
+            <CheckToastSvg/>
             <FormattedMessage
               id="add-wish-list"
               defaultMessage={`Product "${product.data.name}" added to wish list`}
@@ -325,13 +329,13 @@ class Product extends PureComponent {
           </span>,
           {
             hideProgressBar: true,
-          }
-        );
+          },
+        )
       } else {
-        <AsyncAction action={wishlistRemoveItem(product.data.id)} />;
+        <AsyncAction action={wishlistRemoveItem(product.data.id)}/>
         toast.success(
           <span className="d-flex chek-fms">
-            <CheckToastSvg />
+            <CheckToastSvg/>
             <FormattedMessage
               id="producthasalreadyinwishlist"
               defaultMessage={`The product "${product.data.name}" has already been added to the whishlist`}
@@ -339,10 +343,10 @@ class Product extends PureComponent {
           </span>,
           {
             hideProgressBar: true,
-          }
-        );
+          },
+        )
       }
-    };
+    }
     return (
       <>
         <Helmet>
@@ -351,17 +355,17 @@ class Product extends PureComponent {
             name="description"
             content={
               product.data.description
-                ? product.data.description.replace(/(<([^>]+)>)/gi, "")
-                : ""
+                ? product.data.description.replace(/(<([^>]+)>)/gi, '')
+                : ''
             }
             data-react-helmet={true}
           />
           <meta
             name="name"
-            content={product.data.name ? product.data.name : ""}
+            content={product.data.name ? product.data.name : ''}
             data-react-helmet={true}
           />
-          <meta property="og:url" content={product.data.name} />
+          <meta property="og:url" content={product.data.name}/>
           <meta
             property="og:title"
             content={product.data.name}
@@ -375,7 +379,7 @@ class Product extends PureComponent {
         </Helmet>
         <div className={`product product--layout--${layout}`}>
           <div className="product__content">
-            <ProductGallery layout={layout} images={product.data.images} />
+            <ProductGallery layout={layout} images={product.data.images}/>
             <div className="product__info">
               <div className="product__wishlist-compare">
                 <AsyncAction
@@ -388,13 +392,13 @@ class Product extends PureComponent {
                       title="Wishlist"
                       onClick={run}
                       className={classNames(
-                        "btn btn-sm btn-light btn-svg-icon",
+                        'btn btn-sm btn-light btn-svg-icon',
                         {
-                          "btn-loading": loading,
-                        }
+                          'btn-loading': loading,
+                        },
                       )}
                     >
-                      <Wishlist16Svg />
+                      <Wishlist16Svg/>
                     </button>
                   )}
                 />
@@ -432,17 +436,17 @@ class Product extends PureComponent {
                       />
                       <span
                         className="product-card__symbol"
-                        style={{ marginLeft: "5px" }}
+                        style={{ marginLeft: '5px' }}
                       >
                         ֏
                       </span>
                     </span>
 
                     <span className="product-card__old-price">
-                      <Currency value={Number(product.data.price).toFixed(0)} />
+                      <Currency value={Number(product.data.price).toFixed(0)}/>
                       <span
                         className="product-card__symbol"
-                        style={{ marginLeft: "5px" }}
+                        style={{ marginLeft: '5px' }}
                       >
                         ֏
                       </span>
@@ -456,17 +460,17 @@ class Product extends PureComponent {
                       />
                       <span
                         className="product-card__symbol"
-                        style={{ marginLeft: "5px" }}
+                        style={{ marginLeft: '5px' }}
                       >
                         ֏
                       </span>
                     </span>
 
                     <span className="product-card__old-price">
-                      <Currency value={Number(product.data.price).toFixed(0)} />
+                      <Currency value={Number(product.data.price).toFixed(0)}/>
                       <span
                         className="product-card__symbol"
-                        style={{ marginLeft: "5px" }}
+                        style={{ marginLeft: '5px' }}
                       >
                         ֏
                       </span>
@@ -476,7 +480,7 @@ class Product extends PureComponent {
                   <span>
                     <span
                       className="product-card__symbol"
-                      style={{ marginLeft: "5px" }}
+                      style={{ marginLeft: '5px' }}
                     >
                       ֏
                     </span>
@@ -484,7 +488,7 @@ class Product extends PureComponent {
                       value={
                         product.data.price > 0
                           ? Number(product.data.price).toFixed(0)
-                          : ""
+                          : ''
                       }
                     />
                   </span>
@@ -493,11 +497,11 @@ class Product extends PureComponent {
               <div>
                 {product.data.price_html
                   ? product.data.price_html.map((e, i) => (
-                      <span key={i} className="product_price_html">
+                    <span key={i} className="product_price_html">
                         {e}
                       </span>
-                    ))
-                  : ""}
+                  ))
+                  : ''}
               </div>
               <div>
                 <div className="product-inner-description-title">
@@ -509,7 +513,7 @@ class Product extends PureComponent {
                 <div
                   className="f16"
                   dangerouslySetInnerHTML={this.createMarkup(
-                    product.data.short_description
+                    product.data.short_description,
                   )}
                 />
               </div>
@@ -524,7 +528,7 @@ class Product extends PureComponent {
                   superCheck={null}
                 />
               )}
-              {product.data.type == "bundle" ? (
+              {product.data.type == 'bundle' ? (
                 <BundleProducts
                   handleId={this.handleId}
                   quantity={this.state.quantity}
@@ -534,44 +538,69 @@ class Product extends PureComponent {
                   selectedBundleProducts={this.state.bundleProducts}
                 />
               ) : (
-                ""
+                ''
               )}
               <ul className="product__meta">
                 <li className="product__meta-availability">
                   <span
                     className={
-                      product.data.qty > 0 ? `text-success` : `text-danger`
+                      product.data.qty > 0
+                      || product.data.qty === 0
+                      && this.props.backorders == 1
+                        ? `text-success`
+                        : product.data.qty === 0
+                        && this.props.backorders == 0
+                          ? `text-danger`
+                          : `text-danger`
                     }
-                    style={{ fontSize: "18px" }}
+                    style={{ fontSize: '18px' }}
                   >
                     {product.data.qty > 0 ? (
-                      <FormattedMessage
-                        id="instock"
-                        defaultMessage="In stock"
-                      />
-                    ) : (
-                      <FormattedMessage
-                        id="outOfStock"
-                        defaultMessage="Not available"
-                      />
-                    )}{" "}
+                        <FormattedMessage
+                          id="instock"
+                          defaultMessage="In stock"
+                        />
+                      ) :
+                      product.data.qty === 0
+                      && this.props.backorders == 1
+                      && this.props.outOfStock == 0 ||
+                      product.data.qty === 0
+                      && this.props.backorders == 1
+                      && this.props.outOfStock == 1 ? (
+                        <FormattedMessage
+                          id="instock"
+                          defaultMessage="In stock"
+                        />
+                      ) : product.data.qty === 0
+                      && this.props.backorders == 0
+                      && this.props.outOfStock == 1 ? (
+                        <FormattedMessage
+                          id="outOfStock"
+                          defaultMessage="Not available"
+                        />
+                      ) : (
+                        <FormattedMessage
+                          id="outOfStock"
+                          defaultMessage="Not available"
+                        />
+                      )}{' '}
                   </span>
                 </li>
               </ul>
             </div>
             <div className="product__sidebar">
               <div className="product__availability">
-                {product.data.qty > 0 ? "Availability" : "Unavailable"}{" "}
+                {product.data.qty > 0 ? 'Availability' : 'Unavailable'}{' '}
                 <span className="text-success">
-                  {" "}
+                  {' '}
                   {product.data.qty > 0 ? (
-                    <FormattedMessage id="inStock" defaultMessage="Available" />
+                    <FormattedMessage id="inStock" defaultMessage="Available"/>
                   ) : (
                     <FormattedMessage
                       id="outOfStock"
                       defaultMessage="Not available"
                     />
-                  )}{" "}
+                  )}{' '}
                 </span>
               </div>
               <form className="product__options">
@@ -600,12 +629,12 @@ class Product extends PureComponent {
                             this.state.token,
                             this.state.customer,
                             this.state.locale,
-                            product?.data?.type == "bundle"
+                            product?.data?.type == 'bundle'
                               ? {
-                                  options: product.data.bundle_options,
-                                  selectedOptions: this.state.bundleProducts,
-                                }
-                              : null
+                                options        : product.data.bundle_options,
+                                selectedOptions: this.state.bundleProducts,
+                              }
+                              : null,
                           )
                         }
                         render={({ run, loading }) => (
@@ -614,10 +643,10 @@ class Product extends PureComponent {
                             onClick={run}
                             disabled={Addtocartdisabled}
                             className={classNames(
-                              "btn btn-orange inner-addtocart rounded-pills btn-lg",
+                              'btn btn-orange inner-addtocart rounded-pills btn-lg',
                               {
-                                "btn-loading": loading,
-                              }
+                                'btn-loading': loading,
+                              },
                             )}
                           >
                             <FormattedMessage
@@ -642,13 +671,13 @@ class Product extends PureComponent {
                                 title="Wishlist"
                                 onClick={run}
                                 className={classNames(
-                                  "btn btn-secondary btn-svg-icon ",
+                                  'btn btn-secondary btn-svg-icon ',
                                   {
-                                    "btn-loading": loading,
-                                  }
+                                    'btn-loading': loading,
+                                  },
                                 )}
                               >
-                                <InnerWishlist className="inner-wishlist" />
+                                <InnerWishlist className="inner-wishlist"/>
                               </button>
                             )}
                           />
@@ -658,10 +687,10 @@ class Product extends PureComponent {
                       <button
                         type="button"
                         onClick={(e) => {
-                          e.preventDefault();
+                          e.preventDefault()
                           toast(
                             <span className="d-flex faild-toast-fms">
-                              <FailSvg />
+                              <FailSvg/>
                               <FormattedMessage
                                 id="sign-or-register"
                                 defaultMessage="Please sign in or register"
@@ -669,13 +698,13 @@ class Product extends PureComponent {
                             </span>,
                             {
                               hideProgressBar: true,
-                              className: "wishlist-toast",
-                            }
-                          );
+                              className      : 'wishlist-toast',
+                            },
+                          )
                         }}
                         className="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist"
                       >
-                        <InnerWishlist className="inner-wishlist" />
+                        <InnerWishlist className="inner-wishlist"/>
                       </button>
                     )}
 
@@ -695,40 +724,41 @@ class Product extends PureComponent {
             <div>
               <div
                 dangerouslySetInnerHTML={this.createMarkup(
-                  product.data.description
+                  product.data.description,
                 )}
               />
             </div>
           </div>
         </div>
       </>
-    );
+    )
   }
 }
+
 
 Product.propTypes = {
   /** product object */
   product: PropTypes.object.isRequired,
   /** one of ['standard', 'sidebar', 'columnar', 'quickview'] (default: 'standard') */
-  layout: PropTypes.oneOf(["standard", "sidebar", "columnar", "quickview"]),
-};
+  layout: PropTypes.oneOf(['standard', 'sidebar', 'columnar', 'quickview']),
+}
 
 Product.defaultProps = {
-  layout: "standard",
-};
+  layout: 'standard',
+}
 
 const mapStateToProps = (state) => ({
   backorders: state.general.coreConfigs.catalog_inventory_stock_options_backorders,
   outOfStock: state.general.coreConfigs.catalog_products_homepage_out_of_stock_items,
-  locale: state.locale.code,
-  cartToken: state.cartToken,
-  token: state.cartToken,
-  customer: state.customer,
-  bOrder: state.general.bOrder,
-  apiToken: state.general.apiToken,
-  signed: state.customer.authenticated,
-  wishlist: state.wishlist,
-});
+  locale    : state.locale.code,
+  cartToken : state.cartToken,
+  token     : state.cartToken,
+  customer  : state.customer,
+  bOrder    : state.general.bOrder,
+  apiToken  : state.general.apiToken,
+  signed    : state.customer.authenticated,
+  wishlist  : state.wishlist,
+})
 
 const mapDispatchToProps = {
   AddImages,
@@ -737,6 +767,6 @@ const mapDispatchToProps = {
   wishlistAddItem,
   compareAddItem,
   wishlistRemoveItem,
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Product);
+export default connect(mapStateToProps, mapDispatchToProps)(Product)
