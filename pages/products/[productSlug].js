@@ -12,7 +12,7 @@ export default function ProductInnerPage(props) {
   const prodID = props.product.data.product_id;
   const cats = props.product.data.cats;
 
-  console.log(cats,"cats")
+  console.log(props.product,"cats")
   const checkRelatedProducts = props.relatedPproducts.filter(item => item.product_id !== prodID);
   const { dispatch } = store;
   useEffect(() => {
@@ -54,7 +54,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     lang: selectedLocale,
     token: token,
   });
-  const relatedPproducts = await shopApi.getRelatedProducts(product.cats, {
+  const relatedPproducts = await shopApi.getRelatedProducts(product.cats, product.product_id,{
     lang: selectedLocale,
     currency: currency,
     limit: 8,

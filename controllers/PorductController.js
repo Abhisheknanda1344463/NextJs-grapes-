@@ -683,174 +683,331 @@ function Get_Products_By_Slug (params, options) {
 
 function Get_Related_Products (options) {
   // currency: AMD / will work on it
-  const { locale, limit, currency, category_id } = options
-  console.log(category_id, 'from options')
+  const { locale, limit, currency, category_id, product_id } = options
   return new Promise((resolve, reject) => {
-    // RelatedProducts.find({
-    //   parent_id: { $in: category_id.split(',') },
-    // }).then((res) => {
-    //   // console.log(res, 'res in test')
-    //   // const productIds = res.map((e) => e.child_id)
-    //   // console.log(productIds, 'product id in product controller')
-    //   let result = res
-    //   res.forEach((e) => {
-    //     console.log(e.parent_id, '744444')
-    //   })
-    // let productIds = 1
-    //   Products.find({ id: { $in: productIds } })
-    //     .limit(8)
-    //     .then((products) => {
-    //       const promiseArray = products.map((item) => {
-    //         console.log(item, 'item product in test')
-    //
-    //         return new Promise((resolve, reject) => {
-    //           const product = parseClone(item)
-    //
-    //           const p1 = new Promise((resolve1, reject1) => {
-    //             ProductImages.find({ product_id: product.id })
-    //               .then((res) => {
-    //                 resolve1({ ProductImages: res })
-    //               })
-    //               .catch((err) => reject(err))
-    //           })
-    //
-    //           const p2 = new Promise((resolve2, reject2) => {
-    //             ProductFlat.find({ locale, product_id: product.id })
-    //               .then((res) => {
-    //                 resolve2({ productFlat: res })
-    //               })
-    //               .catch((err) => reject(err))
-    //           })
-    //
-    //           const p3 = new Promise((resolve3, reject3) => {
-    //             ProductInventories.find({ product_id: product.id })
-    //               .then((res) => {
-    //                 resolve3({ ProductInventories: res })
-    //               })
-    //               .catch((err) => reject(err))
-    //           })
-    //
-    //           return Promise.all([p1, p2, p3]).then((response) => {
-    //             const collection = arrayConvertToObject(response)
-    //             const imagesData = parseClone(collection.ProductImages)
-    //             const flatData = parseClone(collection.productFlat[0] || [])
-    //             const inventoriesData = parseClone(
-    //               collection.ProductInventories[0] || [],
-    //             )
-    //             if (imagesData.length == 0) {
-    //               const obj = {
-    //                 ...product,
-    //                 ...flatData,
-    //                 ...inventoriesData,
-    //               }
-    //
-    //               resolve(obj)
-    //             } else {
-    //               const { path } = imagesData[0]
-    //               const base_imag = makeImageClone(path)
-    //               const images = imagesData.map((e) => makeImageClone(e.path))
-    //
-    //               const obj = {
-    //                 ...product,
-    //                 ...flatData,
-    //                 ...inventoriesData,
-    //                 base_imag,
-    //                 images,
-    //               }
-    //
-    //               resolve(obj)
-    //             }
-    //           })
-    //         })
-    //       })
-    //
-    //       return Promise.all(promiseArray).then((response) => {
-    //         resolve(response)
-    //       })
-    //     })
-    //     .catch((err) => reject(err))
-    // })
 
-    ProductsCategories.find({
-      category_id: { $in: category_id.split(',') },
-    }).then((res) => {
-      console.log(res, 'res in test')
-      const productIds = res.map((e) => e.product_id)
-      console.log(productIds, 'product id in product controller')
-      Products.find({ id: { $in: productIds } })
-        .limit(8)
-        .then((products) => {
-          const promiseArray = products.map((item) => {
-            console.log(item, 'item product in test')
+      RelatedProducts.find({
+        parent_id: { $in: product_id.split(',') },
+      })
+        .then((res) => {
+          console.log(res.length, "res in test")
+          if (res.length > 0) {
+            const productIds = res.map((e) => e.child_id)
+            Products.find({ id: { $in: productIds } })
+              .limit(8)
+              .then((products) => {
+                const promiseArray = products.map((item) => {
 
-            return new Promise((resolve, reject) => {
-              const product = parseClone(item)
+                  return new Promise((resolve, reject) => {
+                    const product = parseClone(item)
 
-              const p1 = new Promise((resolve1, reject1) => {
-                ProductImages.find({ product_id: product.id })
-                  .then((res) => {
-                    resolve1({ ProductImages: res })
+                    const p1 = new Promise((resolve1, reject1) => {
+                      ProductImages.find({ product_id: product.id })
+                        .then((res) => {
+                          resolve1({ ProductImages: res })
+                        })
+                        .catch((err) => reject(err))
+                    })
+
+                    const p2 = new Promise((resolve2, reject2) => {
+                      ProductFlat.find({ locale, product_id: product.id })
+                        .then((res) => {
+                          resolve2({ productFlat: res })
+                        })
+                        .catch((err) => reject(err))
+                    })
+
+                    const p3 = new Promise((resolve3, reject3) => {
+                      ProductInventories.find({ product_id: product.id })
+                        .then((res) => {
+                          resolve3({ ProductInventories: res })
+                        })
+                        .catch((err) => reject(err))
+                    })
+
+                    return Promise.all([p1, p2, p3]).then((response) => {
+                      const collection = arrayConvertToObject(response)
+                      const imagesData = parseClone(collection.ProductImages)
+                      const flatData = parseClone(collection.productFlat[0] || [])
+                      const inventoriesData = parseClone(
+                        collection.ProductInventories[0] || [],
+                      )
+                      if (imagesData.length == 0) {
+                        const obj = {
+                          ...product,
+                          ...flatData,
+                          ...inventoriesData,
+                        }
+
+                        resolve(obj)
+                      } else {
+                        const { path } = imagesData[0]
+                        const base_imag = makeImageClone(path)
+                        const images = imagesData.map((e) => makeImageClone(e.path))
+
+                        const obj = {
+                          ...product,
+                          ...flatData,
+                          ...inventoriesData,
+                          base_imag,
+                          images,
+                        }
+
+                        resolve(obj)
+                      }
+                    })
                   })
-                  .catch((err) => reject(err))
-              })
+                })
 
-              const p2 = new Promise((resolve2, reject2) => {
-                ProductFlat.find({ locale, product_id: product.id })
-                  .then((res) => {
-                    resolve2({ productFlat: res })
+                return Promise.all(promiseArray).then((response) => {
+                  resolve(response)
+                })
+              })
+          } else {
+            ProductsCategories.find({
+              category_id: { $in: category_id.split(',') },
+            }).then((res) => {
+              console.log(res, 'else res in test')
+              const productIds = res.map((e) => e.product_id)
+              console.log(productIds, 'else product id in product controller')
+              Products.find({ id: { $in: productIds } })
+                .limit(8)
+                .then((products) => {
+                  const promiseArray = products.map((item) => {
+                    console.log(item, 'else item product in test')
+
+                    return new Promise((resolve, reject) => {
+                      const product = parseClone(item)
+
+                      const p1 = new Promise((resolve1, reject1) => {
+                        ProductImages.find({ product_id: product.id })
+                          .then((res) => {
+                            resolve1({ ProductImages: res })
+                          })
+                          .catch((err) => reject(err))
+                      })
+
+                      const p2 = new Promise((resolve2, reject2) => {
+                        ProductFlat.find({ locale, product_id: product.id })
+                          .then((res) => {
+                            resolve2({ productFlat: res })
+                          })
+                          .catch((err) => reject(err))
+                      })
+
+                      const p3 = new Promise((resolve3, reject3) => {
+                        ProductInventories.find({ product_id: product.id })
+                          .then((res) => {
+                            resolve3({ ProductInventories: res })
+                          })
+                          .catch((err) => reject(err))
+                      })
+
+                      return Promise.all([p1, p2, p3]).then((response) => {
+                        const collection = arrayConvertToObject(response)
+                        const imagesData = parseClone(collection.ProductImages)
+                        const flatData = parseClone(collection.productFlat[0] || [])
+                        const inventoriesData = parseClone(
+                          collection.ProductInventories[0] || [],
+                        )
+                        if (imagesData.length == 0) {
+                          const obj = {
+                            ...product,
+                            ...flatData,
+                            ...inventoriesData,
+                          }
+
+                          resolve(obj)
+                        } else {
+                          const { path } = imagesData[0]
+                          const base_imag = makeImageClone(path)
+                          const images = imagesData.map((e) => makeImageClone(e.path))
+
+                          const obj = {
+                            ...product,
+                            ...flatData,
+                            ...inventoriesData,
+                            base_imag,
+                            images,
+                          }
+
+                          resolve(obj)
+                        }
+                      })
+                    })
                   })
-                  .catch((err) => reject(err))
-              })
 
-              const p3 = new Promise((resolve3, reject3) => {
-                ProductInventories.find({ product_id: product.id })
-                  .then((res) => {
-                    resolve3({ ProductInventories: res })
+                  return Promise.all(promiseArray).then((response) => {
+                    resolve(response)
                   })
-                  .catch((err) => reject(err))
-              })
-
-              return Promise.all([p1, p2, p3]).then((response) => {
-                const collection = arrayConvertToObject(response)
-                const imagesData = parseClone(collection.ProductImages)
-                const flatData = parseClone(collection.productFlat[0] || [])
-                const inventoriesData = parseClone(
-                  collection.ProductInventories[0] || [],
-                )
-                if (imagesData.length == 0) {
-                  const obj = {
-                    ...product,
-                    ...flatData,
-                    ...inventoriesData,
-                  }
-
-                  resolve(obj)
-                } else {
-                  const { path } = imagesData[0]
-                  const base_imag = makeImageClone(path)
-                  const images = imagesData.map((e) => makeImageClone(e.path))
-
-                  const obj = {
-                    ...product,
-                    ...flatData,
-                    ...inventoriesData,
-                    base_imag,
-                    images,
-                  }
-
-                  resolve(obj)
-                }
-              })
+                })
+                .catch((err) => reject(err))
             })
-          })
-
-          return Promise.all(promiseArray).then((response) => {
-            resolve(response)
-          })
+          }
         })
-        .catch((err) => reject(err))
+
     })
-  })
+
+  //   checkRelated.then(item => console.log(item))
+  //   if (checkRelated) {
+  //     RelatedProducts.find({
+  //       parent_id: { $in: product_id.split(',') },
+  //     }).then((res) => {
+  //       const productIds = res.map((e) => e.child_id)
+  //       Products.find({ id: { $in: productIds } })
+  //         .limit(8)
+  //         .then((products) => {
+  //           const promiseArray = products.map((item) => {
+  //
+  //             return new Promise((resolve, reject) => {
+  //               const product = parseClone(item)
+  //
+  //               const p1 = new Promise((resolve1, reject1) => {
+  //                 ProductImages.find({ product_id: product.id })
+  //                   .then((res) => {
+  //                     resolve1({ ProductImages: res })
+  //                   })
+  //                   .catch((err) => reject(err))
+  //               })
+  //
+  //               const p2 = new Promise((resolve2, reject2) => {
+  //                 ProductFlat.find({ locale, product_id: product.id })
+  //                   .then((res) => {
+  //                     resolve2({ productFlat: res })
+  //                   })
+  //                   .catch((err) => reject(err))
+  //               })
+  //
+  //               const p3 = new Promise((resolve3, reject3) => {
+  //                 ProductInventories.find({ product_id: product.id })
+  //                   .then((res) => {
+  //                     resolve3({ ProductInventories: res })
+  //                   })
+  //                   .catch((err) => reject(err))
+  //               })
+  //
+  //               return Promise.all([p1, p2, p3]).then((response) => {
+  //                 const collection = arrayConvertToObject(response)
+  //                 const imagesData = parseClone(collection.ProductImages)
+  //                 const flatData = parseClone(collection.productFlat[0] || [])
+  //                 const inventoriesData = parseClone(
+  //                   collection.ProductInventories[0] || [],
+  //                 )
+  //                 if (imagesData.length == 0) {
+  //                   const obj = {
+  //                     ...product,
+  //                     ...flatData,
+  //                     ...inventoriesData,
+  //                   }
+  //
+  //                   resolve(obj)
+  //                 } else {
+  //                   const { path } = imagesData[0]
+  //                   const base_imag = makeImageClone(path)
+  //                   const images = imagesData.map((e) => makeImageClone(e.path))
+  //
+  //                   const obj = {
+  //                     ...product,
+  //                     ...flatData,
+  //                     ...inventoriesData,
+  //                     base_imag,
+  //                     images,
+  //                   }
+  //
+  //                   resolve(obj)
+  //                 }
+  //               })
+  //             })
+  //           })
+  //
+  //           return Promise.all(promiseArray).then((response) => {
+  //             resolve(response)
+  //           })
+  //         })
+  //         .catch((err) => reject(err))
+  //     })
+  //   } else {
+  //     ProductsCategories.find({
+  //       category_id: { $in: category_id.split(',') },
+  //     }).then((res) => {
+  //       console.log(res, 'res in test')
+  //       const productIds = res.map((e) => e.product_id)
+  //       console.log(productIds, 'product id in product controller')
+  //       Products.find({ id: { $in: productIds } })
+  //         .limit(8)
+  //         .then((products) => {
+  //           const promiseArray = products.map((item) => {
+  //             console.log(item, 'item product in test')
+  //
+  //             return new Promise((resolve, reject) => {
+  //               const product = parseClone(item)
+  //
+  //               const p1 = new Promise((resolve1, reject1) => {
+  //                 ProductImages.find({ product_id: product.id })
+  //                   .then((res) => {
+  //                     resolve1({ ProductImages: res })
+  //                   })
+  //                   .catch((err) => reject(err))
+  //               })
+  //
+  //               const p2 = new Promise((resolve2, reject2) => {
+  //                 ProductFlat.find({ locale, product_id: product.id })
+  //                   .then((res) => {
+  //                     resolve2({ productFlat: res })
+  //                   })
+  //                   .catch((err) => reject(err))
+  //               })
+  //
+  //               const p3 = new Promise((resolve3, reject3) => {
+  //                 ProductInventories.find({ product_id: product.id })
+  //                   .then((res) => {
+  //                     resolve3({ ProductInventories: res })
+  //                   })
+  //                   .catch((err) => reject(err))
+  //               })
+  //
+  //               return Promise.all([p1, p2, p3]).then((response) => {
+  //                 const collection = arrayConvertToObject(response)
+  //                 const imagesData = parseClone(collection.ProductImages)
+  //                 const flatData = parseClone(collection.productFlat[0] || [])
+  //                 const inventoriesData = parseClone(
+  //                   collection.ProductInventories[0] || [],
+  //                 )
+  //                 if (imagesData.length == 0) {
+  //                   const obj = {
+  //                     ...product,
+  //                     ...flatData,
+  //                     ...inventoriesData,
+  //                   }
+  //
+  //                   resolve(obj)
+  //                 } else {
+  //                   const { path } = imagesData[0]
+  //                   const base_imag = makeImageClone(path)
+  //                   const images = imagesData.map((e) => makeImageClone(e.path))
+  //
+  //                   const obj = {
+  //                     ...product,
+  //                     ...flatData,
+  //                     ...inventoriesData,
+  //                     base_imag,
+  //                     images,
+  //                   }
+  //
+  //                   resolve(obj)
+  //                 }
+  //               })
+  //             })
+  //           })
+  //
+  //           return Promise.all(promiseArray).then((response) => {
+  //             resolve(response)
+  //           })
+  //         })
+  //         .catch((err) => reject(err))
+  //     })
+  //   }
+  // })
 }
 
 

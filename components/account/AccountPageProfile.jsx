@@ -200,7 +200,7 @@ function AccountPageProfile(props) {
               <input
                 onChange={handleChange}
                 name="birth"
-                defaultValue={address ? address.email : ""}
+                defaultValue={address ? address.date_of_birth : ""}
                 value={input.birth}
                 id="profile-birth"
                 type="date"
