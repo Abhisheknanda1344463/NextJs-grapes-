@@ -177,6 +177,36 @@ const shopApi = {
       `${url}/db/related-products?limit=8&category_id=${categoryId}&product_id=${productId}&locale=${lang}&currency=${currency}`
     ).then((response) => response.json());
   },
+
+  getUpSellProducts: (categoryId, productId, options = {}) => {
+    let lang = "en";
+    let currency = "USD";
+    if (options.lang) {
+      lang = options.lang;
+    }
+
+    if (options.currency) {
+      currency = options.currency.code;
+    }
+    return fetch(
+      `${url}/db/up-sell-products?limit=8&category_id=${categoryId}&product_id=${productId}&locale=${lang}&currency=${currency}`
+    ).then((response) => response.json());
+  },
+
+  getCrossSellProducts: (categoryId, productId, options = {}) => {
+    let lang = "en";
+    let currency = "USD";
+    if (options.lang) {
+      lang = options.lang;
+    }
+
+    if (options.currency) {
+      currency = options.currency.code;
+    }
+    return fetch(
+      `${url}/db/cross-sell-products?limit=8&category_id=${categoryId}&product_id=${productId}&locale=${lang}&currency=${currency}`
+    ).then((response) => response.json());
+  },
   /**
    * Return products list.
    *

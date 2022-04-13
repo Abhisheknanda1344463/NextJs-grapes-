@@ -32,21 +32,21 @@ import { runFbPixelEvent } from "../../services/utils";
 
 // }
 
-export function getUpSellAndCrossSellProducts(locale, product, currency) {
-  try {
-    fetch(
-      apiUrlWithStore(
-        `/db/get-crosell-upsell-products?locale=${locale}&product_id=${product.product_id}&currency=${currency}`
-      )
-    )
-      .then((response) => response.json())
-      .then((res) => {
-        // console.log(res, 'get-crosell-upsell-products');
-      });
-  } catch (e) {
-    console.log(e);
-  }
-}
+// export function getUpSellAndCrossSellProducts(locale, product, currency) {
+//   try {
+//     fetch(
+//       apiUrlWithStore(
+//         `/db/get-crosell-upsell-products?locale=${locale}&product_id=${product.product_id}&currency=${currency}`
+//       )
+//     )
+//       .then((response) => response.json())
+//       .then((res) => {
+//         // console.log(res, 'get-crosell-upsell-products');
+//       });
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
 
 export function cartAddItemSuccessAfterLogin(
   product,
@@ -181,6 +181,7 @@ export function cartAddItem(
       token: customer.token,
     };
     console.log(body.product_id,"with customer")
+    console.log(body.cartToken,"with carttoken in cartActions")
   } else {
     body = {
       api_token: cartToken.cartToken,

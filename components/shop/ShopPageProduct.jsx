@@ -20,31 +20,31 @@ import { useRouter } from "next/router";
 function ShopPageProduct(props) {
   const { productSlug, layout, product, sidebarPosition, locale, loading } =
     props;
-  const query = useRouter();
   const [isLoading, setIsLoading] = useState(loading);
-  const [relatedProducts, setRelatedProducts] = useState(
-    props.relatedPproducts
-  );
+  const [relatedProducts, setRelatedProducts] = useState(props.relatedPproducts);
   const router = useRouter();
   ////const [product, setProduct] = useState(data);
-  const [crossProducts, setCrossProducts] = useState([]);
-  const [UpSellsProducts, setUpSellsProducts] = useState([]);
+  const [crossProducts, setCrossProducts] = useState(props.crossSellProducts);
+  const [upSellProducts, setUpSellProducts] = useState(props.upSellProducts);
 
   const customer = useSelector((state) => state.customer);
   const currency = useSelector((state) => state.currency.current);
-
+//   console.log(props, "props in shop page product")
+// console.log(crossProducts,"cross_sell_products")
+// console.log(upSellProducts,"up_sell_products")
+// console.log(relatedProducts,"related_products")
   const selectedData = locale;
   const prevProductSlugRef = useRef();
   const prevLocaleRef = useRef();
 
   useEffect(() => {
     setIsLoading(false);
-    if (product?.data?.cross_sells?.length > 0) {
-      setCrossProducts(product.data.cross_sells);
-    }
-    if (product?.data?.up_sells?.length > 0) {
-      setUpSellsProducts(product.data.up_sells);
-    }
+    // if (product?.data?.cross_sells?.length > 0) {
+    //   setCrossProducts(product.data.cross_sells);
+    // }
+    // if (product?.data?.up_sells?.length > 0) {
+    //   setUpSellsProducts(product.data.up_sells);
+    // }
     prevProductSlugRef.current = productSlug;
     prevLocaleRef.current = props.locale;
     /// setProduct(data);
@@ -58,8 +58,11 @@ function ShopPageProduct(props) {
     prevProductSlugRef.current = productSlug;
     prevLocaleRef.current = props.locale;
     setRelatedProducts(props.relatedPproducts);
+    setCrossProducts(props.crossSellProducts)
+    setUpSellProducts(props.upSellProducts)
+
     /// setProduct(data);
-  }, [productSlug, router.locale]);
+  }, [productSlug, router.locale,relatedProducts,upSellProducts,crossProducts]);
 
   // console.log(productSlug, "productSlugproductSlug");
   // useEffect(() => {
@@ -159,12 +162,12 @@ function ShopPageProduct(props) {
             locale={router.locale}
           />
         )}
-        {UpSellsProducts.length > 0 && (
+        {upSellProducts.length > 0 && (
           <BlockProductsCarousel
             customer={customer}
             title={upsellingProducts}
             layout="grid-5"
-            products={UpSellsProducts}
+            products={upSellProducts}
             locale={router.locale}
           />
         )}
