@@ -75,6 +75,16 @@ router.get("/related-products", function (req, res) {
     res.send(response);
   });
 });
+router.get("/up-sell-products", function (req, res) {
+  ProductControllers.Get_Up_Sell_Products(req.query).then((response) => {
+    res.send(response);
+  });
+});
+router.get("/cross-sell-products", function (req, res) {
+  ProductControllers.Get_Cross_Sell_Products(req.query).then((response) => {
+    res.send(response);
+  });
+});
 router.get("/featured-products", function (req, res) {
   ProductControllers.Get_featured_Products(req.query).then((response) =>
     res.send(response)
@@ -82,7 +92,6 @@ router.get("/featured-products", function (req, res) {
 });
 router.get("/new-products", function (req, res) {
   ProductControllers.Get_New_Products(req.query).then((response) => {
-    // console.log(response, 'responseeeeeeeee')
     res.send(response);
   });
 });
