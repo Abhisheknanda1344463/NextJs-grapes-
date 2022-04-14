@@ -46,6 +46,7 @@ function AccountPageProfile(props) {
       )
         .then((responce) => responce.json())
         .then((res) => {
+          console.log(res, "res in account page profile")
           if (res) {
             setAddress(res.data);
           }

@@ -1,150 +1,156 @@
-import React from "react";
-import Link from "next/link";
-import Router from "next/router";
-import { url, apiUrlWithStore } from "../../helper";
-import shopApi from "../../api/shop";
-import { connect } from "react-redux";
-import { toast } from "react-toastify";
-import { Check9x7Svg, IdramPosSVG, TelcellPosSVG, PaypalPosSVG } from "../../svg";
-import Currency from "../shared/Currency";
-import Collapse from "../shared/Collapse";
-import PageHeader from "../shared/PageHeader";
-import ShippingMethod from "./ShippingMethod";
+import React                                                     from 'react'
+import Link                                                      from 'next/link'
+import Router                                                    from 'next/router'
+import { url, apiUrlWithStore }                                  from '../../helper'
+import shopApi                                                   from '../../api/shop'
+import { connect }                                               from 'react-redux'
+import { toast }                                                 from 'react-toastify'
+import { Check9x7Svg, IdramPosSVG, TelcellPosSVG, PaypalPosSVG } from '../../svg'
+import Currency                                                  from '../shared/Currency'
+import Collapse                                                  from '../shared/Collapse'
+import PageHeader                                                from '../shared/PageHeader'
+import ShippingMethod                                            from './ShippingMethod'
 // import payments from "../../data/shopPayments";
-import ShippingAddress from "./ShippingAddress";
-import { FormattedMessage, injectIntl } from "react-intl";
-import { cartUpdateData, cartRemoveAllItems } from "../../store/cart";
-import CreditCartSvg from "../../svg/creditCart.svg";
-import { runFbPixelEvent } from "../../services/utils";
-import TextField from "@mui/material/TextField";
+import ShippingAddress                                           from './ShippingAddress'
+import { FormattedMessage, injectIntl }                          from 'react-intl'
+import { cartUpdateData, cartRemoveAllItems }                    from '../../store/cart'
+import CreditCartSvg                                             from '../../svg/creditCart.svg'
+import { runFbPixelEvent }                                       from '../../services/utils'
+import TextField                                                 from '@mui/material/TextField'
 //momemt js
-import moment from "moment";
+import moment                                                    from 'moment'
+
+
+
 const validEmailRegex = RegExp(
-  /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
-);
+  /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+)
 
 const validateForm = (errors) => {
-  let arr = Object.values(errors);
-  let isValid = true;
+  let arr = Object.values(errors)
+  let isValid = true
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].length > 0) {
-      isValid = false;
+      isValid = false
     }
   }
-  return isValid;
-};
+  return isValid
+}
 
-const phonenumber = RegExp(/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/);
+const phonenumber = RegExp(/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/)
+
 
 class ShopPageCheckout extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
-      customer: this.props.customer,
-      cart: this.props.cart,
-      loading: false,
-      inputsValues: null,
-      checkbox: false,
-      token: this.props.token,
-      locale: this.props.locale,
-      payment: "cashondelivery",
-      payments: this.props.payments,
+      customer           : this.props.customer,
+      cart               : this.props.cart,
+      loading            : false,
+      inputsValues       : null,
+      checkbox           : false,
+      token              : this.props.token,
+      locale             : this.props.locale,
+      payment            : 'cashondelivery',
+      payments           : this.props.payments,
       inputsDataForParent: false,
-      notes: "",
-      fullName: "",
-      lname: "",
-      name: "",
-      shippingMethod: "",
-      shippingMethodRate: "",
-      street: "",
-      shipingStreet: "",
-      shipingPhone: "",
-      phone: "",
-      email: "",
-      country: "",
-      states: "",
-      city: "",
-      apartment: "",
-      postal: "",
-      defaultAddress: true,
-      newBillingAddress: false,
-      input: null,
+      notes              : '',
+      fullName           : '',
+      lname              : '',
+      name               : '',
+      shippingMethod     : '',
+      shippingMethodRate : '',
+      street             : '',
+      shipingStreet      : '',
+      shipingPhone       : '',
+      phone              : '',
+      email              : '',
+      country            : '',
+      states             : '',
+      city               : '',
+      apartment          : '',
+      postal             : '',
+      defaultAddress     : true,
+      newBillingAddress  : false,
+      input              : null,
 
-      billStreet: "",
-      billPhone: "",
-      billApartment: "",
-      billCity: "",
-      billPost: "",
-      billCountry: "",
-      billState: "",
+      billStreet   : '',
+      billPhone    : '',
+      billApartment: '',
+      billCity     : '',
+      billPost     : '',
+      billCountry  : '',
+      billState    : '',
 
-      billCountryList: [],
-      billCountryStates: [],
+      billCountryList        : [],
+      billCountryStates      : [],
       isSelectedCustomAddress: false,
-      pastOrders: [],
-      addressOption: {},
-      addCupone: "",
-      errors: {
-        fullName: "",
-        name: "",
-        lname: "",
-        street: "",
-        shipingStreet: "",
-        shipingPhone: "",
-        phone: "",
-        email: "",
-        country: "",
-        city: "",
-        apartment: "",
-        postal: "",
-        checkbox: "",
+      pastOrders             : [],
+      addressOption          : {},
+      addCupone              : '',
+      errors                 : {
+        fullName     : '',
+        name         : '',
+        lname        : '',
+        street       : '',
+        shipingStreet: '',
+        shipingPhone : '',
+        phone        : '',
+        email        : '',
+        country      : '',
+        city         : '',
+        apartment    : '',
+        postal       : '',
+        checkbox     : '',
       },
-    };
+    }
   }
 
-  componentDidMount() {
-    this.abortController = new AbortController();
-    this.single = this.abortController;
-    runFbPixelEvent({ name: "Checkout Page" });
+  componentDidMount () {
+    this.abortController = new AbortController()
+    this.single = this.abortController
+    runFbPixelEvent({ name: 'Checkout Page' })
 
     fetch(apiUrlWithStore(`/api/country-states?pagination=0`))
       .then((res) => res.json())
-      .then((res) => this.setState({ billCountryStates: res }));
+      .then((res) => this.setState({ billCountryStates: res }))
 
     fetch(apiUrlWithStore(`/api/countries?pagination=0`))
       .then((res) => res.json())
-      .then((res) => this.setState({ billCountryList: res.data.reverse() }));
+      .then((res) => this.setState({ billCountryList: res.data.reverse() }))
 
-    if (this.state.customer.token != "") {
+    fetch(apiUrlWithStore(`/api/customer/get?token=${this.state.customer.token}`),
+      {
+        single: this.single,
+      },
+    )
+      .then((responce) => responce.json())
+      .then((res) => {
+        console.log(res.data.email, "responce in cuztomer token")
+        this.setState({ email: res.data?.email })
+      })
+    if (this.state.customer.token != '') {
       fetch(
-        apiUrlWithStore(`/api/addresses?token=${this.state.customer.token}`)
+        apiUrlWithStore(`/api/addresses?token=${this.state.customer.token}`),
       )
         .then((res) => res.json())
         .then((res) => {
+          console.log(res, 'res in shop page checkout')
           this.setState({
             pastOrders: res.data,
-            street: res.data[0]?.address1[0],
-            city: res.data[0]?.city,
-            country: res.data[0]?.country,
-            fullName: res.data[0]?.first_name,
-            lname: res.data[0]?.last_name,
-            phone: res.data[0]?.phone,
-            postal: res.data[0]?.postcode,
-            state: res.data[0]?.state,
-            apartment: res.data[0]?.apartment,
-          });
-        });
+            street    : res.data[0]?.address1[0],
+            city      : res.data[0]?.city,
+            country   : res.data[0]?.country,
+            fullName  : res.data[0]?.first_name,
+            lname     : res.data[0]?.last_name,
+            phone     : res.data[0]?.phone,
+            postal    : res.data[0]?.postcode,
+            state     : res.data[0]?.state,
+            apartment : res.data[0]?.apartment,
+          })
+        })
 
-      fetch(
-        apiUrlWithStore("/api/customer/get?token=" + this.state.customer.token),
-        {
-          single: this.single,
-        }
-      )
-        .then((responce) => responce.json())
-        .then((res) => {
-          this.setState({ email: res.data[0].email });
-        });
+      console.log(this.state, 'this state')
     }
   }
 
@@ -193,107 +199,107 @@ class ShopPageCheckout extends React.Component {
 
   handlePaymentChange = (event) => {
     if (event.target.checked) {
-      this.setState({ payment: event.target.value });
+      this.setState({ payment: event.target.value })
     }
-  };
+  }
 
   setShipingMethod = (val) => {
-    this.setState({ shippingMethod: val.value });
+    this.setState({ shippingMethod: val.value })
     this.setState({
-      shippingMethodRate: val.getAttribute("data-default_rate"),
-    });
-  };
+      shippingMethodRate: val.getAttribute('data-default_rate'),
+    })
+  }
 
   getCartCustomer = () => {
     if (this.state.customer && this.state.customer.token) {
       fetch(
         apiUrlWithStore(
-          `/api/checkout/cart?token=` + this.state.customer.token
+          `/api/checkout/cart?token=` + this.state.customer.token,
         ),
         {
-          method: "GET",
+          method : 'GET',
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+            Accept        : 'application/json',
+            'Content-Type': 'application/json',
           },
-        }
+        },
       )
         .then((response) => response.json())
         .then((res) => {
           if (!res.data.coupon_code) {
-            this.setState({ addCupone: "" });
+            this.setState({ addCupone: '' })
           }
           this.props.cartUpdateData({
-            total: res.data.base_grand_total,
-            coupon_code: res.data.coupon_code,
+            total          : res.data.base_grand_total,
+            coupon_code    : res.data.coupon_code,
             coupon_discount: res.data.base_discount,
-          });
-        });
+          })
+        })
     }
-  };
+  }
 
   addCuponeCode = (methods) => {
     //  this.getCartCustomer();
     const requestOptions = {
-      method: methods,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        code: this.state.addCupone,
+      method : methods,
+      headers: { 'Content-Type': 'application/json' },
+      body   : JSON.stringify({
+        code : this.state.addCupone,
         token: this.state.customer.token,
       }),
-    };
-    if (this.state.addCupone || methods == "DELETE") {
+    }
+    if (this.state.addCupone || methods == 'DELETE') {
       fetch(apiUrlWithStore(`/api/checkout/cart/coupon`, requestOptions))
         .then((response) => response.json())
         .then((res) => {
           if (res.message) {
             if (res.success) {
-              toast.success(`${res.message}`,{ hideProgressBar: true});
+              toast.success(`${res.message}`, { hideProgressBar: true })
               this.props.cartUpdateData({
                 coupon_name: res.CouponName,
-              });
+              })
 
-              this.getCartCustomer();
+              this.getCartCustomer()
             } else {
-              toast.error(`${res.message}`, { hideProgressBar: true});
+              toast.error(`${res.message}`, { hideProgressBar: true })
             }
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error))
     }
-  };
+  }
 
-  renderTotals() {
-    const { cart } = this.props;
+  renderTotals () {
+    const { cart } = this.props
 
     if (cart.extraLines.length <= 0) {
-      return null;
+      return null
     }
     const extraLines = cart.extraLines.map((extraLine, index) => (
       <tr key={index}>
         <th>{extraLine.title}</th>
         <td>
-          <Currency value={extraLine.price} />
+          <Currency value={extraLine.price}/>
         </td>
       </tr>
-    ));
+    ))
 
     return (
       <React.Fragment>
         <tbody className="checkout__totals-subtotals">
-          <tr>
-            <th>Subtotal</th>
-            <td>
-              <Currency value={cart.subtotal} />
-            </td>
-          </tr>
-          {extraLines}
+        <tr>
+          <th>Subtotal</th>
+          <td>
+            <Currency value={cart.subtotal}/>
+          </td>
+        </tr>
+        {extraLines}
         </tbody>
       </React.Fragment>
-    );
+    )
   }
 
-  renderCupone() {
+  renderCupone () {
     return (
       <div className="coupon-code">
         <div className="coupon-code__list">
@@ -320,7 +326,7 @@ class ShopPageCheckout extends React.Component {
           <TextField
             id="outlined-email-input"
             label={
-              <FormattedMessage id="coupon.code" defaultMessage="Coupon Code" />
+              <FormattedMessage id="coupon.code" defaultMessage="Coupon Code"/>
             }
             type="email"
             autoComplete="current-email"
@@ -333,63 +339,63 @@ class ShopPageCheckout extends React.Component {
             onClick={
               this.props.cart.coupon_code
                 ? () => {
-                    this.addCuponeCode("DELETE");
-                  }
+                  this.addCuponeCode('DELETE')
+                }
                 : () => {
-                    this.addCuponeCode("POST");
-                  }
+                  this.addCuponeCode('POST')
+                }
             }
             className="coupon-code-button-apply"
           >
             {/* <FormattedMessage id="Apply" defaultMessage="Apply" /> */}
             {this.props.cart.coupon_code ? (
-              <FormattedMessage id="remove" defaultMessage="Remove" />
+              <FormattedMessage id="remove" defaultMessage="Remove"/>
             ) : (
-              <FormattedMessage id="apply" defaultMessage="Apply" />
+              <FormattedMessage id="apply" defaultMessage="Apply"/>
             )}
           </button>
         </div>
       </div>
-    );
+    )
   }
 
-  renderCuponeName() {
+  renderCuponeName () {
     let couponname = this.props.cart.coupon_code ? (
       <th>{this.props.cart.coupon_name}</th>
     ) : (
-      ""
-    );
+      ''
+    )
     let coupondiscount = this.props.cart.coupon_code ? (
       <th>-{this.props.cart.coupon_discount}</th>
     ) : (
-      ""
-    );
+      ''
+    )
     return (
       <tr>
         {couponname}
         {coupondiscount}
       </tr>
-    );
+    )
   }
 
-  renderCart() {
-    const { cart } = this.props;
-    let newDate = new Date();
-    const date_now = moment(newDate).format("YYYY-MM-DD");
+  renderCart () {
+    const { cart } = this.props
+    let newDate = new Date()
+    const date_now = moment(newDate).format('YYYY-MM-DD')
     const items = cart.items.map((item) => (
       <tr key={item.id}>
         <td>{`${item.product.name}`}</td>
         <td className="responsive-checkout-text">
-          {console.log("item",item)}
+          {/*{console.log("item",item)}*/}
           {`${item.quantity} ×`}
           {item.product?.special_price &&
           date_now >= item.product.special_price_from &&
           date_now <= item.product.special_price_to ? (
-            <Currency value={Number(item.product.special_price).toFixed(0)} />
+            <Currency value={Number(item.product.special_price).toFixed(0)}/>
           ) : item.product?.special_price
-            ? <Currency value={Number(item.product.special_price).toFixed(0)} /> : (
-            <Currency value={Number(item.product.price).toFixed(0)} />
-          )}
+            ? <Currency value={Number(item.product.special_price).toFixed(0)}/> : (
+              <Currency value={Number(item.product.price).toFixed(0)}/>
+            )}
           {/*{item.product.formatted_price*/}
           {/*  ? item.product.formatted_special_price != "$0.00"*/}
           {/*    ? item.product.formatted_special_price*/}
@@ -400,54 +406,54 @@ class ShopPageCheckout extends React.Component {
           {/*    : item.product.formated_price}*/}
         </td>
       </tr>
-    ));
+    ))
     return (
       <table className="checkout__totals">
         <tbody className="checkout__totals-products">{items}</tbody>
         <tfoot className="checkout__totals-footer">
-          {cart.tax > 0 ? (
-            <tr>
-              <th className="font-weight-bold pt-5">
-                <FormattedMessage id="tax" defaultMessage="Tax" />
-              </th>
-              <th className="responsive-checkout-text pt-5"> {cart.tax}</th>
-            </tr>
-          ) : null}
-          {this.state.shippingMethodRate ? (
-            <tr className="checkout-shipimg-title-fms">
-              <th className="font-weight-bold">
-                {" "}
-                <FormattedMessage
-                  id="shipping"
-                  defaultMessage="Shipping"
-                />{" "}
-              </th>
-              <td className="responsive-checkout-text">
-                <Currency value={this.state.shippingMethodRate} />
-              </td>
-            </tr>
-          ) : (
-            ""
-          )}
+        {cart.tax > 0 ? (
           <tr>
-            <td colSpan="2">{this.renderCupone()}</td>
-            {this.renderCuponeName()}
+            <th className="font-weight-bold pt-5">
+              <FormattedMessage id="tax" defaultMessage="Tax"/>
+            </th>
+            <th className="responsive-checkout-text pt-5"> {cart.tax}</th>
           </tr>
-          <tr>
+        ) : null}
+        {this.state.shippingMethodRate ? (
+          <tr className="checkout-shipimg-title-fms">
             <th className="font-weight-bold">
-              <FormattedMessage id="total" defaultMessage="Total" />
+              {' '}
+              <FormattedMessage
+                id="shipping"
+                defaultMessage="Shipping"
+              />{' '}
             </th>
             <td className="responsive-checkout-text">
-              <Currency value={cart.total} />
+              <Currency value={this.state.shippingMethodRate}/>
             </td>
           </tr>
+        ) : (
+          ''
+        )}
+        <tr>
+          <td colSpan="2">{this.renderCupone()}</td>
+          {this.renderCuponeName()}
+        </tr>
+        <tr>
+          <th className="font-weight-bold">
+            <FormattedMessage id="total" defaultMessage="Total"/>
+          </th>
+          <td className="responsive-checkout-text">
+            <Currency value={cart.total}/>
+          </td>
+        </tr>
         </tfoot>
       </table>
-    );
+    )
   }
 
-  renderPaymentsList() {
-    const { payment: currentPayment } = this.state;
+  renderPaymentsList () {
+    const { payment: currentPayment } = this.state
     const payments = this.state.payments.map((payment) => {
       const renderPayment = ({ setItemRef, setContentRef }, index) => (
         <li className="payment-methods__item" ref={setItemRef} key={index}>
@@ -463,23 +469,23 @@ class ShopPageCheckout extends React.Component {
                   onChange={this.handlePaymentChange}
                 />
 
-                <span className="input-radio__circle pay-side cash-visa-fms"  style={{marginRight: "12px"}}/>
+                <span className="input-radio__circle pay-side cash-visa-fms" style={{ marginRight: '12px' }}/>
               </span>
             </span>
             <span className="payment-methods__item-title">
-              {payment.method == "newevoca_vpos" ||
-              payment.method == "ineco_vpos" ||
-              payment.method == "ameria_vpos"
+              {payment.method == 'newevoca_vpos' ||
+              payment.method == 'ineco_vpos' ||
+              payment.method == 'ameria_vpos'
                 ? <CreditCartSvg/>
-                : payment.method == "idram_vpos" ? <IdramPosSVG />
-                : payment.method == "telcell_vpos" ? <TelcellPosSVG />
-                // : payment.method == "paypal_vpos" ? <PaypalPosSVG />
-               : (
-                <FormattedMessage
-                  id={payment.key}
-                  defaultMessage={payment.title}
-                />
-              )}
+                : payment.method == 'idram_vpos' ? <IdramPosSVG/>
+                  : payment.method == 'telcell_vpos' ? <TelcellPosSVG/>
+                    // : payment.method == "paypal_vpos" ? <PaypalPosSVG />
+                    : (
+                      <FormattedMessage
+                        id={payment.key}
+                        defaultMessage={payment.title}
+                      />
+                    )}
             </span>
           </label>
           <div className="payment-methods__item-container" ref={setContentRef}>
@@ -497,7 +503,7 @@ class ShopPageCheckout extends React.Component {
             {/*/>*/}
           </div>
         </li>
-      );
+      )
 
       return (
         <Collapse
@@ -506,8 +512,8 @@ class ShopPageCheckout extends React.Component {
           toggleClass="payment-methods__item--active"
           render={renderPayment}
         />
-      );
-    });
+      )
+    })
     return (
       <div>
         <div className="payment-methods">
@@ -520,82 +526,82 @@ class ShopPageCheckout extends React.Component {
           <ul className="payment-methods__list">{payments}</ul>
         </div>
       </div>
-    );
+    )
   }
 
   // openAddress() {
   //     this.setState({ ShippingAddress: !this.state.ShippingAddress });
   // }
 
-  openBillingAddress() {
-    this.setState({ newBillingAddress: true });
+  openBillingAddress () {
+    this.setState({ newBillingAddress: true })
   }
 
-  closeBillingAddress() {
-    this.setState({ newBillingAddress: false });
+  closeBillingAddress () {
+    this.setState({ newBillingAddress: false })
   }
 
   onclick = (event) => {
-    this.setState({ checkbox: !this.state.checkbox });
-  };
+    this.setState({ checkbox: !this.state.checkbox })
+  }
 
   chacking = (resolve) => {
     const {
-      fullName,
-      lname,
-      email,
-      street,
-      phone,
-      country,
-      city,
-      apartment,
-      postal,
-      checkbox,
-    } = this.state;
-    let object = {};
+            fullName,
+            lname,
+            email,
+            street,
+            phone,
+            country,
+            city,
+            apartment,
+            postal,
+            checkbox,
+          } = this.state
+    let object = {}
 
-    if (email === "" || validEmailRegex.test(this.state.email) == false) {
-      object.email = "Email is not valid!";
+    if (email === '' || validEmailRegex.test(this.state.email) == false) {
+      object.email = 'Email is not valid!'
     }
 
-    if (fullName === "") {
-      object.fullName = "Full Name must be 3 characters long!";
+    if (fullName === '') {
+      object.fullName = 'Full Name must be 3 characters long!'
     }
-    if (lname === "") {
-      object.lname = "Last Name must be 3 characters long!";
+    if (lname === '') {
+      object.lname = 'Last Name must be 3 characters long!'
     }
     // if (email === "" || validEmailRegex.test(this.state.email) == false) {
     //   object.email = "Email is not valid!";
     // }
 
-    if (street === "") {
-      object.street = "Street is not valid!";
+    if (street === '') {
+      object.street = 'Street is not valid!'
     }
 
-    if (apartment === "") {
-      object.apartment = "Apartment is not valid!";
+    if (apartment === '') {
+      object.apartment = 'Apartment is not valid!'
     }
 
-    if (postal === "") {
-      object.postal = "Postal code is not valid!";
+    if (postal === '') {
+      object.postal = 'Postal code is not valid!'
     }
 
-    if (country === "") {
-      object.country = "Country is not valid!";
+    if (country === '') {
+      object.country = 'Country is not valid!'
     }
 
-    if (city === "") {
-      object.city = "City is not valid!";
+    if (city === '') {
+      object.city = 'City is not valid!'
     }
 
-    if (phone === "" || phonenumber.test(this.state.phone) == false) {
-      object.phone = "Phone is not valid!";
+    if (phone === '' || phonenumber.test(this.state.phone) == false) {
+      object.phone = 'Phone is not valid!'
     }
 
     if (checkbox === false) {
-      object.checkbox = "This field is required";
+      object.checkbox = 'This field is required'
     } else {
-      object.checkbox = "";
+      object.checkbox = ''
     }
 
     if (Object.keys(object).length > 0) {
@@ -607,52 +613,52 @@ class ShopPageCheckout extends React.Component {
           },
         },
         () => {
-          resolve();
-        }
-      );
+          resolve()
+        },
+      )
     }
     if (Object.keys(this.state.addressOption).length > 0) {
       this.setState({
-        street: this.state.addressOption.address1[0],
-        fullName: this.state.addressOption.first_name,
-        lname: this.state.addressOption.last_name,
-        city: this.state.addressOption.city,
-        country: this.state.addressOption.country,
-        states: this.state.state || "no state",
-        postal: this.state.addressOption.postcode,
-        phone: this.state.addressOption.phone,
-        email: this.state.email,
+        street   : this.state.addressOption.address1[0],
+        fullName : this.state.addressOption.first_name,
+        lname    : this.state.addressOption.last_name,
+        city     : this.state.addressOption.city,
+        country  : this.state.addressOption.country,
+        states   : this.state.state || 'no state',
+        postal   : this.state.addressOption.postcode,
+        phone    : this.state.addressOption.phone,
+        email    : this.state.email,
         apartment: this.state.addressOption.apartment,
-        errors: {
-          street: "",
-          fullName: "",
-          lname: "",
-          city: "",
-          country: "",
-          states: "",
-          postal: "",
-          phone: "",
-          apartment: "",
-          checkbox: object.checkbox,
-          email: this.state.email ? "" : "Invalid Email",
+        errors   : {
+          street   : '',
+          fullName : '',
+          lname    : '',
+          city     : '',
+          country  : '',
+          states   : '',
+          postal   : '',
+          phone    : '',
+          apartment: '',
+          checkbox : object.checkbox,
+          email    : this.state.email ? '' : 'Invalid Email',
         },
-      });
+      })
     }
-  };
+  }
 
-  requestOrder() {
+  requestOrder () {
     const headers = {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    };
+      Accept        : 'application/json',
+      'Content-Type': 'application/json',
+    }
 
-    let shippingDetalies, options, options_payment, save_shipping;
+    let shippingDetalies, options, options_payment, save_shipping
     if (this.state.ShippingAddress) {
       shippingDetalies = {
         address1: this.state.shipingStreet,
-        name: this.state.name,
-        phone: this.state.shipingPhone,
-      };
+        name    : this.state.name,
+        phone   : this.state.shipingPhone,
+      }
     }
 
     // const billing = {
@@ -686,49 +692,49 @@ class ShopPageCheckout extends React.Component {
     //         phone: this.state.shipingPhone
     //     }
 
-    let billing;
+    let billing
     if (Object.keys(this.state.addressOption).length > 0) {
       billing = {
         use_for_shipping: true,
-        save_as_address: false,
-        address1: [this.state.addressOption.address1[0]],
-        address2: [this.state.addressOption.apartment],
-        email: this.state.email,
-        first_name: this.state.addressOption.first_name,
-        last_name: this.state.addressOption.last_name,
-        city: this.state.addressOption.city,
-        country: this.state.addressOption.country,
-        state: this.state.state || "no state",
-        postcode: this.state.addressOption.postcode,
-        phone: this.state.addressOption.phone,
+        save_as_address : false,
+        address1        : [this.state.addressOption.address1[0]],
+        address2        : [this.state.addressOption.apartment],
+        email           : this.state.email,
+        first_name      : this.state.addressOption.first_name,
+        last_name       : this.state.addressOption.last_name,
+        city            : this.state.addressOption.city,
+        country         : this.state.addressOption.country,
+        state           : this.state.state || 'no state',
+        postcode        : this.state.addressOption.postcode,
+        phone           : this.state.addressOption.phone,
         // apartment: this.state.addressOption.apartment,
-        company_name: "",
-        additional: this.state.notes,
-      };
+        company_name: '',
+        additional  : this.state.notes,
+      }
     } else {
       if (this.state.pastOrders.length > 0) {
         const {
-          street,
-          city,
-          country,
-          fullName,
-          lname,
-          phone,
-          postal,
-          state,
-          apartment,
-        } = this.state;
+                street,
+                city,
+                country,
+                fullName,
+                lname,
+                phone,
+                postal,
+                state,
+                apartment,
+              } = this.state
 
         const {
-          city: cityTwo,
-          country: countryTwo,
-          first_name: fullNameTwo,
-          last_name: lnameTwo,
-          phone: phoneTwo,
-          postcode: postalTwo,
-          state: stateTwo,
-          apartment: apartmentTwo,
-        } = this.state.pastOrders[0];
+                city      : cityTwo,
+                country   : countryTwo,
+                first_name: fullNameTwo,
+                last_name : lnameTwo,
+                phone     : phoneTwo,
+                postcode  : postalTwo,
+                state     : stateTwo,
+                apartment : apartmentTwo,
+              } = this.state.pastOrders[0]
 
         const aJson = JSON.stringify({
           street,
@@ -740,74 +746,74 @@ class ShopPageCheckout extends React.Component {
           postal,
           state,
           apartment,
-        });
+        })
 
         const bJson = JSON.stringify({
-          street: this.state.pastOrders[0].address1[0],
-          city: cityTwo,
-          country: countryTwo,
-          fullName: fullNameTwo,
-          lname: lnameTwo,
-          phone: phoneTwo,
-          postal: postalTwo,
-          state: stateTwo,
+          street   : this.state.pastOrders[0].address1[0],
+          city     : cityTwo,
+          country  : countryTwo,
+          fullName : fullNameTwo,
+          lname    : lnameTwo,
+          phone    : phoneTwo,
+          postal   : postalTwo,
+          state    : stateTwo,
           apartment: apartmentTwo,
-        });
+        })
         if (aJson == bJson) {
           billing = {
             use_for_shipping: true,
-            save_as_address: false,
-            address1: [this.state.street],
-            address2: [this.state.apartment],
-            email: this.state.email,
-            first_name: this.state.fullName,
-            last_name: this.state.lname,
-            city: this.state.city,
-            country: this.state.country,
-            state: this.state.state || "no state",
-            postcode: this.state.postal,
-            phone: this.state.phone,
+            save_as_address : false,
+            address1        : [this.state.street],
+            address2        : [this.state.apartment],
+            email           : this.state.email,
+            first_name      : this.state.fullName,
+            last_name       : this.state.lname,
+            city            : this.state.city,
+            country         : this.state.country,
+            state           : this.state.state || 'no state',
+            postcode        : this.state.postal,
+            phone           : this.state.phone,
             // apartment: this.state.apartment,
-            company_name: "",
-            additional: this.state.notes,
-          };
+            company_name: '',
+            additional  : this.state.notes,
+          }
         } else {
           billing = {
             use_for_shipping: true,
-            save_as_address: true,
-            address1: [this.state.street],
-            address2: [this.state.apartment],
-            email: this.state.email,
-            first_name: this.state.fullName,
-            last_name: this.state.lname,
-            city: this.state.city,
-            country: this.state.country,
-            state: this.state.state || "no state",
-            postcode: this.state.postal,
-            phone: this.state.phone,
+            save_as_address : true,
+            address1        : [this.state.street],
+            address2        : [this.state.apartment],
+            email           : this.state.email,
+            first_name      : this.state.fullName,
+            last_name       : this.state.lname,
+            city            : this.state.city,
+            country         : this.state.country,
+            state           : this.state.state || 'no state',
+            postcode        : this.state.postal,
+            phone           : this.state.phone,
             // apartment: this.state.apartment,
-            company_name: "",
-            additional: this.state.notes,
-          };
+            company_name: '',
+            additional  : this.state.notes,
+          }
         }
       } else {
         billing = {
           use_for_shipping: true,
-          save_as_address: true,
-          address1: [this.state.street],
-          address2: [this.state.apartment],
-          email: this.state.email,
-          first_name: this.state.fullName,
-          last_name: this.state.lname,
-          city: this.state.city,
-          country: this.state.country,
-          state: this.state.state || "no state",
-          postcode: this.state.postal,
-          phone: this.state.phone,
+          save_as_address : true,
+          address1        : [this.state.street],
+          address2        : [this.state.apartment],
+          email           : this.state.email,
+          first_name      : this.state.fullName,
+          last_name       : this.state.lname,
+          city            : this.state.city,
+          country         : this.state.country,
+          state           : this.state.state || 'no state',
+          postcode        : this.state.postal,
+          phone           : this.state.phone,
           // apartment: this.state.apartment,
-          company_name: "",
-          additional: this.state.notes,
-        };
+          company_name: '',
+          additional  : this.state.notes,
+        }
       }
     }
 
@@ -815,70 +821,70 @@ class ShopPageCheckout extends React.Component {
     const shipping = {
       address1: [this.state.shipingStreet],
       address2: [this.state.apartment || this.state.addressOption.apartment],
-      name: this.state.name,
-      phone: this.state.shipingPhone,
-    };
+      name    : this.state.name,
+      phone   : this.state.shipingPhone,
+    }
 
     if (this.state.customer.token) {
       options = {
-        method: "POST",
+        method : 'POST',
         headers: headers,
-        body: JSON.stringify({
-          billing: billing,
-          shipping: shipping,
+        body   : JSON.stringify({
+          billing  : billing,
+          shipping : shipping,
           api_token: this.state.token.cartToken,
-          token: this.state.customer.token,
+          token    : this.state.customer.token,
         }),
-      };
+      }
       options_payment = {
-        method: "POST",
+        method : 'POST',
         headers: headers,
-        body: JSON.stringify({
-          payment: { method: this.state.payment },
+        body   : JSON.stringify({
+          payment  : { method: this.state.payment },
           api_token: this.state.token.cartToken,
-          token: this.state.customer.token,
+          token    : this.state.customer.token,
         }),
-      };
+      }
 
       save_shipping = {
-        method: "POST",
+        method : 'POST',
         headers: headers,
-        body: JSON.stringify({
+        body   : JSON.stringify({
           shipping_method: this.state.shippingMethod,
-          api_token: this.state.token.cartToken,
-          token: this.state.customer.token,
+          api_token      : this.state.token.cartToken,
+          token          : this.state.customer.token,
         }),
-      };
+      }
     } else {
       options = {
-        method: "POST",
+        method : 'POST',
         headers: headers,
-        body: JSON.stringify({
-          billing: billing,
-          shipping: shipping,
+        body   : JSON.stringify({
+          billing  : billing,
+          shipping : shipping,
           api_token: this.state.token.cartToken,
         }),
-      };
+      }
       options_payment = {
-        method: "POST",
+        method : 'POST',
         headers: headers,
-        body: JSON.stringify({
-          payment: { method: this.state.payment },
+        body   : JSON.stringify({
+          payment  : { method: this.state.payment },
           api_token: this.state.token.cartToken,
         }),
-      };
+      }
 
       save_shipping = {
-        method: "POST",
+        method : 'POST',
         headers: headers,
-        body: JSON.stringify({
+        body   : JSON.stringify({
           shipping_method: this.state.shippingMethod,
-          api_token: this.state.token.cartToken,
+          api_token      : this.state.token.cartToken,
         }),
-      };
+      }
     }
 
-    fetch(apiUrlWithStore("/api/checkout/save-address"), options)
+    fetch(apiUrlWithStore('/api/checkout/save-address'), options)
       .then((response) => {
         if (response.ok) {
           fetch(
@@ -886,102 +892,102 @@ class ShopPageCheckout extends React.Component {
               `/api/checkout/save-shipping${
                 this.state.customer.token
                   ? `?token=${this.state.customer.token}`
-                  : ""
-              }`
+                  : ''
+              }`,
             ),
-            save_shipping
+            save_shipping,
           )
             .then((res) => {
               if (res.ok) {
                 fetch(
-                  apiUrlWithStore("/api/checkout/save-payment"),
-                  options_payment
+                  apiUrlWithStore('/api/checkout/save-payment'),
+                  options_payment,
                 )
                   .then((rsponce) => {
                     if (rsponce.ok) {
-                      let body;
+                      let body
                       if (this.state.customer.token) {
                         body = {
                           api_token: this.state.token.cartToken,
-                          token: this.state.customer.token,
+                          token    : this.state.customer.token,
                           // description: this.state.notes,
-                        };
+                        }
                       } else {
                         body = {
                           api_token: this.state.token.cartToken,
                           // description: this.state.notes,
-                        };
+                        }
                       }
 
-                      fetch(apiUrlWithStore("/api/checkout/save-order"), {
-                        method: "POST",
+                      fetch(apiUrlWithStore('/api/checkout/save-order'), {
+                        method : 'POST',
                         headers: headers,
-                        body: JSON.stringify(body),
+                        body   : JSON.stringify(body),
                       })
                         .then((res) => res.json())
                         .then((res) => {
                           if (res.success) {
                             if (res?.redirect_url?.backURL) {
-                              window.location = res.redirect_url.backURL;
+                              window.location = res.redirect_url.backURL
                             } else {
-                              let url = "";
+                              let url = ''
                               if (res?.redirect_url) {
-                                url = res.redirect_url;
+                                url = res.redirect_url
                               } else if (res?.order?.id) {
-                                url = `/thanks?orderID=${res.order.id}`;
+                                url = `/thanks?orderID=${res.order.id}`
                               } else {
-                                url = `/thanks?orderID=${res.id}`;
+                                url = `/thanks?orderID=${res.id}`
                               }
-                              Router.push(url);
+                              Router.push(url)
                             }
 
-                            this.props.cartRemoveAllItems();
+                            this.props.cartRemoveAllItems()
                           }
                         })
-                        .catch((err) => console.log(err, "err"));
+                        .catch((err) => console.log(err, 'err'))
                     }
                   })
                   .then((res) => {
                     // console.log(res, "lplplpl");
-                  });
+                  })
               }
             })
-            .catch((err) => console.log(err, "err"));
+            .catch((err) => console.log(err, 'err'))
         }
       })
-      .catch((err) => console.log(err, "err"));
+      .catch((err) => console.log(err, 'err'))
     //   return <Redirect to="/thanks" />;
   }
 
   handleSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     new Promise((resolve) => {
-      this.setState({ loading: true });
-      this.chacking(resolve);
+      this.setState({ loading: true })
+      this.chacking(resolve)
     }).then(() => {
       if (validateForm(this.state.errors)) {
-        this.requestOrder();
+        this.requestOrder()
       } else {
-        this.setState({ loading: false });
+        this.setState({ loading: false })
       }
-    });
-  };
+    })
+  }
 
   handleInputChange = (object) => {
-    let name, value;
-    name = object?.target?.name || object.name;
-    value = object?.target?.value || object.value;
+    let name, value
+    name = object?.target?.name || object.name
+    value = object?.target?.value || object.value
 
     this.setState({
       [name]: value,
-    });
+    })
 
     this.setState({
       errors: {
         ...this.state.errors,
-        [name]: "",
+        [name]: '',
       },
-    });
+    })
 
     //// old logic for update input values
     // let errors = this.state.errors;
@@ -989,18 +995,18 @@ class ShopPageCheckout extends React.Component {
     //   [event.target.name]: event.target.value,
     //   [name]: value,
     // });
-  };
+  }
 
   chosenAddress = (obj) => {
     this.setState({
       addressOption: { ...obj },
-    });
-  };
+    })
+  }
 
-  render() {
-    let selectCountry;
-    let selectState;
-    let countryCode;
+  render () {
+    let selectCountry
+    let selectState
+    let countryCode
 
     if (this.state.billCountryList) {
       selectCountry = (
@@ -1009,8 +1015,8 @@ class ShopPageCheckout extends React.Component {
             name="billCountry"
             className={
               this.state.billCountry
-                ? "dark-opacity checkout-input checkout-select-billing"
-                : "checkout-input checkout-select-billing"
+                ? 'dark-opacity checkout-input checkout-select-billing'
+                : 'checkout-input checkout-select-billing'
             }
             onChange={this.handleInputChange}
             value={this.state.billCountry}
@@ -1032,7 +1038,7 @@ class ShopPageCheckout extends React.Component {
             ))}
           </select>
         </div>
-      );
+      )
     }
 
     if (this.state.billCountryList && this.state.billCountry) {
@@ -1041,7 +1047,7 @@ class ShopPageCheckout extends React.Component {
           this.state.billCountryList[i] &&
           this.state.billCountryList[i].name == this.state.billCountry
         ) {
-          countryCode = this.state.billCountryList[i].code;
+          countryCode = this.state.billCountryList[i].code
         }
       }
     }
@@ -1057,8 +1063,8 @@ class ShopPageCheckout extends React.Component {
             name="billState"
             className={
               this.state.billState
-                ? "dark-opacity checkout-input checkout-select-billing"
-                : "checkout-input checkout-select-billing"
+                ? 'dark-opacity checkout-input checkout-select-billing'
+                : 'checkout-input checkout-select-billing'
             }
             onChange={this.handleInputChange}
           >
@@ -1070,18 +1076,18 @@ class ShopPageCheckout extends React.Component {
                 <option value={option.default_name} key={index}>
                   {option.default_name}
                 </option>
-              )
+              ),
             )}
           </select>
         </div>
-      );
+      )
     } else {
-      selectState = "";
+      selectState = ''
     }
 
-    const { cart } = this.props;
-    const { errors } = this.state;
-    const { locale } = this.props;
+    const { cart } = this.props
+    const { errors } = this.state
+    const { locale } = this.props
 
     if (cart.items.length < 1) {
       // return Router.push('/shop/cart')
@@ -1090,23 +1096,23 @@ class ShopPageCheckout extends React.Component {
     const breadcrumb = [
       {
         title: (
-          <FormattedMessage id="home" defaultMessage="home" />
+          <FormattedMessage id="home" defaultMessage="home"/>
         ),
-        url: "/",
+        url  : '/',
       },
       {
-        title: <FormattedMessage id="checkout" defaultMessage="Checkout" />,
-        url: url + "/shop/checkout",
+        title: <FormattedMessage id="checkout" defaultMessage="Checkout"/>,
+        url  : url + '/shop/checkout',
       },
-    ];
+    ]
 
     return (
       <React.Fragment>
-        <PageHeader breadcrumb={breadcrumb} />
+        <PageHeader breadcrumb={breadcrumb}/>
         <div className="checkout block">
           <div className="container">
             <h3 className="checkout-page-title">
-              <FormattedMessage id="checkout" defaultMessage="Checkout" />
+              <FormattedMessage id="checkout" defaultMessage="Checkout"/>
             </h3>
             <div className="row ">
               <div className="col-12 col-lg-6 col-xl-7">
@@ -1135,7 +1141,7 @@ class ShopPageCheckout extends React.Component {
                           </Link>
                         </div>
                       ) : (
-                        ""
+                        ''
                       )}
                     </div>
                     <span className="already-have-account-mail-fms">
@@ -1149,6 +1155,7 @@ class ShopPageCheckout extends React.Component {
                         }
                         type="email"
                         autoComplete="current-email"
+                        value={this.state.email}
                         onChange={this.handleInputChange}
                         name="email"
                       />
@@ -1184,7 +1191,7 @@ class ShopPageCheckout extends React.Component {
                         onChange={this.closeBillingAddress.bind(this)}
                       />
 
-                      <span className="input-radio__circle mr-2 " />
+                      <span className="input-radio__circle mr-2 "/>
                       <label
                         className="payment-methods__item-title payment-methods__item-title-fms shipping-methods__item-title-fms"
                         htmlFor="checkout-some-shiping"
@@ -1205,7 +1212,7 @@ class ShopPageCheckout extends React.Component {
                         onChange={this.openBillingAddress.bind(this)}
                       />
 
-                      <span className="input-radio__circle mr-2  other-shipping-adress-circle" />
+                      <span className="input-radio__circle mr-2  other-shipping-adress-circle"/>
                       <label
                         className="payment-methods__item-title payment-methods__item-title-fms shipping-methods__item-title-fms"
                         htmlFor="checkout-different-shiping"
@@ -1303,7 +1310,7 @@ class ShopPageCheckout extends React.Component {
                         {selectState}
                       </div>
                     ) : (
-                      ""
+                      ''
                     )}
 
                     <ShippingMethod
@@ -1312,9 +1319,9 @@ class ShopPageCheckout extends React.Component {
                       locale={this.state.locale}
                       updateShippingValue={(value, rate) => {
                         this.setState({
-                          shippingMethod: value,
+                          shippingMethod    : value,
                           shippingMethodRate: rate,
-                        });
+                        })
                       }}
                       country={this.state.country}
                     />
@@ -1363,13 +1370,13 @@ class ShopPageCheckout extends React.Component {
                               className="input-check__input"
                               onChange={() =>
                                 this.handleInputChange({
-                                  name: "checkbox",
+                                  name : 'checkbox',
                                   value: !this.state.checkbox,
                                 })
                               }
                             />
-                            <span className="input-check__box" />
-                            <Check9x7Svg className="input-check__icon" />
+                            <span className="input-check__box"/>
+                            <Check9x7Svg className="input-check__icon"/>
                           </span>
                         </span>
                         <label
@@ -1386,7 +1393,7 @@ class ShopPageCheckout extends React.Component {
                               </a>
                             </Link>
                           </span>
-                          <span style={{ color: "red" }}>*</span>
+                          <span style={{ color: 'red' }}>*</span>
                         </label>
                       </div>
                       {this.state.errors?.checkbox?.length > 0 && (
@@ -1402,14 +1409,14 @@ class ShopPageCheckout extends React.Component {
                     <button
                       onClick={this.handleSubmit}
                       type="submit"
-                      style={{ width: "50%", fontSize: "18px" }}
+                      style={{ width: '50%', fontSize: '18px' }}
                       className={
                         !this.state.loading
-                          ? "btn btn-primary btn-primary-fms custon-btn-padding"
-                          : "btn btn-primary  btn-primary-fms btn-loading"
+                          ? 'btn btn-primary btn-primary-fms custon-btn-padding'
+                          : 'btn btn-primary  btn-primary-fms btn-loading'
                       }
                     >
-                      <FormattedMessage id="pay" defaultMessage="Pay" />
+                      <FormattedMessage id="pay" defaultMessage="Pay"/>
                     </button>
                   </div>
                 </div>
@@ -1418,23 +1425,24 @@ class ShopPageCheckout extends React.Component {
           </div>
         </div>
       </React.Fragment>
-    );
+    )
   }
 }
 
+
 const mapStateToProps = (state) => ({
-  cart: state.cart,
-  locale: state.locale.code,
-  token: state.cartToken,
+  cart    : state.cart,
+  locale  : state.locale.code,
+  token   : state.cartToken,
   customer: state.customer,
-  fbPixel: state.general.fbPixel,
-});
+  fbPixel : state.general.fbPixel,
+})
 
 const mapDispatchToProps = (dispatch) => ({
-  cartUpdateData: (data) => dispatch(cartUpdateData(data)),
+  cartUpdateData    : (data) => dispatch(cartUpdateData(data)),
   cartRemoveAllItems: (data) => dispatch(cartRemoveAllItems(data)),
-});
+})
 
 export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(ShopPageCheckout)
-);
+  connect(mapStateToProps, mapDispatchToProps)(ShopPageCheckout),
+)

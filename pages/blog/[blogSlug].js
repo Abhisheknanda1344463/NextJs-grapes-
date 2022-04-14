@@ -49,9 +49,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
   let blog = null;
 
   //// const settingsResponse = await ApiCustomSettingsAsync();
-  const { setCatgoies, setMenuList } = await ApiCategoriesAndMenues(
-    selectedLocale
-  );
+  const { setCatgoies, setMenuList } = await ApiCategoriesAndMenues(selectedLocale);
 
   dispatches = {
     ...generalDispatches.clientSide,
@@ -70,7 +68,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     await fetch(`${url}/db/cms/blog/${blogSlug}?locale=${selectedLocale}`)
       .then((res) => res.json())
       .then((responce) => {
-        // console.log(responce.data, "responce.dataresponce.dataresponce.data");
+        console.log(responce.data, "responce.dataresponce.dataresponce.data");
         blog = responce.data;
       });
   }
