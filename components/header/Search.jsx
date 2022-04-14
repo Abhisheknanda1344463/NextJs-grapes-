@@ -83,9 +83,7 @@ function Search(props) {
     const query = event.target.value;
 
     setQuery(query);
-    if (query === "") {
-      setHasSuggestions(false);
-    } else {
+    if(query.length >= 3) {
       timer = setTimeout(() => {
         const options = {
           limit: 10,
@@ -98,21 +96,16 @@ function Search(props) {
           options.category = category;
         }
         shopApi.getSeachProducts(query, options).then((products) => {
-          // console.log(products, "seached products in search")
           if (canceled) {
             return;
           }
-          // console.log(products.data.filter(item => item !== Array.isArray(item)), "products.data");
           let newProduct = products.data.filter(item => {
             if(item.length === 0 ) {
               return
             }
             return item
           });
-console.log(newProduct,"ttttttttt")
-          // let x =
-          // const newProducts.data = [image,...item]
-          // console.log(newProducts,"products in query")
+          console.log(newProduct,"ttttttttt")
           if (newProduct.length > 0) {
             setSuggestedProducts(newProduct);
             setHasSuggestions(newProduct.length > 0);
@@ -125,10 +118,12 @@ console.log(newProduct,"ttttttttt")
         });
       }, 100);
     }
+    if (query === "") {
+      setHasSuggestions(false);
+    }
 
     setCancelFn(() => newCancelFn);
   };
-  // console.log(props, "products datya");
   const handleBlur = () => {
     setTimeout(() => {
       if (!document.activeElement || document.activeElement === document.body) {

@@ -49,7 +49,7 @@ export default function BlogPost(props) {
         <div
           className={postClasses}
           dangerouslySetInnerHTML={createMarkup(blog.html_content)}
-        ></div>
+        />
       </div>
     </>
   );

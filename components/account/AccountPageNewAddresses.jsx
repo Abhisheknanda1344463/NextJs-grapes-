@@ -11,6 +11,8 @@ const AccountPageNewAddresses = (props) => {
   const form = useRef(null);
   const customer = useSelector((state) => state.customer);
   const [errors, setErrors] = useState();
+  const [address, setAddress] = useState("");
+  const [appartment, setAppartment] = useState("");
   const [success, setSuccess] = useState(false);
   const [successData, setSuucessData] = useState();
   const [input, setInput] = useState({});
@@ -41,6 +43,14 @@ const AccountPageNewAddresses = (props) => {
       ...input,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleChangeAdd = (e) => {
+    setAddress(e.target.value)
+  };
+
+  const handleChangeApp = (e) => {
+    setAppartment(e.target.value)
   };
 
   let selectCountry;
@@ -88,8 +98,9 @@ const AccountPageNewAddresses = (props) => {
         token: customer.token,
         first_name: input.first_name,
         last_name: input.last_name,
-        address1: [input.address1],
-        apartment: input.apartment,
+        address1: [address,appartment],
+        // adres: input.adres,
+        // apartment: input.apartment,
         city: input.city,
         country: input.country_name,
         country_name: input.country_name,
@@ -110,7 +121,7 @@ const AccountPageNewAddresses = (props) => {
           setInput({
             first_name: "",
             last_name: "",
-            address1: "",
+            address1: [],
             apartment: "",
             city: "",
             country_name: "",
@@ -118,6 +129,8 @@ const AccountPageNewAddresses = (props) => {
             phone: "",
             state: "",
           });
+          setAddress("")
+          setAppartment("")
         }
       });
     // window.scrollTo({top: 0, left: 0, behavior: "smooth"});
@@ -202,13 +215,13 @@ const AccountPageNewAddresses = (props) => {
                   <FormattedMessage id="address" defaultMessage="Address">
                     {(placeholder) => (
                       <input
-                        onChange={handleChange}
-                        value={input.address1}
+                        onChange={handleChangeAdd}
+                        value={address}
                         defaultValue=""
                         name="address1"
                         type="text"
                         className={
-                          input.address1
+                          address
                             ? "dark-opacity form-control checkout-input f15"
                             : "form-control checkout-input f15"
                         }
@@ -227,13 +240,13 @@ const AccountPageNewAddresses = (props) => {
                     >
                       {(placeholder) => (
                         <input
-                          onChange={handleChange}
+                          onChange={handleChangeApp}
                           name="apartment"
-                          value={input.apartment}
+                          value={appartment}
                           defaultValue=""
                           type="text"
                           className={
-                            input.apartment
+                            appartment
                               ? "dark-opacity form-control checkout-input f15"
                               : "form-control checkout-input f15"
                           }
