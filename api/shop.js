@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-unused-vars
 import qs from "query-string";
 import { getCategoryBySlug } from "../fake-server/endpoints/categories";
-import { url, apiUrlWithStore, domainUrl ,megaUrl} from "../helper";
+import { url, apiUrlWithStore, domainUrl, megaUrl } from "../helper";
 import {
   getDiscountedProducts,
   getLatestProducts,
@@ -269,7 +269,7 @@ const shopApi = {
     if (options.savings == "") {
       delete options.savings;
     }
-
+    console.log(catID, catId, "catIdcatId");
     const categoryId = catId || catID;
     console.log(domain ? `https://` + domain : url, "getProductsList");
     if (

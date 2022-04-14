@@ -293,8 +293,6 @@ function ShopPageCategory(props) {
     setMinPrice(allProduct.dispatches.setInitialMinPrice);
   }, [router.locale, categorySlug, state.options]);
 
-  ///console.log(prevCategorySlugRef.current, "prevCategorySlugRef.current");
-
   async function categoryData() {
     const query = buildQuery({ ...state.options, page: page }, state.filters);
     const location = `${window.location.pathname}${query ? "?" : ""}${query}`;
@@ -313,12 +311,17 @@ function ShopPageCategory(props) {
           filters: { ...state.filters },
           history: history.search,
           location: location,
-          catID: catID,
+          catID: props.categoryId,
           window: null,
           limit: 6,
         })
         .then((items) => {
           setProductsList(items);
+
+          const location = `${window.location.pathname}${
+            query ? "?" : ""
+          }${query}`;
+          window.history.replaceState(null, "", location);
         });
     }
   }
