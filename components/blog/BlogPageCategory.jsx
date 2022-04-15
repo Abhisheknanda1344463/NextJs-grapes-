@@ -29,6 +29,7 @@ const BlogPageCategory = (props) => {
   const [page, setPage] = useState(props.blog.current_page);
   const [blogs, setBlogs] = useState(props.blog.data);
   const [total, setTotal] = useState(props.blog.total);
+  // console.log(props, "props in blopg page category")
 
   const prevLocaleCodeRef = useRef();
   const prevPageRef = useRef();
@@ -108,6 +109,7 @@ const BlogPageCategory = (props) => {
   };
 
   const postsList = props.blog.data.map((post) => {
+    // console.log(post, "post in  blog page category")
     // let pos = post.translations.find(item => item.locale === selectedData);
     // pos.image=post.image
     const postLayout = {

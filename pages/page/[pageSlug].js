@@ -9,6 +9,7 @@ import BlogPageCategory from "../../components/blog/BlogPageCategory";
 import { generalProcessForAnyPage } from "../../services/utils";
 
 export default function Page(props) {
+  console.log(props.blog, "blog in blogslug")
   const { query } = useRouter();
   const { dispatch } = store;
 
@@ -59,13 +60,10 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     //     current_page: page || res.meta.current_page,
     //   };
     // });
-    content = await fetch(
-      domainUrl(
-        `${dbName}/db/cms/blogs?locale=${selectedLocale}&page=${page}&limit=${6}`
-      )
-    );
+    content = await fetch(domainUrl(`${dbName}/db/cms/blogs?locale=${selectedLocale}&page=${page}&limit=${6}`));
 
     dataContent = await content.json();
+    console.log(dataContent, "datacontent")
     blog = {
       data: dataContent.data,
       total: dataContent?.meta?.total || 3,
@@ -82,6 +80,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     ...generalDispatches.clientSide,
     ...generalDispatches.serverSide,
   };
+  console.log(blog, "blog in blogslug")
 
   /////REMEBER NOT WORK
   // const metas = await fetch(

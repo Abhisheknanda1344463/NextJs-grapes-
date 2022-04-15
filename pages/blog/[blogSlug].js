@@ -58,17 +58,17 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     setMenuList,
   };
   /// locale = selectedLocale;
-  console.log(blogSlug, "11111111111111");
+  // console.log(blogSlug, "11111111111111");
   // console.log(
   //   `${url}/cms/blog/${blogSlug}?locale=${locale}`,
   //   "${url}/cms/blog/${blogSlug}?locale=${locale}"
   // );
   if (blogSlug != "undefined") {
-    console.log(blogSlug, "222222222222");
+    // console.log(blogSlug, "222222222222");
     await fetch(`${url}/db/cms/blog/${blogSlug}?locale=${selectedLocale}`)
       .then((res) => res.json())
       .then((responce) => {
-        console.log(responce.data, "responce.dataresponce.dataresponce.data");
+        // console.log(responce.data, "responce.dataresponce.dataresponce.data");
         blog = responce.data;
       });
   }

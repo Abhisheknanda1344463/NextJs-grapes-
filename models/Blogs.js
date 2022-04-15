@@ -10,6 +10,14 @@ const BlogsSchema = new Schema({
         type: String,
         required: true,
     },
+    created_at: {
+        type: String,
+        required: true,
+    },
+    updated_at: {
+        type: String,
+        required: true,
+    },
     content: {
         type: String,
         required: true,

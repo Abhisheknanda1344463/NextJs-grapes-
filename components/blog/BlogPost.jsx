@@ -5,6 +5,7 @@ import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import Link from "next/link";
+import defaultImage from '../../images/defoultpic.png'
 // // application
 // import BlogCommentsList from './BlogCommentsList';
 
@@ -18,6 +19,7 @@ import Image from "components/hoc/Image";
 
 export default function BlogPost(props) {
   const { layout, blog } = props;
+  // console.log(blog, "blog in blog post")
   const postClasses = classNames("post__content typography", {
     "typography--expanded": layout === "full",
   });
@@ -42,7 +44,7 @@ export default function BlogPost(props) {
 
         <div className="post__featured">
           {/* <Link href="/" > */}
-          <Image src={`${blog.image}`} alt="" layout="fill" />
+          <Image src={`${blog.image ? blog.image : defaultImage.src}`} alt="" layout="fill" />
           {/* </Link>*/}
         </div>
 

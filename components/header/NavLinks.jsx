@@ -211,7 +211,7 @@ function NavLinks(props) {
   return (
     <ul className="nav-links__list">
       {linksList}
-      {hasBlog !== "0" ? (
+      {hasBlog === "1" ? (
         <li className="nav-links__item">
           <Link href="/page/blogs">
             <a>
