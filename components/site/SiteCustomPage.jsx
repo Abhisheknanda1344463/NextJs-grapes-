@@ -13,6 +13,7 @@ function SiteCustomPage(props) {
   const { pageSlug } = props;
   const [content, setContent] = useState(props.content);
   const selectedData = useSelector((state) => state.locale.code);
+  const [isTable, setIsTable] = useState(false)
   const router = useRouter();
   // useEffect(() => {
   //   if (pageSlug) {
@@ -33,6 +34,13 @@ function SiteCustomPage(props) {
     }
   }, [pageSlug, router.locale]);
 
+  useEffect(() => {
+    if (content) {
+      let text = document.getElementsByTagName('table')
+      text[0] ? setIsTable(true) : setIsTable(false)
+    }
+  }, [])
+
   return (
     <React.Fragment>
       <Helmet>
@@ -40,10 +48,10 @@ function SiteCustomPage(props) {
         <meta name="description" content="Custom description" />
         <link rel="canonical" href={`Custom page`} />
       </Helmet>
-      <div>
+      <div style={{ overflowX: isTable ? "scroll" : '' }}>
         <Content text={content} {...props} />
       </div>
-    </React.Fragment>
+    </React.Fragment >
   );
 }
 

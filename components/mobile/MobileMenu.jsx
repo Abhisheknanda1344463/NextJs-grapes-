@@ -1,5 +1,5 @@
 // react
-import React, { useEffect, useState } from "react";
+import React from "react";
 import classNames from "classnames";
 import { FormattedMessage } from "react-intl";
 import { connect, useSelector } from "react-redux";
@@ -14,7 +14,12 @@ import MobileHeader from "./MobileHeader";
 import MobileMenuFooter from "./MobileMenuFooter";
 function MobileMenu(props) {
   const children = [];
-  const { mobileMenuState, closeMobileMenu, changeLocale, languages } = props;
+  const { closeMobileMenu, changeLocale } = props;
+
+  //Manvel Chnages
+  const mobileMenuState = useSelector(state => state.mobileMenu)
+  const languages = useSelector(state => state.locale.code)
+  const menuPagesList = useSelector(state => state.mobileMenu.menuList)
 
   for (let i = 0; i < languages?.length; i++) {
     const { locale_image, code, name } = languages[i];
@@ -38,7 +43,9 @@ function MobileMenu(props) {
   const navLinksMobile = useSelector((state) =>
     state.general.menuList.filter((items) => items.type == "header")
   );
-
+  const navLinksMobileFooter = useSelector((state) =>
+    state.general.menuList.filter((items) => items.type == "footer")
+  );
   const handleItemClick = (item) => {
     if (item.data) {
       if (item.data.type === "language") {
@@ -53,7 +60,6 @@ function MobileMenu(props) {
 
   const statecategories = useSelector((state) => state.general.categories);
   const categories = [{ label: category, children: statecategories }];
-
   return (
     <div className={classes} style={{ opacity: mobileMenuState.open ? 1 : 0 }}>
       <div className="mobilemenu__backdrop" onClick={closeMobileMenu} />
@@ -76,7 +82,7 @@ function MobileMenu(props) {
           {props.menuPagesList ? (
             <>
               <MobileLinks
-                links={[{ label: pages, childs: navLinksMobile }]}
+                links={[{ label: pages, childs: [...navLinksMobile, ...navLinksMobileFooter] }]}
                 onItemClick={handleItemClick}
               />
               <ul className="mob-links__item">

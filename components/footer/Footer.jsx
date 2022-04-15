@@ -7,12 +7,11 @@ import FooterContacts from "./FooterContacts";
 import FooterNewsletter from "./FooterNewsletter";
 import ToTop from "./ToTop";
 import FooterAccount from "./FooterAccount";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 function Footer() {
   const hasTracking = useSelector(state => state.general.coreConfigs.sales_tracking_tracking_active)
   const hasContact = useSelector(state => state.general.coreConfigs.theme_contact_us_active)
-
   return (
     <div className="site-footer">
       <div className="footer-container container">
@@ -29,12 +28,12 @@ function Footer() {
           {/*    : <></>*/}
           {/*}*/}
 
-              <div className="footer-first-column">
-                <FooterAccount
-                  hasTracking={hasTracking}
-                  hasContact={hasContact}
-                />
-              </div>
+          <div className="footer-first-column">
+            <FooterAccount
+              hasTracking={hasTracking}
+              hasContact={hasContact}
+            />
+          </div>
 
           <div className="footer-newsletter-hide">
             <FooterContacts />

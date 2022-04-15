@@ -12,7 +12,6 @@ export default function Page(props) {
   console.log(props.blog, "blog in blogslug")
   const { query } = useRouter();
   const { dispatch } = store;
-
   useEffect(() => {
     window.history.replaceState(null, "", window.location.pathname);
     ///router.push(window.location.pathname, window.location.pathname);
@@ -37,7 +36,6 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     "public, s-maxage=10, stale-while-revalidate=59"
   );
   const { pageSlug, page = 1 } = query;
-  console.log(locale, "localelocalelocale");
   const {
     locale: defaultLocaleSelected,
     currency,
