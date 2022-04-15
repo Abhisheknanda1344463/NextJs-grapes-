@@ -132,7 +132,6 @@ function NavLinks(props) {
     const navLinks2 = [
       ...new Map(navLinks.map((item) => [item[key], item])).values(),
     ];
-
     linksList = sortedNavLinks.map((item, index) => {
       let arrow;
       let submenu;
@@ -190,9 +189,8 @@ function NavLinks(props) {
           </Head>
           <li key={index} className={classes} onMouseEnter={handleMouseEnter}>
             <Link
-              href={`${
-                !item.url_key ? `/${router.locale}/page/${madePath}` : ""
-              }`}
+              href={`${!item.url_key ? `/${router.locale}/page/${madePath}` : ""
+                }`}
             >
               <a onClick={item.url_key ? (event) => openNewWindow(event) : ""}>
                 <span className="navbar-link-hover">
