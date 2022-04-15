@@ -33,22 +33,22 @@ function Suggestions (props) {
   const backorders = useSelector(state => state.general.coreConfigs.catalog_inventory_stock_options_backorders)
   const outOfStock = useSelector(state => state.general.coreConfigs.catalog_products_homepage_out_of_stock_items)
 
-
   useEffect(() => {
-    console.log(apiToken, "apitoken")
-    console.log(customer, "customer")
+    console.log(apiToken, 'apitoken')
+    console.log(customer, 'customer')
     ///setToken(apiToken);
-    fetch(apiUrlWithStore("/api/checkout/cart/token"))
+    fetch(apiUrlWithStore('/api/checkout/cart/token'))
       .then((responce) => responce.json())
       .then((res) => {
-        setToken(res);
+        setToken(res)
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
   }, [apiToken])
 
   const list =
           products &&
           products.map((product) =>
+
             product.id != -1 ?
               product.qty === 0 && backorders == 0 && outOfStock == 0
                 ? <></>
@@ -132,7 +132,7 @@ function Suggestions (props) {
                               1,
                               token,
                               customer,
-                              selectedData
+                              selectedData,
                             )
                           }
                           render={({ run, loading }) => (
@@ -156,7 +156,7 @@ function Suggestions (props) {
                   </li>
                 ) : (
                 <div className="search__fm_dr_Message">
-                  {/*{console.log(product.id, "productId in Suggestion")}*/}
+                  {console.log(product, "productId in Suggestion")}
                   <FormattedMessage
                     id="noMatching"
                     defaultMessage="No matching items"

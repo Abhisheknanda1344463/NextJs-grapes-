@@ -24,19 +24,25 @@ function Get_Blogs({ locale, page = 1, limit = 6 }) {
         .skip(skip)
         .limit(+limit)
         .exec((err, blogs) => {
+          console.log(blogs, "blogs ___________________ BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
           let translatedData = [];
           blogs.map((blog) => {
+            // console.log(blog, "blog without slug")
+            console.log(blog.image, "_____image_____")
+            console.log(blog['created_at'], "_____created_at_____")
             let translated = blog.translations.find((translate) => {
               if (translate.locale === locale) {
-                const locale = JSON.parse(JSON.stringify(translate));
+                const locale = JSON.parse(JSON.stringify({...translate,image: blog.image, created_at: blog.created_at}));
                 translatedData.push(locale);
               }
             });
+            // console.log("get_blogs",translated )
             translatedData.push(translated);
           });
           const newtranslatedData = translatedData.filter(function (element) {
             return element !== undefined;
           });
+          // console.log(translatedData,"________________________________________________________________++++++")
 
           resolve({
             data: newtranslatedData,
@@ -62,13 +68,15 @@ function Get_Blog_By_Slug({ locale, url_key }) {
   return new Promise((resolve, reject) => {
     Blogs.findOne({ url_key })
       .then((blog) => {
+        // console.log(blog, "blog in blog controller")
         let translatedData = [];
         blog.translations.map((item) => {
-          ///  console.log(item, "itemitemitem");
+            // console.log("get_blogs_slug",item);
           //   let translated = item.find((translate) => {
 
           if (item.locale === locale) {
-            const locale = JSON.parse(JSON.stringify(item));
+            // consle.log(item, "item in XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+            const locale = JSON.parse(JSON.stringify({...item,image: blog.image, created_at: blog.created_at}));
             translatedData.push(locale);
           }
         });
@@ -77,6 +85,7 @@ function Get_Blog_By_Slug({ locale, url_key }) {
         const newtranslatedData = translatedData.filter(function (element) {
           return element !== undefined;
         });
+        // console.log(newtranslatedData, "newtranslatedDatanewtranslatedDatanewtranslatedDatanewtranslatedDatanewtranslatedDatanewtranslatedData")
 
         /////   console.log(newtranslatedData, 'newtranslatedDatanewtranslatedDatanewtranslatedData')
         resolve({ data: newtranslatedData });

@@ -5,6 +5,7 @@ import Link from "next/link";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
+import defaultImage from '../../images/defoultpic.png'
 
 function PostCard(props) {
   const { post, layout, } = props;
@@ -17,6 +18,7 @@ function PostCard(props) {
   });
 
   let day = new Date(post.created_at);
+  console.log(defaultImage,"defaultImage   in create")
   let dd = String(day.getDate()).padStart(2, "0");
   let mm = String(day.getMonth() + 1).padStart(2, "0"); //January is 0!
   let yyyy = day.getFullYear();
@@ -28,7 +30,7 @@ function PostCard(props) {
       <div className="post-card__image">
         <Link href={`/blog/${post.url_key}`}>
           <a>
-            <img alt="post-image" src={`${post.image}`} layout="fill" />
+            <img alt="post-image" src={`${post.image ? post.image : defaultImage.src} `} layout="fill" />
           </a>
         </Link>
       </div>
