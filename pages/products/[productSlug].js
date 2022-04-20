@@ -87,15 +87,17 @@ export async function getServerSideProps ({ locale, locales, req, res, query }) 
     ...generalDispatches.clientSide,
     ...generalDispatches.serverSide,
   }
-  
-  
+
+ 
   return {
     props: {
       locale               : selectedLocale,
       dispatches,
-      productSlug          : productSlug,
-      product              : { data: product },
-      relatedPproducts     : relatedPproducts,
+      productSlug: productSlug,
+      product: { data: product },
+      relatedPproducts: relatedPproducts,
+      upSellProducts: upSellProducts,
+      crossSellProducts: crossSellProducts,
       configurableVariantes: configurabelConfigProduct,
     },
   }
