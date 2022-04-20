@@ -31,8 +31,6 @@ export default function ProductInnerPage (props) {
       layout="standard"
       productSlug={props.productSlug}
       relatedPproducts={checkRelatedProducts}
-      // upSellProducts={props.upSellProducts}
-      crossSellProducts={props.crossSellProducts}
       product={props.product}
       dispatches={props.dispatches}
       configurableVariantes={props.configurableVariantes}
@@ -78,6 +76,7 @@ export async function getServerSideProps ({ locale, locales, req, res, query }) 
     ...generalDispatches.clientSide,
     ...generalDispatches.serverSide,
   }
+  
   return {
     props: {
       locale               : selectedLocale,
@@ -85,8 +84,6 @@ export async function getServerSideProps ({ locale, locales, req, res, query }) 
       productSlug          : productSlug,
       product              : { data: product },
       relatedPproducts     : relatedPproducts,
-      // upSellProducts       : upSellProducts,
-      crossSellProducts    : crossSellProducts,
       configurableVariantes: configurabelConfigProduct,
     },
   }
