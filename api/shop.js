@@ -1,8 +1,6 @@
-/* eslint-disable arrow-body-style */
-// eslint-disable-next-line no-unused-vars
-import qs from 'query-string'
-import {getCategoryBySlug} from '../fake-server/endpoints/categories'
-import {url, apiUrlWithStore, domainUrl, megaUrl} from '../helper'
+import qs from "query-string";
+import { getCategoryBySlug } from "../fake-server/endpoints/categories";
+import { url, apiUrlWithStore, domainUrl, megaUrl } from "../helper";
 import {
   getDiscountedProducts,
   getLatestProducts,
