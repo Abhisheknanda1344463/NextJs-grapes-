@@ -30,7 +30,10 @@ function UpSell({product}) {
         <FormattedMessage id="noThanks" defaultMessage="No, Thanks"/>
       </div>
     </div>
-  );
+  )
 }
 
-export default UpSell;
+export default UpSell
+
+
+
