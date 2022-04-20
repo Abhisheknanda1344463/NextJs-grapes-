@@ -275,7 +275,7 @@ const shopApi = {
     }
 
     const categoryId = catId || catID
-    console.log(dbName ? `https://` + dbName : url, 'getProductsList')
+
     if (
       qs.stringify(options) == '' &&
       qs.stringify(filters) == '' &&
@@ -284,8 +284,9 @@ const shopApi = {
       return fetch(
         `${
           dbName ? `https://` + dbName : url
-        }/db/products?limit=20&currency=${currency}&locale=${options.locale}${
-          categoryId ? `&category_id=${categoryId}` : ''
+        }//db/products?limit=20&currency=${currency}&limit=20&locale=${
+          options.locale
+        }${categoryId ? `&category_id=${categoryId}` : ""}` : ''
         }`,
       ).then((responce) => responce.json())
     } else {
