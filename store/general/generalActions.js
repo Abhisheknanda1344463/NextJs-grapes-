@@ -18,6 +18,8 @@ import {
   SET_INITIAL_MIN_PRICE,
   SET_POPUP_NAME,
   SET_CONFIGS,
+  SET_UP_CROSS_PRODS,
+  SET_TEMPORARY_DATA,
 } from "./generalActionTypes";
 
 export const setInitialMinPrice = (payload) => {
@@ -102,6 +104,17 @@ export function setLogo(payload) {
       payload,
     });
 }
+
+export const setUpCrossProd = (payload) => ({
+  type: SET_UP_CROSS_PRODS,
+  payload,
+});
+
+
+export const setTempData = (payload) => ({
+  type: SET_TEMPORARY_DATA,
+  payload,
+});
 
 export const setCatgoies = (payload) => ({
   type: CATEGORIS_DATA,

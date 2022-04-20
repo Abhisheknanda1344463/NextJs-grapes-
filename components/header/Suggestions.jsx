@@ -34,8 +34,8 @@ function Suggestions (props) {
   const outOfStock = useSelector(state => state.general.coreConfigs.catalog_products_homepage_out_of_stock_items)
 
   useEffect(() => {
-    console.log(apiToken, 'apitoken')
-    console.log(customer, 'customer')
+    // console.log(apiToken, 'apitoken')
+    // console.log(customer, 'customer')
     ///setToken(apiToken);
     fetch(apiUrlWithStore('/api/checkout/cart/token'))
       .then((responce) => responce.json())

@@ -11,7 +11,7 @@ import { ArrowRoundedRight6x9Svg } from "../../svg";
 import { url } from "../../services/utils";
 function Menu(props) {
   const { layout, withIcons, items, onClick, symbol } = props;
-  ///console.log(onClick, "onClickonClick");
+  // console.log(props, "onClickonClick");
   const domain = useSelector((state) => state.general.domain);
 
   const renderLink = (item, content) => {
@@ -21,14 +21,20 @@ function Menu(props) {
         <AppLink
           {...item.props}
           href={url.category(item)}
-          onClick={() => onClick(item)}
+          onClick={() => {
+            onClick(item)
+          }}
         >
           <a>{content}</a>
         </AppLink>
       );
     } else {
       link = (
-        <button type="button" onClick={() => onClick(item)}>
+        <button
+          type="button"
+          onClick={() => {
+            onClick(item)
+          }}>
           {content}
         </button>
       );

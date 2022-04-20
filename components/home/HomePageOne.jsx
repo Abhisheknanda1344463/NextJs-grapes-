@@ -52,6 +52,8 @@ function HomePageOne(props) {
   const messageTitle = homepage_title_text.props.defaultMessage;
   const messageIntro = homepage_intro_text.props.defaultMessage;
 
+  // console.log(messageTitle, messageIntro, "LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOI")
+
   const getHomeProducts = () => {
     try {
       fetch(

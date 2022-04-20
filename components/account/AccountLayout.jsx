@@ -35,9 +35,10 @@ export default function AccountLayout(props) {
     dispatch({ type: "AUTHENTICATED", payload: false });
     dispatch({ type: "CUSTOMER_TOKEN", payload: "" });
 
-    fetch(`${url}/api/customer/logout?token=${customer.token}`).catch((error) =>
-      alert("Server Error , contact with administrator" + error)
-    );
+    fetch(`${url}/api/customer/logout?token=${customer.token}`)
+    //   .catch((error) =>
+    //   alert("Server Error , contact with administrator" + error)
+    // );
     history.push("/");
   };
 

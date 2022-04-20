@@ -356,11 +356,17 @@ class ProductGallery extends Component {
               {featured}
             </StroykaSlick>
           </div>
-          <div className="product-gallery__carousel">
-            <StroykaSlick {...slickSettingsThumbnails[layout]}>
-              {thumbnails}
-            </StroykaSlick>
-          </div>
+          {
+            !this.props.ups
+            && (
+              <div className="product-gallery__carousel">
+                <StroykaSlick {...slickSettingsThumbnails[layout]}>
+                  {thumbnails}
+                </StroykaSlick>
+              </div>
+            )
+          }
+
         </div>
       </div>
     );

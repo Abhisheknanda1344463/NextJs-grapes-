@@ -20,6 +20,7 @@ class AsyncAction extends Component {
     }
 
     run = () => {
+
         const { action } = this.props;
         const { loading } = this.state;
 

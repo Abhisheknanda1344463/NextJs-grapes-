@@ -162,6 +162,8 @@ export function genereateReadyArray(array) {
     return Object.values(product)[0];
   });
 }
+
+
 export async function generalProcessForAnyPage(locale, dbName) {
   /// let locale = null;
   let currency = null;

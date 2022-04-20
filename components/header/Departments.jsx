@@ -106,9 +106,8 @@ class Departments extends Component {
   };
 
   handleButtonClick = () => {
-    this.setState((state) => ({
-      open: !state.open,
-    }));
+    console.log(this.state.open, "jkhdfkasdhksdjskdhaklaksvkajafkhakfjalkaklbjalkbf")
+    this.setState({open: !this.state.open});
     this.setState({ active: !this.state.active });
   };
 

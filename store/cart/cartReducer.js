@@ -6,6 +6,9 @@ import {
   UPDATE_CART_DATA,
   CART_DELETE_ALL,
   CART_UPDATE_LANGUAGE,
+  CART_CROSS_SELL,
+  CART_UP_SELL,
+  SET_POPUP,
 } from "./cartActionTypes";
 import currencyReducer from "../currency";
 import store from "../../store";
@@ -327,6 +330,15 @@ export default function cartReducer(state = initialState, action) {
       return updateCartLanguage(state, action.payload);
     case CART_DELETE_ALL:
       return removeAllItems(state);
+    case CART_UP_SELL:
+      return getCartUpSell(state, action.payload)
+    case CART_CROSS_SELL:
+      return getCartCrossSell(state, action.payload)
+    case SET_POPUP:
+      return {
+        ...state,
+        popUpName: action.payload,
+      };
     default:
       return state;
   }

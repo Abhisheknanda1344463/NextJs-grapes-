@@ -17,6 +17,8 @@ import {
   SET_INITIAL_MAX_PRICE,
   SET_INITIAL_MIN_PRICE,
   SET_CONFIGS,
+  SET_UP_CROSS_PRODS,
+  SET_TEMPORARY_DATA,
 } from "./generalActionTypes";
 
 const initialState = {
@@ -31,10 +33,25 @@ const initialState = {
   initialMaxPrice: 0,
   initialMinPrice: 0,
   coreConfigs: {},
+  upCrosProd: [],
+  temporaryData: []
 };
 
 export default function generalReducer(state = initialState, action) {
   switch (action.type) {
+
+    case SET_TEMPORARY_DATA:
+      return {
+        ...state,
+        temporaryData: action.payload,
+      };
+
+    case SET_UP_CROSS_PRODS:
+      return {
+        ...state,
+        upCrosProd: action.payload,
+      }
+
     case SET_INITIAL_MAX_PRICE:
       return {
         ...state,

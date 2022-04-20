@@ -31,8 +31,6 @@ export default function ProductInnerPage(props) {
       layout="standard"
       productSlug={props.productSlug}
       relatedPproducts={checkRelatedProducts}
-      upSellProducts={props.upSellProducts}
-      crossSellProducts={props.crossSellProducts}
       product={props.product}
       dispatches={props.dispatches}
       configurableVariantes={props.configurableVariantes}
@@ -64,17 +62,19 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     currency: currency,
     limit: 8,
   })
+
   const upSellProducts = await shopApi.getUpSellProducts(null, product.product_id, {
     lang: selectedLocale,
     currency: currency,
     limit: 8,
   })
+
   const crossSellProducts = await shopApi.getCrossSellProducts(null, product.product_id, {
     lang: selectedLocale,
     currency: currency,
     limit: 8,
   })
-
+  
   let configurabelConfigProduct = null
 
   if (product.type == 'configurable') {

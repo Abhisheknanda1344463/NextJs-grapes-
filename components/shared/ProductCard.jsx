@@ -1,48 +1,51 @@
 // react
-import React, { useState }                       from 'react'
+import React, {useState, useEffect} from 'react'
 //timezone
-import moment                                    from 'moment'
+import moment from 'moment'
 // third-party
-import classNames                                from 'classnames'
-import Link                                      from 'next/link'
-import PropTypes                                 from 'prop-types'
-import { connect }                               from 'react-redux'
-import { toast }                                 from 'react-toastify'
-import { useSelector }                           from 'react-redux'
-import { FormattedMessage }                      from 'react-intl'
-import { setPopup }                              from '../../store/general'
-import { wishlistRemoveItem }                    from '../../store/wishlist'
+import classNames from 'classnames'
+import Link from 'next/link'
+import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
+import {toast} from 'react-toastify'
+import {useSelector} from 'react-redux'
+import {FormattedMessage} from 'react-intl'
+import {setPopup, setPopupName, setUpCrossProd, setTempData} from '../../store/general'
+import {wishlistRemoveItem} from '../../store/wishlist'
 // application
-import Currency                                  from './Currency'
-import AsyncAction                               from './AsyncAction'
-import Image                                     from 'components/hoc/Image'
-import { CheckToastSvg, FailSvg, Wishlist16Svg } from '../../svg'
-import { url }                                   from '../../services/utils'
-import { cartAddItem }                           from '../../store/cart'
-import { apiImageUrl }                           from '../../helper'
-import defoult                                   from '../../images/defoultpic.png'
-import { compareAddItem }                        from '../../store/compare'
-import { quickviewOpen }                         from '../../store/quickview'
-import { wishlistAddItem }                       from '../../store/wishlist'
-import { useRouter }                             from 'next/router'
+import Currency from './Currency'
+import AsyncAction from './AsyncAction'
+import Image from 'components/hoc/Image'
+import {CheckToastSvg, FailSvg, Wishlist16Svg} from '../../svg'
+import {url} from '../../services/utils'
+import {cartAddItem} from '../../store/cart'
+import {apiImageUrl, megaUrl} from '../../helper'
+import defoult from '../../images/defoultpic.png'
+import {compareAddItem} from '../../store/compare'
+import {quickviewOpen} from '../../store/quickview'
+import {wishlistAddItem} from '../../store/wishlist'
+import {useRouter} from 'next/router'
+import shopApi from '../../api/shop'
 
 
-
-function ProductCard (props) {
+function ProductCard(props) {
   const {
-          customer,
-          product,
-          layout,
-          cartAddItem,
-          wishlistAddItem,
-          setPopup,
-          wishlist,
-          wishlistRemoveItem,
-        } = props
+    customer,
+    product,
+    layout,
+    cartAddItem,
+    wishlistAddItem,
+    setPopup,
+    setPopupName,
+    setUpCrossProd,
+    setTempData,
+    wishlist,
+    wishlistRemoveItem,
+  } = props
   const [dimension, setDimension] = useState(1200)
   const router = useRouter()
-  React.useEffect(() => {
-    function handleResize () {
+  useEffect(() => {
+    function handleResize() {
       setDimension(window.innerWidth)
     }
 
@@ -53,6 +56,53 @@ function ProductCard (props) {
     }
   })
 
+  const getUpCrosselProd = (prodID, type) => {
+    switch (type) {
+      case 'upsel':
+        fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+          .then(res => res.json())
+          .then(data => {
+            setPopup(true)
+            // if (data.length === 0) {
+            //   setPopup(false)
+            //   fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+            //     .then(res2 => res2.json())
+            //     .then(data2 => {
+            //       setPopup(true)
+            //       if (data2.length === 0) {
+            //         setPopup(false)
+            //         setPopupName("")
+            //       }
+            //       setUpCrossProd(data2)
+            //     })
+            // }
+            // setUpCrossProd({upsell: data})
+            setUpCrossProd(data)
+          })
+        break
+      case 'crossel':
+        // shopApi.getCrossSellProducts(prodID)
+        //   .then(res => {
+        //   if(res.length === 0) {
+        //     alert(res.length)
+        //     setPopup(false);
+        //     setPopupName("")
+        //   }
+        //   setUpCrossProd(res)
+        // })
+        fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+          .then(res => res.json())
+          .then(data => setUpCrossProd(data)
+          )
+        break
+      default:
+        setPopup(false)
+        break;
+    }
+
+
+  }
+
   const productLink = ''
 
   const isTablet = () => {
@@ -61,6 +111,10 @@ function ProductCard (props) {
     } else {
       return true
     }
+  }
+
+  const al = (e) => {
+    alert(e)
   }
 
   const selectedData = useSelector((state) => state.locale.code)
@@ -73,43 +127,106 @@ function ProductCard (props) {
     'product-card--layout--grid product-card--size--sm': layout === 'grid-sm',
     'product-card--layout--grid product-card--size--nl': layout === 'grid-nl',
     'product-card--layout--grid product-card--size--lg': layout === 'grid-lg',
-    'product-card--layout--list'                       : layout === 'list',
-    'product-card--layout--horizontal'                 : layout === 'horizontal',
+    'product-card--layout--list': layout === 'list',
+    'product-card--layout--horizontal': layout === 'horizontal',
   })
-
 
   let badges = []
   let image
   let price
   let features
+  // console.log(product, ': product in product card')
+  if (product) {
+    if (product.images && product.images.length > 0) {
+      image = (
+        <div className="product-card__image product-image">
+          {!isTablet() ? (
+            <Link href={url.product(product)}>
+              <div className="product-image__body product-image__body-fms">
+                <div className="item_overlay hide-for-tablet"></div>
+                <div className="img_btn_wrapper">
 
-  if (product.images && product.images.length > 0) {
-    image = (
-      <div className="product-card__image product-image">
-        {!isTablet() ? (
-          <Link href={url.product(product)}>
-            <div className="product-image__body product-image__body-fms">
-              <div className="item_overlay hide-for-tablet"></div>
-              <div className="img_btn_wrapper">
-                {/*{console.log(product?.type, "product type in product card")}*/}
+                  {product && product?.type === 'configurable' ? (
 
-                {product && product?.type === 'configurable' ? (
-
-                  <Link href={url.product(product)}>
-                    {/*{console.log(url.product(product), "url.product(product)")}*/}
-                    <button
-                      type="button"
-                      className={classNames(
-                        'btn btn-primary product-card__addtocart hide-for-tablet',
+                    <Link href={url.product(product)}>
+                      <button
+                        type="button"
+                        className={classNames(
+                          'btn btn-primary product-card__addtocart hide-for-tablet',
+                        )}
+                      >
+                        <FormattedMessage
+                          id="add.tocart"
+                          defaultMessage="Add to cart"
+                        />
+                      </button>
+                    </Link>
+                  ) : (
+                    <AsyncAction
+                      action={() =>
+                        cartAddItem(
+                          product,
+                          [],
+                          1,
+                          cartToken,
+                          customer,
+                          selectedData,
+                          null,
+                          'homePage',
+                        )
+                      }
+                      render={({run, loading}) => (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            run()
+                            setTempData([product])
+                            getUpCrosselProd(product.product_id || product.product.id, 'upsel')
+                            setPopupName('upsell')
+                            // setPopup(true)
+                          }}
+                          className={classNames(
+                            'btn btn-primary product-card__addtocart hide-for-tablet',
+                            {
+                              'btn-loading': loading,
+                            },
+                          )}
+                        >
+                          <FormattedMessage
+                            id="add.tocart"
+                            defaultMessage="Add to cart"
+                          />
+                        </button>
                       )}
-                    >
-                      <FormattedMessage
-                        id="add.tocart"
-                        defaultMessage="Add to cart"
-                      />
-                    </button>
-                  </Link>
+                    />
+                  )}
+                </div>
+                {product.images[0].path ? (
+                  <Image
+                    alt=""
+                    layout="fill"
+                    className="product-image__img"
+                    src={`${apiImageUrl}/cache/medium/` + product.images[0].path}
+                  />
                 ) : (
+                  <Image
+                    alt=""
+                    layout="fill"
+                    src={`${apiImageUrl}/cache/medium/${product.images[0]}`}
+                    className="product-image__img"
+                  />
+                )}
+              </div>
+            </Link>
+          ) : (
+            <Link
+              href={isTablet() ? url.product(product) : ''}
+              className="product-image__body"
+            >
+              <div className="product-image__body">
+                <div className="item_overlay hide-for-tablet"></div>
+                <div className="img_btn_wrapper">
                   <AsyncAction
                     action={() =>
                       cartAddItem(
@@ -123,17 +240,18 @@ function ProductCard (props) {
                         'homePage',
                       )
                     }
-                    render={({ run, loading }) => (
+                    render={({run, loading}) => (
                       <button
                         type="button"
-                        onClick={(e) => {
-                          e.preventDefault()
+                        onClick={() => {
+                          // e.preventDefault()
                           run()
-                          // setPopup(true);
+                          getUpCrosselProd(product.product_id || product.product.id, 'upsel')
+                          setPopupName('upsell')
+                          setPopup(true)
                         }}
                         className={classNames(
                           'btn btn-primary product-card__addtocart hide-for-tablet',
-
                           {
                             'btn-loading': loading,
                           },
@@ -146,91 +264,36 @@ function ProductCard (props) {
                       </button>
                     )}
                   />
-                )}
-              </div>
-              {product.images[0].path ? (
+                </div>
                 <Image
                   alt=""
                   layout="fill"
                   className="product-image__img"
-                  src={`${apiImageUrl}/cache/medium/` + product.images[0].path}
-                />
-              ) : (
-                <Image
-                  alt=""
-                  layout="fill"
-                  src={`${apiImageUrl}/cache/medium/${product.images[0]}`}
-                  className="product-image__img"
-                />
-              )}
-            </div>
-          </Link>
-        ) : (
-          <Link
-            href={isTablet() ? url.product(product) : ''}
-            className="product-image__body"
-          >
-            <div className="product-image__body">
-              <div className="item_overlay hide-for-tablet"></div>
-              <div className="img_btn_wrapper">
-                <AsyncAction
-                  action={() =>
-                    cartAddItem(
-                      product,
-                      [],
-                      1,
-                      cartToken,
-                      customer,
-                      selectedData,
-                      null,
-                      'homePage',
-                    )
-                  }
-                  render={({ run, loading }) => (
-                    <button
-                      type="button"
-                      onClick={run}
-                      className={classNames(
-                        'btn btn-primary product-card__addtocart hide-for-tablet',
-                        {
-                          'btn-loading': loading,
-                        },
-                      )}
-                    >
-                      <FormattedMessage
-                        id="add.tocart"
-                        defaultMessage="Add to cart"
-                      />
-                    </button>
-                  )}
+                  src={`${apiImageUrl}/cache/medium/${product.images[0].path}`}
                 />
               </div>
-              <Image
-                alt=""
-                layout="fill"
-                className="product-image__img"
-                src={`${apiImageUrl}/cache/medium/${product.images[0].path}`}
-              />
-            </div>
-          </Link>
-        )}
-      </div>
-    )
-  } else {
-    image = (
-      <div className="product-card__image product-image">
-        <div className="product-image__body product-image__defoult-fms">
-          {/* <div className="item_overlay hide-for-tablet"></div>
-          <div className="img_btn_wrapper"></div> */}
-          <Image
-            className="product-image__img "
-            src={defoult}
-            alt="Picture is missing"
-            layout="fill"
-          />
+            </Link>
+          )}
         </div>
-      </div>
-    )
+      )
+    } else {
+      image = (
+        <div className="product-card__image product-image">
+          <div className="product-image__body product-image__defoult-fms">
+            {/* <div className="item_overlay hide-for-tablet"></div>
+          <div className="img_btn_wrapper"></div> */}
+            <Image
+              className="product-image__img "
+              src={defoult}
+              alt="Picture is missing"
+              layout="fill"
+            />
+          </div>
+        </div>
+      )
+    }
+  } else {
+    return null
   }
 
   let addAndRemoveWishList = () => {
@@ -275,8 +338,6 @@ function ProductCard (props) {
   const date_now = moment(newDate).format('YYYY-MM-DD')
   const date_to = moment.unix(product.special_price_to).format('YYYY-MM-DD')
 
-  // console.log(product,'54554545454')
-
   if (!product?.special_price && CONFIG === 'configurable') {
     price = (
       <div className="product-card__prices">
@@ -302,7 +363,6 @@ function ProductCard (props) {
         }
       </div>
     )
-    // console.log(product, "productCard")
   } else if (product?.special_price) {
     price = (
       <div className="product-card__prices">
@@ -326,7 +386,7 @@ function ProductCard (props) {
       </div>
     )
   } else {
-    // console.log("product", product)
+
     price = (
       <div className="product-card__prices">
         <span className="product-card__symbol">֏</span>
@@ -338,7 +398,7 @@ function ProductCard (props) {
     router.replace('/products', `/products/${product.url_key}`)
   }
   return (
-    <React.Fragment>
+    <>
       {
         <div className={containerClasses}>
           {badges}
@@ -378,7 +438,7 @@ function ProductCard (props) {
                   <span onClick={addAndRemoveWishList}>
                   <AsyncAction
                     action={() => wishlistAddItem(product, selectedData)}
-                    render={({ run, loading }) => (
+                    render={({run, loading}) => (
                       <div
                         type="button"
                         onClick={run}
@@ -410,7 +470,7 @@ function ProductCard (props) {
                       </span>,
                         {
                           hideProgressBar: true,
-                          className      : 'wishlist-toast',
+                          className: 'wishlist-toast',
                         },
                       )
                     }}
@@ -420,22 +480,6 @@ function ProductCard (props) {
                   </div>
                 )}
               </div>
-
-              {/*<AsyncAction*/}
-              {/*    action={() => cartAddItem(product,[], 1,cartToken,customer,selectedData)}*/}
-              {/*    render={({ run, loading }) => (*/}
-              {/*        <button*/}
-              {/*            type="button"*/}
-              {/*            onClick={run}*/}
-              {/*            className={classNames('btn btn-light btn-svg-icon product-card-add show-for-tablet', {*/}
-              {/*                'btn-loading': loading,*/}
-              {/*            })}*/}
-              {/*        >*/}
-              {/*                <AddCart className="product-card-add" />*/}
-              {/*        </button>*/}
-
-              {/*    )}*/}
-              {/*/>*/}
             </div>
 
             <AsyncAction
@@ -451,10 +495,15 @@ function ProductCard (props) {
                   'homePage',
                 )
               }
-              render={({ run, loading }) => (
+              render={({run, loading}) => (
                 <button
                   type="button"
-                  onClick={run}
+                  onClick={() => {
+                    run()
+                    getUpCrosselProd(product.product_id || product.product.id, 'upsel')
+                    setPopupName('upsell')
+                    setPopup(true)
+                  }}
                   className={classNames(
                     'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ',
                     {
@@ -473,7 +522,7 @@ function ProductCard (props) {
         </div>
       }
 
-    </React.Fragment>
+    </>
   )
 }
 
@@ -501,12 +550,15 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
+  setPopupName,
   cartAddItem,
   wishlistAddItem,
   compareAddItem,
   quickviewOpen,
   setPopup,
   wishlistRemoveItem,
+  setUpCrossProd,
+  setTempData,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductCard)
