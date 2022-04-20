@@ -62,7 +62,7 @@ function ShopPageProduct(props) {
     // setUpSellProducts(props.upSellProducts)
 
     /// setProduct(data);
-  }, [productSlug, router.locale,relatedProducts,crossProducts]);
+   }, [productSlug, router.locale, relatedProducts, upSellProducts, crossProducts]);
 
   // console.log(productSlug, "productSlugproductSlug");
   // useEffect(() => {
