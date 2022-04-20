@@ -1,5 +1,5 @@
 // react
-import React, { PureComponent, useState, USeEffect } from 'react'
+import React, { PureComponent, useState, useEffect } from 'react'
 import classNames                                    from 'classnames'
 import PropTypes                                     from 'prop-types'
 import { connect, useSelector, useDispatch }         from 'react-redux'
@@ -17,23 +17,14 @@ import { cartAddItem }                               from '../../store/cart'
 import { AddCartToken }                              from '../../store/token'
 import { compareAddItem }                            from '../../store/compare'
 import { wishlistAddItem }                           from '../../store/wishlist'
+import { setPopup, setPopupName,setUpCrossProd }                    from '../../store/general'
 
-
-
-useRouter
 import {
   CheckToastSvg,
   FailSvg,
   InnerWishlist,
   Wishlist16Svg,
-}                                                    from '../../svg'
-import moment                                        from 'moment'
-import ConfigurableFilters                           from '../configurableFilters'
-import BundleProducts                                from 'components/shop/productBundleFikter/BundleProducts'
-import { useRouter }                                 from 'next/router'
-
-
-
+}                          from '../../svg'
 class Product extends PureComponent {
   checkAddProd = false
   cartProduct = null
@@ -41,6 +32,7 @@ class Product extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
+      // popUpName: "",
       quantity: 1,
       // configurImage: null,
       bundleProducts   : {},
@@ -63,6 +55,7 @@ class Product extends PureComponent {
       IsOpen           : 'product-inner-long-description-click',
     }
   }
+
 
   renderProduct = () => {
     if (this.props.product.data.type === 'configurable') {
@@ -100,7 +93,10 @@ class Product extends PureComponent {
     // hereeeeeeeeeeeeeeeeeeee
     // here need variants in this reference "this.props.product.data.variants"
     this.renderProduct()
+    // console.log(this.state.locale,"this.state.ocale")
   }
+
+
 
   componentDidUpdate (prProps, prState) {
     // console.log(
@@ -379,7 +375,7 @@ class Product extends PureComponent {
         </Helmet>
         <div className={`product product--layout--${layout}`}>
           <div className="product__content">
-            <ProductGallery layout={layout} images={product.data.images}/>
+            <ProductGallery layout={layout} images={product.data.images} ups={false}/>
             <div className="product__info">
               <div className="product__wishlist-compare">
                 <AsyncAction
@@ -620,6 +616,12 @@ class Product extends PureComponent {
                       />
                     </div>
                     <div className="product__actions-item product__actions-item--addtocart">
+                      {/*<button type="button" onClick={(e) => {*/}
+                      {/*  e.preventDefault()*/}
+                      {/*  this.props.setPopupName('upsell')*/}
+                      {/*  this.props.setPopup(true)*/}
+                      {/*}}>fake button*/}
+                      {/*</button>*/}
                       <AsyncAction
                         action={() =>
                           cartAddItem(
@@ -640,7 +642,14 @@ class Product extends PureComponent {
                         render={({ run, loading }) => (
                           <button
                             type="button"
-                            onClick={run}
+                            onClick={() => {
+                              run()
+                              // e.preventDefault()
+                              // {console.log(product.data, "product data in product js")}
+                              this.props.setUpCrossProd({ crossell: product.data.product.cross_sells, upsel: product.data.product.up_sells })
+                              this.props.setPopupName('upsell')
+                              this.props.setPopup(true)
+                            }}
                             disabled={Addtocartdisabled}
                             className={classNames(
                               'btn btn-orange inner-addtocart rounded-pills btn-lg',
@@ -734,6 +743,13 @@ class Product extends PureComponent {
     )
   }
 }
+import moment              from 'moment'
+import ConfigurableFilters from '../configurableFilters'
+import BundleProducts      from 'components/shop/productBundleFikter/BundleProducts'
+
+
+
+import { useRouter }       from 'next/router'
 
 
 Product.propTypes = {
@@ -761,6 +777,9 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
+  setPopupName,
+  setPopup,
+  setUpCrossProd,
   AddImages,
   AddCartToken,
   cartAddItem,

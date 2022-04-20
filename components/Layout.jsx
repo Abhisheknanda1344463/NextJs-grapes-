@@ -40,6 +40,7 @@ function Layout(props) {
     fbPixel,
     domain,
     popUp,
+    upCrosProd,
   } = props;
   const router = useRouter();
   const dispatch = useDispatch();
@@ -109,18 +110,20 @@ function Layout(props) {
     };
   }, [customer.token]);
 
-  // useEffect(() => {
-  //   if (!props?.cartToken?.cartToken) {
-  //     fetch(`/api/checkout/cart/token`)
-  //       .then((responce) => responce.json())
-  //       .then((res) => {
-  //         if (res.api_token) {
-  //           props.AddCartToken(res.api_token);
-  //         }
-  //       })
-  //       .catch((err) => console.error(err));
-  //   }
-  // }, []);
+  //fix this bug after checking issue
+
+  useEffect(() => {
+    if (!props?.cartToken?.cartToken) {
+      fetch(`/api/checkout/cart/token`)
+        .then((responce) => responce.json())
+        .then((res) => {
+          if (res.api_token) {
+            props.AddCartToken(res.api_token);
+          }
+        })
+        .catch((err) => console.error(err));
+    }
+  }, []);
 
   let isMobile = false;
   if (width !== undefined && width > 991) {
@@ -162,7 +165,7 @@ function Layout(props) {
           <Footer />
         </footer>
 
-        <UpSellCrossel active={popUp} />
+        <UpSellCrossel active={popUp} upCrosProd={upCrosProd}/>
       </div>
     </div>
   );
@@ -178,14 +181,16 @@ function Layout(props) {
 // };
 
 const mapStateToProps = ({
-  general: { fbPixel, customJs, domain, popUp },
+  general: { fbPixel, customJs, domain, popUp,upCrosProd },
   cartToken,
+
 }) => ({
   domain,
   fbPixel,
   customJs,
   popUp,
   cartToken,
+  upCrosProd,
 });
 
 const mapDispatchToProps = (dispatch) => ({

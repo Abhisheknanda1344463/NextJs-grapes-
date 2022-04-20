@@ -6,6 +6,8 @@ import {
   UPDATE_CART_DATA,
   CART_DELETE_ALL,
   CART_UPDATE_LANGUAGE,
+  SET_POPUP,
+
 } from "./cartActionTypes";
 import { url, apiUrlWithStore } from "../../helper";
 import React from "react";
@@ -47,6 +49,10 @@ import { runFbPixelEvent } from "../../services/utils";
 //     console.log(e);
 //   }
 // }
+// export const popUp = (payload) => ({
+//   type: SET_POPUP,
+//   payload
+// });
 
 export function cartAddItemSuccessAfterLogin(
   product,
@@ -171,7 +177,7 @@ export function cartAddItem(
   bundleProductInfo = null,
   pageFrom = ""
 ) {
-  console.log(product, "product")
+  // console.log(product, "product___________________________________________________________________")
   let body;
   if (customer && customer.token) {
     body = {
@@ -188,7 +194,7 @@ export function cartAddItem(
       product_id: product.product_id,
       quantity: quantity,
     };
-    console.log(body.product_id, "else")
+    // console.log(body.product_id, "else")
   }
 
   if (bundleProductInfo) {

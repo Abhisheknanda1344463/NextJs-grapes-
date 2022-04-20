@@ -46,7 +46,7 @@ const slickSettings = {
       {
         breakpoint: 479,
         settings  : {
-          slidesToShow  : 1,
+          slidesToShow  : 2,
           slidesToScroll: 1,
         },
       },
@@ -77,7 +77,7 @@ const slickSettings = {
       {
         breakpoint: 474,
         settings  : {
-          slidesToShow  : 1,
+          slidesToShow  : 2,
           slidesToScroll: 1,
         },
       },
@@ -115,7 +115,7 @@ const slickSettings = {
       {
         breakpoint: 479,
         settings  : {
-          slidesToShow  : 1,
+          slidesToShow  : 2,
           slidesToScroll: 1,
         },
       },
@@ -139,7 +139,7 @@ const slickSettings = {
       {
         breakpoint: 767,
         settings  : {
-          slidesToShow  : 1,
+          slidesToShow  : 2,
           slidesToScroll: 1,
         },
       },
@@ -192,7 +192,7 @@ export default function BlockProductsCarousel (props) {
     return columns
   }
   useEffect(() => {
-    console.log(props.products, 'localelocale')
+    // console.log(props.products, 'localelocale')
     setProducts(props.products)
   }, [locale])
 
