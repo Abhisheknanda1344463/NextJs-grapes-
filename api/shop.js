@@ -239,85 +239,81 @@ const shopApi = {
     ).then((response) => response.json())
   },
 
-  getProductsList: ({
-                      options = {},
-                      filters = {},
-                      location,
-                      /// locale,
-                      catID,
-                      // domain,
-                      dbName,
-                      window,
-                      limit,
-                    }) => {
-    let currency = 'AMD'
+   getProductsList: ({
+    options = {},
+    filters = {},
+    location,
+    /// locale,
+    catID,
+    // domain,
+    dbName,
+    window,
+    limit,
+  }) => {
+    let currency = "AMD";
     if (options.currency) {
-      currency = options.currency.code
+      currency = options.currency.code;
     }
 
     /// console.log(options.locale, "options.localeoptions.locale");
-    const urlI = window && window.location ? window.location.href : ''
-    let cat = qs.parse(location)
-    let catId, index
-    index = urlI.indexOf('page')
+    const urlI = window && window.location ? window.location.href : "";
+    let cat = qs.parse(location);
+    let catId, index;
+    index = urlI.indexOf("page");
 
-    if (cat.category_id && urlI.indexOf('category_id') > 0) {
-      catId = cat.category_id
+    if (cat.category_id && urlI.indexOf("category_id") > 0) {
+      catId = cat.category_id;
     }
     for (let filter in filters) {
-      if (filters[filter] == '') {
-        delete filters[filter]
+      if (filters[filter] == "") {
+        delete filters[filter];
       }
     }
 
-    if (options.savings == '') {
-      delete options.savings
+    if (options.savings == "") {
+      delete options.savings;
     }
-
     console.log(catID, catId, "catIdcatId");
     const categoryId = catId || catID;
     console.log(dbName ? `https://` + dbName : url, "getProductsList");
-
     if (
-      qs.stringify(options) == '' &&
-      qs.stringify(filters) == '' &&
+      qs.stringify(options) == "" &&
+      qs.stringify(filters) == "" &&
       !location
     ) {
       return fetch(
         `${
           dbName ? `https://` + dbName : url
-            }/db/products?limit=20&currency=${currency}&limit=20&locale=${
+        }/db/products?limit=20&currency=${currency}&limit=20&locale=${
           options.locale
-        }${categoryId ? `&category_id=${categoryId}` : ""}` : ''
-        }`,
-
-      ).then((responce) => responce.json())
+        }${categoryId ? `&category_id=${categoryId}` : ""}`
+      ).then((responce) => responce.json());
     } else {
-      let string = `limit=20`
+      let string = `limit=20`;
 
       if (index > 0 && options?.page) {
-        string += `&page=${options?.page}`
-        delete options['page']
+        string += `&page=${options?.page}`;
+        delete options["page"];
       }
 
       if (categoryId) {
-        string += `&category_id=${categoryId}`
+        string += `&category_id=${categoryId}`;
       }
 
-      if (qs.stringify(filters) != '') {
-        string += `&${qs.stringify(filters)}`
+      if (qs.stringify(filters) != "") {
+        string += `&${qs.stringify(filters)}`;
       }
 
       for (let key in options) {
-        let value = options[key]?.code ? options[key]?.code : options[key]
-        string += `&${key}=${value}`
+        let value = options[key]?.code ? options[key]?.code : options[key];
+        string += `&${key}=${value}`;
       }
 
       return fetch(
         `${dbName ? `https://` + dbName : url}/db/products?locale=${
           options.locale
-        }&${string}`,
-      ).then((responce) => responce.json())
+        }&${string}`
+      ).then((responce) => responce.json());
     }
   },
   getPaymentsMethods: (options = {}) => {
