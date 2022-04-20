@@ -21,6 +21,8 @@ export default function AccountPageEditAddress ({ addressId, dbName }) {
   const [successData, setSuucessData] = useState()
   const [errors] = useState()
   const [input, setInput] = useState({})
+  const [address, setAddress] = useState('')
+  const [appartment, setAppartment] = useState('')
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -35,12 +37,15 @@ export default function AccountPageEditAddress ({ addressId, dbName }) {
         .then((responce) => responce.json())
         .then((res) => {
           if (res.data) {
-            console.log(res, "oooo");
+            console.log(res, 'oooo')
+            setAddress(res.data.address1[0])
+            setAppartment(res.data.address1[1])
             setInput({
               first_name  : res.data.first_name,
               last_name   : res.data.last_name,
-              address1    : res.data.address1,
-              apartment   : res.data.apartment,
+              country     : res.data.country_name,
+              country_name: res.data.country_name,
+              address1    : [address, appartment],
               city        : res.data.city,
               state       : res.data.state,
               postcode    : res.data.postcode,
@@ -72,6 +77,14 @@ export default function AccountPageEditAddress ({ addressId, dbName }) {
     })
   }
 
+  const handleChangeAdd = (e) => {
+    setAddress(e.target.value)
+  }
+
+  const handleChangeApp = (e) => {
+    setAppartment(e.target.value)
+  }
+
   let selectCountry
 
   const handleClick = (event) => {
@@ -84,24 +97,24 @@ export default function AccountPageEditAddress ({ addressId, dbName }) {
       },
       body   : JSON.stringify({
         token     : customer.token,
-        first_name: input.first_name ,
-        last_name : input.last_name ,
+        first_name: input.first_name,
+        last_name : input.last_name,
         id        : addressId,
-        address1  : [input.address1 ],
-        city      : input.city ,
+        address1  : [address, appartment],
+        city      : input.city,
         // country: "AM",
-        country_name: input.country,
-        country     : input.country,
+        country_name: input.country_name,
+        country     : input.country_name,
         phone       : input.phone,
         postcode    : input.postcode,
         state       : input.state,
-        apartment   : input.apartment,
+        // apartment   : input.apartment,
       }),
     }
     fetch(domainUrl(`${dbName}/api/addresses/${addressId}`), option)
       .then((response) => response.json())
       .then((res) => {
-        console.log(res, "res in accountpageAditAddress")
+        console.log(res, 'res in accountpageAditAddress')
         setSuccess(true)
         setSuucessData(res.message)
       })
@@ -165,7 +178,7 @@ export default function AccountPageEditAddress ({ addressId, dbName }) {
       <div className="card-divider"/>
 
       <div className="card add-new-address-body">
-        {console.log(input, "input")}
+        {console.log(input, 'input')}
         <h5 className="address-page-title">
           <FormattedMessage
             id="add-an-address"
@@ -234,13 +247,13 @@ export default function AccountPageEditAddress ({ addressId, dbName }) {
                   >
                     {(placeholder) => (
                       <input
-                        onChange={handleChange}
-                        value={input.address1}
+                        onChange={handleChangeAdd}
+                        value={address}
                         // defaultValue={address.address1}
                         name="address1"
                         type="text"
                         className={
-                          input.address1
+                          address
                             ? 'dark-opacity form-control checkout-input f15'
                             : 'form-control checkout-input f15'
                         }
@@ -259,13 +272,13 @@ export default function AccountPageEditAddress ({ addressId, dbName }) {
                     >
                       {(placeholder) => (
                         <input
-                          onChange={handleChange}
+                          onChange={handleChangeApp}
                           name="apartment"
-                          value={input.apartment}
+                          value={appartment}
                           // defaultValue={address.apartment}
                           type="text"
                           className={
-                            input.apartment
+                            appartment
                               ? 'dark-opacity form-control checkout-input f15'
                               : 'form-control checkout-input f15'
                           }

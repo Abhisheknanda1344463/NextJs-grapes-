@@ -302,7 +302,8 @@ function Get_New_And_Futured_Products({ locale, limit, currency, ...rest }) {
 
 function Get_Product_list(options) {
   //limit, category_id, currency,
-  const { locale: defaultLocale, limit, page, ...rest } = options;
+  const { locale: defaultLocale, limit: limitproduct, page, ...rest } = options;
+  const limit = limitproduct || 20;
   console.log(
     defaultLocale,
     "Get_Product_listGet_Product_listGet_Product_list"
@@ -376,7 +377,7 @@ function Get_Product_list(options) {
               }
             });
             if (productIds.length == 0) {
-              resolve({});
+              return build();
             }
             const productsPromise = new Promise((resolve, reject) => {
               Products.find({ id: { $in: productIds } }).then((products) =>
@@ -391,7 +392,7 @@ function Get_Product_list(options) {
                * */
               let object;
               let date_now = null;
-              console.log(productIds, "aaaaaaaaaaaa");
+              ////    console.log(productIds, "aaaaaaaaaaaa");
               if (productIds.length > 0) {
                 object = {
                   locale: locale,
@@ -402,7 +403,7 @@ function Get_Product_list(options) {
                   locale: locale,
                 };
               }
-              console.log(productIds.length, object, "aaaaaaaaaaaa");
+              ////   console.log(productIds.length, object, "aaaaaaaaaaaa");
               // console.log(options["price"], 'options["price"]options["price"]');
               if (options["price"]) {
                 const [from, to] = options["price"].split(",");
@@ -415,7 +416,7 @@ function Get_Product_list(options) {
                   },
                 };
               }
-              console.log(object);
+              ///  console.log(object);
               if (options["savings"]) {
                 const d = new Date(),
                   month = "" + (d.getMonth() + 1),
@@ -441,7 +442,7 @@ function Get_Product_list(options) {
                   .exec((count_error, count) => {
                     const pageCount = Math.ceil(count / limit);
                     const skip = (+page - 1) * limit;
-                    console.log(count, "count");
+                    console.log(count, skip, "count");
                     ProductFlat.find({
                       ...object,
                     })
@@ -459,6 +460,7 @@ function Get_Product_list(options) {
                         resolve({
                           total: 20,
                           flatProducts,
+                          page: page || 1,
                           prices: [0, prices[prices.length - 1] || 1000],
                           price: options["price"],
                         });
@@ -469,7 +471,7 @@ function Get_Product_list(options) {
                   (count_error, count) => {
                     const pageCount = Math.ceil(count / limit);
                     const skip = (+page - 1) * limit;
-
+                    console.log(skip, +limit, page, "asdsads");
                     ProductFlat.find({ ...object })
                       .skip(skip)
                       .limit(+limit)
@@ -481,6 +483,7 @@ function Get_Product_list(options) {
                         resolve({
                           total: pageCount,
                           flatProducts,
+                          page: page || 1,
                           prices: [0, prices[prices.length - 1] || 1000],
                           price: options["price"],
                         });

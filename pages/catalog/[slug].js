@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ShopPageCategory from "../../components/shop/ShopPageCategory";
 import { useRouter } from "next/router";
 import shopApi from "../../api/shop";
@@ -11,14 +11,16 @@ import clientSideActions from "../../services/clientSide";
 import { generalProcessForAnyPage } from "../../services/utils";
 
 export default function Catlog(props) {
-  const { query, router } = useRouter();
+  const { query } = useRouter();
+  const router = useRouter();
   const { dispatch } = store;
+  const [change, setChange] = useState(false);
   ////console.log(props.locale, "props.localeprops.locale");
-  console.log(props, "props in categories");
+  // console.log(props, "props in categories");
   // useEffect(() => {
-  //   window.history.replaceState(null, "", window.location.pathname);
-  //   ///router.push(window.location.pathname, window.location.pathname);
-  // }, [query.slug]);
+  //   /// window.history.replaceState(null, "", window.location.href);
+  //   router.push(window.location.pathname, window.location.pathname);
+  // }, [query, change]);
 
   useEffect(() => {
     for (let actionKey in props.dispatches) {
@@ -34,7 +36,10 @@ export default function Catlog(props) {
       categorySlug={query.slug}
       locale={props.locale}
       dbName={props.dbName}
+      setChange={setChange}
       productsList={props.productsList}
+      data={props.productsList.data}
+      page={props.productsList.page}
       {...props}
     />
   );
@@ -59,7 +64,24 @@ export async function getServerSideProps({
     currency,
     dispatches: generalDispatches,
   } = await generalProcessForAnyPage(locale);
-  console.log(query, "queryquery");
+
+  const filterValues = {};
+  Object.keys(query).forEach((param) => {
+    if (param == "page") {
+      const filterSlug = param;
+      filterValues[filterSlug] = query[param];
+    } else {
+      const mr = param.match(/^filter_([-_A-Za-z0-9]+)$/);
+      if (!mr) {
+        return;
+      }
+      const filterSlug = mr[1];
+      filterValues[filterSlug] = query[param];
+    }
+  });
+  console.log(filterValues, "queryquery");
+
+  /// return filterValues;
   const selectedLocale = locale != "catchAll" ? locale : defaultLocaleSelected;
   let categoryId,
     categoryTitle,
@@ -92,7 +114,7 @@ export async function getServerSideProps({
     });
   }
 
-  console.log(categoryId, query.cat_id, "categoriesResponsecategoriesResponse");
+  // console.log(categoryId, query.cat_id, "categoriesResponsecategoriesResponse");
   if (categoriesResponse?.categories) {
     getItems(categoriesResponse.categories[0].children);
   }
@@ -115,8 +137,9 @@ export async function getServerSideProps({
       },
       filters: {},
       location: "",
+      filters: filterValues,
       dbName: dbName,
-      catID: categoryId ? categoryId : query.cat_id,
+      catID: query.cat_id,
       window: null,
       limit: 6,
     })
@@ -134,13 +157,13 @@ export async function getServerSideProps({
     ...generalDispatches.clientSide,
     ...generalDispatches.serverSide,
   };
-
+  console.log(productsList, "productsList");
   return {
     props: {
       currency: { code: settingsResponse.data.currency.code },
       productsList: productsList,
       brandList: brands,
-      categoryId,
+      categoryId: query.cat_id,
       dbName: dbName,
       categoryTitle,
       dispatches: dispatchesNew,

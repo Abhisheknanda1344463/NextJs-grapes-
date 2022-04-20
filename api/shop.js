@@ -106,7 +106,7 @@ const shopApi = {
     );
 
     // This is for demonstration purposes only. Remove it and use the code above.
-    return getCategoryBySlug(slug, options);
+    // return getCategoryBySlug(slug, options);
   },
   getConfigurabelConfigProduct: (id) => {
     return fetch(`${url}/db/product-configurable-config/${id}`).then((res) =>
@@ -242,7 +242,7 @@ const shopApi = {
     location,
     /// locale,
     catID,
-    domain,
+    // domain,
     dbName,
     window,
     limit,
@@ -258,8 +258,9 @@ const shopApi = {
     let catId, index;
     index = urlI.indexOf("page");
 
-    if (cat.category_id && urlI.indexOf("category_id") > 0)
+    if (cat.category_id && urlI.indexOf("category_id") > 0) {
       catId = cat.category_id;
+    }
     for (let filter in filters) {
       if (filters[filter] == "") {
         delete filters[filter];
@@ -271,7 +272,7 @@ const shopApi = {
     }
     console.log(catID, catId, "catIdcatId");
     const categoryId = catId || catID;
-    console.log(domain ? `https://` + domain : url, "getProductsList");
+    console.log(dbName ? `https://` + dbName : url, "getProductsList");
     if (
       qs.stringify(options) == "" &&
       qs.stringify(filters) == "" &&
@@ -279,10 +280,10 @@ const shopApi = {
     ) {
       return fetch(
         `${
-          domain ? `https://` + domain : url
-        }/db/products?limit=20&currency=${currency}&locale=${options.locale}${
-          categoryId ? `&category_id=${categoryId}` : ""
-        }`
+          dbName ? `https://` + dbName : url
+        }/db/products?limit=20&currency=${currency}&limit=20&locale=${
+          options.locale
+        }${categoryId ? `&category_id=${categoryId}` : ""}`
       ).then((responce) => responce.json());
     } else {
       let string = `limit=20`;
@@ -306,7 +307,7 @@ const shopApi = {
       }
 
       return fetch(
-        `${domain ? `https://` + domain : url}/db/products?locale=${
+        `${dbName ? `https://` + dbName : url}/db/products?locale=${
           options.locale
         }&${string}`
       ).then((responce) => responce.json());

@@ -92,7 +92,7 @@ function buildQuery(options, filters) {
     params.search = options.search;
   }
   params.category_id = options.category_id;
-  if (options.page !== 1) {
+  if (options.page !== "") {
     params.page = options.page;
   }
 
@@ -103,6 +103,7 @@ function buildQuery(options, filters) {
   if (options.sort !== "default") {
     params.sort = options.sort;
   }
+
   Object.keys(filters)
     .filter((x) => x !== "category" && !!filters[x])
     .forEach((filterSlug) => {
@@ -221,6 +222,8 @@ function ShopPageCategory(props) {
     categorySlug,
     productsList: allProduct,
     dbName,
+    setChange,
+    page: setPageNumber,
     sidebarPosition,
     initialMaxPrice,
     initialMinPrice,
@@ -234,7 +237,8 @@ function ShopPageCategory(props) {
   const [brands, setBrands] = useState(brandList);
   const [catID, setCatID] = useState(props.categoryId);
   const [catTitle, setTitle] = useState(props.categoryTitle);
-  const [page, setPage] = useState(state?.options?.page || 1);
+  const { page: selectedPage } = router.query;
+  const [page, setPage] = useState(selectedPage);
 
   const offcanvas = columns === 3 ? "mobile" : "always";
   const prevPageRef = useRef();
@@ -256,6 +260,7 @@ function ShopPageCategory(props) {
     allProduct.dispatches.setInitialMinPrice
   );
   const [filtersData, setFilters] = useState();
+  const { query } = useRouter();
 
   useEffect(() => {
     prevPageRef.current = page;
@@ -268,66 +273,32 @@ function ShopPageCategory(props) {
     prevLocationSearchRef.current = history.search || null;
   }, []);
 
-  // const categoryFilter = (category) => {
-  //   category.filter((elem) => {
-  //     if (elem.slug === categorySlug) {
-  //       setCatID(elem.id);
-  //       setTitle(elem.name);
-  //       return false;
-  //     } else {
-  //       if (elem && elem.children.length > 0) {
-  //         categoryFilter(elem.children);
-  //       }
-  //     }
-  //   });
-  // };
-  // console.log(categorySlug, "categorySlugcategorySlug");
+  useEffect(() => {
+    if (
+      prevStateOptionsRef.current != state.options ||
+      prevPageRef.current != page
+    ) {
+      const query = buildQuery({ ...state.options, page: page }, state.filters);
+      console.log(setPageNumber, "setPageNumber");
+      prevStateFiltersRef.current = state.filters;
+      prevStateOptionsRef.current = state.options;
+      const location = `${window.location.pathname}${
+        query ? `?cat_id=${props.categoryId}&` : ""
+      }${query}`;
+      router.push(location, location);
+    }
+  }, [state.filters, state.options, page]);
 
   useEffect(() => {
     prevCategorySlugRef.current = categorySlug;
-    // prevStateOptionsRef.current = state.options;
-    ///prevStateFiltersRef.current = state.filters;
     setProductsList(allProduct);
+  }, [router.locale, categorySlug, state.options, allProduct]);
+
+  useEffect(() => {
     setBrands(brandList);
     setMaxPrice(allProduct.dispatches.setInitialMaxPrice);
     setMinPrice(allProduct.dispatches.setInitialMinPrice);
   }, [router.locale, categorySlug, state.options]);
-
-  async function categoryData() {
-    const query = buildQuery({ ...state.options, page: page }, state.filters);
-    const location = `${window.location.pathname}${query ? "?" : ""}${query}`;
-    if (prevStateOptionsRef.current != state.options) {
-      prevStateFiltersRef.current = state.filters;
-      prevStateOptionsRef.current = state.options;
-      await shopApi
-        .getProductsList({
-          options: {
-            ...state.options,
-            page: page,
-            currency: "AMD",
-            locale: props.locale,
-          },
-          domain: dbName,
-          filters: { ...state.filters },
-          history: history.search,
-          location: location,
-          catID: props.categoryId,
-          window: null,
-          limit: 6,
-        })
-        .then((items) => {
-          setProductsList(items);
-
-          const location = `${window.location.pathname}${
-            query ? "?" : ""
-          }${query}`;
-          window.history.replaceState(null, "", location);
-        });
-    }
-  }
-  useEffect(() => {
-    categoryData();
-  }, [state.options, state.filters, page]);
 
   if (state.productsListIsLoading && !productsList) {
     return <BlockLoader />;
