@@ -1,68 +1,61 @@
 // react
-import React, { PureComponent, useState, USeEffect } from 'react'
-import classNames from 'classnames'
-import PropTypes from 'prop-types'
-import { connect, useSelector, useDispatch } from 'react-redux'
-import { toast } from 'react-toastify'
-import { FormattedMessage } from 'react-intl'
-import { Helmet } from 'react-helmet-async'
-import { wishlistRemoveItem } from '../../store/wishlist'
-import { url, apiImageUrl } from '../../helper'
-import Currency from './Currency'
-import AsyncAction from './AsyncAction'
-import InputNumber from './InputNumber'
-import { AddImages } from '../../store/image'
-import ProductGallery from './ProductGallery'
-import { cartAddItem } from '../../store/cart'
-import { AddCartToken } from '../../store/token'
-import { compareAddItem } from '../../store/compare'
-import { wishlistAddItem } from '../../store/wishlist'
+import React, { PureComponent, useState, useEffect } from 'react'
+import classNames                                    from 'classnames'
+import PropTypes                                     from 'prop-types'
+import { connect, useSelector, useDispatch }         from 'react-redux'
+import { toast }                                     from 'react-toastify'
+import { FormattedMessage }                          from 'react-intl'
+import { Helmet }                                    from 'react-helmet-async'
+import { wishlistRemoveItem }                        from '../../store/wishlist'
+import { url, apiImageUrl }                          from '../../helper'
+import Currency                                      from './Currency'
+import AsyncAction                                   from './AsyncAction'
+import InputNumber                                   from './InputNumber'
+import { AddImages }                                 from '../../store/image'
+import ProductGallery                                from './ProductGallery'
+import { cartAddItem }                               from '../../store/cart'
+import { AddCartToken }                              from '../../store/token'
+import { compareAddItem }                            from '../../store/compare'
+import { wishlistAddItem }                           from '../../store/wishlist'
+import { setPopup, setPopupName,setUpCrossProd }                    from '../../store/general'
 
-
-
-useRouter
 import {
   CheckToastSvg,
   FailSvg,
   InnerWishlist,
   Wishlist16Svg,
-} from '../../svg'
-import moment from 'moment'
-import ConfigurableFilters from '../configurableFilters'
-import BundleProducts from 'components/shop/productBundleFikter/BundleProducts'
-import { useRouter } from 'next/router'
-
-
-
+}                          from '../../svg'
 class Product extends PureComponent {
   checkAddProd = false
   cartProduct = null
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
+      // popUpName: "",
       quantity: 1,
       // configurImage: null,
-      bundleProducts: {},
-      selectedConfigs: {
-        RAM: null,
+      bundleProducts   : {},
+      selectedConfigs  : {
+        RAM   : null,
         Memory: null,
-        color: null,
+        color : null,
       },
-      locale: this.props.locale,
-      size: null,
-      imagesData: null,
-      simpleProduct: null,
+      locale           : this.props.locale,
+      size             : null,
+      imagesData       : null,
+      simpleProduct    : null,
       configurablesData: null,
-      colorCheck: false,
-      token: this.props.token,
-      locale: this.props.locale,
-      product: this.props.product,
-      customer: this.props.customer,
-      wishlist: this.props.wishlist,
-      IsOpen: 'product-inner-long-description-click',
+      colorCheck       : false,
+      token            : this.props.token,
+      locale           : this.props.locale,
+      product          : this.props.product,
+      customer         : this.props.customer,
+      wishlist         : this.props.wishlist,
+      IsOpen           : 'product-inner-long-description-click',
     }
   }
+
 
   renderProduct = () => {
     if (this.props.product.data.type === 'configurable') {
@@ -76,9 +69,9 @@ class Product extends PureComponent {
     if (this.props.product.data.type !== 'configurable') {
       this.checkAddProd = true
       this.setState({
-        product: this.props.product,
-        simpleProduct: this.props.product.data,
-        imagesData: this.props.product.data.images,
+        product          : this.props.product,
+        simpleProduct    : this.props.product.data,
+        imagesData       : this.props.product.data.images,
         configurablesData: null,
       })
       this.props.AddImages(this.props.product.data.images)
@@ -96,13 +89,16 @@ class Product extends PureComponent {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     // hereeeeeeeeeeeeeeeeeeee
     // here need variants in this reference "this.props.product.data.variants"
     this.renderProduct()
+    // console.log(this.state.locale,"this.state.ocale")
   }
 
-  componentDidUpdate(prProps, prState) {
+
+
+  componentDidUpdate (prProps, prState) {
     // console.log(
     //   prProps.locale,
     //   prState.locale,
@@ -118,7 +114,7 @@ class Product extends PureComponent {
     }
   }
 
-  createMarkup(item) {
+  createMarkup (item) {
     return { __html: item }
   }
 
@@ -126,7 +122,7 @@ class Product extends PureComponent {
     this.setState({ quantity })
   }
 
-  setInitialAndUpdatedData(data) {
+  setInitialAndUpdatedData (data) {
     // this.props.configurableVariantes.data
     if (this.props.product.data.type === 'configurable') {
       if (data && Object.keys(data.index).length > 0) {
@@ -158,7 +154,7 @@ class Product extends PureComponent {
         }
         this.setState({
           configurablesData: data,
-          selectedConfigs: { ...collectionDefaultValues },
+          selectedConfigs  : { ...collectionDefaultValues },
         })
       }
     }
@@ -194,7 +190,7 @@ class Product extends PureComponent {
      *  optionId:   Object,   option code
      */
 
-    // changes radiocbutton
+      // changes radiocbutton
 
     const attrLength = Object.keys(this.state.selectedConfigs).length
     const changedConfig = {
@@ -288,16 +284,16 @@ class Product extends PureComponent {
     })
   }
 
-  render() {
+  render () {
     const {
-      signed,
-      layout,
-      cartAddItem,
-      wishlistAddItem,
-      wishlist,
-      wishlistRemoveItem,
-      // AddCartToken,
-    } = this.props
+            signed,
+            layout,
+            cartAddItem,
+            wishlistAddItem,
+            wishlist,
+            wishlistRemoveItem,
+            // AddCartToken,
+          } = this.props
     const { quantity, product } = this.state
     const maxQty = this.props.bOrder ? 50000 : product.data.qty
     // let Addtocartdisabled = this.props.bOrder ? "" : "disabled";
@@ -321,7 +317,7 @@ class Product extends PureComponent {
       if (wishlistChekArray == undefined) {
         toast.success(
           <span className="d-flex chek-fms">
-            <CheckToastSvg />
+            <CheckToastSvg/>
             <FormattedMessage
               id="add-wish-list"
               defaultMessage={`Product "${product.data.name}" added to wish list`}
@@ -332,10 +328,10 @@ class Product extends PureComponent {
           },
         )
       } else {
-        <AsyncAction action={wishlistRemoveItem(product.data.id)} />
+        <AsyncAction action={wishlistRemoveItem(product.data.id)}/>
         toast.success(
           <span className="d-flex chek-fms">
-            <CheckToastSvg />
+            <CheckToastSvg/>
             <FormattedMessage
               id="producthasalreadyinwishlist"
               defaultMessage={`The product "${product.data.name}" has already been added to the whishlist`}
@@ -365,7 +361,7 @@ class Product extends PureComponent {
             content={product.data.name ? product.data.name : ''}
             data-react-helmet={true}
           />
-          <meta property="og:url" content={product.data.name} />
+          <meta property="og:url" content={product.data.name}/>
           <meta
             property="og:title"
             content={product.data.name}
@@ -379,7 +375,7 @@ class Product extends PureComponent {
         </Helmet>
         <div className={`product product--layout--${layout}`}>
           <div className="product__content">
-            <ProductGallery layout={layout} images={product.data.images} />
+            <ProductGallery layout={layout} images={product.data.images} ups={false}/>
             <div className="product__info">
               <div className="product__wishlist-compare">
                 <AsyncAction
@@ -398,7 +394,7 @@ class Product extends PureComponent {
                         },
                       )}
                     >
-                      <Wishlist16Svg />
+                      <Wishlist16Svg/>
                     </button>
                   )}
                 />
@@ -427,8 +423,8 @@ class Product extends PureComponent {
                 {/*)}*/}
                 {/*   need to refacor when add function checking currency*/}
                 {product.data.special_price &&
-                  date_now >= date_from &&
-                  date_now <= date_to ? (
+                date_now >= date_from &&
+                date_now <= date_to ? (
                   <>
                     <span className="product-card__new-price">
                       <Currency
@@ -443,7 +439,7 @@ class Product extends PureComponent {
                     </span>
 
                     <span className="product-card__old-price">
-                      <Currency value={Number(product.data.price).toFixed(0)} />
+                      <Currency value={Number(product.data.price).toFixed(0)}/>
                       <span
                         className="product-card__symbol"
                         style={{ marginLeft: '5px' }}
@@ -467,7 +463,7 @@ class Product extends PureComponent {
                     </span>
 
                     <span className="product-card__old-price">
-                      <Currency value={Number(product.data.price).toFixed(0)} />
+                      <Currency value={Number(product.data.price).toFixed(0)}/>
                       <span
                         className="product-card__symbol"
                         style={{ marginLeft: '5px' }}
@@ -498,8 +494,8 @@ class Product extends PureComponent {
                 {product.data.price_html
                   ? product.data.price_html.map((e, i) => (
                     <span key={i} className="product_price_html">
-                      {e}
-                    </span>
+                        {e}
+                      </span>
                   ))
                   : ''}
               </div>
@@ -545,35 +541,35 @@ class Product extends PureComponent {
                   <span
                     className={
                       product.data.qty > 0
-                        || product.data.qty === 0
-                        && this.props.backorders == 1
+                      || product.data.qty === 0
+                      && this.props.backorders == 1
                         ? `text-success`
                         : product.data.qty === 0
-                          && this.props.backorders == 0
+                        && this.props.backorders == 0
                           ? `text-danger`
                           : `text-danger`
                     }
                     style={{ fontSize: '18px' }}
                   >
                     {product.data.qty > 0 ? (
-                      <FormattedMessage
-                        id="instock"
-                        defaultMessage="In stock"
-                      />
-                    ) :
+                        <FormattedMessage
+                          id="instock"
+                          defaultMessage="In stock"
+                        />
+                      ) :
                       product.data.qty === 0
-                        && this.props.backorders == 1
-                        && this.props.outOfStock == 0 ||
-                        product.data.qty === 0
-                        && this.props.backorders == 1
-                        && this.props.outOfStock == 1 ? (
+                      && this.props.backorders == 1
+                      && this.props.outOfStock == 0 ||
+                      product.data.qty === 0
+                      && this.props.backorders == 1
+                      && this.props.outOfStock == 1 ? (
                         <FormattedMessage
                           id="instock"
                           defaultMessage="In stock"
                         />
                       ) : product.data.qty === 0
-                        && this.props.backorders == 0
-                        && this.props.outOfStock == 1 ? (
+                      && this.props.backorders == 0
+                      && this.props.outOfStock == 1 ? (
                         <FormattedMessage
                           id="outOfStock"
                           defaultMessage="Not available"
@@ -594,7 +590,7 @@ class Product extends PureComponent {
                 <span className="text-success">
                   {' '}
                   {product.data.qty > 0 ? (
-                    <FormattedMessage id="inStock" defaultMessage="Available" />
+                    <FormattedMessage id="inStock" defaultMessage="Available"/>
                   ) : (
                     <FormattedMessage
                       id="outOfStock"
@@ -620,6 +616,12 @@ class Product extends PureComponent {
                       />
                     </div>
                     <div className="product__actions-item product__actions-item--addtocart">
+                      {/*<button type="button" onClick={(e) => {*/}
+                      {/*  e.preventDefault()*/}
+                      {/*  this.props.setPopupName('upsell')*/}
+                      {/*  this.props.setPopup(true)*/}
+                      {/*}}>fake button*/}
+                      {/*</button>*/}
                       <AsyncAction
                         action={() =>
                           cartAddItem(
@@ -631,7 +633,7 @@ class Product extends PureComponent {
                             this.state.locale,
                             product?.data?.type == 'bundle'
                               ? {
-                                options: product.data.bundle_options,
+                                options        : product.data.bundle_options,
                                 selectedOptions: this.state.bundleProducts,
                               }
                               : null,
@@ -640,7 +642,14 @@ class Product extends PureComponent {
                         render={({ run, loading }) => (
                           <button
                             type="button"
-                            onClick={run}
+                            onClick={() => {
+                              run()
+                              // e.preventDefault()
+                              // {console.log(product.data, "product data in product js")}
+                              this.props.setUpCrossProd({ crossell: product.data.product.cross_sells, upsel: product.data.product.up_sells })
+                              this.props.setPopupName('upsell')
+                              this.props.setPopup(true)
+                            }}
                             disabled={Addtocartdisabled}
                             className={classNames(
                               'btn btn-orange inner-addtocart rounded-pills btn-lg',
@@ -677,7 +686,7 @@ class Product extends PureComponent {
                                   },
                                 )}
                               >
-                                <InnerWishlist className="inner-wishlist" />
+                                <InnerWishlist className="inner-wishlist"/>
                               </button>
                             )}
                           />
@@ -690,7 +699,7 @@ class Product extends PureComponent {
                           e.preventDefault()
                           toast(
                             <span className="d-flex faild-toast-fms">
-                              <FailSvg />
+                              <FailSvg/>
                               <FormattedMessage
                                 id="sign-or-register"
                                 defaultMessage="Please sign in or register"
@@ -698,13 +707,13 @@ class Product extends PureComponent {
                             </span>,
                             {
                               hideProgressBar: true,
-                              className: 'wishlist-toast',
+                              className      : 'wishlist-toast',
                             },
                           )
                         }}
                         className="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist"
                       >
-                        <InnerWishlist className="inner-wishlist" />
+                        <InnerWishlist className="inner-wishlist"/>
                       </button>
                     )}
 
@@ -734,6 +743,13 @@ class Product extends PureComponent {
     )
   }
 }
+import moment              from 'moment'
+import ConfigurableFilters from '../configurableFilters'
+import BundleProducts      from 'components/shop/productBundleFikter/BundleProducts'
+
+
+
+import { useRouter }       from 'next/router'
 
 
 Product.propTypes = {
@@ -750,17 +766,20 @@ Product.defaultProps = {
 const mapStateToProps = (state) => ({
   backorders: state.general.coreConfigs.catalog_inventory_stock_options_backorders,
   outOfStock: state.general.coreConfigs.catalog_products_homepage_out_of_stock_items,
-  locale: state.locale.code,
-  cartToken: state.cartToken,
-  token: state.cartToken,
-  customer: state.customer,
-  bOrder: state.general.bOrder,
-  apiToken: state.general.apiToken,
-  signed: state.customer.authenticated,
-  wishlist: state.wishlist,
+  locale    : state.locale.code,
+  cartToken : state.cartToken,
+  token     : state.cartToken,
+  customer  : state.customer,
+  bOrder    : state.general.bOrder,
+  apiToken  : state.general.apiToken,
+  signed    : state.customer.authenticated,
+  wishlist  : state.wishlist,
 })
 
 const mapDispatchToProps = {
+  setPopupName,
+  setPopup,
+  setUpCrossProd,
   AddImages,
   AddCartToken,
   cartAddItem,
