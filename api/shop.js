@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-unused-vars
 import qs from "query-string";
 import { getCategoryBySlug } from "../fake-server/endpoints/categories";
-import { url, apiUrlWithStore, domainUrl ,megaUrl} from "../helper";
+import { url, apiUrlWithStore, domainUrl, megaUrl } from "../helper";
 import {
   getDiscountedProducts,
   getLatestProducts,
@@ -270,7 +270,7 @@ const shopApi = {
     if (options.savings == "") {
       delete options.savings;
     }
-
+    console.log(catID, catId, "catIdcatId");
     const categoryId = catId || catID;
     console.log(dbName ? `https://` + dbName : url, "getProductsList");
     if (
@@ -281,9 +281,9 @@ const shopApi = {
       return fetch(
         `${
           dbName ? `https://` + dbName : url
-        }/db/products?limit=20&currency=${currency}&locale=${options.locale}${
-          categoryId ? `&category_id=${categoryId}` : ""
-        }`
+        }/db/products?limit=20&currency=${currency}&limit=20&locale=${
+          options.locale
+        }${categoryId ? `&category_id=${categoryId}` : ""}`
       ).then((responce) => responce.json());
     } else {
       let string = `limit=20`;
