@@ -61,7 +61,6 @@ function Get_Settings(fullUrl, urlStore) {
               ...next,
             };
           }, {});
-
         resolve({ store_info: store_info });
       })
       .catch((err) => reject(err));

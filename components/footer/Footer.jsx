@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 function Footer() {
   const hasTracking = useSelector(state => state.general.coreConfigs.sales_tracking_tracking_active)
   const hasContact = useSelector(state => state.general.coreConfigs.theme_contact_us_active)
+  const storeConfigs = useSelector((state) => state.general.store_configs);
   return (
     <div className="site-footer">
       <div className="footer-container container">

@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import store                        from '../../store'
-import shopApi                      from '../../api/shop'
-import allActions                   from '../../services/actionsArray'
+import store from '../../store'
+import shopApi from '../../api/shop'
+import allActions from '../../services/actionsArray'
 import { generalProcessForAnyPage } from '../../services/utils'
-import ShopPageProduct              from '../../components/shop/ShopPageProduct'
+import ShopPageProduct from '../../components/shop/ShopPageProduct'
 
 
 
-export default function ProductInnerPage (props) {
+export default function ProductInnerPage(props) {
   const query = useRouter()
   const prodID = props.product.data.product_id
   const cats = props.product.data.cats
@@ -43,36 +43,36 @@ export default function ProductInnerPage (props) {
 }
 
 
-export async function getServerSideProps ({ locale, locales, req, res, query }) {
+export async function getServerSideProps({ locale, locales, req, res, query }) {
   const { productSlug } = query
 
   const {
-          locale: defaultLocaleSelected,
-          token,
-          currency,
-          dispatches: generalDispatches,
-        } = await generalProcessForAnyPage(locale)
+    locale: defaultLocaleSelected,
+    token,
+    currency,
+    dispatches: generalDispatches,
+  } = await generalProcessForAnyPage(locale)
 
   const selectedLocale = locale !== 'catchAll' ? locale : defaultLocaleSelected
 
   const product = await shopApi.getProductBySlug(productSlug, {
-    lang : selectedLocale,
+    lang: selectedLocale,
     token: token,
   })
   const relatedPproducts = await shopApi.getRelatedProducts(product.cats, product.product_id, {
-    lang    : selectedLocale,
+    lang: selectedLocale,
     currency: currency,
-    limit   : 8,
+    limit: 8,
   })
   const upSellProducts = await shopApi.getUpSellProducts(null, product.product_id, {
-    lang    : selectedLocale,
+    lang: selectedLocale,
     currency: currency,
-    limit   : 8,
+    limit: 8,
   })
   const crossSellProducts = await shopApi.getCrossSellProducts(null, product.product_id, {
-    lang    : selectedLocale,
+    lang: selectedLocale,
     currency: currency,
-    limit   : 8,
+    limit: 8,
   })
 
   let configurabelConfigProduct = null
@@ -87,15 +87,17 @@ export async function getServerSideProps ({ locale, locales, req, res, query }) 
     ...generalDispatches.clientSide,
     ...generalDispatches.serverSide,
   }
+
+
   return {
     props: {
-      locale               : selectedLocale,
+      locale: selectedLocale,
       dispatches,
-      productSlug          : productSlug,
-      product              : { data: product },
-      relatedPproducts     : relatedPproducts,
-      upSellProducts       : upSellProducts,
-      crossSellProducts    : crossSellProducts,
+      productSlug: productSlug,
+      product: { data: product },
+      relatedPproducts: relatedPproducts,
+      upSellProducts: upSellProducts,
+      crossSellProducts: crossSellProducts,
       configurableVariantes: configurabelConfigProduct,
     },
   }

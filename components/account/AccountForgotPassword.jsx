@@ -39,9 +39,9 @@ export default function AccountForgotPassword(props) {
         <div className=" col-md-6 d-flex mt-4 mt-md-0 forgot-pass-block">
           <div className="card flex-grow-1 mb-0">
             <div className="card-body p-5">
-              <h3 className="card-title">
+              <h1 className="card-title">
                 <FormattedMessage id="email" defaultMessage="e-mail address" />
-              </h3>
+              </h1>
 
               <form>
                 <div className="">

@@ -40,10 +40,10 @@ function HomePageOne(props) {
     <FormattedMessage id="shop.one" defaultMessage="Saled products" />
   );
   const homepage_title_text = (
-    <FormattedMessage id="homepage_title_text" defaultMessage="" />
+    <FormattedMessage id="homepage_title_text" defaultMessage="Home" />
   );
   const homepage_intro_text = (
-    <FormattedMessage id="homepage_intro_text" defaultMessage="" />
+    <FormattedMessage id="homepage_intro_text" defaultMessage="Home Page" />
   );
   const history = useRouter();
   const prevCurrencyCodeRef = useRef();
@@ -125,8 +125,8 @@ function HomePageOne(props) {
           customer={customer}
           title={newCollection}
           dbName={dbName}
-          // homepage_title_text={homepage_title_text}
-          // homepage_intro_text={homepage_intro_text}
+          homepage_title_text={homepage_title_text}
+          homepage_intro_text={homepage_intro_text}
           products={bestsellers}
           addInClass={bestsellers.length <= 4 ? "small" : "larg"}
         />

@@ -71,12 +71,12 @@ function AccountResetPassword(props) {
       <div className="col-md-8 d-flex mt-4 mt-md-5 forgot-pass-block mx-auto">
         <div className="card flex-grow-1 mb-0">
           <div className="card-body p-5">
-            <h3 className="card-title">
+            <h1 className="card-title">
               <FormattedMessage
                 id="reset.password"
                 defaultMessage="Reset Password"
               />
-            </h3>
+            </h1>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="form-group">
                 <FormattedMessage id="password" defaultMessage="password">

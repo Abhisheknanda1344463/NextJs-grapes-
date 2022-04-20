@@ -29,10 +29,10 @@ function ShopPageProduct(props) {
 
   const customer = useSelector((state) => state.customer);
   const currency = useSelector((state) => state.currency.current);
-//   console.log(props, "props in shop page product")
-// console.log(crossProducts,"cross_sell_products")
-// console.log(upSellProducts,"up_sell_products")
-// console.log(relatedProducts,"related_products")
+  //   console.log(props, "props in shop page product")
+  // console.log(crossProducts,"cross_sell_products")
+  // console.log(upSellProducts,"up_sell_products")
+  // console.log(relatedProducts,"related_products")
   const selectedData = locale;
   const prevProductSlugRef = useRef();
   const prevLocaleRef = useRef();
@@ -62,7 +62,7 @@ function ShopPageProduct(props) {
     setUpSellProducts(props.upSellProducts)
 
     /// setProduct(data);
-  }, [productSlug, router.locale,relatedProducts,upSellProducts,crossProducts]);
+  }, [productSlug, router.locale, relatedProducts, upSellProducts, crossProducts]);
 
   // console.log(productSlug, "productSlugproductSlug");
   // useEffect(() => {
@@ -129,7 +129,7 @@ function ShopPageProduct(props) {
                 layout="grid-4-sm"
                 products={Object.values(props.relatedPproducts)}
                 locale={router.locale}
-                // withSidebar
+              // withSidebar
               />
             )}
           </div>
@@ -192,7 +192,9 @@ function ShopPageProduct(props) {
 
       <PageHeader breadcrumb={breadcrumb} />
 
-      <div className="take-product-page">{content}</div>
+      <div className="take-product-page">
+        {content}
+      </div>
     </React.Fragment>
   );
 }

@@ -1,22 +1,21 @@
-import { useEffect }              from 'react'
-import ShopPageCategory           from '../../components/shop/ShopPageCategory'
-import { useRouter }              from 'next/router'
-import shopApi                    from '../../api/shop'
-import store                      from '../../store'
+import { useEffect } from 'react'
+import ShopPageCategory from '../../components/shop/ShopPageCategory'
+import { useRouter } from 'next/router'
+import shopApi from '../../api/shop'
+import store from '../../store'
 import { ApiCustomSettingsAsync } from '../../services/utils'
-import serverSideActions          from '../../services/serverSide'
-import allActions                 from '../../services/actionsArray'
+import serverSideActions from '../../services/serverSide'
+import allActions from '../../services/actionsArray'
 
-import clientSideActions            from '../../services/clientSide'
+import clientSideActions from '../../services/clientSide'
 import { generalProcessForAnyPage } from '../../services/utils'
 
 
 
-export default function Catlog (props) {
+export default function Catlog(props) {
   const { query, router } = useRouter()
   const { dispatch } = store
   ////console.log(props.locale, "props.localeprops.locale");
-console.log(props, "props in categories");
   // useEffect(() => {
   //   window.history.replaceState(null, "", window.location.pathname);
   //   ///router.push(window.location.pathname, window.location.pathname);
@@ -43,7 +42,7 @@ console.log(props, "props in categories");
 }
 
 
-export async function getServerSideProps ({
+export async function getServerSideProps({
   ///query: { slug },
   locale,
   locales,
@@ -58,17 +57,16 @@ export async function getServerSideProps ({
   const dbName = req.headers['x-forwarded-host']
   /////FIXME WE DONT NEED ALL THIS DATA
   const {
-          locale: defaultLocaleSelected,
-          currency,
-          dispatches: generalDispatches,
-        } = await generalProcessForAnyPage(locale)
-  console.log(query, 'queryquery')
+    locale: defaultLocaleSelected,
+    currency,
+    dispatches: generalDispatches,
+  } = await generalProcessForAnyPage(locale)
   const selectedLocale = locale != 'catchAll' ? locale : defaultLocaleSelected
   let categoryId,
-      categoryTitle,
-      dispatches,
-      brands       = [],
-      productsList = []
+    categoryTitle,
+    dispatches,
+    brands = [],
+    productsList = []
 
   // console.log(
   //   selectedLocale,
@@ -84,7 +82,7 @@ export async function getServerSideProps ({
   })
 
 
-  function getItems (array) {
+  function getItems(array) {
     array.forEach((e, i) => {
       if (e.slug == query.slug && e.children?.length === 0) {
         categoryId = e.id
@@ -97,16 +95,15 @@ export async function getServerSideProps ({
   }
 
 
-  console.log(categoryId, query.cat_id, 'categoriesResponsecategoriesResponse')
   if (categoriesResponse?.categories) {
     getItems(categoriesResponse.categories[0].children)
   }
 
   await shopApi
     .getFilters(categoryId ? categoryId : query.cat_id, {
-      lang    : selectedLocale,
+      lang: selectedLocale,
       currency: { code: settingsResponse.data.currency.code },
-      limit   : 8,
+      limit: 8,
     })
     .then((data) => {
       brands = data
@@ -114,19 +111,18 @@ export async function getServerSideProps ({
 
   await shopApi
     .getProductsList({
-      options : {
+      options: {
         currency: { code: settingsResponse.data.currency.code },
-        locale  : selectedLocale,
+        locale: selectedLocale,
       },
-      filters : {},
+      filters: {},
       location: '',
-      dbName  : dbName,
-      catID   : categoryId ? categoryId : query.cat_id,
-      window  : null,
-      limit   : 6,
+      dbName: dbName,
+      catID: categoryId ? categoryId : query.cat_id,
+      window: null,
+      limit: 6,
     })
     .then((responseProductList) => {
-      console.log(responseProductList, "responce product list in categories")
       dispatches = {
         ...dispatches,
         ...responseProductList.dispatches,
@@ -143,14 +139,14 @@ export async function getServerSideProps ({
 
   return {
     props: {
-      currency    : { code: settingsResponse.data.currency.code },
+      currency: { code: settingsResponse.data.currency.code },
       productsList: productsList,
-      brandList   : brands,
+      brandList: brands,
       categoryId,
-      dbName      : dbName,
+      dbName: dbName,
       categoryTitle,
-      dispatches  : dispatchesNew,
-      locale      : selectedLocale,
+      dispatches: dispatchesNew,
+      locale: selectedLocale,
     },
   }
 }

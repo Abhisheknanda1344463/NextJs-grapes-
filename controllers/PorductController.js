@@ -31,24 +31,24 @@ const { type } = require('os')
  *  Utils fot that controllers
  */
 
-function parseClone (obj) {
+function parseClone(obj) {
   return JSON.parse(JSON.stringify(obj))
 }
 
 
-function makeImageClone (path) {
+function makeImageClone(path) {
   return {
-    path              : path,
-    url               : `/storage/clever/${path}`,
-    large_image_url   : `${apiImageUrl}/cache/large/${path}`,
-    medium_image_url  : `${apiImageUrl}/cache/medium/${path}`,
-    small_image_url   : `${apiImageUrl}/cache/small/${path}`,
+    path: path,
+    url: `/storage/clever/${path}`,
+    large_image_url: `${apiImageUrl}/cache/large/${path}`,
+    medium_image_url: `${apiImageUrl}/cache/medium/${path}`,
+    small_image_url: `${apiImageUrl}/cache/small/${path}`,
     original_image_url: `${apiImageUrl}/cache/original/${path}`,
   }
 }
 
 
-function defaultFilter ({ key, options }) {
+function defaultFilter({ key, options }) {
   let dynamicSearchKey = null
   switch (typeof options[key]) {
     case 'boolean':
@@ -78,7 +78,7 @@ function defaultFilter ({ key, options }) {
 }
 
 
-function build ({ flatProducts, locale, resolve, ...rest }) {
+function build({ flatProducts, locale, resolve, ...rest }) {
   const promiseArray = flatProducts.map((item) => {
     return new Promise((resolve, reject) => {
       const product = parseClone(item)
@@ -157,12 +157,12 @@ function build ({ flatProducts, locale, resolve, ...rest }) {
       )
       ///   console.log(setInitialMaxPrice, "setInitialMaxPricesetInitialMaxPrice");
       everyThing = {
-        data      : response,
-        filters   : [],
-        links     : {},
-        max_price : rest.prices[1],
-        meta      : {},
-        total     : rest.total,
+        data: response,
+        filters: [],
+        links: {},
+        max_price: rest.prices[1],
+        meta: {},
+        total: rest.total,
         dispatches: {
           setInitialMinPrice: setInitialMinPrice,
           setInitialMaxPrice: setInitialMaxPrice,
@@ -178,7 +178,7 @@ function build ({ flatProducts, locale, resolve, ...rest }) {
 }
 
 
-function buildProductsListCollection ({ flat, savings, price, ...rest }) {
+function buildProductsListCollection({ flat, savings, price, ...rest }) {
   /**
    *  @info switch cases for filters
    *  @params savings and prices are the uniq filters, for them working another logic
@@ -216,7 +216,7 @@ function buildProductsListCollection ({ flat, savings, price, ...rest }) {
 
 // ##########################################################################################
 
-function arrayConvertToObject (response) {
+function arrayConvertToObject(response) {
   return response.reduce((prev, next) => {
     const keys = Object.keys(next)
     if (keys.length > 1) {
@@ -240,7 +240,7 @@ function arrayConvertToObject (response) {
 }
 
 
-function Get_New_And_Futured_Products ({ locale, limit, currency, ...rest }) {
+function Get_New_And_Futured_Products({ locale, limit, currency, ...rest }) {
   return new Promise((resolve, reject) => {
     const futuredProducts = new Promise((resolve, reject) => {
       ProductFlat.find({ new: 1, locale })
@@ -308,13 +308,9 @@ function Get_New_And_Futured_Products ({ locale, limit, currency, ...rest }) {
 //   })
 // }
 
-function Get_Product_list (options) {
+function Get_Product_list(options) {
   //limit, category_id, currency,
   const { locale: defaultLocale, limit, page, ...rest } = options
-  console.log(
-    defaultLocale,
-    'Get_Product_listGet_Product_listGet_Product_list',
-  )
   var locale
   if (defaultLocale.length > 0) {
     locale = defaultLocale[0]
@@ -322,7 +318,6 @@ function Get_Product_list (options) {
     locale = defaultLocale
   }
   let searchKeys = {}
-  console.log(options, 'options')
   for (let key in options) {
     if (
       key != 'limit' &&
@@ -353,10 +348,9 @@ function Get_Product_list (options) {
   return new Promise((resolve, reject) => {
     ProductsCategories.find({ category_id: options.category_id }).then(
       (res) => {
+        console.log(res, 'resresresres-______________________');
         const productIdsByCategory = res.map((e) => e.product_id)
-        console.log(searchKeys, 'searchKeys')
         const paramsArray = Object.keys(JSON.parse(JSON.stringify(searchKeys)))
-        console.log(paramsArray, 'searchKeys')
         const buildQueryParams = paramsArray.reduce((acc, next) => {
           if (
             typeof searchKeys[next] == 'object' &&
@@ -367,23 +361,16 @@ function Get_Product_list (options) {
             return { ...acc, [next]: searchKeys[next] }
           }
         }, {})
-        console.log(
-          buildQueryParams,
-          'buildQueryParamsbuildQueryParamsbuildQueryParams',
-        )
 
         if (Object.keys(buildQueryParams)[0] !== 'text_value') {
           var productIds
-          console.log(buildQueryParams, 'buildQueryParams')
           ProductAttributeValues.find({ ...buildQueryParams }).then((res) => {
-            console.log(productIdsByCategory, 'productIdsByCategory')
             productIds = productIdsByCategory.filter((id) => {
               const find = res.find((e) => e.product_id == id)
               if (find) {
                 return id
               }
             })
-            console.log(productIds, 'productIds')
             const productsPromise = new Promise((resolve, reject) => {
               Products.find({ id: { $in: productIds } }).then((products) =>
                 resolve({ products }),
@@ -397,10 +384,9 @@ function Get_Product_list (options) {
                * */
               let object
               let date_now = null
-              console.log(productIds, 'aaaaaaaaaaaa')
               if (productIds.length > 0) {
                 object = {
-                  locale    : locale,
+                  locale: locale,
                   product_id: { $in: productIds },
                 }
               } else {
@@ -408,7 +394,6 @@ function Get_Product_list (options) {
                   locale: locale,
                 }
               }
-              console.log(productIds.length, object, 'aaaaaaaaaaaa')
               // console.log(options["price"], 'options["price"]options["price"]');
               if (options['price']) {
                 const [from, to] = options['price'].split(',')
@@ -421,12 +406,11 @@ function Get_Product_list (options) {
                   },
                 }
               }
-              console.log(object)
               if (options['savings']) {
-                const d     = new Date(),
-                      month = '' + (d.getMonth() + 1),
-                      day   = '' + d.getDate(),
-                      year  = d.getFullYear()
+                const d = new Date(),
+                  month = '' + (d.getMonth() + 1),
+                  day = '' + d.getDate(),
+                  year = d.getFullYear()
                 if (month.length < 2) month = '0' + month
                 if (day.length < 2) day = '0' + day
                 date_now = new Date(`${year}-${month}-${day}`).getTime()
@@ -463,10 +447,10 @@ function Get_Product_list (options) {
                           .filter((e) => e)
 
                         resolve({
-                          total : 20,
+                          total: 20,
                           flatProducts,
                           prices: [0, prices[prices.length - 1] || 1000],
-                          price : options['price'],
+                          price: options['price'],
                         })
                       })
                   })
@@ -485,10 +469,10 @@ function Get_Product_list (options) {
                           .filter((e) => e)
 
                         resolve({
-                          total : pageCount,
+                          total: pageCount,
                           flatProducts,
                           prices: [0, prices[prices.length - 1] || 1000],
-                          price : options['price'],
+                          price: options['price'],
                         })
                       })
                   },
@@ -506,8 +490,8 @@ function Get_Product_list (options) {
                   buildProductsListCollection({
                     locale,
                     resolve,
-                    flat   : true,
-                    price  : productsAndMinMaxPrice.price,
+                    flat: true,
+                    price: productsAndMinMaxPrice.price,
                     savings: options['savings'],
                     ...productsAndMinMaxPrice,
                   })
@@ -538,7 +522,7 @@ function Get_Product_list (options) {
 }
 
 
-function Get_Products_By_Slug (params, options) {
+function Get_Products_By_Slug(params, options) {
   const { locale, token } = options
   const { productSlug } = params
   return new Promise((resolve, reject) => {
@@ -598,7 +582,7 @@ function Get_Products_By_Slug (params, options) {
 
             const flates = new Promise((resolve, reject) => {
               ProductFlat.find({
-                locale    : locale,
+                locale: locale,
                 product_id: { $in: productsIds },
               }).then((flats) => {
                 // console.log(flats, "productsIdsproductsIdsproductsIds");
@@ -651,7 +635,6 @@ function Get_Products_By_Slug (params, options) {
 
         return Promise.all([p1, p2, p3, p4, variants]).then((response) => {
           const collection = arrayConvertToObject(response)
-
           const variants = collection.variants
           const cats = parseClone(collection.cats)
           const flatData = parseClone(productFlat || [])
@@ -665,7 +648,6 @@ function Get_Products_By_Slug (params, options) {
           const images = imagesData.map((e) => makeImageClone(e.path))
           ////  flatData["parent_id"] = flatData["product"].parent_id;
           delete flatData['product']
-
           const obj = {
             ...products,
             ...flatData,
@@ -683,7 +665,7 @@ function Get_Products_By_Slug (params, options) {
 }
 
 
-function Get_Related_Products (options) {
+function Get_Related_Products(options) {
   // currency: AMD / will work on it
   const { locale, limit, currency, category_id, product_id } = options
   console.log(category_id, "category id in product controller")
@@ -777,7 +759,7 @@ function Get_Related_Products (options) {
               .limit(8)
               .then((products) => {
                 const promiseArray = products.map((item) => {
-                  if(item.product_id === product_id) {
+                  if (item.product_id === product_id) {
                     return
                   }
                   console.log(item, 'else item product in test')
@@ -855,7 +837,7 @@ function Get_Related_Products (options) {
 }
 
 
-function Get_Up_Sell_Products (options) {
+function Get_Up_Sell_Products(options) {
   const { locale, limit, currency, category_id, product_id } = options
   return new Promise((resolve, reject) => {
 
@@ -943,7 +925,7 @@ function Get_Up_Sell_Products (options) {
 }
 
 
-function Get_Cross_Sell_Products (options) {
+function Get_Cross_Sell_Products(options) {
   const { locale, limit, currency, category_id, product_id } = options
   return new Promise((resolve, reject) => {
 
@@ -1031,7 +1013,7 @@ function Get_Cross_Sell_Products (options) {
 }
 
 
-function Get_Configurable_Config (configurableId) {
+function Get_Configurable_Config(configurableId) {
   return new Promise((resolve, reject) => {
     // there are problem in Admin, attributes collection is empty
     Products.findOne({ id: configurableId }).then((items) => {
@@ -1125,7 +1107,7 @@ function Get_Configurable_Config (configurableId) {
                       if (index[attributeValue.product_id]) {
                         index[attributeValue.product_id][
                           attributeValue.attribute_id
-                          ] = optionId
+                        ] = optionId
                       } else {
                         index[attributeValue.product_id] = {
                           [attributeValue.attribute_id]: optionId,
@@ -1198,10 +1180,10 @@ function Get_Configurable_Config (configurableId) {
                     })
 
                     return {
-                      id         : attr.id,
-                      code       : attr.code,
-                      label      : attr.admin_name,
-                      options    : customOptionsCollection,
+                      id: attr.id,
+                      code: attr.code,
+                      label: attr.admin_name,
+                      options: customOptionsCollection,
                       swatch_type: null,
                       product_id,
                     }
@@ -1237,7 +1219,7 @@ function Get_Configurable_Config (configurableId) {
                           return {
                             ...acc,
                             [next.product_id]: {
-                              title      : next.name,
+                              title: next.name,
                               description: next.description,
                             },
                           }
@@ -1247,16 +1229,16 @@ function Get_Configurable_Config (configurableId) {
                           return {
                             ...acc,
                             [next.product_id]: {
-                              final_price  : {
+                              final_price: {
                                 formated_price:
                                   'static string by david check that with Ruben',
-                                price         :
+                                price:
                                   'static string by david check that with Ruben',
                               },
                               regular_price: {
                                 formated_price:
                                   'static string by david check that with Ruben',
-                                price         :
+                                price:
                                   'static string by david check that with Ruben',
                               },
                             },
@@ -1264,7 +1246,7 @@ function Get_Configurable_Config (configurableId) {
                         }, {})
 
                         resolve({
-                          variant_prices    : priceVariantes,
+                          variant_prices: priceVariantes,
                           variant_title_desc: titleDescVariantes,
                         })
                       })
@@ -1276,16 +1258,16 @@ function Get_Configurable_Config (configurableId) {
                       const response = arrayConvertToObject(res)
 
                       const mainResponse = {
-                        attributes        : attributes,
-                        chooseText        : 'Choose an option',
-                        index             : index,
-                        variant_images    : response.images,
-                        variant_prices    : response.variant_prices,
+                        attributes: attributes,
+                        chooseText: 'Choose an option',
+                        index: index,
+                        variant_images: response.images,
+                        variant_prices: response.variant_prices,
                         variant_title_desc: response.variant_title_desc,
-                        variant_videos    : [],
-                        regular_price     : {
+                        variant_videos: [],
+                        regular_price: {
                           formated_price: '$1.00',
-                          price         : '1.0000',
+                          price: '1.0000',
                         },
 
                         // need to do dynamic by beckend
@@ -1309,7 +1291,7 @@ function Get_Configurable_Config (configurableId) {
 
 // i am frontend developer...)))
 
-function Get_Product_Type () {
+function Get_Product_Type() {
   return new Promise((resolve, reject) => {
     let productID = null
     let parentID = null
