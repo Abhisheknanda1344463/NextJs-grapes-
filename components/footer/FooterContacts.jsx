@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 
 export default function FooterContacts() {
   const storeConfigs = useSelector((state) => state.general.store_configs);
-
   // const links = [
   //   { title: <FormattedMessage id="topbar.phone1" defaultMessage="Phone number" />, url: "" },
   //   { title: <FormattedMessage id="topbar.phone2" defaultMessage="Phone number" />, url: "" },
@@ -24,28 +23,31 @@ export default function FooterContacts() {
   // });
 
   // dangerouslySetInnerHTML={}
-
+  //Commented BY MANVEL Discuss with Ruben
   const contacts = (
     <ul className="footer-contacts__contacts">
       <li className="contatsAddress">
         {storeConfigs.footer_email ? (
           <p dangerouslySetInnerHTML={{ __html: storeConfigs.footer_email }} />
         ) : (
-          <span>example@zegashop.com</span>
+          ""
+          // <span>example@zegashop.com</span>
         )}
       </li>
       <li className="contatsAddress middleAddress">
         {storeConfigs.phone ? (
           <Link href={`tel:${storeConfigs.phone}`}>{storeConfigs.phone}</Link>
         ) : (
-          <span>+1 (929) 336 - 4318</span>
+          ""
+          // <span>+1 (929) 336 - 4318</span>
         )}
       </li>
       <li className="contatsAddress">
         {storeConfigs.footer_address ? (
           <p dangerouslySetInnerHTML={{ __html: storeConfigs.footer_address }} />
         ) : (
-          <span>Address։ City name, Country name</span>
+          ""
+          // <span>Address։ City name, Country name</span>
         )}
       </li>
       <li>

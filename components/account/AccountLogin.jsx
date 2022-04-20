@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 // third-party
-import  Link from "next/link";
+import Link from "next/link";
 import { FormattedMessage } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
@@ -119,10 +119,8 @@ export default function AccountLogin() {
         );
         if (pro == undefined) {
           fetch(
-            `${url}/api/checkout/cart/add/${product.product.id}?product_id=${
-              product.product.id
-            }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${
-              token ? `&token=${token}` : ""
+            `${url}/api/checkout/cart/add/${product.product.id}?product_id=${product.product.id
+            }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${token ? `&token=${token}` : ""
             }`,
             { method: "POST" }
           )
@@ -136,15 +134,13 @@ export default function AccountLogin() {
     } else if (cart.items.length > 0 && products.data === null) {
       cart.items.map((product) => {
         fetch(
-          `${url}/api/checkout/cart/add/${product.product.id}?product_id=${
-            product.product.id
-          }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${
-            token ? `&token=${token}` : ""
+          `${url}/api/checkout/cart/add/${product.product.id}?product_id=${product.product.id
+          }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${token ? `&token=${token}` : ""
           }`,
           { method: "POST" }
         )
           .then((responce) => responce.json())
-          .then((res) => {})
+          .then((res) => { })
           .catch((err) => console.error(err));
       });
     }
@@ -180,9 +176,9 @@ export default function AccountLogin() {
       <div className="container p-0 login-container">
         <div className="row ">
           <form className="card-body card p-5  col-md-6 d-flex mt-4 mt-md-0 sign-up-fms">
-            <h2 className="card-title">
+            <h1 className="card-title">
               <FormattedMessage id="login" defaultMessage="Sign In" />
-            </h2>
+            </h1>
 
             <div className="signUp-position-relative ">
               <TextField

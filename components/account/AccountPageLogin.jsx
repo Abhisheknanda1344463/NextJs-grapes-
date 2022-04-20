@@ -5,51 +5,51 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 
 // application
-import PageHeader               from '../shared/PageHeader'
-import { FormattedMessage }     from 'react-intl'
+import PageHeader from '../shared/PageHeader'
+import { FormattedMessage } from 'react-intl'
 import { url, apiUrlWithStore } from '../../helper'
-import { useForm }              from 'react-hook-form'
-import TextField                from '@mui/material/TextField'
+import { useForm } from 'react-hook-form'
+import TextField from '@mui/material/TextField'
 // data stubs
-import theme                    from '../../data/theme'
-import { useRouter }            from 'next/router'
-import { toast }                from 'react-toastify'
+import theme from '../../data/theme'
+import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
 // import AccountLogin from "./AccountLogin";
-import { CheckToastSvg, FailSvg }        from 'svg'
+import { CheckToastSvg, FailSvg } from 'svg'
 
 
-export default function AccountPageLogin () {
+export default function AccountPageLogin() {
   const [input, Setinput] = useState({})
   const history = useRouter()
 
   const {
-          register,
-          handleSubmit,
-          watch,
-          formState: { errors },
-        } = useForm({})
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({})
 
   const breadcrumb = [
     {
-      title: <FormattedMessage id="home" defaultMessage="Home"/>,
-      url  : '/',
+      title: <FormattedMessage id="home" defaultMessage="Home" />,
+      url: '/',
     },
     {
       title: (
-        <FormattedMessage id="topbar.myAccount" defaultMessage="My account"/>
+        <FormattedMessage id="topbar.myAccount" defaultMessage="My account" />
       ),
-      url  : '',
+      url: '',
     },
   ]
 
   const registerHandler = (event) => {
     // event.preventDefault();
     let options = {
-      method : 'POST',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body   : JSON.stringify({ ...event }),
+      body: JSON.stringify({ ...event }),
     }
 
     fetch(apiUrlWithStore('/api/customer/register'), options)
@@ -59,7 +59,7 @@ export default function AccountPageLogin () {
           history.push('/')
           toast(
             <span className="d-flex chek-fms">
-              <CheckToastSvg/>
+              <CheckToastSvg />
               <FormattedMessage
                 id="accountcreatedsuccessfully"
                 defaultMessage="Your account has been created successfully."
@@ -73,7 +73,7 @@ export default function AccountPageLogin () {
           history.push('/')
           toast(
             <span className="d-flex chek-fms">
-              <CheckToastSvg/>
+              <CheckToastSvg />
               <FormattedMessage
                 id="verificationMail"
                 defaultMessage="Verification mail sent."
@@ -126,7 +126,7 @@ export default function AccountPageLogin () {
       </Helmet>
 
       <FormattedMessage id="topbar.myAccount" defaultMessage="My account">
-        {(account) => <PageHeader header={account} breadcrumb={breadcrumb}/>}
+        {(account) => <PageHeader header={account} breadcrumb={breadcrumb} />}
       </FormattedMessage>
 
       <div className="block">
@@ -135,9 +135,9 @@ export default function AccountPageLogin () {
             <div className=" col-md-6 d-flex mt-4 mt-md-0 sign-up-fms">
               <div className="card flex-grow-1 mb-0">
                 <div className="card-body p-5">
-                  <h2 className="card-title">
-                    <FormattedMessage id="sign.up" defaultMessage="Sign Up"/>
-                  </h2>
+                  <h1 className="card-title">
+                    <FormattedMessage id="sign.up" defaultMessage="Sign Up" />
+                  </h1>
                   <form onSubmit={handleSubmit(registerHandler)}>
                     <div className="signUp-position-relative ">
                       <TextField
@@ -154,7 +154,7 @@ export default function AccountPageLogin () {
                         name="email"
                         {...register('email', {
                           required: true,
-                          pattern :
+                          pattern:
                             /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                         })}
                       />
@@ -195,7 +195,7 @@ export default function AccountPageLogin () {
 
                       <div className="alert alert-danger p-0 m-0">
                         {errors?.password?.type == 'required' &&
-                        'The Password is required'}
+                          'The Password is required'}
                       </div>
                     </div>
                     <div className="signUp-position-relative">
@@ -226,7 +226,7 @@ export default function AccountPageLogin () {
                         {errors?.password_confirmation?.type == 'validate' ? (
                           errors?.password_confirmation?.message
                         ) : errors?.password_confirmation?.type ==
-                        'required' ? (
+                          'required' ? (
                           <FormattedMessage
                             id="passwordEmail"
                             defaultMessage="The Password is required"

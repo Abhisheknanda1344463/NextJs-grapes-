@@ -37,7 +37,7 @@ function SiteCustomPage(props) {
   useEffect(() => {
     if (content) {
       let text = document.getElementsByTagName('table')
-      text[0] ? setIsTable(true) : setIsTable(false)
+      text && text[0] ? setIsTable(true) : setIsTable(false)
     }
   }, [])
 
@@ -48,8 +48,8 @@ function SiteCustomPage(props) {
         <meta name="description" content="Custom description" />
         <link rel="canonical" href={`Custom page`} />
       </Helmet>
-      <div style={{ overflowX: isTable ? "scroll" : '' }}>
-        <Content text={content} {...props} />
+      <div>
+        <Content text={content} {...props} isTable={isTable} />
       </div>
     </React.Fragment >
   );

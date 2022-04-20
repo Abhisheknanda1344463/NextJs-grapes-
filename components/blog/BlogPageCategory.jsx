@@ -153,9 +153,9 @@ const BlogPageCategory = (props) => {
         <div className="row">
           {/* {sidebarStart} */}
           <div className="col-12 col-md-12">
-            <h2 className="blog-page-title">
+            <h1 className="blog-page-title">
               <FormattedMessage id="blog" defaultMessage="Blog" />
-            </h2>
+            </h1>
             {postsList.length ? (
               <div className="block">
                 <div className="posts-view">

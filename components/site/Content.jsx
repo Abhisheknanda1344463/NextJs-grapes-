@@ -4,11 +4,13 @@ import { Helmet } from "react-helmet-async";
 
 import theme from "../../data/theme";
 
-function Content({ text }) {
+function Content({ text, isTable }) {
   // if (!text) {
   //   return "";
   // }
   const data = text ? text?.data[0] : "";
+
+
 
   return (
     <div className="block about-us">
@@ -26,7 +28,7 @@ function Content({ text }) {
             dangerouslySetInnerHTML={{ __html: data?.page_title }}
           />
           <div className="document">
-            <div dangerouslySetInnerHTML={{ __html: data?.html_content }} />
+            <div dangerouslySetInnerHTML={{ __html: data?.html_content }} style={{ overflowX: isTable ? "auto" : '' }} />
           </div>
         </div>
       </div>

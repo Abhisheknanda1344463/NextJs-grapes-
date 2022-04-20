@@ -76,7 +76,7 @@ class FooterAccount extends React.Component {
       <>
         {links}
         {this.props.hasTracking === "1" ? trackingNumber : ""}
-        {this.props.hasContact  === "1" ? contactWith: ""}
+        {this.props.hasContact === "1" ? contactWith : ""}
       </>
     );
   }
