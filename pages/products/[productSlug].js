@@ -64,16 +64,7 @@ export async function getServerSideProps ({ locale, locales, req, res, query }) 
     currency: currency,
     limit   : 8,
   })
-  // const upSellProducts = await shopApi.getUpSellProducts(product.product_id, {
-  //   lang    : selectedLocale,
-  //   currency: currency,
-  //   limit   : 8,
-  // })
-  const crossSellProducts = await shopApi.getCrossSellProducts(product.product_id, {
-    lang    : selectedLocale,
-    currency: currency,
-    limit   : 8,
-  })
+
 
   let configurabelConfigProduct = null
 
