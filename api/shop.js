@@ -274,7 +274,9 @@ const shopApi = {
       delete options.savings
     }
 
-    const categoryId = catId || catID
+    console.log(catID, catId, "catIdcatId");
+    const categoryId = catId || catID;
+    console.log(dbName ? `https://` + dbName : url, "getProductsList");
 
     if (
       qs.stringify(options) == '' &&
@@ -284,10 +286,11 @@ const shopApi = {
       return fetch(
         `${
           dbName ? `https://` + dbName : url
-        }//db/products?limit=20&currency=${currency}&limit=20&locale=${
+            }/db/products?limit=20&currency=${currency}&limit=20&locale=${
           options.locale
         }${categoryId ? `&category_id=${categoryId}` : ""}` : ''
         }`,
+
       ).then((responce) => responce.json())
     } else {
       let string = `limit=20`
