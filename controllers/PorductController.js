@@ -477,210 +477,214 @@ function Get_New_And_Futured_Products({locale, limit, currency, ...rest}) {
 //       .catch((err) => reject(err));
 //   })
 // }
-
 function Get_Product_list(options) {
   //limit, category_id, currency,
-  const {locale: defaultLocale, limit, page, ...rest} = options
+  const { locale: defaultLocale, limit: limitproduct, page, ...rest } = options;
+  const limit = limitproduct || 20;
   console.log(
     defaultLocale,
-    'Get_Product_listGet_Product_listGet_Product_list',
-  )
-  var locale
+    "Get_Product_listGet_Product_listGet_Product_list"
+  );
+  var locale;
   if (defaultLocale.length > 0) {
-    locale = defaultLocale[0]
+    locale = defaultLocale[0];
   } else {
-    locale = defaultLocale
+    locale = defaultLocale;
   }
-  let searchKeys = {}
-  console.log(options, 'options')
+  let searchKeys = {};
+  console.log(options, "options");
   for (let key in options) {
     if (
-      key != 'limit' &&
-      key != 'category_id' &&
-      key != 'currency' &&
-      key != 'locale' &&
-      key != 'page'
+      key != "limit" &&
+      key != "category_id" &&
+      key != "currency" &&
+      key != "locale" &&
+      key != "page"
     ) {
       switch (key) {
-        case 'savings':
-          break
-        case 'price':
+        case "savings":
+          break;
+        case "price":
           // const [from, to] = options["price"].split(",");
           // searchKeys = {
           //   ...searchKeys,
           //   prices: { $gte: from + ".0000", $lte: to + ".0000" },
           // };
-          break
+          break;
         default:
           searchKeys = {
             ...searchKeys,
-            ...defaultFilter({key, options, searchKeys}),
-          }
+            ...defaultFilter({ key, options, searchKeys }),
+          };
       }
     }
   }
 
   return new Promise((resolve, reject) => {
-    ProductsCategories.find({category_id: options.category_id}).then(
+    ProductsCategories.find({ category_id: options.category_id }).then(
       (res) => {
-        const productIdsByCategory = res.map((e) => e.product_id)
-        console.log(searchKeys, 'searchKeys')
-        const paramsArray = Object.keys(JSON.parse(JSON.stringify(searchKeys)))
-        console.log(paramsArray, 'searchKeys')
+        const productIdsByCategory = res.map((e) => e.product_id);
+        console.log(searchKeys, "searchKeys");
+        const paramsArray = Object.keys(JSON.parse(JSON.stringify(searchKeys)));
+        console.log(paramsArray, "searchKeys");
         const buildQueryParams = paramsArray.reduce((acc, next) => {
           if (
-            typeof searchKeys[next] == 'object' &&
+            typeof searchKeys[next] == "object" &&
             searchKeys[next]?.length > 0
           ) {
-            return {...acc, [next]: {$in: searchKeys[next]}}
+            return { ...acc, [next]: { $in: searchKeys[next] } };
           } else {
-            return {...acc, [next]: searchKeys[next]}
+            return { ...acc, [next]: searchKeys[next] };
           }
-        }, {})
+        }, {});
         console.log(
           buildQueryParams,
-          'buildQueryParamsbuildQueryParamsbuildQueryParams',
-        )
+          "buildQueryParamsbuildQueryParamsbuildQueryParams"
+        );
 
-        if (Object.keys(buildQueryParams)[0] !== 'text_value') {
-          var productIds
-          console.log(buildQueryParams, 'buildQueryParams')
-          ProductAttributeValues.find({...buildQueryParams}).then((res) => {
-            console.log(productIdsByCategory, 'productIdsByCategory')
+        if (Object.keys(buildQueryParams)[0] !== "text_value") {
+          var productIds;
+          console.log(buildQueryParams, "buildQueryParams");
+          ProductAttributeValues.find({ ...buildQueryParams }).then((res) => {
+            console.log(productIdsByCategory, "productIdsByCategory");
             productIds = productIdsByCategory.filter((id) => {
-              const find = res.find((e) => e.product_id == id)
+              const find = res.find((e) => e.product_id == id);
               if (find) {
-                return id
+                return id;
               }
-            })
-            console.log(productIds, 'productIds')
+            });
+            if (productIds.length == 0) {
+              return build();
+            }
             const productsPromise = new Promise((resolve, reject) => {
-              Products.find({id: {$in: productIds}}).then((products) =>
-                resolve({products}),
-              )
-            })
+              Products.find({ id: { $in: productIds } }).then((products) =>
+                resolve({ products })
+              );
+            });
 
             const minMaxPricePromise = new Promise((resolve, reject) => {
               /**
                *  @info: Min max price Only category Id , wihtout all filtered attributes, need to overwrite
                *
                * */
-              let object
-              let date_now = null
-              console.log(productIds, 'aaaaaaaaaaaa')
+              let object;
+              let date_now = null;
+              ////    console.log(productIds, "aaaaaaaaaaaa");
               if (productIds.length > 0) {
                 object = {
                   locale: locale,
-                  product_id: {$in: productIds},
-                }
+                  product_id: { $in: productIds },
+                };
               } else {
                 object = {
                   locale: locale,
-                }
+                };
               }
-              console.log(productIds.length, object, 'aaaaaaaaaaaa')
+              ////   console.log(productIds.length, object, "aaaaaaaaaaaa");
               // console.log(options["price"], 'options["price"]options["price"]');
-              if (options['price']) {
-                const [from, to] = options['price'].split(',')
+              if (options["price"]) {
+                const [from, to] = options["price"].split(",");
                 // console.log(from, to);
                 object = {
                   ...object,
                   price: {
-                    $gte: from + '.0000',
-                    $lte: parseFloat(to) + 10 + '.0000',
+                    $gte: from + ".0000",
+                    $lte: parseFloat(to) + 10 + ".0000",
                   },
-                }
+                };
               }
-              console.log(object)
-              if (options['savings']) {
+              ///  console.log(object);
+              if (options["savings"]) {
                 const d = new Date(),
-                  month = '' + (d.getMonth() + 1),
-                  day = '' + d.getDate(),
-                  year = d.getFullYear()
-                if (month.length < 2) month = '0' + month
-                if (day.length < 2) day = '0' + day
-                date_now = new Date(`${year}-${month}-${day}`).getTime()
-                date_now = '' + date_now
-                date_now = parseInt(date_now.slice(0, -3))
+                  month = "" + (d.getMonth() + 1),
+                  day = "" + d.getDate(),
+                  year = d.getFullYear();
+                if (month.length < 2) month = "0" + month;
+                if (day.length < 2) day = "0" + day;
+                date_now = new Date(`${year}-${month}-${day}`).getTime();
+                date_now = "" + date_now;
+                date_now = parseInt(date_now.slice(0, -3));
                 /// console.log(date_now, "date now in product");
 
                 object = {
                   ...object,
-                  special_price: {$ne: null},
-                }
+                  special_price: { $ne: null },
+                };
 
-                ProductFlat.where('special_price_from')
+                ProductFlat.where("special_price_from")
                   .lte(date_now)
-                  .where('special_price_to')
+                  .where("special_price_to")
                   .gte(date_now)
-                  .countDocuments({...object})
+                  .countDocuments({ ...object })
                   .exec((count_error, count) => {
-                    const pageCount = Math.ceil(count / limit)
-                    const skip = (+page - 1) * limit
-                    console.log(count, 'count')
+                    const pageCount = Math.ceil(count / limit);
+                    const skip = (+page - 1) * limit;
+                    console.log(count, skip, "count");
                     ProductFlat.find({
                       ...object,
                     })
                       .skip(skip)
                       .limit(+limit)
-                      .where('special_price_from')
+                      .where("special_price_from")
                       .lte(date_now)
-                      .where('special_price_to')
+                      .where("special_price_to")
                       .gte(date_now)
                       .then((flatProducts) => {
                         const prices = flatProducts
                           .map((item) => parseInt(item.price))
-                          .filter((e) => e)
+                          .filter((e) => e);
 
                         resolve({
                           total: 20,
                           flatProducts,
+                          page: page || 1,
                           prices: [0, prices[prices.length - 1] || 1000],
-                          price: options['price'],
-                        })
-                      })
-                  })
+                          price: options["price"],
+                        });
+                      });
+                  });
               } else {
-                ProductFlat.countDocuments({...object}).exec(
+                ProductFlat.countDocuments({ ...object }).exec(
                   (count_error, count) => {
-                    const pageCount = Math.ceil(count / limit)
-                    const skip = (+page - 1) * limit
-
-                    ProductFlat.find({...object})
+                    const pageCount = Math.ceil(count / limit);
+                    const skip = (+page - 1) * limit;
+                    console.log(skip, +limit, page, "asdsads");
+                    ProductFlat.find({ ...object })
                       .skip(skip)
                       .limit(+limit)
                       .then((flatProducts) => {
                         const prices = flatProducts
                           .map((item) => parseInt(item.price))
-                          .filter((e) => e)
+                          .filter((e) => e);
 
                         resolve({
                           total: pageCount,
                           flatProducts,
+                          page: page || 1,
                           prices: [0, prices[prices.length - 1] || 1000],
-                          price: options['price'],
-                        })
-                      })
-                  },
-                )
+                          price: options["price"],
+                        });
+                      });
+                  }
+                );
               }
-            })
+            });
             //  console.log(productsPromise, "optionsoptions");
             return Promise.all([productsPromise, minMaxPricePromise]).then(
               (response) => {
                 const productsAndMinMaxPrice = arrayConvertToObject(
-                  parseClone(response),
-                )
+                  parseClone(response)
+                );
 
-                if (options['savings'] || options['price']) {
+                if (options["savings"] || options["price"]) {
                   buildProductsListCollection({
                     locale,
                     resolve,
                     flat: true,
                     price: productsAndMinMaxPrice.price,
-                    savings: options['savings'],
+                    savings: options["savings"],
                     ...productsAndMinMaxPrice,
-                  })
+                  });
                 } else {
                   buildProductsListCollection({
                     page,
@@ -689,23 +693,24 @@ function Get_Product_list(options) {
                     // price: options["price"],
                     flat: false,
                     ...productsAndMinMaxPrice,
-                  })
+                  });
                 }
-              },
-            )
-          })
+              }
+            );
+          });
         } else {
           ProductFlat.find({
-            name: {$regex: Object.values(buildQueryParams)[0], $options: 'i'},
+            name: { $regex: Object.values(buildQueryParams)[0], $options: "i" },
             // name: { $regex: ".*" + Object.values(buildQueryParams)[0] + ".*" },
           }).then((flatProducts) => {
-            build({flatProducts, locale, resolve, type: 'data', ...rest})
-          })
+            build({ flatProducts, locale, resolve, type: "data", ...rest });
+          });
         }
-      },
-    )
-  })
+      }
+    );
+  });
 }
+
 
 
 function Get_Products_By_Slug(params, options) {
