@@ -88,7 +88,7 @@ export async function getServerSideProps ({ locale, locales, req, res, query }) 
     ...generalDispatches.serverSide,
   }
 
- 
+
   return {
     props: {
       locale               : selectedLocale,
