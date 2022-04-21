@@ -63,18 +63,6 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     limit: 8,
   })
 
-  const upSellProducts = await shopApi.getUpSellProducts(null, product.product_id, {
-    lang: selectedLocale,
-    currency: currency,
-    limit: 8,
-  })
-
-  const crossSellProducts = await shopApi.getCrossSellProducts(null, product.product_id, {
-    lang: selectedLocale,
-    currency: currency,
-    limit: 8,
-  })
-  
   let configurabelConfigProduct = null
 
   if (product.type == 'configurable') {
@@ -96,8 +84,6 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
       productSlug: productSlug,
       product: { data: product },
       relatedPproducts: relatedPproducts,
-      upSellProducts: upSellProducts,
-      crossSellProducts: crossSellProducts,
       configurableVariantes: configurabelConfigProduct,
     },
   }

@@ -17,7 +17,6 @@ const CrosselProducts = require(`../models/CrosselProducts`)
 const ProductInventories = require('../models/ProductInventories.js')
 const ProductsCategories = require('../models/ProductsCategories.js')
 const ProductSuperAttributes = require('../models/ProductSuperAttributes.js')
-// const CoreConfigs = require('../models/Products.js')
 
 const ProductAttributeValues = require('../models/ProductAttributeValues.js')
 const Attributes = require('../models/Attributes.js')
@@ -105,174 +104,6 @@ function build({flatProducts, locale, resolve, ...rest}) {
           .catch((err) => reject4(err))
       })
 
-      // const p5 = new Promise((resolve, reject5) => {
-      //   UpSellProducts.find({ parent_id: productId })
-      //     .then(res => {
-      //       if (res.length > 0) {
-      //         const productIds = res.map((e) => e.child_id)
-      //         // console.log(productIds, "PROMOOOOOOOOOOOOOOOOOOOOO")
-      //         Products.find({ id: { $in: productIds } })
-      //           .limit(8)
-      //           .then((products) => {
-      //             const promiseArray = products.map((item) => {
-      //
-      //               return new Promise((resolve, reject) => {
-      //                 const product = parseClone(item)
-      //
-      //                 const p1 = new Promise((resolve1, reject1) => {
-      //                   ProductImages.find({ product_id: product.id })
-      //                     .then((res) => {
-      //                       resolve1({ ProductImages: res })
-      //                     })
-      //                     .catch((err) => reject(err))
-      //                 })
-      //
-      //                 const p2 = new Promise((resolve2, reject2) => {
-      //                   ProductFlat.find({ locale, product_id: product.id })
-      //                     .then((res) => {
-      //                       resolve2({ productFlat: res })
-      //                     })
-      //                     .catch((err) => reject(err))
-      //                 })
-      //
-      //                 const p3 = new Promise((resolve3, reject3) => {
-      //                   ProductInventories.find({ product_id: product.id })
-      //                     .then((res) => {
-      //                       resolve3({ ProductInventories: res })
-      //                     })
-      //                     .catch((err) => reject(err))
-      //                 })
-      //
-      //                 return Promise.all([p1, p2, p3]).then((response) => {
-      //                   const collection = arrayConvertToObject(response)
-      //                   const imagesData = parseClone(collection.ProductImages)
-      //                   const flatData = parseClone(collection.productFlat[0] || [])
-      //                   const inventoriesData = parseClone(
-      //                     collection.ProductInventories[0] || [],
-      //                   )
-      //                   if (imagesData.length == 0) {
-      //                     const obj = {
-      //                       ...product,
-      //                       ...flatData,
-      //                       ...inventoriesData,
-      //                     }
-      //
-      //                     resolve(obj)
-      //                   } else {
-      //                     const { path } = imagesData[0]
-      //                     const base_imag = makeImageClone(path)
-      //                     const images = imagesData.map((e) => makeImageClone(e.path))
-      //
-      //                     const obj = {
-      //                       ...product,
-      //                       ...flatData,
-      //                       ...inventoriesData,
-      //                       base_imag,
-      //                       images,
-      //                     }
-      //
-      //                     resolve(obj)
-      //                   }
-      //                 })
-      //               })
-      //             })
-      //             return Promise.all(promiseArray).then((response) => {
-      //               // resolve(response)
-      //               // console.log(response, "response  in upsel_crossSel product________")
-      //               resolve({ UpSellProducts: response })
-      //             })
-      //           })
-      //       } else {
-      //         resolve({ UpSellProducts: res })
-      //       }
-      //       // resolve({ UpSellProducts: res })
-      //     })
-      //     .catch(err => reject5(err))
-      // })
-      //
-      // const p6 = new Promise((resolve, reject5) => {
-      //   CrosselProducts.find({ parent_id: productId })
-      //     .then(res => {
-      //       if (res.length > 0) {
-      //         const productIds = res.map((e) => e.child_id)
-      //         Products.find({ id: { $in: productIds } })
-      //           .limit(8)
-      //           .then((products) => {
-      //             const promiseArray = products.map((item) => {
-      //
-      //               return new Promise((resolve, reject) => {
-      //                 const product = parseClone(item)
-      //
-      //                 const p1 = new Promise((resolve1, reject1) => {
-      //                   ProductImages.find({ product_id: product.id })
-      //                     .then((res) => {
-      //                       resolve1({ ProductImages: res })
-      //                     })
-      //                     .catch((err) => reject(err))
-      //                 })
-      //
-      //                 const p2 = new Promise((resolve2, reject2) => {
-      //                   ProductFlat.find({ locale, product_id: product.id })
-      //                     .then((res) => {
-      //                       resolve2({ productFlat: res })
-      //                     })
-      //                     .catch((err) => reject(err))
-      //                 })
-      //
-      //                 const p3 = new Promise((resolve3, reject3) => {
-      //                   ProductInventories.find({ product_id: product.id })
-      //                     .then((res) => {
-      //                       resolve3({ ProductInventories: res })
-      //                     })
-      //                     .catch((err) => reject(err))
-      //                 })
-      //
-      //                 return Promise.all([p1, p2, p3]).then((response) => {
-      //                   const collection = arrayConvertToObject(response)
-      //                   const imagesData = parseClone(collection.ProductImages)
-      //                   const flatData = parseClone(collection.productFlat[0] || [])
-      //                   const inventoriesData = parseClone(
-      //                     collection.ProductInventories[0] || [],
-      //                   )
-      //                   if (imagesData.length == 0) {
-      //                     const obj = {
-      //                       ...product,
-      //                       ...flatData,
-      //                       ...inventoriesData,
-      //                     }
-      //
-      //                     resolve(obj)
-      //                   } else {
-      //                     const { path } = imagesData[0]
-      //                     const base_imag = makeImageClone(path)
-      //                     const images = imagesData.map((e) => makeImageClone(e.path))
-      //
-      //                     const obj = {
-      //                       ...product,
-      //                       ...flatData,
-      //                       ...inventoriesData,
-      //                       base_imag,
-      //                       images,
-      //                     }
-      //
-      //                     resolve(obj)
-      //                   }
-      //                 })
-      //               })
-      //             })
-      //             return Promise.all(promiseArray).then((response) => {
-      //               // resolve(response)
-      //               resolve({ CrosselProducts: response })
-      //             })
-      //           })
-      //       } else {
-      //         resolve({ CrosselProducts: res })
-      //       }
-      //       // resolve({ UpSellProducts: res })
-      //     })
-      //     .catch(err => reject5(err))
-      // })
-
       return Promise.all([p1, p2, p3, p4])
         .then((response) => {
           const collection = arrayConvertToObject(response)
@@ -280,17 +111,12 @@ function build({flatProducts, locale, resolve, ...rest}) {
           const flatData = parseClone(collection.productFlat[0] || [])
           const inventoriesData = parseClone(collection.ProductInventories[0] || [])
           const allProducts = parseClone(collection.Products[0] || [])
-          // const upProds = parseClone(collection.UpSellProducts[0] || [])
-          // const crossProds = parseClone(collection.CrosselProducts[0] || [])
-          // console.log(upProds, "upProds in combine process");
           if (imagesData[0] && imagesData[0].path) {
             const {path} = imagesData[0]
             const base_imag = makeImageClone(path)
             const images = imagesData.map((e) => makeImageClone(e.path))
 
             const obj = {
-              // ...upProds,
-              // ...crossProds,
               ...allProducts,
               ...product,
               ...flatData,
@@ -309,7 +135,6 @@ function build({flatProducts, locale, resolve, ...rest}) {
   return Promise.all(promiseArray).then((response) => {
     let everyThing = null
     if (rest.prices && rest.prices.length > 0) {
-      // console.log(response, "rest.pricesrest.pricesrest.prices");
       var setInitialMinPrice = 0
       var setInitialMaxPrice = 0
 

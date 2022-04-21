@@ -62,20 +62,21 @@ function ProductCard(props) {
         fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
           .then(res => res.json())
           .then(data => {
+            if (data.length === 0) {
+              setPopup(false)
+              fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+                .then(res2 => res2.json())
+                .then(data2 => {
+
+                  if (data2.length === 0) {
+                    setPopup(false)
+                    setPopupName("")
+                  }
+                  setPopup(true)
+                  setUpCrossProd(data2)
+                })
+            }
             setPopup(true)
-            // if (data.length === 0) {
-            //   setPopup(false)
-            //   fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
-            //     .then(res2 => res2.json())
-            //     .then(data2 => {
-            //       setPopup(true)
-            //       if (data2.length === 0) {
-            //         setPopup(false)
-            //         setPopupName("")
-            //       }
-            //       setUpCrossProd(data2)
-            //     })
-            // }
             // setUpCrossProd({upsell: data})
             setUpCrossProd(data)
           })
@@ -163,18 +164,18 @@ function ProductCard(props) {
                     </Link>
                   ) : (
                     <AsyncAction
-                      action={() =>
-                        cartAddItem(
-                          product,
-                          [],
-                          1,
-                          cartToken,
-                          customer,
-                          selectedData,
-                          null,
-                          'homePage',
-                        )
-                      }
+                      // action={() =>
+                      //   cartAddItem(
+                      //     product,
+                      //     [],
+                      //     1,
+                      //     cartToken,
+                      //     customer,
+                      //     selectedData,
+                      //     null,
+                      //     'homePage',
+                      //   )
+                      // }
                       render={({run, loading}) => (
                         <button
                           type="button"
@@ -183,8 +184,7 @@ function ProductCard(props) {
                             run()
                             setTempData([product])
                             getUpCrosselProd(product.product_id || product.product.id, 'upsel')
-                            setPopupName('upsell')
-                            // setPopup(true)
+                            setPopupName('upsell')  
                           }}
                           className={classNames(
                             'btn btn-primary product-card__addtocart hide-for-tablet',

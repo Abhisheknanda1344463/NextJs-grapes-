@@ -1,61 +1,65 @@
 // react
-import React, { PureComponent, useState, useEffect } from 'react'
-import classNames                                    from 'classnames'
-import PropTypes                                     from 'prop-types'
-import { connect, useSelector, useDispatch }         from 'react-redux'
-import { toast }                                     from 'react-toastify'
-import { FormattedMessage }                          from 'react-intl'
-import { Helmet }                                    from 'react-helmet-async'
-import { wishlistRemoveItem }                        from '../../store/wishlist'
-import { url, apiImageUrl }                          from '../../helper'
-import Currency                                      from './Currency'
-import AsyncAction                                   from './AsyncAction'
-import InputNumber                                   from './InputNumber'
-import { AddImages }                                 from '../../store/image'
-import ProductGallery                                from './ProductGallery'
-import { cartAddItem }                               from '../../store/cart'
-import { AddCartToken }                              from '../../store/token'
-import { compareAddItem }                            from '../../store/compare'
-import { wishlistAddItem }                           from '../../store/wishlist'
-import { setPopup, setPopupName,setUpCrossProd }                    from '../../store/general'
-
+import React, {PureComponent, useState, useEffect} from 'react'
+import classNames from 'classnames'
+import PropTypes from 'prop-types'
+import {connect, useSelector, useDispatch} from 'react-redux'
+import {toast} from 'react-toastify'
+import {FormattedMessage} from 'react-intl'
+import {Helmet} from 'react-helmet-async'
+import {wishlistRemoveItem} from '../../store/wishlist'
+import {url, apiImageUrl, megaUrl} from '../../helper'
+import Currency from './Currency'
+import AsyncAction from './AsyncAction'
+import InputNumber from './InputNumber'
+import {AddImages} from '../../store/image'
+import ProductGallery from './ProductGallery'
+import {cartAddItem} from '../../store/cart'
+import {AddCartToken} from '../../store/token'
+import {compareAddItem} from '../../store/compare'
+import {wishlistAddItem} from '../../store/wishlist'
+import {setPopup, setPopupName, setUpCrossProd} from '../../store/general'
 import {
   CheckToastSvg,
   FailSvg,
   InnerWishlist,
   Wishlist16Svg,
-}                          from '../../svg'
+} from '../../svg'
+import moment from 'moment'
+import ConfigurableFilters from '../configurableFilters'
+import BundleProducts from 'components/shop/productBundleFikter/BundleProducts'
+import {useRouter} from 'next/router'
+
+
 class Product extends PureComponent {
   checkAddProd = false
   cartProduct = null
 
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       // popUpName: "",
       quantity: 1,
       // configurImage: null,
-      bundleProducts   : {},
-      selectedConfigs  : {
-        RAM   : null,
+      bundleProducts: {},
+      selectedConfigs: {
+        RAM: null,
         Memory: null,
-        color : null,
+        color: null,
       },
-      locale           : this.props.locale,
-      size             : null,
-      imagesData       : null,
-      simpleProduct    : null,
+      locale: this.props.locale,
+      size: null,
+      imagesData: null,
+      simpleProduct: null,
       configurablesData: null,
-      colorCheck       : false,
-      token            : this.props.token,
-      locale           : this.props.locale,
-      product          : this.props.product,
-      customer         : this.props.customer,
-      wishlist         : this.props.wishlist,
-      IsOpen           : 'product-inner-long-description-click',
+      colorCheck: false,
+      token: this.props.token,
+      locale: this.props.locale,
+      product: this.props.product,
+      customer: this.props.customer,
+      wishlist: this.props.wishlist,
+      IsOpen: 'product-inner-long-description-click',
     }
   }
-
 
   renderProduct = () => {
     if (this.props.product.data.type === 'configurable') {
@@ -69,9 +73,9 @@ class Product extends PureComponent {
     if (this.props.product.data.type !== 'configurable') {
       this.checkAddProd = true
       this.setState({
-        product          : this.props.product,
-        simpleProduct    : this.props.product.data,
-        imagesData       : this.props.product.data.images,
+        product: this.props.product,
+        simpleProduct: this.props.product.data,
+        imagesData: this.props.product.data.images,
         configurablesData: null,
       })
       this.props.AddImages(this.props.product.data.images)
@@ -89,23 +93,13 @@ class Product extends PureComponent {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     // hereeeeeeeeeeeeeeeeeeee
     // here need variants in this reference "this.props.product.data.variants"
     this.renderProduct()
-    // console.log(this.state.locale,"this.state.ocale")
   }
 
-
-
-  componentDidUpdate (prProps, prState) {
-    // console.log(
-    //   prProps.locale,
-    //   prState.locale,
-    //   this.props.locale,
-    //   this.state.locale,
-    //   "localelocale"
-    // );
+  componentDidUpdate(prProps, prState) {
     if (
       prProps.productSlug !== this.props.productSlug ||
       prProps.locale !== this.props.product.data.locale
@@ -114,19 +108,57 @@ class Product extends PureComponent {
     }
   }
 
-  createMarkup (item) {
-    return { __html: item }
+
+  getUpCrosselProd = (prodID, type) => {
+    switch (type) {
+      case 'upsel':
+        fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+          .then(res => res.json())
+          .then(data => {
+
+            if (data.length === 0) {
+              this.props.setPopup(false)
+              fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+                .then(res2 => res2.json())
+                .then(data2 => {
+
+                  if (data2.length === 0) {
+                    this.props.setPopup(false)
+                    this.props.setPopupName("")
+                  }
+                  this.props.setPopup(true)
+                  this.props.setUpCrossProd(data2)
+                })
+            }
+            this.props.setPopup(true)
+            this.props.setUpCrossProd(data)
+          })
+        break
+      case 'crossel':
+        fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+          .then(res => res.json())
+          .then(data => this.props.setUpCrossProd(data)
+          )
+        break
+      default:
+        this.props.setPopup(false)
+        break;
+    }
+  }
+
+  createMarkup(item) {
+    return {__html: item}
   }
 
   handleChangeQuantity = (quantity) => {
-    this.setState({ quantity })
+    this.setState({quantity})
   }
 
-  setInitialAndUpdatedData (data) {
+  setInitialAndUpdatedData(data) {
     // this.props.configurableVariantes.data
     if (this.props.product.data.type === 'configurable') {
       if (data && Object.keys(data.index).length > 0) {
-        const { index, attributes } = data
+        const {index, attributes} = data
         let collectionDefaultValues = {}
         const [productId, defaultAttributesData] = Object.entries(index)[0]
         const oldVariants = JSON.parse(
@@ -144,17 +176,17 @@ class Product extends PureComponent {
           product: product,
         })
         for (let attrId in defaultAttributesData) {
-          const { options: defaultOptions, code } = attributes.find(
+          const {options: defaultOptions, code} = attributes.find(
             (attr) => attr.id == attrId,
           )
           const defaultOption = defaultOptions.find((option) => {
             return option.id == defaultAttributesData[attrId]
           })
-          collectionDefaultValues[code] = { ...defaultOption, code: code }
+          collectionDefaultValues[code] = {...defaultOption, code: code}
         }
         this.setState({
           configurablesData: data,
-          selectedConfigs  : { ...collectionDefaultValues },
+          selectedConfigs: {...collectionDefaultValues},
         })
       }
     }
@@ -166,7 +198,7 @@ class Product extends PureComponent {
         ...this.state,
         bundleProducts: {
           ...this.state.bundleProducts,
-          [type]: [{ ...elem, quantity: 1 }],
+          [type]: [{...elem, quantity: 1}],
         },
       })
     } else {
@@ -175,8 +207,8 @@ class Product extends PureComponent {
         bundleProducts: {
           ...this.state.bundleProducts,
           [type]: this.state.bundleProducts[type]
-            ? [...this.state.bundleProducts[type], { ...elem, quantity: 1 }]
-            : [{ ...elem, quantity: 1 }],
+            ? [...this.state.bundleProducts[type], {...elem, quantity: 1}]
+            : [{...elem, quantity: 1}],
         },
       })
     }
@@ -221,7 +253,7 @@ class Product extends PureComponent {
         const prodId = changedConfig[option].products[i]
 
         for (let key in configsData) {
-          const { products } = configsData[key]
+          const {products} = configsData[key]
           if (products.includes(prodId)) {
             count++
           }
@@ -257,7 +289,7 @@ class Product extends PureComponent {
 
     this.setState({
       product,
-      selectedConfigs: { ...changedConfig, ...configsData },
+      selectedConfigs: {...changedConfig, ...configsData},
     })
   }
 
@@ -284,17 +316,17 @@ class Product extends PureComponent {
     })
   }
 
-  render () {
+  render() {
     const {
-            signed,
-            layout,
-            cartAddItem,
-            wishlistAddItem,
-            wishlist,
-            wishlistRemoveItem,
-            // AddCartToken,
-          } = this.props
-    const { quantity, product } = this.state
+      signed,
+      layout,
+      cartAddItem,
+      wishlistAddItem,
+      wishlist,
+      wishlistRemoveItem,
+      // AddCartToken,
+    } = this.props
+    const {quantity, product} = this.state
     const maxQty = this.props.bOrder ? 50000 : product.data.qty
     // let Addtocartdisabled = this.props.bOrder ? "" : "disabled";
     let Addtocartdisabled = ''
@@ -380,7 +412,7 @@ class Product extends PureComponent {
               <div className="product__wishlist-compare">
                 <AsyncAction
                   action={() => wishlistAddItem(product, this.state.locale)}
-                  render={({ run, loading }) => (
+                  render={({run, loading}) => (
                     <button
                       type="button"
                       data-toggle="tooltip"
@@ -432,7 +464,7 @@ class Product extends PureComponent {
                       />
                       <span
                         className="product-card__symbol"
-                        style={{ marginLeft: '5px' }}
+                        style={{marginLeft: '5px'}}
                       >
                         ֏
                       </span>
@@ -442,7 +474,7 @@ class Product extends PureComponent {
                       <Currency value={Number(product.data.price).toFixed(0)}/>
                       <span
                         className="product-card__symbol"
-                        style={{ marginLeft: '5px' }}
+                        style={{marginLeft: '5px'}}
                       >
                         ֏
                       </span>
@@ -456,7 +488,7 @@ class Product extends PureComponent {
                       />
                       <span
                         className="product-card__symbol"
-                        style={{ marginLeft: '5px' }}
+                        style={{marginLeft: '5px'}}
                       >
                         ֏
                       </span>
@@ -466,7 +498,7 @@ class Product extends PureComponent {
                       <Currency value={Number(product.data.price).toFixed(0)}/>
                       <span
                         className="product-card__symbol"
-                        style={{ marginLeft: '5px' }}
+                        style={{marginLeft: '5px'}}
                       >
                         ֏
                       </span>
@@ -476,7 +508,7 @@ class Product extends PureComponent {
                   <span>
                     <span
                       className="product-card__symbol"
-                      style={{ marginLeft: '5px' }}
+                      style={{marginLeft: '5px'}}
                     >
                       ֏
                     </span>
@@ -513,7 +545,6 @@ class Product extends PureComponent {
                   )}
                 />
               </div>
-              {/*{console.log("this state", this.state)}*/}
               {this.state?.configurablesData?.attributes && (
                 <ConfigurableFilters
                   locale={this.state.locale}
@@ -549,7 +580,7 @@ class Product extends PureComponent {
                           ? `text-danger`
                           : `text-danger`
                     }
-                    style={{ fontSize: '18px' }}
+                    style={{fontSize: '18px'}}
                   >
                     {product.data.qty > 0 ? (
                         <FormattedMessage
@@ -616,39 +647,34 @@ class Product extends PureComponent {
                       />
                     </div>
                     <div className="product__actions-item product__actions-item--addtocart">
-                      {/*<button type="button" onClick={(e) => {*/}
-                      {/*  e.preventDefault()*/}
-                      {/*  this.props.setPopupName('upsell')*/}
-                      {/*  this.props.setPopup(true)*/}
-                      {/*}}>fake button*/}
-                      {/*</button>*/}
                       <AsyncAction
-                        action={() =>
-                          cartAddItem(
-                            product.data,
-                            [],
-                            quantity,
-                            this.state.token,
-                            this.state.customer,
-                            this.state.locale,
-                            product?.data?.type == 'bundle'
-                              ? {
-                                options        : product.data.bundle_options,
-                                selectedOptions: this.state.bundleProducts,
-                              }
-                              : null,
-                          )
-                        }
-                        render={({ run, loading }) => (
+                        // action={() =>
+                        //   cartAddItem(
+                        //     product.data,
+                        //     [],
+                        //     quantity,
+                        //     this.state.token,
+                        //     this.state.customer,
+                        //     this.state.locale,
+                        //     product?.data?.type == 'bundle'
+                        //       ? {
+                        //         options: product.data.bundle_options,
+                        //         selectedOptions: this.state.bundleProducts,
+                        //       }
+                        //       : null,
+                        //   )
+                        // }
+                        render={({run, loading}) => (
                           <button
                             type="button"
                             onClick={() => {
                               run()
                               // e.preventDefault()
-                              // {console.log(product.data, "product data in product js")}
-                              this.props.setUpCrossProd({ crossell: product.data.product.cross_sells, upsel: product.data.product.up_sells })
+                              {
+                                console.log(product.data, "product data in product js")
+                              }
+                              this.getUpCrosselProd(product.data.product_id || product.data.product.id, "upsel")
                               this.props.setPopupName('upsell')
-                              this.props.setPopup(true)
                             }}
                             disabled={Addtocartdisabled}
                             className={classNames(
@@ -673,7 +699,7 @@ class Product extends PureComponent {
                             action={() =>
                               wishlistAddItem(product.data, this.state.locale)
                             }
-                            render={({ run, loading }) => (
+                            render={({run, loading}) => (
                               <button
                                 type="button"
                                 data-toggle="tooltip"
@@ -707,7 +733,7 @@ class Product extends PureComponent {
                             </span>,
                             {
                               hideProgressBar: true,
-                              className      : 'wishlist-toast',
+                              className: 'wishlist-toast',
                             },
                           )
                         }}
@@ -743,13 +769,6 @@ class Product extends PureComponent {
     )
   }
 }
-import moment              from 'moment'
-import ConfigurableFilters from '../configurableFilters'
-import BundleProducts      from 'components/shop/productBundleFikter/BundleProducts'
-
-
-
-import { useRouter }       from 'next/router'
 
 
 Product.propTypes = {
@@ -766,14 +785,14 @@ Product.defaultProps = {
 const mapStateToProps = (state) => ({
   backorders: state.general.coreConfigs.catalog_inventory_stock_options_backorders,
   outOfStock: state.general.coreConfigs.catalog_products_homepage_out_of_stock_items,
-  locale    : state.locale.code,
-  cartToken : state.cartToken,
-  token     : state.cartToken,
-  customer  : state.customer,
-  bOrder    : state.general.bOrder,
-  apiToken  : state.general.apiToken,
-  signed    : state.customer.authenticated,
-  wishlist  : state.wishlist,
+  locale: state.locale.code,
+  cartToken: state.cartToken,
+  token: state.cartToken,
+  customer: state.customer,
+  bOrder: state.general.bOrder,
+  apiToken: state.general.apiToken,
+  signed: state.customer.authenticated,
+  wishlist: state.wishlist,
 })
 
 const mapDispatchToProps = {
