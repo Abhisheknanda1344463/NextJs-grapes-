@@ -1,14 +1,18 @@
 // react
-import React,{useEffect} from 'react'
-import {connect} from 'react-redux'
+import React, {useEffect} from 'react'
+import {connect, useSelector, useDispatch} from 'react-redux'
 import {FormattedMessage} from 'react-intl'
 import {CrosselSvg} from 'svg'
 import CrosselCard from 'components/shared/CrosselCard'
+import {setPopup, setPopupName, setUpCrossProd, setTempData} from '../../store/general'
 
 
 function CrossSell({product}) {
   console.log(product, "product in  crossel")
-  useEffect(() => {},[product])
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+  }, [product])
   return (
     <div className="crossel-content">
       <div className="crossel-title">
@@ -29,11 +33,17 @@ function CrossSell({product}) {
             ? product.slice(0, 2).map((prod, ind) => (
               <CrosselCard product={prod} key={ind}/>
             ))
-            : <CrosselCard product={product}/>
+            : <CrosselCard product={product[0]}/>
         }
       </div>
-      <span className="no-thanks">
-        <FormattedMessage id="noThanks" defaultMessage="No, Thanks"/>
+      <span
+        className="no-thanks"
+        onClick={() => dispatch(setPopup(false))}
+      >
+        <FormattedMessage
+          id="noThanks"
+          defaultMessage="No, Thanks"
+        />
       </span>
     </div>
   )

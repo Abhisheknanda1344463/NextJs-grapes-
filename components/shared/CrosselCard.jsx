@@ -26,8 +26,7 @@ import InputNumber from './InputNumber'
 
 function CrosselCard(props) {
   // console.log(props, "props in crossel card")
-  const {customer, product, layout, cartAddItem, wishlistAddItem, setPopup} =
-    props;
+  const {customer, product, layout, cartAddItem, wishlistAddItem, setPopup} =  props;
   const [dimension, setDimension] = useState(1200);
   const [quantity, setQuantity] = useState(1)
 
@@ -125,7 +124,7 @@ function CrosselCard(props) {
                       cartAddItem(
                         product,
                         [],
-                        1,
+                        quantity,
                         cartToken,
                         customer,
                         selectedData

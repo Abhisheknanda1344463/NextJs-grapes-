@@ -37,7 +37,6 @@ const UpSellCard = ({product}) => {
         shopApi.getUpSellProducts(prodID).then(res => {
           dispatch(setUpCrossProd(res))
         })
-        // fetch(`https://zizi.zegashop.com/db/up-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`).then(res => res.json()).then(data => dispatch(setUpCrossProd(data)))
         break
       case 'crossel':
         shopApi.getCrossSellProducts(prodID).then(res => {
@@ -295,7 +294,7 @@ const UpSellCard = ({product}) => {
                             >
                               <FormattedMessage
                                 id="add.tocart"
-                                defaultMessage="Add to cart"
+                                defaultMessage="Replace"
                               />
                             </button>
                           </Link>
@@ -337,7 +336,7 @@ const UpSellCard = ({product}) => {
                               >
                                 <FormattedMessage
                                   id="add.tocart"
-                                  defaultMessage="Add to cart"
+                                  defaultMessage="Replace"
                                 />
                               </button>
                             )}
