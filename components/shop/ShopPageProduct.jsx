@@ -1,25 +1,24 @@
 // react
-import React, { useEffect, useState, useRef } from 'react'
-import PropTypes                              from 'prop-types'
-import { useSelector }                        from 'react-redux'
-import { Helmet }                             from 'react-helmet-async'
-import { FormattedMessage }                   from 'react-intl'
-import theme                                  from '../../data/theme'
-import shopApi                                from '../../api/shop'
-import Product                                from '../shared/Product'
-import { url }                                from '../../services/utils'
-import PageHeader                             from '../shared/PageHeader'
-import BlockLoader                            from '../blocks/BlockLoader'
-import WidgetProducts                         from '../widgets/WidgetProducts'
-import categories                             from '../../data/shopWidgetCategories'
-import WidgetCategories                       from '../widgets/WidgetCategories'
-import BlockProductsCarousel                  from '../blocks/BlockProductsCarousel'
-import { useRouter }                          from 'next/router'
+import React, {useEffect, useState, useRef} from 'react'
+import PropTypes from 'prop-types'
+import {useSelector} from 'react-redux'
+import {Helmet} from 'react-helmet-async'
+import {FormattedMessage} from 'react-intl'
+import theme from '../../data/theme'
+import shopApi from '../../api/shop'
+import Product from '../shared/Product'
+import {url} from '../../services/utils'
+import PageHeader from '../shared/PageHeader'
+import BlockLoader from '../blocks/BlockLoader'
+import WidgetProducts from '../widgets/WidgetProducts'
+import categories from '../../data/shopWidgetCategories'
+import WidgetCategories from '../widgets/WidgetCategories'
+import BlockProductsCarousel from '../blocks/BlockProductsCarousel'
+import {useRouter} from 'next/router'
 
 
-
-function ShopPageProduct (props) {
-  const { productSlug, layout, product, sidebarPosition, locale, loading } = props
+function ShopPageProduct(props) {
+  const {productSlug, layout, product, sidebarPosition, locale, loading, upSellProducts, crossSellProducts} = props
   const [isLoading, setIsLoading] = useState(loading)
   const [relatedProducts, setRelatedProducts] = useState(props.relatedPproducts)
   const router = useRouter()
@@ -59,9 +58,9 @@ function ShopPageProduct (props) {
   const breadcrumb = [
     {
       title: <FormattedMessage id="home" defaultMessage="Home"/>,
-      url  : url.home(),
+      url: url.home(),
     },
-    { title: product.data.name, url: url.product(product.data) },
+    {title: product.data.name, url: url.product(product.data)},
   ]
 
   const related = (
@@ -95,6 +94,8 @@ function ShopPageProduct (props) {
                 productSlug={productSlug}
                 configurableVariantes={props?.configurableVariantes || null}
                 locale={router.locale}
+                upSell={upSellProducts ? upSellProducts : []}
+                crossSell={crossSellProducts ? crossSellProducts : []}
               />
               {/*<ProductTabs withSidebar />*/}
             </div>
@@ -125,6 +126,8 @@ function ShopPageProduct (props) {
               customer={customer}
               configurableVariantes={props?.configurableVariantes || null}
               locale={router.locale}
+              upSell={upSellProducts ? upSellProducts : []}
+              crossSell={crossSellProducts ? crossSellProducts : []}
             />
           </div>
         </div>
@@ -171,7 +174,7 @@ ShopPageProduct.propTypes = {
 }
 
 ShopPageProduct.defaultProps = {
-  layout         : 'standard',
+  layout: 'standard',
   sidebarPosition: 'start',
 }
 

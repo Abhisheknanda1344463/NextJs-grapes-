@@ -1,6 +1,6 @@
 import qs from "query-string";
-import { getCategoryBySlug } from "../fake-server/endpoints/categories";
-import { url, apiUrlWithStore, domainUrl, megaUrl } from "../helper";
+import {getCategoryBySlug} from "../fake-server/endpoints/categories";
+import {url, apiUrlWithStore, domainUrl, megaUrl} from "../helper";
 import {
   getDiscountedProducts,
   getLatestProducts,
@@ -190,8 +190,8 @@ const shopApi = {
       `${megaUrl}/db/up-sell-products?limit=8&product_id=${productId}&locale=${lang}&currency=${currency}`,
     ).then((response) => {
       console.log(response, "response in get upsel prods________")
-      response.json()
-    })
+     return response.json()
+    }).catch(err => console.log(err))
   },
 
   getCrossSellProducts: (productId, options = {}) => {
@@ -239,17 +239,17 @@ const shopApi = {
     ).then((response) => response.json())
   },
 
-   getProductsList: ({
-    options = {},
-    filters = {},
-    location,
-    /// locale,
-    catID,
-    // domain,
-    dbName,
-    window,
-    limit,
-  }) => {
+  getProductsList: ({
+                      options = {},
+                      filters = {},
+                      location,
+                      /// locale,
+                      catID,
+                      // domain,
+                      dbName,
+                      window,
+                      limit,
+                    }) => {
     let currency = "AMD";
     if (options.currency) {
       currency = options.currency.code;

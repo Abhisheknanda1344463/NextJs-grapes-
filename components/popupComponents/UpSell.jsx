@@ -1,22 +1,56 @@
 // react
 import React from "react";
 import {FormattedMessage} from "react-intl";
-import {useSelector, useDispatch} from 'react-redux';
+import {connect, useSelector, useDispatch} from 'react-redux';
 import ProductCard from "components/shared/ProductCard";
 import UpSellCard from "components/shared/UpSellCard";
 import AsyncAction from '../shared/AsyncAction'
 import {cartAddItem} from '../../store/cart'
+import shopApi from '../../api/shop'
 import {setPopup, setPopupName, setUpCrossProd, setTempData} from '../../store/general'
 
 // import CrosselCard from "components/shared/CrosselCard";
-function UpSell({product}) {
+function UpSell(props) {
+  const {
+    selectedData,
+    cartToken,
+    customer,
+    oldProduct,
+    product,
+    setPopupName,
+    cartAddItem,
+    setPopup,
+    setUpCrossProd,
+    setTempData,
+  } = props
 
-  const dispatch = useDispatch();
-  const selectedData = useSelector((state) => state.locale.code)
-  const cartToken = useSelector((state) => state.cartToken)
-  const customer = useSelector((state) => state.customer)
-  const oldProduct = useSelector(state => state.general.temporaryData[0]);
+
+  const getUpCrosselProd = (prodID, type) => {
+    switch (type) {
+      case 'upsel':
+        shopApi.getUpSellProducts(prodID).then(res => {
+          setUpCrossProd(res)
+        })
+        break
+      case 'crossel':
+        shopApi.getCrossSellProducts(prodID).then(res => {
+          if(res.length === 0) {
+            setPopup(false)
+          }
+          console.log(res, 'PXOPXOXOOXOXOXOXOXOXOXOXOXOXXO')
+          setUpCrossProd(res)
+        })
+        break
+    }
+  }
+
+  // const dispatch = useDispatch();
+  // const selectedData = useSelector((state) => state.locale.code)
+  // const cartToken = useSelector((state) => state.cartToken)
+  // const customer = useSelector((state) => state.customer)
+  // const oldProduct = useSelector(state => state.general.temporaryData[0]);
   // console.log(product, "-upsell")
+  // console.log(oldProduct, "-oldProduct")
   // const oldPrice = oldProduct?.min_price
   // const newPrice = Number(product?.min_price).toFixed(2);
   // const curretPrice = (newPrice - oldPrice) < oldPrice ? "" : newPrice - oldPrice
@@ -32,13 +66,14 @@ function UpSell({product}) {
       </h3>
 
       <UpSellCard product={product} upCros={true}/>
-      {/*<ProductCard product={props.product} upCros={true}/>*/}
+      {/*<UpSellCard product={oldProduct} upCros={true}/>*/}
+      {/*<ProductCard product={product} upCros={true}/>*/}
 
       <div className="no-thanks">
         <AsyncAction
           action={() =>
             cartAddItem(
-              product,
+              oldProduct,
               [],
               1,
               cartToken,
@@ -53,10 +88,10 @@ function UpSell({product}) {
               onClick={(e) => {
                 e.preventDefault()
                 run()
-                // setTempData([product])
-                // getUpCrosselProd(product.product_id || product.product.id, 'upsel')
-                // dispatch(setPopupName(''))
-                dispatch(setPopup(false))
+                setTempData(product)
+                getUpCrosselProd(oldProduct.product_id || oldProduct.product.id, 'crossel')
+                setPopupName('crossel')
+                // setPopup(false)
               }}
             >
               <FormattedMessage
@@ -72,7 +107,22 @@ function UpSell({product}) {
   )
 }
 
-export default UpSell
+const mapStateToProps = state => ({
+  selectedData: state.locale.code,
+  cartToken: state.cartToken,
+  customer: state.customer,
+  oldProduct: state.general.temporaryData[0]
+})
+
+const mapDispatchToProps = {
+  setPopupName,
+  cartAddItem,
+  setPopup,
+  setUpCrossProd,
+  setTempData,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpSell)
 
 
 

@@ -13,5 +13,6 @@
 }
 .modal-content {
   //width: unset !important;
-  width: 70%;
+  max-width: 1001px;
+  min-height: 676px;
 }
