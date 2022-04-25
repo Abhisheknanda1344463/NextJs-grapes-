@@ -15,33 +15,46 @@ import AsyncAction from './AsyncAction'
 import {cartAddItem, cartRemoveItem} from '../../store/cart'
 import classNames from 'classnames'
 import {FormattedMessage} from 'react-intl'
-import {useSelector, useDispatch} from 'react-redux'
-import {setPopup, setPopupName, setUpCrossProd} from '../../store/general'
+import {connect, useSelector, useDispatch} from 'react-redux'
+import {setPopup, setPopupName, setUpCrossProd, setTempData} from '../../store/general'
 import shopApi from '../../api/shop'
 import Link from 'next/link'
 
 
-const UpSellCard = ({product}) => {
+const UpSellCard = (props) => {
+
+  const {
+    product,
+    selectedData,
+    cartToken,
+    customer,
+    setPopupName,
+    cartAddItem,
+    setPopup,
+    setUpCrossProd,
+    setTempData,
+  } = props
   const dispatch = useDispatch()
   // const [quantity, setQuantity] = useState(1)
-  const selectedData = useSelector((state) => state.locale.code)
-  const token = useSelector((state) => state.customer.token)
-  const customer = useSelector((state) => state.customer)
+  // const selectedData = useSelector((state) => state.locale.code)
+  // const token = useSelector((state) => state.customer.token)
+  // const cartToken = useSelector((state) => state.cartToken)
+  // const customer = useSelector((state) => state.customer)
   const backorders = useSelector(state => state.general.coreConfigs.catalog_inventory_stock_options_backorders)
   const outOfStock = useSelector(state => state.general.coreConfigs.catalog_products_homepage_out_of_stock_items)
-  const oldProd = useSelector(state => state.general.temporaryData[0])
+  // const oldProd = useSelector(state => state.general.temporaryData[0])
 
   const getUpCrosselProd = (prodID, type) => {
     switch (type) {
       case 'upsel':
         shopApi.getUpSellProducts(prodID).then(res => {
-          dispatch(setUpCrossProd(res))
+          setUpCrossProd(res)
         })
         break
       case 'crossel':
         shopApi.getCrossSellProducts(prodID).then(res => {
-          console.log(res, 'PXOPXOXOOXOXOXOXOXOXOXOXOXOXXO')
-          dispatch(setUpCrossProd(res))
+          // console.log(res, 'PXOPXOXOOXOXOXOXOXOXOXOXOXOXXO')
+          setUpCrossProd(res)
         })
         break
     }
@@ -57,7 +70,7 @@ const UpSellCard = ({product}) => {
   // }
 
   return (
-    <div style={{display: 'flex', gap: '20px'}}>
+    <div className="upsell_body">
       {
         product && product.images && (
 
@@ -188,7 +201,7 @@ const UpSellCard = ({product}) => {
                   ))
                   : ''}
               </div>
-              <div>
+              <div className="short_description_block">
                 <div className="product-inner-description-title">
                   <FormattedMessage
                     id="short.description"
@@ -268,20 +281,8 @@ const UpSellCard = ({product}) => {
               <form className="product__options">
                 <div className="form-group product__option">
                   <div className="product__actions">
-                    {/*<div className="product__actions-item product-inner-quantity">*/}
-                    {/*  <InputNumber*/}
-                    {/*    id="product-quantity"*/}
-                    {/*    aria-label="Quantity"*/}
-                    {/*    className="product__quantity"*/}
-                    {/*    size="lg"*/}
-                    {/*    min={1}*/}
-                    {/*    max={5000}*/}
-                    {/*    value={quantity}*/}
-                    {/*    onChange={handleChangeQuantity}*/}
-                    {/*    // disabled={Addtocartdisabled}*/}
-                    {/*  />*/}
-                    {/*</div>*/}
                     <div className="product__actions-item product__actions-item--addtocart">
+                      {/*{console.log(product, cartToken, customer, selectedData, "__--__--__--__--__--___")}*/}
                       {
                         product && product.type === 'configurable' ? (
 
@@ -300,33 +301,28 @@ const UpSellCard = ({product}) => {
                           </Link>
                         ) : (
                           <AsyncAction
-                            // action={() => {
-                            //   cartAddItem(
-                            //     product,
-                            //     [],
-                            //     1,
-                            //     cartToken,
-                            //     customer,
-                            //     selectedData,
-                            //     null,
-                            //     'homePage',
-                            //   )
-                            // }
-                            //   // cartRemoveItem(oldProd.product_id, oldProd, token, customer)
-                            //
-                            // }
+                            action={() =>
+                              cartAddItem(
+                                product,
+                                [],
+                                1,
+                                cartToken,
+                                customer,
+                                selectedData,
+                                null,
+                                'homePage',
+                              )
+                            }
                             render={({run, loading}) => (
                               <button
                                 type="button"
                                 onClick={(e) => {
                                   run()
                                   e.preventDefault()
-
-                                  getUpCrosselProd(oldProd.product_id, 'crossel')
-                                  dispatch(setPopupName('crossel'))
-                                  dispatch(setPopup(true))
+                                  getUpCrosselProd(product.product_id, 'crossel')
+                                  setPopupName('crossel')
+                                  // setPopup(true)
                                 }}
-                                // disabled={Addtocartdisabled}
                                 className={classNames(
                                   'btn btn-orange inner-addtocart rounded-pills btn-lg',
                                   {
@@ -356,4 +352,20 @@ const UpSellCard = ({product}) => {
     </div>
   )
 }
-export default UpSellCard
+
+
+const mapStateToProps = state => ({
+  selectedData: state.locale.code,
+  cartToken: state.cartToken,
+  customer: state.customer,
+})
+
+const mapDispatchToProps = {
+  setPopupName,
+  cartAddItem,
+  setPopup,
+  setUpCrossProd,
+  setTempData,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpSellCard)

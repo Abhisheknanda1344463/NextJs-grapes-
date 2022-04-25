@@ -30,27 +30,33 @@ function UpSellCrossel({active, upCrosProd}) {
   } else if (popUpName == 'upsell') {
     content = <UpSell product={upCrosProd[0]}/>
   } else if (popUpName == 'crossel') {
-    content = <CrossSell product={upCrosProd}/>
+    content = <CrossSell product={upCrosProd} hasTitle={true}/>
   } else if (popUpName == 'crossel2') {
-    content = <CrossSell product={upCrosProd}/>
+    content = <CrosselSecond product={upCrosProd}/>
   }
 
   return (
-    <div
-      className={active ? 'modalss active' : 'modalss'}
-      onClick={() => dispatch(setPopup(false))}
-    >
-      <div
-        className={
-          active ? `modal-content active ${popUpName}` : 'modal-content'
-        }
-        onClick={(e) => e.stopPropagation()}
-      >
+    <>
+      {
+        upCrosProd.length === 0
+          ? <></>
+          : <div
+            className={active ? 'modalss active' : 'modalss'}
+            onClick={() => dispatch(setPopup(false))}
+          >
+            <div
+              className={
+                active ? `modal-content active ${popUpName}` : 'modal-content'
+              }
+              onClick={(e) => e.stopPropagation()}
+            >
 
-        {content}
+              {content}
 
-      </div>
-    </div>
+            </div>
+          </div>
+      }
+    </>
   )
 }
 

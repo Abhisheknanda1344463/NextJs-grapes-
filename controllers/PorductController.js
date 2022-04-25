@@ -111,10 +111,13 @@ function build({flatProducts, locale, resolve, ...rest}) {
           const flatData = parseClone(collection.productFlat[0] || [])
           const inventoriesData = parseClone(collection.ProductInventories[0] || [])
           const allProducts = parseClone(collection.Products[0] || [])
+
+
           if (imagesData[0] && imagesData[0].path) {
             const {path} = imagesData[0]
             const base_imag = makeImageClone(path)
             const images = imagesData.map((e) => makeImageClone(e.path))
+
 
             const obj = {
               ...allProducts,
@@ -124,6 +127,7 @@ function build({flatProducts, locale, resolve, ...rest}) {
               base_imag,
               images,
             }
+            console.log(obj, "———————————————————SOS________________")
             resolve(obj)
           }
           resolve([])
@@ -150,7 +154,6 @@ function build({flatProducts, locale, resolve, ...rest}) {
           return o.price
         }),
       )
-      ///   console.log(setInitialMaxPrice, "setInitialMaxPricesetInitialMaxPrice");
       everyThing = {
         data: response,
         filters: [],
@@ -304,7 +307,7 @@ function Get_New_And_Futured_Products({locale, limit, currency, ...rest}) {
 // }
 function Get_Product_list(options) {
   //limit, category_id, currency,
-  const { locale: defaultLocale, limit: limitproduct, page, ...rest } = options;
+  const {locale: defaultLocale, limit: limitproduct, page, ...rest} = options;
   const limit = limitproduct || 20;
   console.log(
     defaultLocale,
@@ -339,14 +342,14 @@ function Get_Product_list(options) {
         default:
           searchKeys = {
             ...searchKeys,
-            ...defaultFilter({ key, options, searchKeys }),
+            ...defaultFilter({key, options, searchKeys}),
           };
       }
     }
   }
 
   return new Promise((resolve, reject) => {
-    ProductsCategories.find({ category_id: options.category_id }).then(
+    ProductsCategories.find({category_id: options.category_id}).then(
       (res) => {
         const productIdsByCategory = res.map((e) => e.product_id);
         console.log(searchKeys, "searchKeys");
@@ -357,9 +360,9 @@ function Get_Product_list(options) {
             typeof searchKeys[next] == "object" &&
             searchKeys[next]?.length > 0
           ) {
-            return { ...acc, [next]: { $in: searchKeys[next] } };
+            return {...acc, [next]: {$in: searchKeys[next]}};
           } else {
-            return { ...acc, [next]: searchKeys[next] };
+            return {...acc, [next]: searchKeys[next]};
           }
         }, {});
         console.log(
@@ -370,7 +373,7 @@ function Get_Product_list(options) {
         if (Object.keys(buildQueryParams)[0] !== "text_value") {
           var productIds;
           console.log(buildQueryParams, "buildQueryParams");
-          ProductAttributeValues.find({ ...buildQueryParams }).then((res) => {
+          ProductAttributeValues.find({...buildQueryParams}).then((res) => {
             console.log(productIdsByCategory, "productIdsByCategory");
             productIds = productIdsByCategory.filter((id) => {
               const find = res.find((e) => e.product_id == id);
@@ -382,8 +385,8 @@ function Get_Product_list(options) {
               return build();
             }
             const productsPromise = new Promise((resolve, reject) => {
-              Products.find({ id: { $in: productIds } }).then((products) =>
-                resolve({ products })
+              Products.find({id: {$in: productIds}}).then((products) =>
+                resolve({products})
               );
             });
 
@@ -398,7 +401,7 @@ function Get_Product_list(options) {
               if (productIds.length > 0) {
                 object = {
                   locale: locale,
-                  product_id: { $in: productIds },
+                  product_id: {$in: productIds},
                 };
               } else {
                 object = {
@@ -433,14 +436,14 @@ function Get_Product_list(options) {
 
                 object = {
                   ...object,
-                  special_price: { $ne: null },
+                  special_price: {$ne: null},
                 };
 
                 ProductFlat.where("special_price_from")
                   .lte(date_now)
                   .where("special_price_to")
                   .gte(date_now)
-                  .countDocuments({ ...object })
+                  .countDocuments({...object})
                   .exec((count_error, count) => {
                     const pageCount = Math.ceil(count / limit);
                     const skip = (+page - 1) * limit;
@@ -469,12 +472,12 @@ function Get_Product_list(options) {
                       });
                   });
               } else {
-                ProductFlat.countDocuments({ ...object }).exec(
+                ProductFlat.countDocuments({...object}).exec(
                   (count_error, count) => {
                     const pageCount = Math.ceil(count / limit);
                     const skip = (+page - 1) * limit;
                     console.log(skip, +limit, page, "asdsads");
-                    ProductFlat.find({ ...object })
+                    ProductFlat.find({...object})
                       .skip(skip)
                       .limit(+limit)
                       .then((flatProducts) => {
@@ -525,17 +528,16 @@ function Get_Product_list(options) {
           });
         } else {
           ProductFlat.find({
-            name: { $regex: Object.values(buildQueryParams)[0], $options: "i" },
+            name: {$regex: Object.values(buildQueryParams)[0], $options: "i"},
             // name: { $regex: ".*" + Object.values(buildQueryParams)[0] + ".*" },
           }).then((flatProducts) => {
-            build({ flatProducts, locale, resolve, type: "data", ...rest });
+            build({flatProducts, locale, resolve, type: "data", ...rest});
           });
         }
       }
     );
   });
 }
-
 
 
 function Get_Products_By_Slug(params, options) {

@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 import {
   CART_ADD_ITEM,
   CART_REMOVE_ITEM,
@@ -9,11 +9,11 @@ import {
   SET_POPUP,
 
 } from "./cartActionTypes";
-import { url, apiUrlWithStore } from "../../helper";
+import {url, apiUrlWithStore} from "../../helper";
 import React from "react";
-import { FormattedMessage } from "react-intl";
-import { CheckToastSvg, FailSvg } from "svg";
-import { runFbPixelEvent } from "../../services/utils";
+import {FormattedMessage} from "react-intl";
+import {CheckToastSvg, FailSvg} from "svg";
+import {runFbPixelEvent} from "../../services/utils";
 
 // const translations = {
 //     product: {
@@ -69,6 +69,7 @@ export function cartAddItemSuccessAfterLogin(
     cartItems,
   };
 }
+
 export function cartAddItemSuccess(
   product,
   options = [],
@@ -76,7 +77,7 @@ export function cartAddItemSuccess(
   cartItems,
   locale
 ) {
-  runFbPixelEvent({ name: "Add To Cart" });
+  runFbPixelEvent({name: "Add To Cart"});
   let overWriteProductName = cartItems.items.map((item) => {
     if (item.product.id === product.product_id) {
       product.name = item.product.name;
@@ -87,7 +88,7 @@ export function cartAddItemSuccess(
 
   toast.success(
     <span className="d-flex chek-fms">
-      <CheckToastSvg />
+      <CheckToastSvg/>
       <FormattedMessage
         id="add-cart"
         defaultMessage={`Product "${
@@ -114,6 +115,7 @@ export function cartUpdateData(payload) {
     payload,
   };
 }
+
 export function cartRemoveItemSuccess(itemId, item, cartData) {
 
   return {
@@ -167,6 +169,7 @@ export function cartAddItemAfterLogin(
   };
   return as();
 }
+
 export function cartAddItem(
   product,
   options = [],
@@ -186,19 +189,19 @@ export function cartAddItem(
       quantity: quantity,
       token: customer.token,
     };
-    console.log(body.product_id,"with customer")
-    console.log(body.cartToken,"with carttoken in cartActions")
+    // console.log(body.product_id,"with customer")
+    // console.log(body.cartToken,"with carttoken in cartActions")
   } else {
     body = {
       api_token: cartToken.cartToken,
       product_id: product.product_id,
       quantity: quantity,
     };
-    // console.log(body.product_id, "else")
   }
+// console.log(body, "body in cartactoondjk")
 
   if (bundleProductInfo) {
-    const { options, selectedOptions } = bundleProductInfo;
+    const {options, selectedOptions} = bundleProductInfo;
     const keys = Object.keys(selectedOptions);
     const collection = keys
       .map((key) => {
@@ -224,11 +227,11 @@ export function cartAddItem(
     fetch(
       apiUrlWithStore(
         "/api/checkout/cart/add/" +
-          `${
-            pageFrom == "homePage" && product.product_id !== undefined
-              ? product.product_id
-              : product.product_id
-          }`
+        `${
+          pageFrom == "homePage" && product.product_id !== undefined
+            ? product.product_id
+            : product.product_id
+        }`
       ),
       {
         headers: {
@@ -241,6 +244,7 @@ export function cartAddItem(
     )
       .then((res) => res.json())
       .then((res) => {
+        console.log(res, "response")
         if (!res.error) {
           dispatch(
             cartAddItemSuccess(product, options, quantity, res.data, locale)
@@ -249,8 +253,7 @@ export function cartAddItem(
           if (body.quantity >= product.qty) {
             toast(
               <span className="d-flex faild-toast-fms">
-                <FailSvg />
-
+                <FailSvg/>
                 <FormattedMessage
                   id="sign-or-register"
                   defaultMessage="This product is not available"
@@ -270,6 +273,7 @@ export function cartAddItem(
 export function cartRemoveItemAfterLogin(itemId, item, dispatch) {
   return dispatch(cartRemoveItemSuccess(itemId, item));
 }
+
 //Create By Manvel
 export function cartTranslation(cartToken, customer, locale) {
   return (dispatch) =>

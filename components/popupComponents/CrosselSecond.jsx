@@ -1,22 +1,45 @@
- // react
-import React from "react";
-import { connect } from "react-redux";
-import { FormattedMessage } from "react-intl";
+// react
+import React, {useEffect} from 'react'
+import {connect, useSelector, useDispatch} from 'react-redux'
+import {FormattedMessage} from "react-intl";
+import CrosselCard from 'components/shared/CrosselCard'
+import {setPopup, setPopupName, setUpCrossProd, setTempData} from '../../store/general'
 
-function CrosselSecond(props) {
+function CrosselSecond({product}) {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(product)
+  }, [product])
+
+
   return (
-    <div className="upsell-content">
-      <h3 className="uPsell-title crossel-second">
+    <div className="crossel-content">
+      <h3 className="crossel_tittle__heading">
         <FormattedMessage
           id="also-buy"
           defaultMessage="People also buy these products"
         />
       </h3>
+      <div className="crossel_body">
 
-      <div className="prod"></div>
-      <div className="no-thanks">
-        <FormattedMessage id="noThanks" defaultMessage="No, Thanks" />
+        <>
+          <CrosselCard product={product[2]}/>
+          <CrosselCard product={product[3]}/>
+        </>
+
       </div>
+
+      <span
+        className="no-thanks"
+        onClick={() => dispatch(setPopup(false))}
+      >
+        <FormattedMessage
+          id="noThanks"
+          defaultMessage="Continue"
+        />
+      </span>
     </div>
   );
 }

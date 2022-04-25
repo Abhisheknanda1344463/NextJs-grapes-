@@ -17,7 +17,7 @@ import {cartAddItem} from '../../store/cart'
 import {AddCartToken} from '../../store/token'
 import {compareAddItem} from '../../store/compare'
 import {wishlistAddItem} from '../../store/wishlist'
-import {setPopup, setPopupName, setUpCrossProd} from '../../store/general'
+import {setPopup, setPopupName, setUpCrossProd, setTempData} from '../../store/general'
 import {
   CheckToastSvg,
   FailSvg,
@@ -115,35 +115,41 @@ class Product extends PureComponent {
         fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
           .then(res => res.json())
           .then(data => {
-
             if (data.length === 0) {
-              this.props.setPopup(false)
               fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
                 .then(res2 => res2.json())
                 .then(data2 => {
-
                   if (data2.length === 0) {
-                    this.props.setPopup(false)
                     this.props.setPopupName("")
                   }
-                  this.props.setPopup(true)
-                  this.props.setUpCrossProd(data2)
+                  setUpCrossProd(data2)
                 })
             }
             this.props.setPopup(true)
-            this.props.setUpCrossProd(data)
+            setUpCrossProd(data)
           })
         break
       case 'crossel':
         fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
           .then(res => res.json())
-          .then(data => this.props.setUpCrossProd(data)
-          )
+          .then(data => {
+            if (data.length === 0) {
+              this.props.setPopup(false)
+              this.props.setPopupName("")
+            }
+            this.props.setPopup(true)
+            setUpCrossProd(data)
+          })
         break
-      default:
-        this.props.setPopup(false)
-        break;
     }
+  }
+
+
+  addcart = () => {
+    if (this.props?.upSell?.length === 0 && this.props?.crossSell?.length === 0) {
+      return true
+    }
+    return false
   }
 
   createMarkup(item) {
@@ -316,7 +322,22 @@ class Product extends PureComponent {
     })
   }
 
+  openUpCrosProd = (product) => {
+    if (this.props?.upSell?.length === 0) {
+      this.getUpCrosselProd(product.data.product_id || product.data.product.id, "crossel")
+      this.props.setPopupName('crossel')
+    } else if (this.props?.crossSell?.length === 0) {
+      this.props.setPopupName('')
+      this.props.setPopup(false)
+    } else {
+      this.getUpCrosselProd(product.data.product_id || product.data.product.id, "upsel")
+      this.props.setPopupName('upsell')
+    }
+  }
+
   render() {
+    console.log(this.props, "props in product")
+
     const {
       signed,
       layout,
@@ -324,6 +345,7 @@ class Product extends PureComponent {
       wishlistAddItem,
       wishlist,
       wishlistRemoveItem,
+      setUpCrossProd,
       // AddCartToken,
     } = this.props
     const {quantity, product} = this.state
@@ -647,50 +669,139 @@ class Product extends PureComponent {
                       />
                     </div>
                     <div className="product__actions-item product__actions-item--addtocart">
-                      <AsyncAction
-                        // action={() =>
-                        //   cartAddItem(
-                        //     product.data,
-                        //     [],
-                        //     quantity,
-                        //     this.state.token,
-                        //     this.state.customer,
-                        //     this.state.locale,
-                        //     product?.data?.type == 'bundle'
-                        //       ? {
-                        //         options: product.data.bundle_options,
-                        //         selectedOptions: this.state.bundleProducts,
-                        //       }
-                        //       : null,
-                        //   )
-                        // }
-                        render={({run, loading}) => (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              run()
-                              // e.preventDefault()
-                              {
-                                console.log(product.data, "product data in product js")
+                      {
+                        this.addcart()
+                          ? (
+                            <AsyncAction
+                              action={() =>
+                                cartAddItem(
+                                  product.data,
+                                  [],
+                                  quantity,
+                                  this.state.token,
+                                  this.state.customer,
+                                  this.state.locale,
+                                  product?.data?.type == 'bundle'
+                                    ? {
+                                      options: product.data.bundle_options,
+                                      selectedOptions: this.state.bundleProducts,
+                                    }
+                                    : null,
+                                )
                               }
-                              this.getUpCrosselProd(product.data.product_id || product.data.product.id, "upsel")
-                              this.props.setPopupName('upsell')
-                            }}
-                            disabled={Addtocartdisabled}
-                            className={classNames(
-                              'btn btn-orange inner-addtocart rounded-pills btn-lg',
-                              {
-                                'btn-loading': loading,
-                              },
-                            )}
-                          >
-                            <FormattedMessage
-                              id="add.tocart"
-                              defaultMessage="Add to cart"
+                              render={({run, loading}) => (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    run()
+                                  }}
+                                  disabled={Addtocartdisabled}
+                                  className={classNames(
+                                    'btn btn-orange inner-addtocart rounded-pills btn-lg',
+                                    {
+                                      'btn-loading': loading,
+                                    },
+                                  )}
+                                >
+                                  <FormattedMessage
+                                    id="add.tocart"
+                                    defaultMessage="Add to cart"
+                                  />
+                                </button>
+                              )
+                              }
                             />
-                          </button>
-                        )}
-                      />
+                          )
+                          : this.props?.upSell?.length === 0 && this.props?.crossSell?.length > 0
+                            ?
+                            (
+                              <AsyncAction
+                                action={() =>
+                                  cartAddItem(
+                                    product.data,
+                                    [],
+                                    quantity,
+                                    this.state.token,
+                                    this.state.customer,
+                                    this.state.locale,
+                                    product?.data?.type == 'bundle'
+                                      ? {
+                                        options: product.data.bundle_options,
+                                        selectedOptions: this.state.bundleProducts,
+                                      }
+                                      : null,
+                                  )
+                                }
+                                render={({run, loading}) => (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      run()
+                                      this.props.setTempData([product.data])
+                                      // this.openUpCrosProd(product)
+                                      fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+                                        .then(res => res.json())
+                                        .then(data => {
+                                          if (data.length === 0) {
+                                            fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+                                              .then(res2 => res2.json())
+                                              .then(data2 => {
+                                                if (data2.length === 0) {
+                                                  this.props.setPopupName("")
+                                                }
+                                                setUpCrossProd(data2)
+                                              })
+                                          }
+                                          this.props.setPopup(true)
+                                          setUpCrossProd(data)
+                                        })
+                                    }}
+                                    disabled={Addtocartdisabled}
+                                    className={classNames(
+                                      'btn btn-orange inner-addtocart rounded-pills btn-lg',
+                                      {
+                                        'btn-loading': loading,
+                                      },
+                                    )}
+                                  >
+                                    <FormattedMessage
+                                      id="add.tocart"
+                                      defaultMessage="Add to cart"
+                                    />
+                                  </button>
+                                )}
+                              />
+                            )
+                            :
+                            (
+                              <AsyncAction
+                                render={({run, loading}) => (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      run()
+                                      this.props.setTempData([product.data])
+                                      this.openUpCrosProd(product)
+                                      this.props.setPopup(true)
+
+                                    }}
+                                    disabled={Addtocartdisabled}
+                                    className={classNames(
+                                      'btn btn-orange inner-addtocart rounded-pills btn-lg',
+                                      {
+                                        'btn-loading': loading,
+                                      },
+                                    )}
+                                  >
+                                    <FormattedMessage
+                                      id="add.tocart"
+                                      defaultMessage="Add to cart"
+                                    />
+                                  </button>
+                                )}
+                              />
+                            )
+                      }
                     </div>
                     {signed ? (
                       <div className="product__actions-item product__actions-item--wishlist">
@@ -793,12 +904,14 @@ const mapStateToProps = (state) => ({
   apiToken: state.general.apiToken,
   signed: state.customer.authenticated,
   wishlist: state.wishlist,
+  oldProduct: state.general.temporaryData[0],
 })
 
 const mapDispatchToProps = {
   setPopupName,
   setPopup,
   setUpCrossProd,
+  setTempData,
   AddImages,
   AddCartToken,
   cartAddItem,

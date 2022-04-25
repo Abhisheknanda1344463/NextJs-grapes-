@@ -21,16 +21,15 @@ class AsyncAction extends Component {
   }
 
   run = () => {
-    // console.log(this.props.action, "action in asyncAction")
     const {action} = this.props;
     const {loading} = this.state;
+    console.log(!action + " - action", loading + " - loading")
 
     if (loading || !action) {
       return;
     }
 
     this.setState({loading: true});
-
     action().then(() => {
       if (this.canceled) {
         return;

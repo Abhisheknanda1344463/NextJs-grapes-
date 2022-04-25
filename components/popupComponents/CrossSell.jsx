@@ -7,45 +7,59 @@ import CrosselCard from 'components/shared/CrosselCard'
 import {setPopup, setPopupName, setUpCrossProd, setTempData} from '../../store/general'
 
 
-function CrossSell({product}) {
-  console.log(product, "product in  crossel")
+function CrossSell({product, hasTitle}) {
+  // console.log(product, "product in  crossel")
 
   const dispatch = useDispatch();
   useEffect(() => {
+    console.log(product)
   }, [product])
+
+
   return (
-    <div className="crossel-content">
-      <div className="crossel-title">
-        <div>
-          <CrosselSvg/>
-          <span>
+    <>
+      <div className="crossel-content">
+        {hasTitle
+          ? (
+            <div className="crossel-title">
+              <div>
+                <CrosselSvg/>
+                <span className="crossel_success_message">
             <FormattedMessage
               id="crosselTitle"
               defaultMessage="Your product has been successfully replaced"
             />
           </span>
+              </div>
+            </div>
+          )
+          : <></>}
+        <h1 className='crossel_tittle__heading'>{hasTitle ? `Congrats!` : ""} People also buy these products</h1>
+        <div className="crossel_body">
+          {
+            product.length !== 0 && product.length >= 2
+              ? product.slice(0, 2).map((prod, ind) => (
+                <>
+                  <CrosselCard product={prod} key={ind}/>
+                </>
+              ))
+              : <><CrosselCard product={product[0]}/></>
+          }
         </div>
-      </div>
-      <h1 style={{textAlign: "center", margin: "20px 0"}}>Congrats! People also buy these products</h1>
-      <div style={{display: 'flex', justifyContent: "center", gap: "50px"}}>
-        {
-          product.length !== 0 && product.length >= 2
-            ? product.slice(0, 2).map((prod, ind) => (
-              <CrosselCard product={prod} key={ind}/>
-            ))
-            : <CrosselCard product={product[0]}/>
-        }
-      </div>
-      <span
-        className="no-thanks"
-        onClick={() => dispatch(setPopup(false))}
-      >
+        <span
+          className="no-thanks"
+          onClick={() => {
+            product.length > 2  ? dispatch(setPopupName("crossel2")) : ""
+            product.length > 2  ? dispatch(setPopup(true)) : dispatch(setPopup(false))
+          }}
+        >
         <FormattedMessage
           id="noThanks"
-          defaultMessage="No, Thanks"
+          defaultMessage="Continue"
         />
       </span>
-    </div>
+      </div>
+    </>
   )
 }
 
