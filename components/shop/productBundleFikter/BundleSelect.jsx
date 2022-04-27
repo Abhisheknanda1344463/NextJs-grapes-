@@ -9,12 +9,51 @@ import BundleSelectProducts from "./BundleSelectProducts";
 
 // third-party
 
+const product = [
+  {
+    name: "poxos",
+    base_image: {
+      small_image_url: "https://4lada.ru/forum/data/avatars/l/0/56.jpg?1491721563"
+    },
+    price: {
+      final_price: {
+        formated_price: "1500"
+      }
+    },
+    label: "head"
+  },
+  {
+    name: "petros",
+    base_image: {
+      small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
+    },
+    price: {
+      final_price: {
+        formated_price: "3500"
+      }
+    },
+    label: "body"
+  },
+  {
+    name: "hayk",
+    base_image: {
+      small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
+    },
+    price: {
+      final_price: {
+        formated_price: "3500"
+      }
+    },
+    label: "body"
+  },
+]
+
 export default function BundleSelect(props) {
   const [quantity, setQuantity] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [selectProduct, setSelectProduct] = useState({});
 
-  const product = props.praduct.products;
+  // const product = props.praduct.products;
   let handleChangeQuantity = (quantity) => {
     setQuantity(quantity++);
   };
@@ -24,7 +63,8 @@ export default function BundleSelect(props) {
       <div className="bundle-border"></div>
       <div className="">
         <div className="bundle-title-fm">
-          <h4>{props.praduct.label}</h4>
+          {/*<h4>{props.praduct.label}</h4>*/}
+          <h4>BundleSelect</h4>
           <span>*</span>
         </div>
         <div className="bundle-select-products bundle-radio-products">
@@ -36,7 +76,8 @@ export default function BundleSelect(props) {
               }}
             >
               <label
-                htmlFor={props.praduct.products.name}
+                // htmlFor={props.praduct.products.name}
+                htmlFor={product[0].name}
                 className="bundle-select-name-fm"
               >
                 <div>
@@ -58,8 +99,14 @@ export default function BundleSelect(props) {
                   : "dropdown-group"
               }
             >
+              {/*<BundleSelectProducts*/}
+              {/*  products={props.praduct.products}*/}
+              {/*  setSelectProduct={setSelectProduct}*/}
+              {/*  isOpen={setIsOpen}*/}
+              {/*  {...props}*/}
+              {/*/>*/}
               <BundleSelectProducts
-                products={props.praduct.products}
+                products={product}
                 setSelectProduct={setSelectProduct}
                 isOpen={setIsOpen}
                 {...props}

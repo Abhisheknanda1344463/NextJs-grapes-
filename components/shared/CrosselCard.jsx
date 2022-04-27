@@ -26,7 +26,7 @@ import InputNumber from './InputNumber'
 
 function CrosselCard(props) {
   // console.log(props, "props in crossel card")
-  const {customer, product, layout, cartAddItem, wishlistAddItem, setPopup} = props;
+  const {customer, product, layout, cartAddItem, wishlistAddItem, setPopup, only} = props;
   const [dimension, setDimension] = useState(1200);
   const [quantity, setQuantity] = useState(1)
 
@@ -54,6 +54,7 @@ function CrosselCard(props) {
 
   const handleChangeQuantity = (quantity) => {
     setQuantity(() => quantity)
+    console.log(quantity, "quantity in crosselcard")
   }
 
   const selectedData = useSelector((state) => state.locale.code);
@@ -66,6 +67,8 @@ function CrosselCard(props) {
     "product-card--layout--grid product-card--size--lg": layout === "grid-lg",
     "product-card--layout--list": layout === "list",
     "product-card--layout--horizontal": layout === "horizontal",
+    "product-for--one-element": only,
+    "product-for--one-element": only,
   });
 
   let badges = [];
@@ -119,6 +122,7 @@ function CrosselCard(props) {
                       // disabled={Addtocartdisabled}
                     />
                   </div>
+
                   <AsyncAction
                     action={() =>
                       cartAddItem(
@@ -133,7 +137,11 @@ function CrosselCard(props) {
                     render={({run, loading}) => (
                       <button
                         type="button"
-                        onClick={run}
+                        onClick={() => {
+                          run()
+                          // alert(quantity)
+                          // console.log(quantity, "quantity value ----")
+                        }}
                         className={classNames(
                           "btn btn-primary product-card__addtocart hide-for-tablet",
                           {
@@ -244,7 +252,7 @@ function CrosselCard(props) {
                 </div>
                 <AsyncAction
                   action={() =>
-                    cartAddItem(product, [], 1, cartToken, customer, selectedData)
+                    cartAddItem(product, [], quantity, cartToken, customer, selectedData)
                   }
                   render={({run, loading}) => (
                     <button
@@ -275,7 +283,7 @@ function CrosselCard(props) {
 
               <AsyncAction
                 action={() =>
-                  cartAddItem(product, [], 1, cartToken, customer, selectedData)
+                  cartAddItem(product, [], quantity, cartToken, customer, selectedData)
                 }
                 render={({run, loading}) => (
                   <button

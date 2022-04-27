@@ -11,7 +11,51 @@ export default function BundleRadio(props) {
   // let handleChangeQuantity = (quantity) => {
   //   setQuantity(quantity++);
   // };
-  const product = props.praduct.products;
+  // const product = props.praduct.products;
+  const product = [
+    {
+      id: 1,
+      name: "poxos",
+      base_image: {
+        small_image_url: "https://4lada.ru/forum/data/avatars/l/0/56.jpg?1491721563"
+      },
+      price: {
+        final_price: {
+          formated_price: "1500"
+        }
+      },
+      label: "head",
+      qty: 5,
+    },
+    {
+      id: 2,
+      name: "petros",
+      base_image: {
+        small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
+      },
+      price: {
+        final_price: {
+          formated_price: "3500"
+        }
+      },
+      label: "body",
+      qty: 5,
+    },
+    {
+      id: 3,
+      name: "hayk",
+      base_image: {
+        small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
+      },
+      price: {
+        final_price: {
+          formated_price: "3500"
+        }
+      },
+      label: "body",
+      qty: 5,
+    },
+  ]
 
   const products = product.map((elem, index) => {
     return (
@@ -64,11 +108,12 @@ export default function BundleRadio(props) {
             size="lg"
             min={1}
             max={elem.qty}
-            value={
-              props.selectedBundleProducts[props.praduct.type]?.find(
-                (e) => e.id == elem.id
-              )?.quantity || 1
-            }
+            // value={
+            //   props.selectedBundleProducts[props.praduct.type]?.find(
+            //     (e) => e.id == elem.id
+            //   )?.quantity || 1
+            // }
+            value={1}
             changeQuantity={(PlusOrMinus) => {
               if (props.selectedBundleProducts[props.praduct.type]) {
                 const qt = props.selectedBundleProducts[props.praduct.type][0].quantity;
@@ -97,7 +142,8 @@ export default function BundleRadio(props) {
       <div className="bundle-border"></div>
       <div className="bundle-radio">
         <div className="bundle-title-fm">
-          <h4>{props.praduct.label}</h4>
+          {/*<h4>{props.praduct.label}</h4>*/}
+          <h4>Radio button</h4>
           <span>*</span>
         </div>
         <div className="bundle-radio-body-fm">{products}</div>

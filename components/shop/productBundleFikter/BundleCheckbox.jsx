@@ -1,12 +1,51 @@
 // react
 import React from "react";
-import { FormattedMessage } from "react-intl";
+import {FormattedMessage} from "react-intl";
 import Image from "components/hoc/Image";
 
 // third-party
+//only for testing
+const product = [
+  {
+    name: "poxos",
+    base_image: {
+      small_image_url: "https://4lada.ru/forum/data/avatars/l/0/56.jpg?1491721563"
+    },
+    price: {
+      final_price: {
+        formated_price: "1500"
+      }
+    },
+    label: "head"
+  },
+  {
+    name: "petros",
+    base_image: {
+      small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
+    },
+    price: {
+      final_price: {
+        formated_price: "3500"
+      }
+    },
+    label: "body"
+  },
+  {
+    name: "hayk",
+    base_image: {
+      small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
+    },
+    price: {
+      final_price: {
+        formated_price: "3500"
+      }
+    },
+    label: "body"
+  },
+]
 
 export default function BundleCheckbox(props) {
-  const product = props.praduct.products;
+  // const product = props.praduct.products;
   const products = product.map((elem, index) => {
     return (
       <div className="bundle-radio-products" key={index}>
@@ -54,7 +93,8 @@ export default function BundleCheckbox(props) {
       <div className="bundle-border"></div>
       <div className="bundle-chekbox">
         <div className="bundle-title-fm">
-          <h4>{props.praduct.label}</h4>
+          {/*<h4>{props.praduct.label}</h4>*/}
+          <h4>checkbox</h4>
           <span>*</span>
         </div>
         <div className="bundle-chekbox-body-fm">{products}</div>

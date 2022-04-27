@@ -35,6 +35,8 @@ function UpSellCrossel({active, upCrosProd}) {
     content = <CrosselSecond product={upCrosProd}/>
   }
 
+  console.log(content,"content in upsellcrossel")
+
   return (
     <>
       {

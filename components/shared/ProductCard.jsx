@@ -102,10 +102,10 @@ function ProductCard(props) {
   }
 
   const openUpCrosProd = (product) => {
-    if (product?.product?.up_sells.length === 0) {
+    if (product?.up_sell?.length === 0) {
       getUpCrosselProd(product.product_id || product.product.id, 'crossel')
       setPopupName('crossel')
-    } else if (product?.product?.cross_sells.length === 0) {
+    } else if (product?.cross_sell?.length === 0) {
       setPopupName('')
       setPopup(false)
     } else {
@@ -115,7 +115,7 @@ function ProductCard(props) {
   }
 
   const addcart = () => {
-    if (product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length === 0) {
+    if (product?.up_sell?.length === 0 && product?.cross_sell?.length === 0) {
       return true
     }
     return false
@@ -167,61 +167,56 @@ function ProductCard(props) {
 
                   {
                     product && product?.type === 'configurable'
-                      ? (
-                        <Link href={url.product(product)}>
-                          <button
-                            type="button"
-                            className={classNames(
-                              'btn btn-primary product-card__addtocart hide-for-tablet',
-                            )}
-                          >
-                            <FormattedMessage
-                              id="add.tocart"
-                              defaultMessage="Add to cart"
-                            />
-                          </button>
-                        </Link>
-                      ) : (
-
-                        addcart()
-                          ? (
-                            <AsyncAction
-                              action={() =>
-                                cartAddItem(
-                                  product,
-                                  [],
-                                  1,
-                                  cartToken,
-                                  customer,
-                                  selectedData,
-                                  null,
-                                  'homePage',
-                                )
-                              }
-                              render={({run, loading}) => (
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.preventDefault()
-                                    run()
-                                  }}
-                                  className={classNames(
-                                    'btn btn-primary product-card__addtocart hide-for-tablet',
-                                    {
-                                      'btn-loading': loading,
-                                    },
-                                  )}
-                                >
-                                  <FormattedMessage
-                                    id="add.tocart"
-                                    defaultMessage="Add to cart"
-                                  />
-                                </button>
+                      ? <Link href={url.product(product)}>
+                        <button
+                          type="button"
+                          className={classNames(
+                            'btn btn-primary product-card__addtocart hide-for-tablet',
+                          )}
+                        >
+                          <FormattedMessage
+                            id="add.tocart"
+                            defaultMessage="Add to cart"
+                          />
+                        </button>
+                      </Link>
+                      : addcart()
+                        ? <AsyncAction
+                          action={() =>
+                            cartAddItem(
+                              product,
+                              [],
+                              1,
+                              cartToken,
+                              customer,
+                              selectedData,
+                              null,
+                              'homePage',
+                            )
+                          }
+                          render={({run, loading}) => (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                run()
+                              }}
+                              className={classNames(
+                                'btn btn-primary product-card__addtocart hide-for-tablet',
+                                {
+                                  'btn-loading': loading,
+                                },
                               )}
-                            />
-                          ) : product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length > 0)
-                        ? (
-                          <AsyncAction
+                            >
+                              <FormattedMessage
+                                id="add.tocart"
+                                defaultMessage="Add to cart"
+                              />
+                            </button>
+                          )}
+                        />
+                        : product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length > 0
+                          ? <AsyncAction
                             action={() =>
                               cartAddItem(
                                 product,
@@ -257,9 +252,7 @@ function ProductCard(props) {
                               </button>
                             )}
                           />
-                        )
-                        : (
-                          <AsyncAction
+                          : <AsyncAction
                             render={({run, loading}) => (
                               <button
                                 type="button"
@@ -283,8 +276,6 @@ function ProductCard(props) {
                               </button>
                             )}
                           />
-                        )
-
                   }
                 </div>
                 {product.images[0].path ? (
@@ -312,49 +303,149 @@ function ProductCard(props) {
               <div className="product-image__body">
                 <div className="item_overlay hide-for-tablet"></div>
                 <div className="img_btn_wrapper">
-                  <AsyncAction
-                    // action={() =>
-                    //   cartAddItem(
-                    //     product,
-                    //     [],
-                    //     1,
-                    //     cartToken,
-                    //     customer,
-                    //     selectedData,
-                    //     null,
-                    //     'homePage',
-                    //   )
-                    // }
-                    render={({run, loading}) => (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          // e.preventDefault()
-                          run()
-                          // product?.product?.up_sells.length === 0
-                          //   ? getUpCrosselProd(product.product_id || product.product.id, 'crossel')
-                          //   : getUpCrosselProd(product.product_id || product.product.id, 'upsel')
-                          // product?.product?.up_sells.length === 0
-                          //   ? setPopupName('crossel')
-                          //   : setPopupName('upsell')
-                          openUpCrosProd(product);
-                          // setPopupName('upsell')
-                          // setPopup(true)
-                        }}
-                        className={classNames(
-                          'btn btn-primary product-card__addtocart hide-for-tablet',
-                          {
-                            'btn-loading': loading,
-                          },
+                  {/*<AsyncAction*/}
+                  {/*  // action={() =>*/}
+                  {/*  //   cartAddItem(*/}
+                  {/*  //     product,*/}
+                  {/*  //     [],*/}
+                  {/*  //     1,*/}
+                  {/*  //     cartToken,*/}
+                  {/*  //     customer,*/}
+                  {/*  //     selectedData,*/}
+                  {/*  //     null,*/}
+                  {/*  //     'homePage',*/}
+                  {/*  //   )*/}
+                  {/*  // }*/}
+                  {/*  render={({run, loading}) => (*/}
+                  {/*    <button*/}
+                  {/*      type="button"*/}
+                  {/*      onClick={() => {*/}
+                  {/*        // e.preventDefault()*/}
+                  {/*        run()*/}
+                  {/*        // product?.product?.up_sells.length === 0*/}
+                  {/*        //   ? getUpCrosselProd(product.product_id || product.product.id, 'crossel')*/}
+                  {/*        //   : getUpCrosselProd(product.product_id || product.product.id, 'upsel')*/}
+                  {/*        // product?.product?.up_sells.length === 0*/}
+                  {/*        //   ? setPopupName('crossel')*/}
+                  {/*        //   : setPopupName('upsell')*/}
+                  {/*        openUpCrosProd(product);*/}
+                  {/*        // setPopupName('upsell')*/}
+                  {/*        // setPopup(true)*/}
+                  {/*      }}*/}
+                  {/*      className={classNames(*/}
+                  {/*        'btn btn-primary product-card__addtocart hide-for-tablet',*/}
+                  {/*        {*/}
+                  {/*          'btn-loading': loading,*/}
+                  {/*        },*/}
+                  {/*      )}*/}
+                  {/*    >*/}
+                  {/*      <FormattedMessage*/}
+                  {/*        id="add.tocart"*/}
+                  {/*        defaultMessage="Add to cart"*/}
+                  {/*      />*/}
+                  {/*    </button>*/}
+                  {/*  )}*/}
+                  {/*/>*/}
+                  {
+                    addcart()
+                      ? <AsyncAction
+                        action={() =>
+                          cartAddItem(
+                            product,
+                            [],
+                            1,
+                            cartToken,
+                            customer,
+                            selectedData,
+                            null,
+                            'homePage',
+                          )
+                        }
+                        render={({run, loading}) => (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              run()
+                            }}
+                            className={classNames(
+                              'btn btn-primary product-card__addtocart hide-for-tablet',
+                              {
+                                'btn-loading': loading,
+                              },
+                            )}
+                          >
+                            <FormattedMessage
+                              id="add.tocart"
+                              defaultMessage="Add to cart"
+                            />
+                          </button>
                         )}
-                      >
-                        <FormattedMessage
-                          id="add.tocart"
-                          defaultMessage="Add to cart"
+                      />
+                      : product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length > 0
+                        ? <AsyncAction
+                          action={() =>
+                            cartAddItem(
+                              product,
+                              [],
+                              1,
+                              cartToken,
+                              customer,
+                              selectedData,
+                              null,
+                              'homePage',
+                            )
+                          }
+                          render={({run, loading}) => (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                run()
+                                setTempData([product])
+                                openUpCrosProd(product);
+                              }}
+                              className={classNames(
+                                'btn btn-primary product-card__addtocart hide-for-tablet',
+                                {
+                                  'btn-loading': loading,
+                                },
+                              )}
+                            >
+                              <FormattedMessage
+                                id="add.tocart"
+                                defaultMessage="Add to cart"
+                              />
+                            </button>
+                          )}
                         />
-                      </button>
-                    )}
-                  />
+                        : <AsyncAction
+                          render={({run, loading}) => (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                run()
+                                setTempData([product])
+                                openUpCrosProd(product);
+                              }}
+                              className={classNames(
+                                'btn btn-primary product-card__addtocart hide-for-tablet',
+                                {
+                                  'btn-loading': loading,
+                                },
+                              )}
+                            >
+                              <FormattedMessage
+                                id="add.tocart"
+                                defaultMessage="Add to cart"
+                              />
+                            </button>
+                          )}
+                        />
+                  }
+
+
                 </div>
                 <Image
                   alt=""
@@ -573,37 +664,136 @@ function ProductCard(props) {
               </div>
             </div>
 
-            <AsyncAction
-              // action={`${noUpsel === 0 && noCrossel === 0 ? () => cartAddItem(product, [], 1, cartToken, customer, selectedData, null, 'homePage') : ""}`}
-              // action={() => cartAddItem(product, [], 1, cartToken, customer, selectedData, null, 'homePage')}
-              render={({run, loading}) => (
-                <button
-                  type="button"
-                  onClick={() => {
-                    run()
-                    // product?.product?.up_sells.length === 0
-                    //   ? getUpCrosselProd(product.product_id || product.product.id, 'crossel')
-                    //   : getUpCrosselProd(product.product_id || product.product.id, 'upsel')
-                    // product?.product?.up_sells.length === 0
-                    //   ? setPopupName('crossel')
-                    //   : setPopupName('upsell')
-                    openUpCrosProd(product);
-                    // setPopup(true)
-                  }}
-                  className={classNames(
-                    'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ',
-                    {
-                      'btn-loading': loading,
-                    },
+            {/*<AsyncAction*/}
+            {/*  // action={`${noUpsel === 0 && noCrossel === 0 ? () => cartAddItem(product, [], 1, cartToken, customer, selectedData, null, 'homePage') : ""}`}*/}
+            {/*  // action={() => cartAddItem(product, [], 1, cartToken, customer, selectedData, null, 'homePage')}*/}
+            {/*  render={({run, loading}) => (*/}
+            {/*    <button*/}
+            {/*      type="button"*/}
+            {/*      onClick={() => {*/}
+            {/*        run()*/}
+            {/*        // product?.product?.up_sells.length === 0*/}
+            {/*        //   ? getUpCrosselProd(product.product_id || product.product.id, 'crossel')*/}
+            {/*        //   : getUpCrosselProd(product.product_id || product.product.id, 'upsel')*/}
+            {/*        // product?.product?.up_sells.length === 0*/}
+            {/*        //   ? setPopupName('crossel')*/}
+            {/*        //   : setPopupName('upsell')*/}
+            {/*        openUpCrosProd(product);*/}
+            {/*        // setPopup(true)*/}
+            {/*      }}*/}
+            {/*      className={classNames(*/}
+            {/*        'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ',*/}
+            {/*        {*/}
+            {/*          'btn-loading': loading,*/}
+            {/*        },*/}
+            {/*      )}*/}
+            {/*    >*/}
+            {/*      <FormattedMessage*/}
+            {/*        id="add.tocart"*/}
+            {/*        defaultMessage="Add to cart"*/}
+            {/*      />*/}
+            {/*    </button>*/}
+            {/*  )}*/}
+            {/*/>*/}
+
+            {
+              addcart()
+                ? <AsyncAction
+                  action={() =>
+                    cartAddItem(
+                      product,
+                      [],
+                      1,
+                      cartToken,
+                      customer,
+                      selectedData,
+                      null,
+                      'homePage',
+                    )
+                  }
+                  render={({run, loading}) => (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        run()
+                      }}
+                      className={classNames(
+                        'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms',
+                        {
+                          'btn-loading': loading,
+                        },
+                      )}
+                    >
+                      <FormattedMessage
+                        id="add.tocart"
+                        defaultMessage="Add to cart"
+                      />
+                    </button>
                   )}
-                >
-                  <FormattedMessage
-                    id="add.tocart"
-                    defaultMessage="Add to cart"
+                />
+                : product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length > 0
+                  ? <AsyncAction
+                    action={() =>
+                      cartAddItem(
+                        product,
+                        [],
+                        1,
+                        cartToken,
+                        customer,
+                        selectedData,
+                        null,
+                        'homePage',
+                      )
+                    }
+                    render={({run, loading}) => (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          run()
+                          setTempData([product])
+                          openUpCrosProd(product);
+                        }}
+                        className={classNames(
+                          'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms',
+                          {
+                            'btn-loading': loading,
+                          },
+                        )}
+                      >
+                        <FormattedMessage
+                          id="add.tocart"
+                          defaultMessage="Add to cart"
+                        />
+                      </button>
+                    )}
                   />
-                </button>
-              )}
-            />
+                  : <AsyncAction
+                    render={({run, loading}) => (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          run()
+                          setTempData([product])
+                          openUpCrosProd(product);
+                        }}
+                        className={classNames(
+                          'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms',
+                          {
+                            'btn-loading': loading,
+                          },
+                        )}
+                      >
+                        <FormattedMessage
+                          id="add.tocart"
+                          defaultMessage="Add to cart"
+                        />
+                      </button>
+                    )}
+                  />
+            }
           </div>
         </div>
       }

@@ -34,23 +34,33 @@ function CrossSell({product, hasTitle}) {
             </div>
           )
           : <></>}
-        <h1 className='crossel_tittle__heading'>{hasTitle ? `Congrats!` : ""} People also buy these products</h1>
+        {/*<h1 className='crossel_tittle__heading'>{hasTitle ? `Congrats!` : ""} People also buy these products</h1>*/}
+        <h3 className="crossel_tittle__heading">
+          <FormattedMessage
+            id="also-buy"
+            defaultMessage={`${hasTitle ? " Congrats! " : " "}People also buy these products`}
+          />
+        </h3>
         <div className="crossel_body">
           {
             product.length !== 0 && product.length >= 2
-              ? product.slice(0, 2).map((prod, ind) => (
-                <>
-                  <CrosselCard product={prod} key={ind}/>
-                </>
-              ))
-              : <><CrosselCard product={product[0]}/></>
+              // ? product.slice(0, 2).map((prod, ind) => (
+              //   <>
+              //     <CrosselCard product={prod} key={ind}/>
+              //   </>
+              // ))
+              ? <>
+                <CrosselCard product={product[0]}/>
+                <CrosselCard product={product[1]}/>
+              </>
+              : <><CrosselCard product={product[0]} only={true}/></>
           }
         </div>
         <span
           className="no-thanks"
           onClick={() => {
-            product.length > 2  ? dispatch(setPopupName("crossel2")) : ""
-            product.length > 2  ? dispatch(setPopup(true)) : dispatch(setPopup(false))
+            product.length > 2 ? dispatch(setPopupName("crossel2")) : ""
+            product.length > 2 ? dispatch(setPopup(true)) : dispatch(setPopup(false))
           }}
         >
         <FormattedMessage

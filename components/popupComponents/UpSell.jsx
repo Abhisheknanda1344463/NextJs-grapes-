@@ -34,10 +34,10 @@ function UpSell(props) {
         break
       case 'crossel':
         shopApi.getCrossSellProducts(prodID).then(res => {
-          if(res.length === 0) {
+          if (res.length === 0) {
             setPopup(false)
           }
-          console.log(res, 'PXOPXOXOOXOXOXOXOXOXOXOXOXOXXO')
+          // console.log(res, 'PXOPXOXOOXOXOXOXOXOXOXOXOXOXXO')
           setUpCrossProd(res)
         })
         break
@@ -55,13 +55,31 @@ function UpSell(props) {
   // const newPrice = Number(product?.min_price).toFixed(2);
   // const curretPrice = (newPrice - oldPrice) < oldPrice ? "" : newPrice - oldPrice
   // const curretPrice = (newPrice - oldPrice)
+  let newPrice, oldPrice, currentPrice;
+  if (oldProduct?.special_price) {
+    oldPrice = oldProduct?.special_price
+  } else if (oldProduct?.min_price) {
+    oldPrice = oldProduct?.min_price
+  }
+
+  if (product?.special_price) {
+    newPrice = product?.special_price
+  } else if (product?.min_price) {
+    newPrice = product?.min_price
+  }
+
+  console.log(oldPrice, "old price")
+  console.log(newPrice, "new Price")
+  currentPrice = newPrice < oldPrice ? <span style={{color: "red"}}>(newPrice - oldPrice)</span> : (newPrice - oldPrice) + "$"
+
+
   return (
     <div className="upsell-content">
       <h3 className="uPsell-title">
         <FormattedMessage
           id="upSell-title"
-          // defaultMessage={`You are ${curretPrice}$ away from this item`}
-          defaultMessage={`You are 19$ away from this item`}
+          defaultMessage={`You are ${currentPrice} away from this item`}
+          // defaultMessage={`You are 19$ away from this item`}
         />
       </h3>
 
@@ -69,7 +87,7 @@ function UpSell(props) {
       {/*<UpSellCard product={oldProduct} upCros={true}/>*/}
       {/*<ProductCard product={product} upCros={true}/>*/}
 
-      <div className="no-thanks">
+      <div className="no-thanks upsell">
         <AsyncAction
           action={() =>
             cartAddItem(
