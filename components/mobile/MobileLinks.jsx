@@ -9,12 +9,12 @@ import AppLink from '../shared/AppLink'
 import Collapse from '../shared/Collapse'
 import { ArrowRoundedDown12x7Svg, CategorySVG, PagesSVG } from '../../svg'
 import { FormattedMessage } from 'react-intl'
+import { url } from "../../services/utils";
 
 
 
 function MobileLinks(props) {
   const { links, level, onItemClick } = props
-
 
   const handleItemClick = (item) => {
     if (onItemClick) {
@@ -76,7 +76,7 @@ function MobileLinks(props) {
                   ? '/page/' + link?.custom_url
                   : link?.page_id ? '/page/' + link?.page_id : ''
             } else if (link?.category_icon_path && link?.slug) {
-              href = `/catalog/${link?.slug ? link?.slug : ''}`
+              href = `${url.category(link)}`
             } else {
               href = link.url_key
                 ? '/' + link.url_key

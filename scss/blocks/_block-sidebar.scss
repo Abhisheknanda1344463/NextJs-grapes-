@@ -35,6 +35,7 @@ $local-transition-duration: .3s;
             #{$inset-inline-start}: 0;
         }
     }
+
     .block-sidebar__body {
         position: absolute;
         top: 0;
@@ -53,6 +54,7 @@ $local-transition-duration: .3s;
             transform: translateX(#{-100% * $transform-direction}) translateX(#{-30px * $transform-direction});
         }
     }
+
     .block-sidebar__header {
         display: flex;
     }
@@ -75,9 +77,11 @@ $local-transition-duration: .3s;
 
 
 .block-sidebar {}
-.block-sidebar__item + .block-sidebar__item {
+
+.block-sidebar__item+.block-sidebar__item {
     margin-top: 30px;
 }
+
 .block-sidebar--position--start {
     @include direction {
         #{$padding-inline-end}: 20px;
@@ -88,12 +92,14 @@ $local-transition-duration: .3s;
             #{$padding-inline-end}: 6px;
         }
     }
+
     @media (max-width: breakpoint(md-end)) {
         @include direction {
             #{$padding-inline-end}: 0;
         }
     }
 }
+
 .block-sidebar--position--end {
     @include direction {
         #{$padding-inline-start}: 20px;
@@ -104,6 +110,7 @@ $local-transition-duration: .3s;
             #{$padding-inline-start}: 6px;
         }
     }
+
     @media (max-width: breakpoint(md-end)) {
         @include direction {
             #{$padding-inline-start}: 0;
@@ -119,11 +126,13 @@ $local-transition-duration: .3s;
     border-bottom: 1px solid $mobilemenu-divider-color;
     display: none;
 }
+
 .block-sidebar__title {
     padding: 0 20px;
     font-weight: $font-weight-bold;
     flex-grow: 1;
 }
+
 .block-sidebar__close {
     border: none;
     background: transparent;
@@ -144,6 +153,7 @@ $local-transition-duration: .3s;
     &:focus {
         outline: none;
     }
+
     &:focus,
     &:hover {
         fill: $mobilemenu-close-button-hover-color;
@@ -159,5 +169,36 @@ $local-transition-duration: .3s;
 .block-sidebar--offcanvas--mobile {
     @media (max-width: breakpoint(md-end)) {
         @include local-offcanvas;
+    }
+}
+
+@media (max-width: 991px) {
+    .block-sidebar--offcanvas--mobile {
+        visibility: visible;
+        position: unset;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        -webkit-transition: visibility 0s .3s;
+        transition: visibility 0s .3s;
+    }
+
+    .block-sidebar--offcanvas--mobile .block-sidebar__body {
+        position: unset !important;
+        top: 0;
+        width: 290px;
+        height: auto;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        background: #fff;
+        -webkit-box-shadow: 0 0 20px rgb(0 0 0 / 40%);
+        box-shadow: 0 0 20px rgb(0 0 0 / 40%);
+        -webkit-transition: -webkit-transform .3s;
+        transition: -webkit-transform .3s;
+        transition: transform .3s;
+        transition: transform .3s, -webkit-transform .3s;
+        display: flex;
+        flex-direction: column;
     }
 }

@@ -12,7 +12,7 @@ import store from "../../store";
  * */
 
 export default function Image(props) {
-  const { onError = () => {} } = props;
+  const { onError = () => { } } = props;
   const {
     general: { domain },
   } = store.getState();
@@ -38,6 +38,7 @@ export default function Image(props) {
       return (
         <NextImage
           {...props}
+          priority={true}
           src={`/themes/${process.env.themeFolder}${props.src.src}`}
           onError={onError}
         />
@@ -51,9 +52,9 @@ export default function Image(props) {
       // props.src = props.src;
       props.src = props.src.replace("////", "//");
       props.src = props.src.replace("///", "//");
-      return <NextImage {...props} onError={onError} />;
+      return <NextImage {...props} onError={onError} priority={true} />;
     }
   } else {
-    return <NextImage onError={onError} {...props} />;
+    return <NextImage onError={onError} {...props} priority={true} />;
   }
 }

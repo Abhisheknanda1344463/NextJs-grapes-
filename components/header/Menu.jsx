@@ -63,9 +63,8 @@ function Menu(props) {
       icon = (
         <div className="menu__icon">
           <Image
-            src={`${apiImageUrl}/storage/${domain || process.env.themesName}/${
-              item.locale_image
-            }`}
+            src={`${apiImageUrl}/storage/${domain || process.env.themesName}/${item.locale_image
+              }`}
             alt="language"
             width={20}
             height={16}
@@ -80,7 +79,7 @@ function Menu(props) {
           item,
           <React.Fragment>
             {icon}
-            {item.title || item.name}
+            <div className="dropdown-submenu-items">{item.title || item.name}</div>
             {arrow}
             {/* <span style={{ paddingLeft: "10px" }}>{symbol}</span> */}
           </React.Fragment>
@@ -112,7 +111,7 @@ Menu.defaultProps = {
   layout: "classic",
   withIcons: false,
   items: [],
-  onClick: () => {},
+  onClick: () => { },
 };
 
 export default React.memo(Menu);
