@@ -6,8 +6,9 @@
 
 
 .block {
-    margin: 47px 0;//$block-margin-bottom;
+    margin: 47px 0; //$block-margin-bottom;
 }
+
 .block--highlighted {
     padding: 50px 0 60px;
     background: $block-highlighted-bg;
@@ -16,5 +17,11 @@
 @media (max-width: breakpoint(md-end)) {
     .block {
         margin-bottom: $block-margin-bottom-md;
+    }
+}
+
+@media (max-width: 480px) {
+    .block {
+        margin: 27px 0; //$block-margin-bottom;
     }
 }

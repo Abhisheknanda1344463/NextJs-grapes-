@@ -102,10 +102,10 @@ function ProductCard(props) {
   }
 
   const openUpCrosProd = (product) => {
-    if (product?.up_sell?.length === 0) {
+    if (product?.product?.up_sells.length === 0) {
       getUpCrosselProd(product.product_id || product.product.id, 'crossel')
       setPopupName('crossel')
-    } else if (product?.cross_sell?.length === 0) {
+    } else if (product?.product?.cross_sells.length === 0) {
       setPopupName('')
       setPopup(false)
     } else {
@@ -115,7 +115,7 @@ function ProductCard(props) {
   }
 
   const addcart = () => {
-    if (product?.up_sell?.length === 0 && product?.cross_sell?.length === 0) {
+    if (product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length === 0) {
       return true
     }
     return false
@@ -167,56 +167,61 @@ function ProductCard(props) {
 
                   {
                     product && product?.type === 'configurable'
-                      ? <Link href={url.product(product)}>
-                        <button
-                          type="button"
-                          className={classNames(
-                            'btn btn-primary product-card__addtocart hide-for-tablet',
-                          )}
-                        >
-                          <FormattedMessage
-                            id="add.tocart"
-                            defaultMessage="Add to cart"
-                          />
-                        </button>
-                      </Link>
-                      : addcart()
-                        ? <AsyncAction
-                          action={() =>
-                            cartAddItem(
-                              product,
-                              [],
-                              1,
-                              cartToken,
-                              customer,
-                              selectedData,
-                              null,
-                              'homePage',
-                            )
-                          }
-                          render={({run, loading}) => (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault()
-                                run()
-                              }}
-                              className={classNames(
-                                'btn btn-primary product-card__addtocart hide-for-tablet',
-                                {
-                                  'btn-loading': loading,
-                                },
+                      ? (
+                        <Link href={url.product(product)}>
+                          <button
+                            type="button"
+                            className={classNames(
+                              'btn btn-primary product-card__addtocart hide-for-tablet',
+                            )}
+                          >
+                            <FormattedMessage
+                              id="add.tocart"
+                              defaultMessage="Add to cart"
+                            />
+                          </button>
+                        </Link>
+                      ) : (
+
+                        addcart()
+                          ? (
+                            <AsyncAction
+                              action={() =>
+                                cartAddItem(
+                                  product,
+                                  [],
+                                  1,
+                                  cartToken,
+                                  customer,
+                                  selectedData,
+                                  null,
+                                  'homePage',
+                                )
+                              }
+                              render={({run, loading}) => (
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    run()
+                                  }}
+                                  className={classNames(
+                                    'btn btn-primary product-card__addtocart hide-for-tablet',
+                                    {
+                                      'btn-loading': loading,
+                                    },
+                                  )}
+                                >
+                                  <FormattedMessage
+                                    id="add.tocart"
+                                    defaultMessage="Add to cart"
+                                  />
+                                </button>
                               )}
-                            >
-                              <FormattedMessage
-                                id="add.tocart"
-                                defaultMessage="Add to cart"
-                              />
-                            </button>
-                          )}
-                        />
-                        : product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length > 0
-                          ? <AsyncAction
+                            />
+                          ) : product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length > 0)
+                        ? (
+                          <AsyncAction
                             action={() =>
                               cartAddItem(
                                 product,
@@ -252,7 +257,9 @@ function ProductCard(props) {
                               </button>
                             )}
                           />
-                          : <AsyncAction
+                        )
+                        : (
+                          <AsyncAction
                             render={({run, loading}) => (
                               <button
                                 type="button"
@@ -276,6 +283,8 @@ function ProductCard(props) {
                               </button>
                             )}
                           />
+                        )
+
                   }
                 </div>
                 {product.images[0].path ? (
@@ -366,6 +375,7 @@ function ProductCard(props) {
                             type="button"
                             onClick={(e) => {
                               e.preventDefault()
+                              openUpCrosProd(product);
                               run()
                             }}
                             className={classNames(

@@ -79,7 +79,6 @@ export async function getServerSideProps({
       filterValues[filterSlug] = query[param];
     }
   });
-  console.log(filterValues, "queryquery");
 
   /// return filterValues;
   const selectedLocale = locale != "catchAll" ? locale : defaultLocaleSelected;
@@ -114,7 +113,6 @@ export async function getServerSideProps({
     });
   }
 
-  // console.log(categoryId, query.cat_id, "categoriesResponsecategoriesResponse");
   if (categoriesResponse?.categories) {
     getItems(categoriesResponse.categories[0].children);
   }
@@ -157,7 +155,6 @@ export async function getServerSideProps({
     ...generalDispatches.clientSide,
     ...generalDispatches.serverSide,
   };
-  console.log(productsList, "productsList");
   return {
     props: {
       currency: { code: settingsResponse.data.currency.code },

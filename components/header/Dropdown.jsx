@@ -191,16 +191,16 @@
 // *************** Functional Component ******************** //
 
 import React, { useState, useEffect, useRef } from 'react'
-import { useSelector }                from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // third-party
-import classNames      from 'classnames'
-import PropTypes       from 'prop-types'
+import classNames from 'classnames'
+import PropTypes from 'prop-types'
 import { apiImageUrl } from '../../helper'
 
 // application
-import Menu                       from './Menu'
-import Image                      from 'components/hoc/Image'
+import Menu from './Menu'
+import Image from 'components/hoc/Image'
 import { ArrowRoundedDown7x5Svg } from '../../svg'
 
 
@@ -251,6 +251,9 @@ const Dropdown = (props) => {
   const classes = classNames('topbar-dropdown', {
     'topbar-dropdown--opened': open,
   })
+  const openDrpdownLanguageClasses = classNames('topbar-dropdown__body', {
+    'newclass': open,
+  })
   if (locale && locale.list.length > 0) {
     local = locale.list.find(item => item.code === newLocal)
   }
@@ -264,9 +267,9 @@ const Dropdown = (props) => {
             type="button"
             onClick={handleButtonClick}
           >
-              <span style={{ paddingBottom: '3px', paddingRight: '10px' }}>
-                {local && local?.name}
-              </span>
+            <span style={{ paddingBottom: '3px', paddingRight: '10px' }}>
+              {local && local?.name}
+            </span>
             <Image
               height={16}
               width={20}
@@ -281,7 +284,7 @@ const Dropdown = (props) => {
             />
 
 
-            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow"/>
+            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow" />
           </button>
         ) : (
           <button
@@ -289,9 +292,9 @@ const Dropdown = (props) => {
             type="button"
             onClick={handleButtonClick}
           >
-              <span style={{ paddingBottom: '3px', paddingRight: '10px' }}>
-                {local && local?.name}
-              </span>
+            <span style={{ paddingBottom: '3px', paddingRight: '10px' }}>
+              {local && local?.name}
+            </span>
             <Image
               height={16}
               width={20}
@@ -307,7 +310,7 @@ const Dropdown = (props) => {
           </button>
         )}
         {items.length > 1 && (
-          <div className="topbar-dropdown__body">
+          <div className={openDrpdownLanguageClasses}>
             <Menu
               layout="topbar"
               withIcons={withIcons}
@@ -326,14 +329,14 @@ const Dropdown = (props) => {
           type="button"
           onClick={handleButtonClick}
         >
-            <span style={{ paddingBottom: '3px' }}>
-              {props.current.name}
-            </span>
           <span style={{ paddingBottom: '3px' }}>
-              {props.current.symbol}
-            </span>
+            {props.current.name}
+          </span>
+          <span style={{ paddingBottom: '3px' }}>
+            {props.current.symbol}
+          </span>
           {items.length > 0 ? (
-            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow"/>
+            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow" />
           ) : null}
         </button>
         {items.length > 0 && (
@@ -366,7 +369,7 @@ Dropdown.propTypes = {
 
 Dropdown.defaultProps = {
   withIcons: false,
-  onClick  : undefined,
+  onClick: undefined,
 }
 
 export default Dropdown

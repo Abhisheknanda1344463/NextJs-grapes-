@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Dropdown from "./Dropdown";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
@@ -16,7 +16,6 @@ function DropdownLanguage(props) {
   }
   // const { pathname, asPath, query } = router;
   const { languages } = props;
-
   const handleRoute = (locale) => {
     ///  changeLocale(locale);
     setNewLocal(() => locale)
