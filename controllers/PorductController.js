@@ -104,15 +104,30 @@ function build({flatProducts, locale, resolve, ...rest}) {
           .catch((err) => reject4(err))
       })
 
-      return Promise.all([p1, p2, p3, p4])
+      const p5 = new Promise((resolve, reject5) => {
+        UpSellProducts.find({parent_id: productId})
+          .then((res) => resolve({UpSellProducts: res}))
+          .catch((err) => reject5(err))
+      })
+
+      const p6 = new Promise((resolve, reject6) => {
+        CrosselProducts.find({parent_id: productId})
+          .then((res) => resolve({CrosselProducts: res}))
+          .catch((err) => reject6(err))
+      })
+
+      return Promise.all([p1, p2, p3, p4, p5, p6])
         .then((response) => {
           const collection = arrayConvertToObject(response)
           const imagesData = parseClone(collection.ProductImages)
           const flatData = parseClone(collection.productFlat[0] || [])
+          const upProd = parseClone(collection.UpSellProducts || [])
+          const crossProd = parseClone(collection.CrosselProducts || [])
           const inventoriesData = parseClone(collection.ProductInventories[0] || [])
           const allProducts = parseClone(collection.Products[0] || [])
 
-
+          console.log(upProd, "BOOOOOOOOOOOOOOOO")
+          console.log(crossProd, "LUUUUUUUUUUUUUUUUUUUU")
           if (imagesData[0] && imagesData[0].path) {
             const {path} = imagesData[0]
             const base_imag = makeImageClone(path)
@@ -123,6 +138,8 @@ function build({flatProducts, locale, resolve, ...rest}) {
               ...allProducts,
               ...product,
               ...flatData,
+              up_sell: [...upProd],
+              cross_sell: [...crossProd],
               ...inventoriesData,
               base_imag,
               images,
@@ -1313,6 +1330,11 @@ function Get_Configurable_Config(configurableId) {
 }
 
 
+function Get_Bundle_Prods(bundleId) {
+
+}
+
+
 // i am frontend developer...)))
 
 function Get_Product_Type() {
@@ -1345,6 +1367,7 @@ function Get_Product_Type() {
 
 exports.Get_Product_Type = Get_Product_Type
 exports.Get_Configurable_Config = Get_Configurable_Config
+exports.Get_Bundle_Prods = Get_Bundle_Prods
 exports.Get_Related_Products = Get_Related_Products
 exports.Get_Up_Sell_Products = Get_Up_Sell_Products
 exports.Get_Cross_Sell_Products = Get_Cross_Sell_Products

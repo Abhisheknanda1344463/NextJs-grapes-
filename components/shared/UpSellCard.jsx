@@ -294,7 +294,7 @@ const UpSellCard = (props) => {
                               )}
                             >
                               <FormattedMessage
-                                id="add.tocart"
+                                id="something"
                                 defaultMessage="Replace"
                               />
                             </button>
@@ -331,7 +331,7 @@ const UpSellCard = (props) => {
                                 )}
                               >
                                 <FormattedMessage
-                                  id="add.tocart"
+                                  id="something"
                                   defaultMessage="Replace"
                                 />
                               </button>

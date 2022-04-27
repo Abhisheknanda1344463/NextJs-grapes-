@@ -180,7 +180,7 @@ export function cartAddItem(
   bundleProductInfo = null,
   pageFrom = ""
 ) {
-  // console.log(product, "product___________________________________________________________________")
+  console.log(product, "product in cart action___________________________________________________________________")
   let body;
   if (customer && customer.token) {
     body = {
@@ -198,7 +198,7 @@ export function cartAddItem(
       quantity: quantity,
     };
   }
-// console.log(body, "body in cartactoondjk")
+// console.log(product, "product in cart action")
 
   if (bundleProductInfo) {
     const {options, selectedOptions} = bundleProductInfo;
