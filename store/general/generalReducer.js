@@ -19,6 +19,7 @@ import {
   SET_CONFIGS,
   SET_UP_CROSS_PRODS,
   SET_TEMPORARY_DATA,
+  SET_VALID_CROSS,
 } from "./generalActionTypes";
 
 const initialState = {
@@ -34,11 +35,18 @@ const initialState = {
   initialMinPrice: 0,
   coreConfigs: {},
   upCrosProd: [],
-  temporaryData: []
+  temporaryData: [],
+  crossValid: false,
 };
 
 export default function generalReducer(state = initialState, action) {
   switch (action.type) {
+
+    case "SET_VALID_CROSS":
+      return {
+        ...state,
+        crossValid: action.payload,
+      };
 
     case SET_TEMPORARY_DATA:
       return {

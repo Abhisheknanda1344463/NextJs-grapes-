@@ -10,7 +10,7 @@ function CrosselSecond({product}) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(product)
+    // console.log(product)
   }, [product])
 
 

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Image from "components/hoc/Image";
 import InputNumber from "components/shared/InputNumber";
 export default function BundleRadio(props) {
+  console.log(props, "props in bundleRadio")
   // const [quantity, setQuantity] = useState(1);
   let [backgroundColor, setBackgroundColor] = useState("#f3f3f3");
   const changeBackgroundColor = (id) => {
@@ -19,11 +20,7 @@ export default function BundleRadio(props) {
       base_image: {
         small_image_url: "https://4lada.ru/forum/data/avatars/l/0/56.jpg?1491721563"
       },
-      price: {
-        final_price: {
-          formated_price: "1500"
-        }
-      },
+      price: "1500",
       label: "head",
       qty: 5,
     },
@@ -33,11 +30,7 @@ export default function BundleRadio(props) {
       base_image: {
         small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
       },
-      price: {
-        final_price: {
-          formated_price: "3500"
-        }
-      },
+      price: "3500",
       label: "body",
       qty: 5,
     },
@@ -47,11 +40,7 @@ export default function BundleRadio(props) {
       base_image: {
         small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
       },
-      price: {
-        final_price: {
-          formated_price: "3500"
-        }
-      },
+      price: "3500",
       label: "body",
       qty: 5,
     },
@@ -98,7 +87,7 @@ export default function BundleRadio(props) {
         </label>
 
         <div className="bundle-product-price-fm">
-          {elem.price.final_price.formated_price}
+          {elem.price}
         </div>
         <div className="product__actions-item product-inner-quantity bundle-quantity-fm">
           <InputNumber
@@ -113,7 +102,7 @@ export default function BundleRadio(props) {
             //     (e) => e.id == elem.id
             //   )?.quantity || 1
             // }
-            value={1}
+            value={props.quantity}
             changeQuantity={(PlusOrMinus) => {
               if (props.selectedBundleProducts[props.praduct.type]) {
                 const qt = props.selectedBundleProducts[props.praduct.type][0].quantity;

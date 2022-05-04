@@ -68,9 +68,10 @@ function UpSell(props) {
     newPrice = product?.min_price
   }
 
-  console.log(oldPrice, "old price")
-  console.log(newPrice, "new Price")
-  currentPrice = newPrice < oldPrice ? <span style={{color: "red"}}>(newPrice - oldPrice)</span> : (newPrice - oldPrice) + "$"
+  // console.log(oldPrice, "old price")
+  // console.log(newPrice, "new Price")
+  currentPrice = Number(newPrice) < Number(oldPrice) ? "ups!!!" :((newPrice - oldPrice) + "$")
+  // console.log(currentPrice, "current price in upsell")
 
 
   return (

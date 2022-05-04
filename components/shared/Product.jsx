@@ -17,7 +17,7 @@ import { cartAddItem } from '../../store/cart'
 import { AddCartToken } from '../../store/token'
 import { compareAddItem } from '../../store/compare'
 import { wishlistAddItem } from '../../store/wishlist'
-import { setPopup, setPopupName, setUpCrossProd, setTempData } from '../../store/general'
+import { setPopup, setPopupName, setUpCrossProd, setTempData, setCrossValid } from '../../store/general'
 import {
   CheckToastSvg,
   FailSvg,
@@ -115,16 +115,16 @@ class Product extends PureComponent {
         fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
           .then(res => res.json())
           .then(data => {
-            if (data.length === 0) {
-              fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
-                .then(res2 => res2.json())
-                .then(data2 => {
-                  if (data2.length === 0) {
-                    this.props.setPopupName("")
-                  }
-                  setUpCrossProd(data2)
-                })
-            }
+            // if (data.length === 0) {
+            //   fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+            //     .then(res2 => res2.json())
+            //     .then(data2 => {
+            //       if (data2.length === 0) {
+            //         this.props.setPopupName("")
+            //       }
+            //       setUpCrossProd(data2)
+            //     })
+            // }
             this.props.setPopup(true)
             setUpCrossProd(data)
           })
@@ -133,10 +133,10 @@ class Product extends PureComponent {
         fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
           .then(res => res.json())
           .then(data => {
-            if (data.length === 0) {
-              this.props.setPopup(false)
-              this.props.setPopupName("")
-            }
+            // if (data.length === 0) {
+            //   this.props.setPopup(false)
+            //   this.props.setPopupName("")
+            // }
             this.props.setPopup(true)
             setUpCrossProd(data)
           })
@@ -146,6 +146,7 @@ class Product extends PureComponent {
 
 
   addcart = () => {
+    // console.log(this.props, "OOOOOOOOOOOOOOO______")
     if (this.props?.up_sell?.length === 0 && this.props?.cross_sell?.length === 0) {
       return true
     }
@@ -336,7 +337,7 @@ class Product extends PureComponent {
   }
 
   render() {
-    console.log(this.props, "props in product")
+    // console.log(this.props, "props in product")
 
     const {
       signed,
@@ -577,13 +578,14 @@ class Product extends PureComponent {
                   superCheck={null}
                 />
               )}
-              {console.log(product.data, "bundle test!!!!!")}
+              {console.log(this.props, "bundle in product.js!!!!!")}
               {product.data.type == 'bundle' ? (
                 <BundleProducts
                   handleId={this.handleId}
                   quantity={this.state.quantity}
                   handleTakeProd={this.handleTakeProd}
-                  // options={product.data.bundle_options.options}
+                  options={this.props.bundle.bundle_options}
+                  // options={product.data?.bundle_options}
                   handleChangeQuantity={this.handleChangeQuantity}
                   selectedBundleProducts={this.state.bundleProducts}
                 />
@@ -684,7 +686,7 @@ class Product extends PureComponent {
                                   this.state.locale,
                                   product?.data?.type == 'bundle'
                                     ? {
-                                      options: product.data.bundle_options,
+                                      bundle_options: product.data.bundle_options,
                                       selectedOptions: this.state.bundleProducts,
                                     }
                                     : null,
@@ -694,8 +696,9 @@ class Product extends PureComponent {
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    alert("this.addcart()")
+                                    // alert("this.addcart()")
                                     // alert(quantity)
+                                    this.props.setCrossValid(false)
                                     run()
                                   }}
                                   disabled={Addtocartdisabled}
@@ -729,7 +732,7 @@ class Product extends PureComponent {
                                     this.state.locale,
                                     product?.data?.type == 'bundle'
                                       ? {
-                                        options: product.data.bundle_options,
+                                        bundle_options: product.data.bundle_options,
                                         selectedOptions: this.state.bundleProducts,
                                       }
                                       : null,
@@ -739,11 +742,12 @@ class Product extends PureComponent {
                                   <button
                                     type="button"
                                     onClick={() => {
-                                      alert("this.props?.upSell?.length === 0 && this.props?.crossSell?.length > 0")
+                                      // alert("this.props?.upSell?.length === 0 && this.props?.crossSell?.length > 0")
                                       run()
                                       this.props.setTempData([product.data])
                                       this.props.setPopup(true);
-                                      setUpCrossProd(this.props?.crossSell)
+                                      this.props.setCrossValid(true)
+                                      setUpCrossProd(this.props?.cross_sell)
                                       this.props.setPopupName("crossel")
                                       // this.openUpCrosProd(product)
                                       // fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${product.product_id}&locale=en&currency=USD`)
@@ -777,10 +781,11 @@ class Product extends PureComponent {
                                     type="button"
                                     onClick={() => {
                                       run()
-                                      alert("else")
+                                      // alert("else")
                                       this.props?.up_sell?.length !== 0
                                       this.props.setTempData([product.data])
                                       this.props.setPopup(true)
+                                      this.props.setCrossValid(false)
                                       this.props.setPopupName("upsell")
                                       // ? setUpCrossProd(this.props?.upSell)
                                       // :
@@ -788,15 +793,15 @@ class Product extends PureComponent {
                                         .then(res => res.json())
                                         .then(data => {
                                           if (data.length === 0) {
-                                            fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${product.data.product_id}&locale=en&currency=USD`)
+                                            fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${product.data.product_id}&locale=en&currency=USD`)
                                               .then(res2 => res2.json())
                                               .then(data2 => {
-                                                console.log(data2, "fetched result in product 2")
+                                                // console.log(data2, "fetched result in product 2")
                                                 return setUpCrossProd(data2)
                                               })
                                           }
 
-                                          console.log(data, "fetched result in product")
+                                          // console.log(data, "fetched result in product")
                                           return setUpCrossProd(data)
                                         })
                                       // alert("last condition")
@@ -932,6 +937,7 @@ const mapDispatchToProps = {
   setPopup,
   setUpCrossProd,
   setTempData,
+  setCrossValid,
   AddImages,
   AddCartToken,
   cartAddItem,

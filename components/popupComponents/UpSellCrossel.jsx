@@ -14,6 +14,7 @@ import {url} from '../../helper'
 function UpSellCrossel({active, upCrosProd}) {
   // console.log(upCrosProd, 'upCrosProd in upsell')
   const popUpName = useSelector(state => state.general.popUpName)
+  const hastitle = useSelector(state => state.general.crossValid)
   const dispatch = useDispatch()
   useEffect(() => {
 
@@ -30,12 +31,12 @@ function UpSellCrossel({active, upCrosProd}) {
   } else if (popUpName == 'upsell') {
     content = <UpSell product={upCrosProd[0]}/>
   } else if (popUpName == 'crossel') {
-    content = <CrossSell product={upCrosProd} hasTitle={true}/>
+    content = <CrossSell product={upCrosProd} hasTitle={!hastitle}/>
   } else if (popUpName == 'crossel2') {
     content = <CrosselSecond product={upCrosProd}/>
   }
 
-  console.log(content,"content in upsellcrossel")
+  // console.log(content,"content in upsellcrossel")
 
   return (
     <>

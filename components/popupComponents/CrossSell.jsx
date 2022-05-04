@@ -12,7 +12,7 @@ function CrossSell({product, hasTitle}) {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log(product)
+    // console.log(product)
   }, [product])
 
 

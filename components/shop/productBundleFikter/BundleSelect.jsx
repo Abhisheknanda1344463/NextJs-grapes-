@@ -1,10 +1,10 @@
 // react
-import React, { useState } from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 import Image from "components/hoc/Image";
-import { FormattedMessage } from "react-intl";
+import {FormattedMessage} from "react-intl";
 import InputNumber from "components/shared/InputNumber";
-import { ArrowDown } from "../../../svg";
+import {ArrowDown} from "../../../svg";
 import BundleSelectProducts from "./BundleSelectProducts";
 
 // third-party
@@ -15,11 +15,7 @@ const product = [
     base_image: {
       small_image_url: "https://4lada.ru/forum/data/avatars/l/0/56.jpg?1491721563"
     },
-    price: {
-      final_price: {
-        formated_price: "1500"
-      }
-    },
+    price: "1500",
     label: "head"
   },
   {
@@ -27,11 +23,7 @@ const product = [
     base_image: {
       small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
     },
-    price: {
-      final_price: {
-        formated_price: "3500"
-      }
-    },
+    price: "2500",
     label: "body"
   },
   {
@@ -39,11 +31,7 @@ const product = [
     base_image: {
       small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
     },
-    price: {
-      final_price: {
-        formated_price: "3500"
-      }
-    },
+    price: "3500",
     label: "body"
   },
 ]
@@ -86,11 +74,11 @@ export default function BundleSelect(props) {
                 </div>
               </label>
               <div className="bundle-select-price-fm">
-                {selectProduct.price?.final_price?.formated_price
-                  ? selectProduct.price?.final_price?.formated_price
-                  : product[0].price?.final_price?.formated_price}
+                {selectProduct.price
+                  ? selectProduct.price
+                  : product[0].price}
               </div>
-              <ArrowDown className={isOpen ? "d-block rott_fms" : "d-block"} />
+              <ArrowDown className={isOpen ? "d-block rott_fms" : "d-block"}/>
             </div>
             <div
               className={
@@ -123,7 +111,7 @@ export default function BundleSelect(props) {
               // max={elem.qty}
               value={quantity}
               onChange={handleChangeQuantity}
-            // disabled={Addtocartdisabled}
+              // disabled={Addtocartdisabled}
             />
           </div>
         </div>
