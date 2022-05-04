@@ -5,20 +5,71 @@ import InputNumber from "components/shared/InputNumber";
 import Image from "components/hoc/Image";
 // third-party
 
+const product = [
+  {
+    name: "poxos",
+    base_image: {
+      small_image_url: "https://4lada.ru/forum/data/avatars/l/0/56.jpg?1491721563"
+    },
+    price: "1500",
+    label: "head"
+  },
+  {
+    name: "petros",
+    base_image: {
+      small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
+    },
+    price: "2500",
+    label: "body"
+  },
+  {
+    name: "hayk",
+    base_image: {
+      small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
+    },
+    price: "3500",
+    label: "body"
+  },
+  {
+    name: "test",
+    base_image: {
+      small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
+    },
+    price: "3500",
+    label: "body"
+  },
+  {
+    name: "prod",
+    base_image: {
+      small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
+    },
+    price: "3500",
+    label: "body"
+  },
+  {
+    name: "image",
+    base_image: {
+      small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
+    },
+    price: "3500",
+    label: "body"
+  },
+]
+
 export default function BundleMultiselect(props) {
   let [backgroundColor, setBackgroundColor] = useState(null);
   const changeBackgroundColor = (id) => {
     setBackgroundColor(id);
   };
-  const product = props.praduct.products;
+  // const product = props.praduct.products;
   const products = product.map((elem, index) => {
     return (
       <div
         key={index}
         className="bundle-radio-products"
-        style={
-          backgroundColor == elem.id ? { backgroundColor: "#ffc400" } : null
-        }
+        // style={
+        //   backgroundColor == elem.id ? { backgroundColor: "#ffc400" } : null
+        // }
       >
         <div className="bundle-input-fm multiselect-style">
           <input
@@ -54,7 +105,7 @@ export default function BundleMultiselect(props) {
           <div> {elem.name}</div>
         </label>
         <div className="bundle-product-price-fm">
-          {elem.price.final_price.formated_price}
+          {elem.price}
         </div>
         <div className="bundle-quantity-fm"></div>
       </div>
@@ -66,7 +117,8 @@ export default function BundleMultiselect(props) {
       <div className="bundleborder"></div>
       <div className="bundle-multiselect">
         <div className="bundle-title-fm">
-          <h4>{props.praduct.label}</h4>
+          {/*<h4>{props.praduct.label}</h4>*/}
+          <h4>multiselect</h4>
           <span>*</span>
         </div>
         <div className="bundle-multyselect-body-fm">{products}</div>

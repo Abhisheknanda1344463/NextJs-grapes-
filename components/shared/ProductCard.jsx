@@ -10,7 +10,7 @@ import {connect} from 'react-redux'
 import {toast} from 'react-toastify'
 import {useSelector} from 'react-redux'
 import {FormattedMessage} from 'react-intl'
-import {setPopup, setPopupName, setUpCrossProd, setTempData} from '../../store/general'
+import {setPopup, setPopupName, setUpCrossProd, setTempData, setCrossValid} from '../../store/general'
 import {wishlistRemoveItem} from '../../store/wishlist'
 // application
 import Currency from './Currency'
@@ -39,6 +39,7 @@ function ProductCard(props) {
     setPopupName,
     setUpCrossProd,
     setTempData,
+    setCrossValid,
     wishlist,
     wishlistRemoveItem,
   } = props
@@ -102,10 +103,10 @@ function ProductCard(props) {
   }
 
   const openUpCrosProd = (product) => {
-    if (product?.product?.up_sells.length === 0) {
+    if (product?.up_sell.length === 0) {
       getUpCrosselProd(product.product_id || product.product.id, 'crossel')
       setPopupName('crossel')
-    } else if (product?.product?.cross_sells.length === 0) {
+    } else if (product?.cross_sell.length === 0) {
       setPopupName('')
       setPopup(false)
     } else {
@@ -115,7 +116,8 @@ function ProductCard(props) {
   }
 
   const addcart = () => {
-    if (product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length === 0) {
+    // console.log(product, "produuuuuuuuuuuuuuuuuuu")
+    if (product?.up_sell.length === 0 && product?.cross_sell.length === 0) {
       return true
     }
     return false
@@ -203,6 +205,7 @@ function ProductCard(props) {
                                   type="button"
                                   onClick={(e) => {
                                     e.preventDefault()
+                                    setCrossValid(false)
                                     run()
                                   }}
                                   className={classNames(
@@ -219,7 +222,7 @@ function ProductCard(props) {
                                 </button>
                               )}
                             />
-                          ) : product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length > 0)
+                          ) : product?.up_sell.length === 0 && product?.cross_sell.length > 0)
                         ? (
                           <AsyncAction
                             action={() =>
@@ -241,6 +244,7 @@ function ProductCard(props) {
                                   e.preventDefault()
                                   run()
                                   setTempData([product])
+                                  setCrossValid(true)
                                   openUpCrosProd(product);
                                 }}
                                 className={classNames(
@@ -267,6 +271,7 @@ function ProductCard(props) {
                                   e.preventDefault()
                                   run()
                                   setTempData([product])
+                                  setCrossValid(false)
                                   openUpCrosProd(product);
                                 }}
                                 className={classNames(
@@ -356,33 +361,13 @@ function ProductCard(props) {
                   {/*  )}*/}
                   {/*/>*/}
                   {
-                    addcart()
-                      ? <AsyncAction
-                        action={() =>
-                          cartAddItem(
-                            product,
-                            [],
-                            1,
-                            cartToken,
-                            customer,
-                            selectedData,
-                            null,
-                            'homePage',
-                          )
-                        }
-                        render={({run, loading}) => (
+                    product && product?.type === 'configurable'
+                      ? (
+                        <Link href={url.product(product)}>
                           <button
                             type="button"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              openUpCrosProd(product);
-                              run()
-                            }}
                             className={classNames(
                               'btn btn-primary product-card__addtocart hide-for-tablet',
-                              {
-                                'btn-loading': loading,
-                              },
                             )}
                           >
                             <FormattedMessage
@@ -390,9 +375,9 @@ function ProductCard(props) {
                               defaultMessage="Add to cart"
                             />
                           </button>
-                        )}
-                      />
-                      : product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length > 0
+                        </Link>
+                      ) :
+                      addcart()
                         ? <AsyncAction
                           action={() =>
                             cartAddItem(
@@ -411,9 +396,9 @@ function ProductCard(props) {
                               type="button"
                               onClick={(e) => {
                                 e.preventDefault()
-                                run()
-                                setTempData([product])
+                                setCrossValid(false)
                                 openUpCrosProd(product);
+                                run()
                               }}
                               className={classNames(
                                 'btn btn-primary product-card__addtocart hide-for-tablet',
@@ -429,30 +414,69 @@ function ProductCard(props) {
                             </button>
                           )}
                         />
-                        : <AsyncAction
-                          render={({run, loading}) => (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault()
-                                run()
-                                setTempData([product])
-                                openUpCrosProd(product);
-                              }}
-                              className={classNames(
-                                'btn btn-primary product-card__addtocart hide-for-tablet',
-                                {
-                                  'btn-loading': loading,
-                                },
-                              )}
-                            >
-                              <FormattedMessage
-                                id="add.tocart"
-                                defaultMessage="Add to cart"
-                              />
-                            </button>
-                          )}
-                        />
+                        : product?.up_sell.length === 0 && product?.cross_sell.length > 0
+                          ? <AsyncAction
+                            action={() =>
+                              cartAddItem(
+                                product,
+                                [],
+                                1,
+                                cartToken,
+                                customer,
+                                selectedData,
+                                null,
+                                'homePage',
+                              )
+                            }
+                            render={({run, loading}) => (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  run()
+                                  setTempData([product])
+                                  setCrossValid(true)
+                                  openUpCrosProd(product);
+                                }}
+                                className={classNames(
+                                  'btn btn-primary product-card__addtocart hide-for-tablet',
+                                  {
+                                    'btn-loading': loading,
+                                  },
+                                )}
+                              >
+                                <FormattedMessage
+                                  id="add.tocart"
+                                  defaultMessage="Add to cart"
+                                />
+                              </button>
+                            )}
+                          />
+                          : <AsyncAction
+                            render={({run, loading}) => (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  run()
+                                  setTempData([product])
+                                  setCrossValid(false)
+                                  openUpCrosProd(product);
+                                }}
+                                className={classNames(
+                                  'btn btn-primary product-card__addtocart hide-for-tablet',
+                                  {
+                                    'btn-loading': loading,
+                                  },
+                                )}
+                              >
+                                <FormattedMessage
+                                  id="add.tocart"
+                                  defaultMessage="Add to cart"
+                                />
+                              </button>
+                            )}
+                          />
                   }
 
 
@@ -707,32 +731,13 @@ function ProductCard(props) {
             {/*/>*/}
 
             {
-              addcart()
-                ? <AsyncAction
-                  action={() =>
-                    cartAddItem(
-                      product,
-                      [],
-                      1,
-                      cartToken,
-                      customer,
-                      selectedData,
-                      null,
-                      'homePage',
-                    )
-                  }
-                  render={({run, loading}) => (
+              product && product?.type === 'configurable'
+                ? (
+                  <Link href={url.product(product)}>
                     <button
                       type="button"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        run()
-                      }}
                       className={classNames(
-                        'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms',
-                        {
-                          'btn-loading': loading,
-                        },
+                        'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fm',
                       )}
                     >
                       <FormattedMessage
@@ -740,9 +745,9 @@ function ProductCard(props) {
                         defaultMessage="Add to cart"
                       />
                     </button>
-                  )}
-                />
-                : product?.product?.up_sells.length === 0 && product?.product?.cross_sells.length > 0
+                  </Link>
+                ) :
+                addcart()
                   ? <AsyncAction
                     action={() =>
                       cartAddItem(
@@ -761,9 +766,8 @@ function ProductCard(props) {
                         type="button"
                         onClick={(e) => {
                           e.preventDefault()
+                          setCrossValid(false)
                           run()
-                          setTempData([product])
-                          openUpCrosProd(product);
                         }}
                         className={classNames(
                           'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms',
@@ -779,30 +783,69 @@ function ProductCard(props) {
                       </button>
                     )}
                   />
-                  : <AsyncAction
-                    render={({run, loading}) => (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault()
-                          run()
-                          setTempData([product])
-                          openUpCrosProd(product);
-                        }}
-                        className={classNames(
-                          'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms',
-                          {
-                            'btn-loading': loading,
-                          },
-                        )}
-                      >
-                        <FormattedMessage
-                          id="add.tocart"
-                          defaultMessage="Add to cart"
-                        />
-                      </button>
-                    )}
-                  />
+                  : product?.up_sell.length === 0 && product?.cross_sell.length > 0
+                    ? <AsyncAction
+                      action={() =>
+                        cartAddItem(
+                          product,
+                          [],
+                          1,
+                          cartToken,
+                          customer,
+                          selectedData,
+                          null,
+                          'homePage',
+                        )
+                      }
+                      render={({run, loading}) => (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            run()
+                            setTempData([product])
+                            setCrossValid(true)
+                            openUpCrosProd(product);
+                          }}
+                          className={classNames(
+                            'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms',
+                            {
+                              'btn-loading': loading,
+                            },
+                          )}
+                        >
+                          <FormattedMessage
+                            id="add.tocart"
+                            defaultMessage="Add to cart"
+                          />
+                        </button>
+                      )}
+                    />
+                    : <AsyncAction
+                      render={({run, loading}) => (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            run()
+                            setTempData([product])
+                            setCrossValid(false)
+                            openUpCrosProd(product);
+                          }}
+                          className={classNames(
+                            'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms',
+                            {
+                              'btn-loading': loading,
+                            },
+                          )}
+                        >
+                          <FormattedMessage
+                            id="add.tocart"
+                            defaultMessage="Add to cart"
+                          />
+                        </button>
+                      )}
+                    />
             }
           </div>
         </div>
@@ -845,6 +888,7 @@ const mapDispatchToProps = {
   wishlistRemoveItem,
   setUpCrossProd,
   setTempData,
+  setCrossValid,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductCard)

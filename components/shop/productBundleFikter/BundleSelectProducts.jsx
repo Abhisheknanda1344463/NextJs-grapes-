@@ -12,11 +12,7 @@ const product = [
     base_image: {
       small_image_url: "https://4lada.ru/forum/data/avatars/l/0/56.jpg?1491721563"
     },
-    price: {
-      final_price: {
-        formated_price: "1500"
-      }
-    },
+    price: "1500",
     label: "head"
   },
   {
@@ -24,11 +20,7 @@ const product = [
     base_image: {
       small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
     },
-    price: {
-      final_price: {
-        formated_price: "3500"
-      }
-    },
+    price: "2500",
     label: "body"
   },
   {
@@ -36,11 +28,7 @@ const product = [
     base_image: {
       small_image_url: "https://papacarlo72.ru/wp-content/uploads/2021/09/PapaCarloLogo.png"
     },
-    price: {
-      final_price: {
-        formated_price: "3500"
-      }
-    },
+    price: "3500",
     label: "body"
   },
 ]
@@ -68,7 +56,7 @@ export default function BundleSelectProducts(props) {
         </div>
         <div className="bundle-product-nam-fm"> {elem.name}</div>
         <div className="bundle-product-pric-fm">
-          {elem.price.final_price.formated_price}
+          {elem.price}
         </div>
       </div>
     );

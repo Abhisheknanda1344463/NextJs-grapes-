@@ -3524,7 +3524,8 @@ thead .cart-table__column--total {
 .crossel_tittle__heading {
   text-align: center;
   margin: 20px 0;
-  font-size: 24px
+  font-size: 24px;
+  padding: 0 15px;
 }
 
 .crossel_body {
@@ -3569,6 +3570,13 @@ thead .cart-table__column--total {
 /**********************************/
 
 @media (max-width: 500px) {
+
+  .short-description {
+    table {
+      max-width: 600px !important;
+      width: 100%!important;
+    }
+  }
   .modal-content {
     width: 95%;
   }
@@ -3610,7 +3618,8 @@ thead .cart-table__column--total {
     margin: 0;
 
     .product__actions-item--addtocart {
-      margin: 4px !important;
+      margin: 4px auto !important;
+      width: 85%!important;
     }
 
   }
@@ -3647,7 +3656,8 @@ thead .cart-table__column--total {
   }
 
   .crossel_tittle__heading {
-    font-size: 16px
+    font-size: 16px;
+    padding: 0 5px;
   }
 
   .crossel-content {

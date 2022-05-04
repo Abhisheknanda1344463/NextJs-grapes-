@@ -18,10 +18,11 @@ import {useRouter} from 'next/router'
 
 
 function ShopPageProduct(props) {
-  const {productSlug, layout, product, sidebarPosition, locale, loading} = props
+  const {productSlug, layout, product, sidebarPosition, locale, loading, up_sell, cross_sell, bundle} = props
   const [isLoading, setIsLoading] = useState(loading)
   const [relatedProducts, setRelatedProducts] = useState(props.relatedPproducts)
   const router = useRouter()
+  console.log(bundle, "bundle in ShopPageProduct.js")
   ////const [product, setProduct] = useState(data);
 
   const customer = useSelector((state) => state.customer)
@@ -94,8 +95,9 @@ function ShopPageProduct(props) {
                 productSlug={productSlug}
                 configurableVariantes={props?.configurableVariantes || null}
                 locale={router.locale}
-                // up_sell={up_sell ? up_sell : []}
-                // cross_sell={cross_sell ? cross_sell : []}
+                up_sell={up_sell ? up_sell : []}
+                cross_sell={cross_sell ? cross_sell : []}
+                bundle={bundle}
               />
               {/*<ProductTabs withSidebar />*/}
             </div>
@@ -126,8 +128,9 @@ function ShopPageProduct(props) {
               customer={customer}
               configurableVariantes={props?.configurableVariantes || null}
               locale={router.locale}
-              // up_sell={up_sell ? up_sell : []}
-              // cross_sell={cross_sell ? cross_sell : []}
+              up_sell={up_sell ? up_sell : []}
+              cross_sell={cross_sell ? cross_sell : []}
+              bundle={bundle}
             />
           </div>
         </div>

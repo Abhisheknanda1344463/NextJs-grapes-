@@ -109,6 +109,29 @@ router.get("/product-configurable-config/:id", function (req, res) {
   });
 });
 
+
+
+// router.get("/bundle-product/:id", function(req, res) {
+//   ProductControllers.Get_Bundle_Prods(req.params, req.query).then(response => {
+//     res.send(response)
+//   })
+// });
+
+router.get("/bundle-product/:id", function (req, res) {
+
+  const { locale } = req.query;
+  const { id } = req.params;
+  console.log(locale , "req.queryreq.queryreq.query")
+
+  ProductControllers.Get_Bundle_Prods({
+    locale,
+    id,
+  }).then((response) => {
+    res.send(response);
+  });
+});
+
+
 // ###################################################################### general
 
 router.get("/categories", function (req, res) {

@@ -107,9 +107,8 @@ const shopApi = {
     // return getCategoryBySlug(slug, options);
   },
   getConfigurabelConfigProduct: (id) => {
-    return fetch(`${url}/db/product-configurable-config/${id}`).then((res) =>
-      res.json(),
-    )
+    return fetch(`${url}/db/product-configurable-config/${id}`)
+      .then((res) => res.json())
   },
   /**
    * Returns product.
@@ -190,7 +189,7 @@ const shopApi = {
       `${megaUrl}/db/up-sell-products?limit=8&product_id=${productId}&locale=${lang}&currency=${currency}`,
     ).then((response) => {
       console.log(response, "response in get upsel prods________")
-     return response.json()
+      return response.json()
     }).catch(err => console.log(err))
   },
 
@@ -210,6 +209,25 @@ const shopApi = {
       .then((response) => response.json())
       .catch(err => console.log(err))
   },
+
+  getBundleProduct: (productId, options = {}) => {
+    let lang = 'en'
+    let currency = 'USD'
+    if (options.lang) {
+      lang = options.lang
+    }
+
+    if (options.currency) {
+      currency = options.currency.code
+    }
+
+    console.log(lang , "langlanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglang")
+
+    return fetch(`${megaUrl}/db/bundle-product/${productId}?locale=${lang}&currency=${currency}`)
+      .then((response) => response.json())
+      .catch(err => console.log(err))
+  },
+
   /**
    * Return products list.
    *

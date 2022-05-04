@@ -34,9 +34,10 @@ export default function BundleProducts(props) {
       </div>
       {/*<div className="bundls-fm">{bundls}</div>*/}
       <div className="bundls-fm">
-        <BundleRadio/>
-        <BundleCheckbox/>
-        <BundleSelect/>
+        <BundleRadio {...props}/>
+        <BundleCheckbox {...props}/>
+        <BundleSelect {...props}/>
+        <BundleMultiselect {...props}/>
       </div>
     </div>
   );

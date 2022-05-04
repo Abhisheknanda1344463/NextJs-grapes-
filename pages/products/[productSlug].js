@@ -13,7 +13,7 @@ export default function ProductInnerPage(props) {
   const prodID = props.product.data.product_id
   const cats = props.product.data.cats
 
-  console.log(props, 'prop in product slug___________________________')
+  // console.log(props, 'prop in product slug___________________________')
   const checkRelatedProducts = props.relatedPproducts.filter(item => item.product_id !== prodID)
   const {dispatch} = store
   useEffect(() => {
@@ -37,6 +37,7 @@ export default function ProductInnerPage(props) {
       up_sell={props.up_sell}
       locale={props.locale}
       loading={true}
+      bundle={props.bundle}
     />
   )
 }
@@ -76,13 +77,28 @@ export async function getServerSideProps({locale, locales, req, res, query}) {
     limit: 8,
   })
 
+  // const bundle = await shopApi.getBundleProduct(product.product_id, {
+  //   lang: selectedLocale,
+  //   currency: currency,
+  //   limit: 8,
+  // })
+
   let configurabelConfigProduct = null
+  let bundleProduct = null
 
   if (product.type == 'configurable') {
     const configurableId = product.parent_id || product.product_id
     configurabelConfigProduct = await shopApi.getConfigurabelConfigProduct(
       configurableId,
     )
+  }
+
+  if(product.type == "bundle") {
+    bundleProduct = await shopApi.getBundleProduct(product.product_id,{
+      lang: selectedLocale,
+      currency: currency,
+    } )
+
   }
   const dispatches = {
     ...generalDispatches.clientSide,
@@ -100,6 +116,7 @@ export async function getServerSideProps({locale, locales, req, res, query}) {
       configurableVariantes: configurabelConfigProduct,
       cross_sell: cross_sell,
       up_sell: up_sell,
+      bundle: bundleProduct,
     },
   }
 }

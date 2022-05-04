@@ -20,7 +20,10 @@ import {
   SET_CONFIGS,
   SET_UP_CROSS_PRODS,
   SET_TEMPORARY_DATA,
+  // SET_VALID_CROSS,
 } from "./generalActionTypes";
+// console.log(SET_TEMPORARY_DATA, "data valid in general reducerx")
+// console.log(SET_VALID_CROSS, "cros valid in general reducerx")
 
 export const setInitialMinPrice = (payload) => {
   return {
@@ -104,6 +107,11 @@ export function setLogo(payload) {
       payload,
     });
 }
+
+export const setCrossValid = (payload) => ({
+  type: "SET_VALID_CROSS",
+  payload,
+});
 
 export const setUpCrossProd = (payload) => ({
   type: SET_UP_CROSS_PRODS,
