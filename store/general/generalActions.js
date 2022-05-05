@@ -20,7 +20,8 @@ import {
   SET_CONFIGS,
   SET_UP_CROSS_PRODS,
   SET_TEMPORARY_DATA,
-  // SET_VALID_CROSS,
+  SET_DB_NAME,
+  SET_META_TAGS
 } from "./generalActionTypes";
 // console.log(SET_TEMPORARY_DATA, "data valid in general reducerx")
 // console.log(SET_VALID_CROSS, "cros valid in general reducerx")
@@ -31,6 +32,20 @@ export const setInitialMinPrice = (payload) => {
     payload,
   };
 };
+
+export const setMetaPath = (payload) => {
+  return {
+    type: SET_DB_NAME,
+    payload,
+  };
+};
+export const setMetaTags = (payload) => {
+  return {
+    type: SET_META_TAGS,
+    payload,
+  };
+};
+
 
 export const setInitialMaxPrice = (payload) => {
   return {

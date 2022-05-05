@@ -1,6 +1,6 @@
 // react
 import React from "react";
-
+import Head from "next/head";
 // third-party
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -30,8 +30,14 @@ export default function BlogPost(props) {
   const createMarkup = (item) => {
     return { __html: item };
   };
+  console.log(blog, 'blogblogblogblog');
   return (
     <>
+      <Head>
+        <meta property="og:title" name="title" content={blog?.meta_title} />
+        <meta property="og:description" name="description" content={blog?.meta_description} />
+        <meta property="og:keywords" name="keywords" content={blog?.meta_keywords} />
+      </Head>
       <div className={`block post post--layout--${layout}`}>
         <div
           className={`post__header post-header post-header--layout--${layout}`}
