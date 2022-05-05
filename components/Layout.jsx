@@ -46,6 +46,7 @@ function Layout(props) {
   const dispatch = useDispatch();
   const width = useWindowWidth();
   const customer = useSelector((state) => state.customer);
+  const dbName = useSelector((state) => state.general.dbName);
   const selectedData = useSelector((state) => state.locale.code);
   const upDomain = domain.charAt(0).toUpperCase() + domain.slice(1);
   useEffect(() => {
@@ -144,6 +145,14 @@ function Layout(props) {
         <link rel="canonical" href={`${upDomain}`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="og:description" content={`${theme.fullName}`} />
+        <meta property="og:title" name="title" content={`${theme.fullName}`} />
+        <meta property="og:keywords" name="keywords" content={`${theme.fullName}`} />
+
+        <meta
+          property="og:image"
+          name="image"
+          content={`${dbName}/storage${domain}/configuration/share_pic/share_pic.webp`}
+        />
       </Head>
       <ToastContainer autoClose={3000} />
       {isMobile && <MobileMenu />}
@@ -165,7 +174,7 @@ function Layout(props) {
           <Footer />
         </footer>
 
-        <UpSellCrossel active={popUp} upCrosProd={upCrosProd}/>
+        <UpSellCrossel active={popUp} upCrosProd={upCrosProd} />
       </div>
     </div>
   );
@@ -181,7 +190,7 @@ function Layout(props) {
 // };
 
 const mapStateToProps = ({
-  general: { fbPixel, customJs, domain, popUp,upCrosProd },
+  general: { fbPixel, customJs, domain, popUp, upCrosProd },
   cartToken,
 
 }) => ({

@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
+import Head from "next/head";
 import store from "../store";
 import { domainUrl } from "../helper";
+import { useSelector } from "react-redux"
 import serverSideActions from "../services/serverSide";
 import clientSideActions from "../services/clientSide";
 import HomePageOne from "../components/home/HomePageOne";
@@ -17,7 +19,7 @@ function Home({
 }) {
   const { dispatch } = store;
   const firstLoad = true;
-
+  const domain = useSelector((state) => state.general.domain);
   useEffect(() => {
     for (let actionKey in dispatchesNew) {
       dispatch(allActions[actionKey](dispatchesNew[actionKey]));
@@ -25,7 +27,14 @@ function Home({
   }, [locale]);
 
   return (
-    <div>
+    <React.Fragment>
+      <Head>
+        <meta
+          property="og:image"
+          name="image"
+          content={`${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}
+        />
+      </Head>
       <HomePageOne
         locale={locale}
         currency={currency}
@@ -36,7 +45,7 @@ function Home({
         firstLoad={firstLoad}
         dbName={dbName}
       />
-    </div>
+    </React.Fragment>
   );
 }
 

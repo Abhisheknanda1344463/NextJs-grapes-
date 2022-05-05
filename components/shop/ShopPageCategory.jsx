@@ -178,7 +178,7 @@ export function reducer(state, action) {
           [action.filter]:
             state.filters[action.filter] && action.filter !== "price"
               ? state.filters[action.filter] +
-                (action.value ? "," + action.value : "")
+              (action.value ? "," + action.value : "")
               : action.value,
         },
       };
@@ -240,6 +240,7 @@ function ShopPageCategory(props) {
   const { page: selectedPage } = router.query;
   const [page, setPage] = useState(selectedPage);
 
+
   const offcanvas = columns === 3 ? "mobile" : "always";
   const prevPageRef = useRef();
   const prevCatIdRef = useRef();
@@ -282,9 +283,8 @@ function ShopPageCategory(props) {
       console.log(setPageNumber, "setPageNumber");
       prevStateFiltersRef.current = state.filters;
       prevStateOptionsRef.current = state.options;
-      const location = `${window.location.pathname}${
-        query ? `?cat_id=${props.categoryId}&` : ""
-      }${query}`;
+      const location = `${window.location.pathname}${query ? `?cat_id=${props.categoryId}&` : ""
+        }${query}`;
       router.push(location, location);
     }
   }, [state.filters, state.options, page]);
@@ -486,9 +486,9 @@ function ShopPageCategory(props) {
           <div className="posts-view">
             <div className="posts-view__pagination">
               {productsList &&
-              //////FIXME CHANGE TO LIMIT
-              productsList.data.length < 20 &&
-              page == 1 ? (
+                //////FIXME CHANGE TO LIMIT
+                productsList.data.length < 20 &&
+                page == 1 ? (
                 <></>
               ) : (
                 <Pagination

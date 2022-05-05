@@ -19,7 +19,8 @@ import {
   SET_CONFIGS,
   SET_UP_CROSS_PRODS,
   SET_TEMPORARY_DATA,
-  SET_VALID_CROSS,
+  SET_DB_NAME,
+  SET_META_TAGS
 } from "./generalActionTypes";
 
 const initialState = {
@@ -37,6 +38,9 @@ const initialState = {
   upCrosProd: [],
   temporaryData: [],
   crossValid: false,
+  dbName: '',
+  metas: null
+
 };
 
 export default function generalReducer(state = initialState, action) {
@@ -53,7 +57,16 @@ export default function generalReducer(state = initialState, action) {
         ...state,
         temporaryData: action.payload,
       };
-
+    case SET_DB_NAME:
+      return {
+        ...state,
+        dbName: action.payload
+      }
+    case SET_META_TAGS:
+      return {
+        ...state,
+        metas: action.payload
+      }
     case SET_UP_CROSS_PRODS:
       return {
         ...state,
