@@ -20,6 +20,8 @@ import {
   SET_CONFIGS,
   SET_UP_CROSS_PRODS,
   SET_TEMPORARY_DATA,
+  SET_DB_NAME,
+  SET_META_TAGS
 } from "./generalActionTypes";
 
 export const setInitialMinPrice = (payload) => {
@@ -28,6 +30,20 @@ export const setInitialMinPrice = (payload) => {
     payload,
   };
 };
+
+export const setMetaPath = (payload) => {
+  return {
+    type: SET_DB_NAME,
+    payload,
+  };
+};
+export const setMetaTags = (payload) => {
+  return {
+    type: SET_META_TAGS,
+    payload,
+  };
+};
+
 
 export const setInitialMaxPrice = (payload) => {
   return {

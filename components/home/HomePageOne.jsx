@@ -1,6 +1,7 @@
 import React, { useEffect, useState, memo, useRef } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { setMetaPath, setMetaTags } from "../../store/general";
 import { useSelector, useDispatch } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import BlockProducts from "../blocks/BlockProducts";
@@ -51,9 +52,9 @@ function HomePageOne(props) {
   const metaTags = props?.metas ? JSON.parse(props.metas[0].home_seo) : "";
   const messageTitle = homepage_title_text.props.defaultMessage;
   const messageIntro = homepage_intro_text.props.defaultMessage;
-
-  // console.log(messageTitle, messageIntro, "LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOI")
-
+  dispatch(setMetaPath(dbName))
+  dispatch(setMetaTags(metaTags))
+  const upDomain = domain.charAt(0).toUpperCase() + domain.slice(1);
   const getHomeProducts = () => {
     try {
       fetch(
@@ -100,17 +101,22 @@ function HomePageOne(props) {
     setFirstLoad(false);
     ////  getFeaturedProducts();
   }, [router.locale]);
-
+  console.log(domain, 'domaindomaindomaindomain');
   return (
     <React.Fragment>
       <Head>
         <title>{dbName}</title>
+        <link rel="canonical" href={`${upDomain}`} />
         <meta name="title" content={metaTags.meta_title} />
         <meta name="description" content={metaTags.meta_description} />
         <meta name="keywords" content={metaTags.meta_keywords} />
+        <meta property="og:title" name="title" content={metaTags.meta_title} />
+        <meta property="og:description" name="description" content={metaTags.meta_description} />
+        <meta property="og:keywords" name="keywords" content={metaTags.meta_keywords} />
         <meta
+          property="og:image"
           name="image"
-          content={`${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}
+          content={`${dbName}/storage${domain}/configuration/share_pic/share_pic.webp`}
         />
       </Head>
       <BlockSlideShow history={history} />

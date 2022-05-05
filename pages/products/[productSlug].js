@@ -1,10 +1,10 @@
-import {useEffect} from 'react'
-import {useRouter} from 'next/router'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 import store from '../../store'
 import shopApi from '../../api/shop'
 import allActions from '../../services/actionsArray'
-import {generalProcessForAnyPage} from '../../services/utils'
+import { generalProcessForAnyPage } from '../../services/utils'
 import ShopPageProduct from '../../components/shop/ShopPageProduct'
 
 
@@ -13,9 +13,8 @@ export default function ProductInnerPage(props) {
   const prodID = props.product.data.product_id
   const cats = props.product.data.cats
 
-  console.log(props, 'prop in product slug___________________________')
   const checkRelatedProducts = props.relatedPproducts.filter(item => item.product_id !== prodID)
-  const {dispatch} = store
+  const { dispatch } = store
   useEffect(() => {
     window.history.replaceState(null, '', window.location.pathname)
     ///router.push(window.location.pathname, window.location.pathname);
@@ -42,8 +41,8 @@ export default function ProductInnerPage(props) {
 }
 
 
-export async function getServerSideProps({locale, locales, req, res, query}) {
-  const {productSlug} = query
+export async function getServerSideProps({ locale, locales, req, res, query }) {
+  const { productSlug } = query
 
   const {
     locale: defaultLocaleSelected,
@@ -95,7 +94,7 @@ export async function getServerSideProps({locale, locales, req, res, query}) {
       locale: selectedLocale,
       dispatches,
       productSlug: productSlug,
-      product: {data: product},
+      product: { data: product },
       relatedPproducts: relatedPproducts,
       configurableVariantes: configurabelConfigProduct,
       cross_sell: cross_sell,
