@@ -53,7 +53,7 @@ function Get_Settings(fullUrl, urlStore) {
             if (key == "custom_javascript") {
               key = "custom_js";
             }
-            return { [key]: value };
+            return value ? { [key]: value } : '';
           })
           .reduce((acc, next) => {
             return {
@@ -125,9 +125,7 @@ function Get_Core_Config() {
 
 function Get_Translations(query) {
   return new Promise((resolve, reject) => {
-    console.log(query.locale, "aaaaaaaaaaaaa");
     Translations.findOne({ lang: query.locale }).then((res) => {
-      console.log(res, "aaaaaaaaaaaaa");
       resolve({ [query.locale]: { translations: res.data } });
     });
   });

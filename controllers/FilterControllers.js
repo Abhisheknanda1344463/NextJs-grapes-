@@ -4,7 +4,6 @@ const CategoryFilterableAttributes = require("../models/CategoryFilterableAttrib
 
 function Get_Filters(props) {
   const { lang, category_id } = props;
-  console.log(category_id, lang);
   return new Promise((resolve, reject) => {
     CategoryFilterableAttributes.find({ category_id: category_id }).then(
       (response) => {

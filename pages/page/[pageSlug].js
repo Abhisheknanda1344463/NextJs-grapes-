@@ -9,7 +9,6 @@ import BlogPageCategory from "../../components/blog/BlogPageCategory";
 import { generalProcessForAnyPage } from "../../services/utils";
 
 export default function Page(props) {
-  console.log(props.blog, "blog in blogslug")
   const { query } = useRouter();
   const { dispatch } = store;
   useEffect(() => {
@@ -61,7 +60,6 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     content = await fetch(domainUrl(`${dbName}/db/cms/blogs?locale=${selectedLocale}&page=${page}&limit=${6}`));
 
     dataContent = await content.json();
-    console.log(dataContent, "datacontent")
     blog = {
       data: dataContent.data,
       total: dataContent?.meta?.total || 3,
