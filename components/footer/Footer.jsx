@@ -7,11 +7,12 @@ import FooterContacts from "./FooterContacts";
 import FooterNewsletter from "./FooterNewsletter";
 import ToTop from "./ToTop";
 import FooterAccount from "./FooterAccount";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 
 function Footer() {
   const hasTracking = useSelector(state => state.general.coreConfigs.sales_tracking_tracking_active)
   const hasContact = useSelector(state => state.general.coreConfigs.theme_contact_us_active)
+  const showSubscribtion = useSelector(state => state.general.coreConfigs.theme_subscription_active)
   const storeConfigs = useSelector((state) => state.general.store_configs);
   return (
     <div className="site-footer">
@@ -37,15 +38,18 @@ function Footer() {
           </div>
 
           <div className="footer-newsletter-hide">
-            <FooterContacts />
+            <FooterContacts/>
           </div>
 
-          <div className="newsletter-block">
-            <FooterNewsletter id='outlined-email-input_2' />
-          </div>
+          {
+            showSubscribtion === "1" &&
+            <div className="newsletter-block">
+              <FooterNewsletter id='outlined-email-input_2'/>
+            </div>
+          }
         </div>
       </div>
-      <ToTop />
+      <ToTop/>
     </div>
   );
 }

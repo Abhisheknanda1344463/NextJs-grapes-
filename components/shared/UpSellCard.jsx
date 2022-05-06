@@ -281,7 +281,12 @@ const UpSellCard = (props) => {
               <form className="product__options">
                 <div className="form-group product__option">
                   <div className="product__actions">
-                    <div className="product__actions-item product__actions-item--addtocart">
+                    <div className={classNames("product__actions-item product__actions-item--addtocart",
+                      {
+                        "button_disabled": product.qty === 0
+                          && backorders == 0
+                          && outOfStock == 1
+                      })}>
                       {/*{console.log(product, cartToken, customer, selectedData, "__--__--__--__--__--___")}*/}
                       {
                         product && product.type === 'configurable' ? (

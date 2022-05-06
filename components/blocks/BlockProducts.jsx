@@ -9,7 +9,7 @@ import PropTypes from 'prop-types'
 import BlockHeaderCustom from '../shared/BlockHeaderCustom'
 import ProductCard       from '../shared/ProductCard'
 import { Helmet }        from 'react-helmet-async'
-import UpSellCrossel     from 'components/popupComponents/UpSellCrossel'
+import PopupModal     from 'components/popupComponents/PopupModal'
 import Head              from 'next/head'
 
 

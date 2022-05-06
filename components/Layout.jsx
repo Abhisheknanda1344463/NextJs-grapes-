@@ -22,7 +22,7 @@ import { AddCartToken } from "../store/token";
 import { useRouter } from "next/router";
 import useWindowWidth from "../hooks/useWindowWidth";
 import AccountResetPassword from "./account/AccountResetPassword";
-import UpSellCrossel from "./popupComponents/UpSellCrossel";
+import PopupModal from "./popupComponents/PopupModal";
 // import UpSell from "./popupComponents/UpSellCrossel";
 // import UpSellCrossel from "./popupComponents/UpSellCrossel";
 
@@ -165,7 +165,7 @@ function Layout(props) {
           <Footer />
         </footer>
 
-        <UpSellCrossel active={popUp} upCrosProd={upCrosProd}/>
+        <PopupModal active={popUp} upCrosProd={upCrosProd}/>
       </div>
     </div>
   );

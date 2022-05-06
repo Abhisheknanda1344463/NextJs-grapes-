@@ -52,6 +52,7 @@ function Get_Menus(props) {
                 locale["page_key"] = item.page_key;
                 locale["type"] = item.type;
                 locale["url_key"] = item.url_key;
+                locale["position"] = item.position;
                 translatedData.push(locale);
               }
             });
