@@ -45,13 +45,15 @@ function MobileMenu(props) {
   });
 
   const navLinksMobile = useSelector((state) =>
-    state.general.menuList.filter((items) => items.type == "header")
+    state.general.menuList.filter((items) => items.type == "header").sort((a, b) => a.position - b.position)
   );
   const navLinksMobileFooter = useSelector((state) =>
-    state.general.menuList.filter((items) => items.type == "footer")
+    state.general.menuList.filter((items) => items.type == "footer").sort((a, b) => a.position - b.position)
   );
+
+  // console.log(navLinksMobile, navLinksMobileFooter, "test in mobile links")
   const handleItemClick = (item) => {
-    console.log(item, "item in handle item:___________________________________________")
+    // console.log(item, "item in handle item:___________________________________________")
     if (item.data) {
       if (item.data.type === "language") {
         changeLocale(item.data.locale);

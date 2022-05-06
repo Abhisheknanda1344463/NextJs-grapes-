@@ -140,8 +140,10 @@ router.get("/categories", function (req, res) {
   });
 });
 router.get("/cms/menus", function (req, res) {
-  CategoryControllers.Get_Menus(req.query).then((response) =>
-    res.send(response)
+  CategoryControllers.Get_Menus(req.query).then((response) => {
+    // console.log(response, "test in cms-menu?")
+      res.send(response)
+    }
   );
 });
 

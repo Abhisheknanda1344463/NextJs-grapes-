@@ -5,9 +5,8 @@ import React, {useState, useEffect} from "react";
 import classNames from "classnames";
 import Link from "next/link";
 import PropTypes from "prop-types";
-import {connect} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import {toast} from "react-toastify";
-import {useSelector} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {setPopup} from "../../store/general";
 // application
@@ -29,6 +28,9 @@ function CrosselCard(props) {
   const {customer, product, layout, cartAddItem, wishlistAddItem, setPopup, only} = props;
   const [dimension, setDimension] = useState(1200);
   const [quantity, setQuantity] = useState(1)
+
+  const backorders = useSelector(state => state.general.coreConfigs.catalog_inventory_stock_options_backorders)
+  const outOfStock = useSelector(state => state.general.coreConfigs.catalog_products_homepage_out_of_stock_items)
 
   useEffect(() => {
     function handleResize() {
@@ -122,40 +124,47 @@ function CrosselCard(props) {
                       // disabled={Addtocartdisabled}
                     />
                   </div>
+                  <div className={classNames(" ",
+                    {
+                      "button_disabled": product.qty === 0
+                        && backorders == 0
+                        && outOfStock == 1
+                    })}>
+                    <AsyncAction
+                      action={() =>
+                        cartAddItem(
+                          product,
+                          [],
+                          quantity,
+                          cartToken,
+                          customer,
+                          selectedData
+                        )
+                      }
+                      render={({run, loading}) => (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            run()
+                            // alert(quantity)
+                            // console.log(quantity, "quantity value ----")
+                          }}
+                          className={classNames(
+                            "btn btn-primary product-card__addtocart hide-for-tablet",
+                            {
+                              "btn-loading": loading,
+                            }
+                          )}
+                        >
+                          <FormattedMessage
+                            id="add.tocart"
+                            defaultMessage="Add to cart"
+                          />
+                        </button>
+                      )}
+                    />
+                  </div>
 
-                  <AsyncAction
-                    action={() =>
-                      cartAddItem(
-                        product,
-                        [],
-                        quantity,
-                        cartToken,
-                        customer,
-                        selectedData
-                      )
-                    }
-                    render={({run, loading}) => (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          run()
-                          // alert(quantity)
-                          // console.log(quantity, "quantity value ----")
-                        }}
-                        className={classNames(
-                          "btn btn-primary product-card__addtocart hide-for-tablet",
-                          {
-                            "btn-loading": loading,
-                          }
-                        )}
-                      >
-                        <FormattedMessage
-                          id="add.tocart"
-                          defaultMessage="Add to cart"
-                        />
-                      </button>
-                    )}
-                  />
                 </div>
                 <Image
                   alt=""
@@ -250,6 +259,50 @@ function CrosselCard(props) {
                     // disabled={Addtocartdisabled}
                   />
                 </div>
+                <div className={classNames(" ",
+                  {
+                    "button_disabled": product.qty === 0
+                      && backorders == 0
+                      && outOfStock == 1
+                  })}>
+                  <AsyncAction
+                    action={() =>
+                      cartAddItem(product, [], quantity, cartToken, customer, selectedData)
+                    }
+                    render={({run, loading}) => (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          run();
+                          // setPopup(true);
+                        }}
+                        className={classNames(
+                          "btn btn-primary product-card__addtocart hide-for-tablet",
+                          {
+                            "btn-loading": loading,
+                          }
+                        )}
+                      >
+                        <FormattedMessage
+                          id="add.tocart"
+                          defaultMessage="Add to cart"
+                        />
+                      </button>
+                    )}
+                  />
+                </div>
+
+              </div>
+              <div className="product-card__actions">
+                <div className="product-card__buttons"></div>
+              </div>
+              <div className={classNames(" ",
+                {
+                  "button_disabled": product.qty === 0
+                    && backorders == 0
+                    && outOfStock == 1
+                })}>
                 <AsyncAction
                   action={() =>
                     cartAddItem(product, [], quantity, cartToken, customer, selectedData)
@@ -257,49 +310,20 @@ function CrosselCard(props) {
                   render={({run, loading}) => (
                     <button
                       type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        run();
-                        // setPopup(true);
-                      }}
+                      onClick={run}
                       className={classNames(
-                        "btn btn-primary product-card__addtocart hide-for-tablet",
+                        "btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ",
                         {
                           "btn-loading": loading,
                         }
                       )}
                     >
-                      <FormattedMessage
-                        id="add.tocart"
-                        defaultMessage="Add to cart"
-                      />
+                      <FormattedMessage id="add.tocart" defaultMessage="Add to cart"/>
                     </button>
                   )}
                 />
               </div>
-              <div className="product-card__actions">
-                <div className="product-card__buttons"></div>
-              </div>
 
-              <AsyncAction
-                action={() =>
-                  cartAddItem(product, [], quantity, cartToken, customer, selectedData)
-                }
-                render={({run, loading}) => (
-                  <button
-                    type="button"
-                    onClick={run}
-                    className={classNames(
-                      "btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ",
-                      {
-                        "btn-loading": loading,
-                      }
-                    )}
-                  >
-                    <FormattedMessage id="add.tocart" defaultMessage="Add to cart"/>
-                  </button>
-                )}
-              />
             </>
           </div>
           : <></>

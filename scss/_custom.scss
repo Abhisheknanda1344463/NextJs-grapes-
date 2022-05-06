@@ -30,6 +30,12 @@
   min-height: 200px;
 }
 
+.button_disabled {
+  pointer-events: none !important;
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
+
 .container_fm {
   max-width: 1140px;
   padding: 16px;
@@ -1548,7 +1554,12 @@
 
 .f16 {
   font-size: 16px;
+  table {
+    width: 100% !important;
+  }
 }
+
+
 
 .block-products-carousel__cell {
   padding: 0px 10px;
@@ -3063,13 +3074,16 @@ thead .cart-table__column--total {
   z-index: 202;
   transition: 0.5s;
   pointer-events: none;
-  transform: scale(0);
+  //transform: scale(0);
+  opacity: 0;
+  visibility: hidden;
 }
 
 .modalss.active {
   opacity: 1;
+  visibility: visible;
   pointer-events: all;
-  transform: scale(1);
+  //transform: scale(1);
 }
 
 .modal-content {

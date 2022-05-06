@@ -100,6 +100,7 @@ function Get_Core_Config() {
           "theme.blog.active",
           "theme.contact_us.active",
           "sales.tracking.tracking.active",
+          "theme.subscription.active",
         ],
       },
     })

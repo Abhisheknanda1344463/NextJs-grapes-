@@ -11,7 +11,7 @@ import shopApi from '../../api/shop'
 import {url} from '../../helper'
 
 
-function UpSellCrossel({active, upCrosProd}) {
+function PopupModal({active, upCrosProd}) {
   // console.log(upCrosProd, 'upCrosProd in upsell')
   const popUpName = useSelector(state => state.general.popUpName)
   const hastitle = useSelector(state => state.general.crossValid)
@@ -36,32 +36,27 @@ function UpSellCrossel({active, upCrosProd}) {
     content = <CrosselSecond product={upCrosProd}/>
   }
 
-  // console.log(content,"content in upsellcrossel")
-
   return (
     <>
-      {
-        upCrosProd.length === 0
-          ? <></>
-          : <div
-            className={active ? 'modalss active' : 'modalss'}
-            onClick={() => dispatch(setPopup(false))}
-          >
-            <div
-              className={
-                active ? `modal-content active ${popUpName}` : 'modal-content'
-              }
-              onClick={(e) => e.stopPropagation()}
-            >
+      <div
+        className={active ? 'modalss active' : 'modalss'}
+        onClick={() => dispatch(setPopup(false))}
+      >
+        <div
+          className={
+            active ? `modal-content active ${popUpName}` : 'modal-content'
+          }
+          onClick={(e) => e.stopPropagation()}
+        >
 
-              {content}
+          {content}
 
-            </div>
-          </div>
-      }
+        </div>
+      </div>
+
     </>
   )
 }
 
 
-export default UpSellCrossel
+export default PopupModal

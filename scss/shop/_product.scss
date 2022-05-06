@@ -7,6 +7,14 @@
 @import "../mixins/direction";
 
 
+.active-title {
+  border-bottom: 2px solid $main-theme-color-light;
+}
+
+.desc-heade-title {
+  cursor: pointer;
+}
+
 .label-attr__code {
   position: relative;
   border: 1px dashed #c7c7c7;

@@ -22,7 +22,7 @@ import { AddCartToken } from "../store/token";
 import { useRouter } from "next/router";
 import useWindowWidth from "../hooks/useWindowWidth";
 import AccountResetPassword from "./account/AccountResetPassword";
-import UpSellCrossel from "./popupComponents/UpSellCrossel";
+import PopupModal from "./popupComponents/PopupModal";
 // import UpSell from "./popupComponents/UpSellCrossel";
 // import UpSellCrossel from "./popupComponents/UpSellCrossel";
 
@@ -146,7 +146,11 @@ function Layout(props) {
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="og:description" content={`${theme.fullName}`} />
         <meta property="og:title" name="title" content={`${theme.fullName}`} />
-        <meta property="og:keywords" name="keywords" content={`${theme.fullName}`} />
+        <meta
+          property="og:keywords"
+          name="keywords"
+          content={`${theme.fullName}`}
+        />
 
         <meta
           property="og:image"
@@ -174,7 +178,7 @@ function Layout(props) {
           <Footer />
         </footer>
 
-        <UpSellCrossel active={popUp} upCrosProd={upCrosProd} />
+        <PopupModal active={popUp} upCrosProd={upCrosProd} />
       </div>
     </div>
   );
@@ -192,7 +196,6 @@ function Layout(props) {
 const mapStateToProps = ({
   general: { fbPixel, customJs, domain, popUp, upCrosProd },
   cartToken,
-
 }) => ({
   domain,
   fbPixel,

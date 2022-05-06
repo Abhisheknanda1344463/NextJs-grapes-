@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { FormattedMessage } from "react-intl";
+import {FormattedMessage} from "react-intl";
 
-import { url } from "../../helper";
-import { connect } from "react-redux";
+import {url} from "../../helper";
+import {connect} from "react-redux";
 import TrackingNumber from "./TrackingNumber";
 
 class FooterAccount extends React.Component {
@@ -37,11 +37,12 @@ class FooterAccount extends React.Component {
         return 0;
       });
     }
+    console.log(navLinks)
     const trackingNumber = (
       <div className="trackingNumber-fms">
         <Link href="/tracking">
           <a>
-            <FormattedMessage id="tracking" defaultMessage="Tracking Number" />
+            <FormattedMessage id="tracking" defaultMessage="Tracking Number"/>
           </a>
         </Link>
       </div>
@@ -60,7 +61,7 @@ class FooterAccount extends React.Component {
       </div>
     );
 
-    const links = this.state.footerLinks.map((link, index) => (
+    const links = navLinks.map((link, index) => (
       <div key={index} className="footerLinks-fms">
         <Link
           key={link.id}

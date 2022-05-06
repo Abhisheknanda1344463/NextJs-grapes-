@@ -156,7 +156,7 @@ function ProductCard(props) {
   let image
   let price
   let features
-  // console.log(product, ': product in product card')
+  console.log(product, ': product in product card')
   if (product) {
     if (product.images && product.images.length > 0) {
       image = (
@@ -165,7 +165,12 @@ function ProductCard(props) {
             <Link href={url.product(product)}>
               <div className="product-image__body product-image__body-fms">
                 <div className="item_overlay hide-for-tablet"></div>
-                <div className="img_btn_wrapper">
+                <div className={classNames("img_btn_wrapper",
+                  {
+                    "button_disabled": product.qty === 0
+                      && backorders == 0
+                      && outOfStock == 1
+                  })}>
 
                   {
                     product && product?.type === 'configurable'
