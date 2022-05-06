@@ -64,16 +64,7 @@ function NavLinks(props) {
     }
   };
 
-  if (navLinks != undefined) {
-    navLinks.sort(function (a, b) {
-      var keyA = a.position,
-        keyB = b.position;
-      // Compare the 2 dates
-      if (keyA < keyB) return -1;
-      if (keyA > keyB) return 1;
-      return 0;
-    });
-  }
+
   let sortedNavLinks = null;
   if (navLinks) {
     let withParentId = {};
@@ -116,6 +107,7 @@ function NavLinks(props) {
     }
 
     sortedNavLinks = Object.values(withOutParentId);
+    console.log(sortedNavLinks,"ksjfhkjhfhttps://blabla.zegashop.com/")
   }
 
   if (sortedNavLinks) {
@@ -132,6 +124,17 @@ function NavLinks(props) {
     const navLinks2 = [
       ...new Map(navLinks.map((item) => [item[key], item])).values(),
     ];
+
+    if (sortedNavLinks != undefined) {
+      sortedNavLinks.sort(function (a, b) {
+        var keyA = a.position,
+          keyB = b.position;
+        // Compare the 2 dates
+        if (keyA < keyB) return -1;
+        if (keyA > keyB) return 1;
+        return 0;
+      });
+    }
     linksList = sortedNavLinks.map((item, index) => {
       let arrow;
       let submenu;
