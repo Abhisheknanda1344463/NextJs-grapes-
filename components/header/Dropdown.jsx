@@ -208,6 +208,7 @@ import { ArrowRoundedDown7x5Svg } from '../../svg'
 const Dropdown = (props) => {
   const [open, setOpen] = useState(false)
   const domain = useSelector(state => state.general.domain)
+  const selectedData = useSelector((state) => state.locale.code);
   const wrapperRef = useRef(null)
 
   useEffect(() => {
@@ -251,14 +252,16 @@ const Dropdown = (props) => {
   const classes = classNames('topbar-dropdown', {
     'topbar-dropdown--opened': open,
   })
-  const openDrpdownLanguageClasses = classNames('topbar-dropdown__body', {
-    'newclass': open,
-  })
+  // const openDrpdownLanguageClasses = classNames('topbar-dropdown__body', {
+  //   'newclass': open,
+  // })
   if (locale && locale.list.length > 0) {
     local = locale.list.find(item => item.code === newLocal)
   }
 
+
   if (props.for == 'language') {
+    console.log(local?.locale_image, 'local?.locale_image__________________1111111111111111');
     return (
       <div className={classes} ref={setWrapperRef}>
         {items.length > 1 ? (
@@ -277,9 +280,7 @@ const Dropdown = (props) => {
               src={
                 local && local?.locale_image
                   ? `${apiImageUrl}/storage/${domain}/${local?.locale_image}`
-                  : '../../vendor/webkul/ui/assets/images/flag_' +
-                  local?.code +
-                  '.svg'
+                  : `../../vendor/webkul/ui/assets/images/flag_${local?.code || selectedData}.svg`
               }
             />
 
@@ -287,6 +288,7 @@ const Dropdown = (props) => {
             <ArrowRoundedDown7x5Svg className="language-dropdown-arrow" />
           </button>
         ) : (
+          console.log(local?.locale_image, 'local?.locale_image________________22222222222222222'),
           <button
             className="topbar-dropdown__btn null-icon-fms"
             type="button"
@@ -302,15 +304,13 @@ const Dropdown = (props) => {
               src={
                 local && local?.locale_image
                   ? `${apiImageUrl}/storage/${domain}/${local?.locale_image}`
-                  : '../../vendor/webkul/ui/assets/images/flag_' +
-                  local?.code +
-                  '.svg'
+                  : `../../vendor/webkul/ui/assets/images/flag_${local?.code || selectedData}.svg`
               }
             />
           </button>
         )}
         {items.length > 1 && (
-          <div className={openDrpdownLanguageClasses}>
+          <div className="topbar-dropdown__body">
             <Menu
               layout="topbar"
               withIcons={withIcons}

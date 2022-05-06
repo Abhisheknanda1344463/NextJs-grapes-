@@ -78,7 +78,6 @@ function Get_Categoryes(props) {
 
   if (props.locale !== "catchAll") {
     const Module = modulesInfo[props.locale];
-    console.log(props.locale, "props.locale");
     return new Promise((resolve, reject) => {
       Module.find()
         .then((res) => {

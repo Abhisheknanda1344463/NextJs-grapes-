@@ -24,15 +24,12 @@ function Get_Blogs({ locale, page = 1, limit = 6 }) {
         .skip(skip)
         .limit(+limit)
         .exec((err, blogs) => {
-          console.log(blogs, "blogs ___________________ BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
           let translatedData = [];
           blogs.map((blog) => {
             // console.log(blog, "blog without slug")
-            console.log(blog.image, "_____image_____")
-            console.log(blog['created_at'], "_____created_at_____")
             let translated = blog.translations.find((translate) => {
               if (translate.locale === locale) {
-                const locale = JSON.parse(JSON.stringify({...translate,image: blog.image, created_at: blog.created_at}));
+                const locale = JSON.parse(JSON.stringify({ ...translate, image: blog.image, created_at: blog.created_at }));
                 translatedData.push(locale);
               }
             });
@@ -71,12 +68,12 @@ function Get_Blog_By_Slug({ locale, url_key }) {
         // console.log(blog, "blog in blog controller")
         let translatedData = [];
         blog.translations.map((item) => {
-            // console.log("get_blogs_slug",item);
+          // console.log("get_blogs_slug",item);
           //   let translated = item.find((translate) => {
 
           if (item.locale === locale) {
             // consle.log(item, "item in XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-            const locale = JSON.parse(JSON.stringify({...item,image: blog.image, created_at: blog.created_at}));
+            const locale = JSON.parse(JSON.stringify({ ...item, image: blog.image, created_at: blog.created_at }));
             translatedData.push(locale);
           }
         });
