@@ -1,23 +1,23 @@
 // react
-import React, { useEffect, useReducer, useState, useRef } from "react";
+import React, {useEffect, useReducer, useState, useRef} from "react";
 
 // third-party
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import queryString from "query-string";
-import { useRouter } from "next/router";
-import { Helmet } from "react-helmet-async";
-import { FormattedMessage } from "react-intl";
+import {useRouter} from "next/router";
+import {Helmet} from "react-helmet-async";
+import {FormattedMessage} from "react-intl";
 
 // application
 import shopApi from "../../api/shop";
-import { url } from "../../services/utils";
+import {url} from "../../services/utils";
 import ProductsView from "./ProductsView";
 import Pagination from "../shared/Pagination";
 import PageHeader from "../shared/PageHeader";
 import BlockLoader from "../blocks/BlockLoader";
 import CategorySidebar from "./CategorySidebar";
-import { sidebarClose } from "../../store/sidebar";
+import {sidebarClose} from "../../store/sidebar";
 import WidgetFilters from "../widgets/WidgetFilters";
 import CategorySidebarItem from "./CategorySidebarItem";
 import {
@@ -110,7 +110,8 @@ function buildQuery(options, filters) {
       params[`filter_${filterSlug}`] = filters[filterSlug];
     });
 
-  return queryString.stringify(params, { encode: false });
+  // console.log(queryString.stringify(params, { encode: false }), "BLABLABLABLABLABLABLABL")
+  return queryString.stringify(params, {encode: false});
 }
 
 const initialState = {
@@ -157,7 +158,7 @@ export function reducer(state, action) {
         category: action.category,
       };
     case "FETCH_PRODUCTS_LIST":
-      return { ...state, productsListIsLoading: true };
+      return {...state, productsListIsLoading: true};
     case "FETCH_PRODUCTS_LIST_SUCCESS":
       return {
         ...state,
@@ -167,12 +168,12 @@ export function reducer(state, action) {
     case "SET_OPTION_VALUE":
       return {
         ...state,
-        options: { ...state.options, page: 1, [action.option]: action.value },
+        options: {...state.options, page: 1, [action.option]: action.value},
       };
     case "SET_FILTER_VALUE":
       return {
         ...state,
-        options: { ...state.options, page: 1 },
+        options: {...state.options, page: 1},
         filters: {
           ...state.filters,
           [action.filter]:
@@ -185,20 +186,21 @@ export function reducer(state, action) {
 
     case "REMOVE_FILTER_VALUE":
       let dot = state.filters[action.filter].split(",");
+      // console.log(dot, "dotdotdotdotdotdotdtod")
       const index = dot.indexOf(action.value);
       if (index > -1) {
         dot.splice(index, 1);
       }
       dot = dot.join(",");
-
+      console.log(state, "statstatstetasattetstatstestastersatsertsatetsatertsatesqaet")
       return {
         ...state,
-        options: { ...state.options, page: 1 },
-        filters: { ...state.filters, [action.filter]: dot },
+        options: {...state.options, page: 1},
+        filters: {...state.filters, [action.filter]: dot},
       };
 
     case "RESET_FILTERS":
-      return { ...state, options: {}, filters: {} };
+      return {...state, options: {}, filters: {}};
     case "RESET":
       return state.init ? initialState : state;
     default:
@@ -209,7 +211,7 @@ export function reducer(state, action) {
 function init(state) {
   const [options, filters] = parseQuery(window.history.search);
 
-  return { ...state, options, filters };
+  return {...state, options, filters};
 }
 
 function ShopPageCategory(props) {
@@ -237,9 +239,8 @@ function ShopPageCategory(props) {
   const [brands, setBrands] = useState(brandList);
   const [catID, setCatID] = useState(props.categoryId);
   const [catTitle, setTitle] = useState(props.categoryTitle);
-  const { page: selectedPage } = router.query;
+  const {page: selectedPage} = router.query;
   const [page, setPage] = useState(selectedPage);
-
 
   const offcanvas = columns === 3 ? "mobile" : "always";
   const prevPageRef = useRef();
@@ -247,9 +248,9 @@ function ShopPageCategory(props) {
   const prevLocaleRef = useRef();
   const prevCurrencyRef = useRef();
   const prevCategorySlugRef = useRef();
-  const prevStateOptionsRef = useRef({ current: null });
-  const prevStateFiltersRef = useRef({ current: null });
-  const prevLocationSearchRef = useRef({ current: null });
+  const prevStateOptionsRef = useRef({current: null});
+  const prevStateFiltersRef = useRef({current: null});
+  const prevLocationSearchRef = useRef({current: null});
 
   // ////Areg dont change
   const [productsList, setProductsList] = useState(allProduct);
@@ -261,7 +262,7 @@ function ShopPageCategory(props) {
     allProduct.dispatches.setInitialMinPrice
   );
   const [filtersData, setFilters] = useState();
-  const { query } = useRouter();
+  const {query} = useRouter();
 
   useEffect(() => {
     prevPageRef.current = page;
@@ -279,12 +280,15 @@ function ShopPageCategory(props) {
       prevStateOptionsRef.current != state.options ||
       prevPageRef.current != page
     ) {
-      const query = buildQuery({ ...state.options, page: page }, state.filters);
-      console.log(setPageNumber, "setPageNumber");
+      const query = buildQuery({...state.options, page: page}, state.filters);
+      // console.log(query, "queryqueryquery");
       prevStateFiltersRef.current = state.filters;
       prevStateOptionsRef.current = state.options;
-      const location = `${window.location.pathname}${query ? `?cat_id=${props.categoryId}&` : ""
-        }${query}`;
+      const location = `${window.location.pathname}${
+        query
+          ? `?cat_id=${props.categoryId}&${query}`
+          : `?cat_id=${props.categoryId}`
+      }`
       router.push(location, location);
     }
   }, [state.filters, state.options, page]);
@@ -301,12 +305,12 @@ function ShopPageCategory(props) {
   }, [router.locale, categorySlug, state.options]);
 
   if (state.productsListIsLoading && !productsList) {
-    return <BlockLoader />;
+    return <BlockLoader/>;
   }
 
   const breadcrumb = [
     {
-      title: <FormattedMessage id="home" defaultMessage="Գլխավոր" />,
+      title: <FormattedMessage id="home" defaultMessage="Գլխավոր"/>,
       url: url.home(),
     },
     {
@@ -466,7 +470,7 @@ function ShopPageCategory(props) {
     <React.Fragment>
       <Helmet>
         <title>{`Shop Category Page — ${categorySlug}`}</title>
-        <meta name="keywords" content={`Catalog, ${categorySlug}`} />
+        <meta name="keywords" content={`Catalog, ${categorySlug}`}/>
         <meta
           name="description"
           content={`Marketin, Catalog ${categorySlug}`}
@@ -475,20 +479,20 @@ function ShopPageCategory(props) {
           property="og:title"
           content={`Shop Category Page — ${categorySlug}`}
         />
-        <meta property="og:description" content={`Zegashop ${categorySlug}`} />
-        <meta property="og:image" content="Zegashop" />
-        <meta property="og:url" content={url + "/catalog/" + categorySlug} />
+        <meta property="og:description" content={`Zegashop ${categorySlug}`}/>
+        <meta property="og:image" content="Zegashop"/>
+        <meta property="og:url" content={url + "/catalog/" + categorySlug}/>
       </Helmet>
       <div className="cat_blocks_fms">
-        <PageHeader header={pageTitle} breadcrumb={breadcrumb} />
+        <PageHeader header={pageTitle} breadcrumb={breadcrumb}/>
         {content}
         <div className="block">
           <div className="posts-view">
             <div className="posts-view__pagination">
               {productsList &&
-                //////FIXME CHANGE TO LIMIT
-                productsList.data.length < 20 &&
-                page == 1 ? (
+              //////FIXME CHANGE TO LIMIT
+              productsList.data.length < 20 &&
+              page == 1 ? (
                 <></>
               ) : (
                 <Pagination

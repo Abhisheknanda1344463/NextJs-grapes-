@@ -86,8 +86,8 @@ export async function getServerSideProps({
     categoryTitle,
     dispatches,
     brands = [],
-    productsList = [];
-
+    productsList = [],
+    newdata = [];
   // console.log(
   //   selectedLocale,
   //   locale,
@@ -133,9 +133,7 @@ export async function getServerSideProps({
         currency: { code: settingsResponse.data.currency.code },
         locale: selectedLocale,
       },
-      filters: {},
       location: "",
-      filters: filterValues,
       dbName: dbName,
       catID: query.cat_id,
       window: null,
@@ -146,7 +144,71 @@ export async function getServerSideProps({
         ...dispatches,
         ...responseProductList.dispatches,
       };
-      productsList = responseProductList;
+      if (Object.keys(filterValues).length > 0) {
+        let checkedFiltres = [];
+        newdata = responseProductList.data.map((el, value) => {
+          let checkFiltre = [];
+          let checkFiltreConfig = [];
+          checkedFiltres = Object.keys(filterValues).map((key, index) => {
+            if (el.type == "simple") {
+              checkFiltre[index] = Object.keys(el).filter((e) => {
+                if (e == key) {
+                  let splited = filterValues[key].split(",");
+                  let checkData = splited.filter((s) => s == el[e]);
+                  if (checkData.length > 0) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                } else {
+                  return false;
+                }
+              });
+            } else if (el.type == "configurable") {
+              var asd = shopApi
+                .getFlatProduct(el.product_id, selectedLocale)
+                .then((flat) => {
+                  checkFiltreConfig[index] = flat.filter((e) => {
+                    ///  if (e[key]) {
+                    let splited = filterValues[key].split(",");
+                    let checkData = splited.filter((s) => s == e[key]);
+                    console.log(checkData, "checkDatacheckData");
+                    if (checkData.length > 0) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                    // } else {
+                    //   return false;
+                    // }
+                  });
+
+                  console.log(response, "asd");
+                });
+            }
+          });
+          var result = checkFiltre.filter((e) => e.length);
+          if (checkFiltreConfig.length > 0) {
+            var resultConfig = checkFiltreConfig.filter((e) => e.length);
+          } else {
+            var resultConfig = false;
+          }
+          console.log(resultConfig, "resultConfig");
+          if (
+            result.length == Object.keys(filterValues).length ||
+            resultConfig.length == Object.keys(filterValues).length
+          ) {
+            return el;
+          }
+        });
+        const results = newdata.filter((element) => {
+          return element !== undefined;
+        });
+        productsList = responseProductList;
+        productsList.data = results;
+      } else {
+        productsList = responseProductList;
+      }
     });
 
   /////REMEBER WE NEED THIS BUT NEED TO OPTIMI

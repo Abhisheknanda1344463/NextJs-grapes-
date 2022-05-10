@@ -1460,142 +1460,6 @@ function Get_Configurable_Config(configurableId) {
   });
 }
 
-// old version of bundle products
-// function Get_Bundle_Prods(options) {
-//   const bundleId = options.id
-//   const locale = options.locale
-//   return new Promise((resolve, reject) => {
-//     let combineArr = [];
-//     Products
-//       .findOne({id: bundleId})
-//       .then(res => {
-//         const product = parseClone(res);
-//
-//         BundleOptions
-//           .find({product_id: product.id})
-//           .then(bundOptions => {
-//             console.log(bundOptions,"true data bundle")
-//             const bundleProd = parseClone(bundOptions)
-//
-//             return new Promise((resolve, reject) => {
-//               bundleProd.forEach(forItem => {
-//                 BundleProducts
-//                   .find({product_bundle_option_id: forItem.id})
-//                   .then((item) => {
-//
-//
-//                       // console.log(item, "item  ")
-//                       // console.log(item[0].product_id, "item.iditem.iditem.id")
-//                       // console.log(locale, "localelocalelocalelocale")
-//
-//                       ProductFlat.find({
-//                         $and: [
-//                           {product_id: item[0].product_id},
-//                           {locale: locale}
-//                         ]
-//                       }).then(flatProducts => {
-//                           const promiseArray = flatProducts.map((item) => {
-//                             return new Promise((resolve, reject) => {
-//                               const product = parseClone(item)
-//                               const productId = product.product_id
-//                               const p1 = new Promise((resolve, reject1) => {
-//                                 ProductImages.find({product_id: productId})
-//                                   .then((res) => resolve({ProductImages: res}))
-//                                   .catch((err) => reject1(err))
-//                               })
-//                               const p2 = new Promise((resolve, reject2) => {
-//                                 ProductFlat.find({locale, product_id: productId})
-//                                   .then((res) => resolve({productFlat: res}))
-//                                   .catch((err) => reject2(err))
-//                               })
-//                               const p3 = new Promise((resolve, reject3) => {
-//                                 ProductInventories.find({product_id: productId})
-//                                   .then((res) => resolve({ProductInventories: res}))
-//                                   .catch((err) => reject3(err))
-//                               })
-//
-//                               const p4 = new Promise((resolve, reject4) => {
-//                                 Products.find({id: productId})
-//                                   .then((res) => resolve({Products: res}))
-//                                   .catch((err) => reject4(err))
-//                               })
-//
-//                               const p5 = new Promise((resolve, reject5) => {
-//                                 BundleOptions.find({product_id: productId})
-//                                   .then(res => resolve({BundleOptions: res}))
-//                                   .catch((err) => reject5(err))
-//                               })
-//
-//                               const p6 = new Promise((resolve, reject6) => {
-//                                 CrosselProducts.find({parent_id: productId})
-//                                   .then((res) => resolve({CrosselProducts: res}))
-//                                   .catch((err) => reject6(err))
-//                               })
-//
-//                               return Promise.all([p1, p2, p3, p4, p5, p6])
-//                                 .then((response) => {
-//                                   const collection = arrayConvertToObject(response)
-//                                   console.log(collection,"collection in ++++++++======")
-//                                   const imagesData = parseClone(collection.ProductImages)
-//                                   const flatData = parseClone(collection.productFlat[0] || [])
-//                                   const BundleOptions = parseClone(collection.BundleOptions || [])
-//                                   const crossProd = parseClone(collection.CrosselProducts || [])
-//                                   const inventoriesData = parseClone(collection.ProductInventories[0] || [])
-//                                   const allProducts = parseClone(collection.Products[0] || [])
-//
-//                                   console.log(BundleOptions, "BOOOOOOOOOOOOOOOO")
-//                                   // console.log(crossProd, "LUUUUUUUUUUUUUUUUUUUU")
-//                                   if (imagesData[0] && imagesData[0].path) {
-//                                     const {path} = imagesData[0]
-//                                     const base_imag = makeImageClone(path)
-//                                     const images = imagesData.map((e) => makeImageClone(e.path))
-//
-//
-//                                     const obj = {
-//                                       ...allProducts,
-//                                       ...product,
-//                                       ...flatData,
-//                                       bundle_options: [...BundleOptions],
-//                                       cross_sell: [...crossProd],
-//                                       ...inventoriesData,
-//                                       base_imag,
-//                                       images,
-//                                     }
-//                                     // console.log(obj, "———————————————————SOS________________")
-//                                     resolve(obj)
-//                                   }
-//                                   resolve([])
-//                                 })
-//                                 .catch((err) => reject(err))
-//                             })
-//                           })
-//
-//                           return Promise.all(promiseArray).then((response) => {
-//                             combineArr.push(response)
-//                           })
-//                           // build({flatProducts, locale, resolve, ...rest})
-//                         }
-//                       )
-//                       // .then(ul => console.log(ul, "UUUUUIOOOOOOOOOOO"))
-//
-//                       // combineArr.push({...forItem, options: item})
-//                     }
-//                   )
-//                 resolve(combineArr)
-//               })
-//
-//             })
-//           }).then(res => {
-//           resolve(res, "ffjjfhfjhjjkjgejrejhrher")
-//         })
-//       })
-//       .catch(err => reject(err))
-//
-//   })
-// }
-
-// before criticizing my code, remember that I'm a frontend developer... thank you for your support))
-
 function Get_Bundle_Prods(options) {
   const bundleId = options.id;
   const locale = options.locale;
@@ -1782,7 +1646,16 @@ function Get_Product_Type() {
   }).catch((err) => reject(err));
 }
 
+function GetFiltreConfig(id) {
+  return new Promise((resolve, reject) => {
+    ProductFlat.find({ parent_id: id })
+      .then((res) => resolve(res))
+      .catch((err) => reject(err));
+  });
+}
+
 exports.Get_Product_Type = Get_Product_Type;
+exports.GetFiltreConfig = GetFiltreConfig;
 exports.Get_Configurable_Config = Get_Configurable_Config;
 exports.Get_Bundle_Prods = Get_Bundle_Prods;
 exports.Get_Related_Products = Get_Related_Products;

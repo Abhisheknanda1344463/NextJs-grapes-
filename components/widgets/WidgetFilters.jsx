@@ -1,8 +1,8 @@
 // react
-import React, { useCallback, useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import classNames from "classnames";
-import { FormattedMessage } from "react-intl";
-import { useSelector, connect } from "react-redux";
+import {FormattedMessage} from "react-intl";
+import {useSelector, connect} from "react-redux";
 // import shopApi from "../../api/shop";
 // import { url } from "../../helper";
 // import Collapse from "../shared/Collapse";
@@ -49,7 +49,7 @@ function WidgetFilters(props) {
   }, [filters]);
 
   const handleValueChange = useCallback(
-    ({ filter, value, remove }) => {
+    ({filter, value, remove}) => {
       if (remove) {
         dispatch({
           type: "REMOVE_FILTER_VALUE",
@@ -57,6 +57,7 @@ function WidgetFilters(props) {
           value: value,
         });
       } else {
+        // console.log(value, "value in prododododododododododododododododododododododododod")
         dispatch({
           type: "SET_FILTER_VALUE",
           filter: filter,
@@ -70,7 +71,7 @@ function WidgetFilters(props) {
   const handleResetFilters = () => {
     setInitialMinPrice(initialMinPrice);
     setInitialMaxPrice(initialMaxPrice);
-    dispatch({ type: "RESET_FILTERS" });
+    dispatch({type: "RESET_FILTERS"});
   };
 
   const classes = classNames("widget-filters widget", {
@@ -161,7 +162,7 @@ function WidgetFilters(props) {
             className="btn btn-secondary f15 btn-lg"
             onClick={handleResetFilters}
           >
-            <FormattedMessage id="reset" defaultMessage="Reset" />
+            <FormattedMessage id="reset" defaultMessage="Reset"/>
           </button>
         </div>
       </div>

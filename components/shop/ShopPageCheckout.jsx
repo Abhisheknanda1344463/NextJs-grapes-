@@ -146,7 +146,7 @@ class ShopPageCheckout extends React.Component {
             phone     : res.data[0]?.phone,
             postal    : res.data[0]?.postcode,
             state     : res.data[0]?.state,
-            apartment : res.data[0]?.apartment,
+            apartment: res.data[0]?.address1[1],
           })
         })
 
