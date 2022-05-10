@@ -79,8 +79,8 @@ function Menu(props) {
           item,
           <React.Fragment>
             {icon}
-            {item.title || item.name}
-            {/*<div className="dropdown-submenu-items">{item.title || item.name}</div>*/}
+            {/*{item.title || item.name}*/}
+            <div className="dropdown-submenu-items">{item.title || item.name}</div>
             {arrow}
             {/* <span style={{ paddingLeft: "10px" }}>{symbol}</span> */}
           </React.Fragment>

@@ -109,19 +109,18 @@ router.get("/product-configurable-config/:id", function (req, res) {
   });
 });
 
-
-
-// router.get("/bundle-product/:id", function(req, res) {
-//   ProductControllers.Get_Bundle_Prods(req.params, req.query).then(response => {
-//     res.send(response)
-//   })
-// });
+router.get("/productFlat/:id", function (req, res) {
+  ProductControllers.GetFiltreConfig(req.params.id, req.params.locale).then(
+    (response) => {
+      res.send(response);
+    }
+  );
+});
 
 router.get("/bundle-product/:id", function (req, res) {
-
   const { locale } = req.query;
   const { id } = req.params;
-  console.log(locale , "req.queryreq.queryreq.query")
+  console.log(locale, "req.queryreq.queryreq.query");
 
   ProductControllers.Get_Bundle_Prods({
     locale,
@@ -130,7 +129,6 @@ router.get("/bundle-product/:id", function (req, res) {
     res.send(response);
   });
 });
-
 
 // ###################################################################### general
 
@@ -142,9 +140,8 @@ router.get("/categories", function (req, res) {
 router.get("/cms/menus", function (req, res) {
   CategoryControllers.Get_Menus(req.query).then((response) => {
     // console.log(response, "test in cms-menu?")
-      res.send(response)
-    }
-  );
+    res.send(response);
+  });
 });
 
 router.get("/filters", function (req, res) {
