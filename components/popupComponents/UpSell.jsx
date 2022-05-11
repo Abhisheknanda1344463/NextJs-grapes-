@@ -29,15 +29,16 @@ function UpSell(props) {
     switch (type) {
       case 'upsel':
         shopApi.getUpSellProducts(prodID).then(res => {
+          console.log(res, "result in UPSEEEELLLLLLL")
           setUpCrossProd(res)
         })
         break
       case 'crossel':
         shopApi.getCrossSellProducts(prodID).then(res => {
+          console.log(res, "result in UPSEEEELLLLLLL")
           if (res.length === 0) {
             setPopup(false)
           }
-          // console.log(res, 'PXOPXOXOOXOXOXOXOXOXOXOXOXOXXO')
           setUpCrossProd(res)
         })
         break
@@ -70,7 +71,7 @@ function UpSell(props) {
 
   // console.log(oldPrice, "old price")
   // console.log(newPrice, "new Price")
-  currentPrice = Number(newPrice) < Number(oldPrice) ? "ups!!!" :((newPrice - oldPrice) + "$")
+  currentPrice = Number(newPrice) < Number(oldPrice) ? "ups!!!" : ((newPrice - oldPrice) + "$")
   // console.log(currentPrice, "current price in upsell")
 
 

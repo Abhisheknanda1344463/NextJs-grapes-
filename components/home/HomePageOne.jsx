@@ -122,9 +122,9 @@ function HomePageOne(props) {
       <BlockSlideShow history={history} />
       {messageTitle || messageIntro ? (
         <div className="container welcome-title">
-          <h1>{messageTitle !== "" && messageTitle}</h1>
+          <h1>{homepage_title_text}</h1>
 
-          <p>{messageIntro !== "" && messageIntro}</p>
+          <p>{homepage_intro_text}</p>
         </div>
       ) : null}
       {bestsellers?.length ? (
@@ -133,8 +133,8 @@ function HomePageOne(props) {
           customer={customer}
           title={newCollection}
           dbName={dbName}
-          homepage_title_text={homepage_title_text}
-          homepage_intro_text={homepage_intro_text}
+          // homepage_title_text={homepage_title_text}
+          // homepage_intro_text={homepage_intro_text}
           products={bestsellers}
           addInClass={bestsellers.length <= 4 ? "small" : "larg"}
         />

@@ -115,19 +115,19 @@ class Product extends PureComponent {
   getUpCrosselProd = (prodID, type) => {
     switch (type) {
       case 'upsel':
-        fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+        fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=${this.state.locale}&currency=USD`)
           .then(res => res.json())
           .then(data => {
             this.props.setPopup(true)
-            setUpCrossProd(data)
+            this.props.setUpCrossProd(data)
           })
         break
       case 'crossel':
-        fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+        fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=${this.state.locale}&currency=USD`)
           .then(res => res.json())
           .then(data => {
             this.props.setPopup(true)
-            setUpCrossProd(data)
+            this.props.setUpCrossProd(data)
           })
         break
     }
@@ -135,7 +135,7 @@ class Product extends PureComponent {
 
 
   addcart = () => {
-    if (this.props?.up_sell?.length === 0 && this.props?.cross_sell?.length === 0) {
+    if (this.props.product.data.has_up_sell == 0 && this.props.product.data.has_cross_sell == 0) {
       return true
     }
     return false
@@ -312,14 +312,17 @@ class Product extends PureComponent {
   }
 
   openUpCrosProd = (product) => {
-    if (this.props?.up_sell?.length === 0) {
-      this.getUpCrosselProd(product.data.product_id || product.data.product.id, "crossel")
+    if (product?.data?.has_up_sell == 0) {
+      // alert(product?.data?.has_up_sell  + "-up_sell")
+      this.getUpCrosselProd(product?.data?.product_id || product.data.product.id, "crossel")
       this.props.setPopupName('crossel')
-    } else if (this.props?.cross_sell?.length === 0) {
+    } else if (product?.data?.has_cross_sell == 0) {
+      // alert(product?.data?.has_cross_sell  + "-has_cross_sell")
       this.props.setPopupName('')
       this.props.setPopup(false)
     } else {
-      this.getUpCrosselProd(product.data.product_id || product.data.product.id, "upsel")
+      // alert("product?.data?.has_cross_sell  -has_cross_sell")
+      this.getUpCrosselProd(product?.data?.product_id || product.data.product.id, "upsel")
       this.props.setPopupName('upsell')
     }
   }
@@ -358,9 +361,11 @@ class Product extends PureComponent {
       wishlistAddItem,
       wishlist,
       wishlistRemoveItem,
-      setUpCrossProd,
+      // setUpCrossProd,
       // AddCartToken,
     } = this.props
+    console.log(this.props, "this pros in product")
+
     const {quantity, product} = this.state
     const maxQty = this.props.bOrder ? 50000 : product.data.qty
     // let Addtocartdisabled = this.props.bOrder ? "" : "disabled";
@@ -410,34 +415,35 @@ class Product extends PureComponent {
         )
       }
     }
+    //commented for testing
 
-    const descData = (
-      this.state.desc === "description"
-        ? (
-          <div
-            className='description-size'
-            dangerouslySetInnerHTML={this.createMarkup(
-              product.data.description,
-            )}
-          />
-        )
-        : (
-          <div style={{display: "grid", gridTemplateColumns: "1fr 3fr"}}>
-            <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>Name</div>
-            <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>Poxos</div>
-            <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>Name</div>
-            <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>Poxos</div>
-            <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>Name</div>
-            <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>Poxos</div>
-            <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>Name</div>
-            <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>Poxos</div>
-            <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>Name</div>
-            <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>Poxos</div>
-            <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>Name</div>
-            <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>Poxos</div>
-          </div>
-        )
-    )
+    // const descData = (
+    //   this.state.desc === "description"
+    //     ? (
+    //       <div
+    //         className='description-size'
+    //         dangerouslySetInnerHTML={this.createMarkup(
+    //           product.data.description,
+    //         )}
+    //       />
+    //     )
+    //     : (
+    //       <div style={{display: "grid", gridTemplateColumns: "1fr 3fr"}}>
+    //         <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>Ram</div>
+    //         <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>2GB</div>
+    //         <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>Color</div>
+    //         <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>Green</div>
+    //         <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>Size</div>
+    //         <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>XXL</div>
+    //         <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>WIFI</div>
+    //         <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>Yes</div>
+    //         <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>5G</div>
+    //         <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>Yes</div>
+    //         <div style={{padding: "5px", borderRight: "1px solid #ddd", borderBottom: "1px solid #ddd"}}>Power</div>
+    //         <div style={{padding: "5px", borderBottom: "1px solid #ddd"}}>3580 mA</div>
+    //       </div>
+    //     )
+    // )
 
     return (
       <>
@@ -764,7 +770,7 @@ class Product extends PureComponent {
                               }
                             />
                           )
-                          : this.props?.up_sell?.length === 0 && this.props?.cross_sell?.length > 0
+                          : product?.data?.has_up_sell == 0 && product?.data?.has_cross_sell == 1
                             ?
                             (
                               <AsyncAction
@@ -793,15 +799,7 @@ class Product extends PureComponent {
                                       this.props.setTempData([product.data])
                                       this.props.setPopup(true);
                                       this.props.setCrossValid(true)
-                                      setUpCrossProd(this.props?.cross_sell)
-                                      this.props.setPopupName("crossel")
-                                      // this.openUpCrosProd(product)
-                                      // fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${product.product_id}&locale=en&currency=USD`)
-                                      //   .then(res2 => res2.json())
-                                      //   .then(data2 => {
-                                      //     this.props.setPopup(true)
-                                      //     setUpCrossProd(data2)
-                                      //   })
+                                      this.openUpCrosProd(product)
                                     }}
                                     disabled={Addtocartdisabled}
                                     className={classNames(
@@ -828,31 +826,12 @@ class Product extends PureComponent {
                                     onClick={() => {
                                       run()
                                       // alert("else")
-                                      this.props?.up_sell?.length !== 0
+                                      // this.props?.has_up_sell != 0
                                       this.props.setTempData([product.data])
                                       this.props.setPopup(true)
                                       this.props.setCrossValid(false)
-                                      this.props.setPopupName("upsell")
-                                      // ? setUpCrossProd(this.props?.upSell)
-                                      // :
-                                      fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${product.data.product_id}&locale=en&currency=USD`)
-                                        .then(res => res.json())
-                                        .then(data => {
-                                          if (data.length === 0) {
-                                            fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${product.data.product_id}&locale=en&currency=USD`)
-                                              .then(res2 => res2.json())
-                                              .then(data2 => {
-                                                // console.log(data2, "fetched result in product 2")
-                                                return setUpCrossProd(data2)
-                                              })
-                                          }
 
-                                          // console.log(data, "fetched result in product")
-                                          return setUpCrossProd(data)
-                                        })
-                                      // alert("last condition")
-
-                                      // this.openUpCrosProd(product)
+                                      this.openUpCrosProd(product)
 
 
                                     }}
@@ -944,39 +923,31 @@ class Product extends PureComponent {
                     defaultMessage="Description"
                   />
                </span>
-                <span
-                  ref={this.detailsRef}
-                  className={classNames("desc-heade-title", {"active-title": det})}
-                  onClick={this.changeDetails}
-                  id="details"
-                >
-                  <FormattedMessage
-                    id="details.title"
-                    defaultMessage="Details"
-                  />
-                </span>
+                {/*commented for testing*/}
+                {/*<span*/}
+                {/*  ref={this.detailsRef}*/}
+                {/*  className={classNames("desc-heade-title", {"active-title": det})}*/}
+                {/*  onClick={this.changeDetails}*/}
+                {/*  id="details"*/}
+                {/*>*/}
+                {/*  <FormattedMessage*/}
+                {/*    id="details.title"*/}
+                {/*    defaultMessage="Details"*/}
+                {/*  />*/}
+                {/*</span>*/}
 
               </div>
 
             </div>
             <div>
-              {/*{*/}
-              {/*  this.state.desc === "description"*/}
-              {/*    ? (<div*/}
-              {/*        className='description-size'*/}
-              {/*        dangerouslySetInnerHTML={this.createMarkup(*/}
-              {/*          product.data.description,*/}
-              {/*        )}*/}
-              {/*      />*/}
-              {/*    )*/}
-              {/*    : <>poxos</>*/}
-              {/*}*/}
-
-              {
-                descData
-              }
-
-
+              {/*commented for testing*/}
+              {/*{descData}*/}
+              <div
+                className='description-size'
+                dangerouslySetInnerHTML={this.createMarkup(
+                  product.data.description,
+                )}
+              />
             </div>
           </div>
         </div>
