@@ -150,6 +150,7 @@ export async function getServerSideProps({
           let checkFiltre = [];
           let checkFiltreConfig = [];
           checkedFiltres = Object.keys(filterValues).map((key, index) => {
+            // console.log(el, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeellllllllllllllll")
             if (el.type == "simple") {
               checkFiltre[index] = Object.keys(el).filter((e) => {
                 if (e == key) {
@@ -165,26 +166,40 @@ export async function getServerSideProps({
                 }
               });
             } else if (el.type == "configurable") {
-              var asd = shopApi
-                .getFlatProduct(el.product_id, selectedLocale)
-                .then((flat) => {
-                  checkFiltreConfig[index] = flat.filter((e) => {
-                    ///  if (e[key]) {
+              let checkData = [];
+              // console.log(el, "asasa");
+              el.variants.map((response, keyIndex) => {
+                console.log(response, "response________________________")
+                checkData[index] = [];
+                console.log(index,"index in checkdata")
+                checkFiltre[index] = Object.keys(response).filter((e) => {
+                  console.log(e + " = e", key + " = key")
+                  if (e == key) {
                     let splited = filterValues[key].split(",");
-                    let checkData = splited.filter((s) => s == e[key]);
-                    console.log(checkData, "checkDatacheckData");
-                    if (checkData.length > 0) {
+
+
+                    console.log(splited, "splited ------------")
+                    checkData[index][keyIndex] = splited.filter(
+                      (s) => {
+                        console.log(s, "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+                        console.log(e, "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+                        console.log(response, "responseresponseresponseresponseresponseresponse")
+                        s == response[e]
+                      }
+                    );
+                    console.log(checkData, "checkdata____-----____");
+                    if (checkData[index][keyIndex].length > 0) {
                       return true;
                     } else {
                       return false;
                     }
-                    // } else {
-                    //   return false;
-                    // }
-                  });
-
-                  console.log(response, "asd");
+                  } else {
+                    return false;
+                  }
                 });
+              });
+
+              // console.log(checkData, "asd");
             }
           });
           var result = checkFiltre.filter((e) => e.length);
@@ -193,7 +208,7 @@ export async function getServerSideProps({
           } else {
             var resultConfig = false;
           }
-          console.log(resultConfig, "resultConfig");
+          // console.log(resultConfig, "resultConfig");
           if (
             result.length == Object.keys(filterValues).length ||
             resultConfig.length == Object.keys(filterValues).length

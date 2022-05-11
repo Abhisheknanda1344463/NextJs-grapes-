@@ -132,6 +132,43 @@ function build({ flatProducts, locale, resolve, ...rest }) {
             const { path } = imagesData[0];
             const base_imag = makeImageClone(path);
             const images = imagesData.map((e) => makeImageClone(e.path));
+            var variants = [];
+            // rest.products.map(it => {
+            //   if("variants" in it) {
+            //
+            //     variants = [...it.variants]
+            //     console.log(variants,"VARIANTS IN CYCLE")
+            //   }
+            // })
+            rest &&
+              rest.products &&
+              rest.products.map((it) => {
+                let x = Object.keys(it);
+                x.find((str) => {
+                  if (str === "variants") {
+                    // console.log(it[str], "OOOOOOOOOOOO")
+                    variants = [...it[str]];
+                  } else {
+                    return;
+                  }
+                });
+                // console.log(variants, "xxxxxxxxxxx")
+                // if (x[0] === "variants") {
+                //   console.log(x[0], "xxxxxxxxxxx")
+                //   variants = [...it[x[0]]]
+                // }
+              });
+            // console.log(variants, "VARIANTS IN CYCLE")
+
+            // var variants = product.variants;
+            // if (typeof Array.isArray(rest) == "array") {
+            //   rest.products.map((resItem) => {
+            //     // variants = resItem.variants;
+            //     variants.push(resItem.variants);
+            //     // console.log(variants, "variants in cycle")
+            //   });
+            // }
+            // console.log(variants, "VARIANTS")
 
             const obj = {
               ...allProducts,
@@ -141,6 +178,7 @@ function build({ flatProducts, locale, resolve, ...rest }) {
               cross_sell: [...crossProd],
               ...inventoriesData,
               base_imag,
+              variants,
               images,
             };
             // console.log(obj, "———————————————————SOS________________")
@@ -157,7 +195,7 @@ function build({ flatProducts, locale, resolve, ...rest }) {
     if (rest.prices && rest.prices.length > 0) {
       var setInitialMinPrice = 0;
       var setInitialMaxPrice = 0;
-
+      ////    console.log(response, "responseresponse");
       setInitialMinPrice = Math.min.apply(
         Math,
         response.map(function (o) {
@@ -326,7 +364,7 @@ function Get_Product_list(options) {
   //   "Get_Product_listGet_Product_listGet_Product_list"
   // );
   var locale;
-  console.log(defaultLocale, "defaultLocale");
+  ////console.log(defaultLocale, "defaultLocale");
   if (typeof defaultLocale != "string") {
     locale = defaultLocale[0];
   } else {
@@ -385,7 +423,7 @@ function Get_Product_list(options) {
 
         if (Object.keys(buildQueryParams)[0] !== "text_value") {
           var productIds;
-          // console.log(buildQueryParams, "buildQueryParams");
+          console.log(buildQueryParams, "buildQueryParams");
           ProductAttributeValues.find({ ...buildQueryParams }).then((res) => {
             // console.log(productIdsByCategory, "productIdsByCategory");
             productIds = productIdsByCategory.filter((id) => {
@@ -398,8 +436,30 @@ function Get_Product_list(options) {
               return build();
             }
             const productsPromise = new Promise((resolve, reject) => {
-              Products.find({ id: { $in: productIds } }).then((products) =>
-                resolve({ products })
+              var arrayData = [];
+              Products.find({ id: { $in: productIds }, type: "simple" }).then(
+                (products) => {
+                  const itemproducts = parseClone(products);
+                  arrayData = itemproducts;
+                  Products.find({
+                    id: { $in: productIds },
+                    type: "configurable",
+                  }).then((items) => {
+                    items.map((item, index) => {
+                      const itemProduct = parseClone(item);
+
+                      ProductFlat.find({ parent_id: itemProduct.id })
+                        .then((res) => {
+                          return (itemProduct["variants"] = res);
+                        })
+                        .then(() => {
+                          var products = arrayData.concat(itemProduct);
+                          console.log(arrayData, "arrayData");
+                          resolve({ products });
+                        });
+                    });
+                  });
+                }
               );
             });
 
