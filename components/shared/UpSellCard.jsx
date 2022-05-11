@@ -53,6 +53,9 @@ const UpSellCard = (props) => {
         break
       case 'crossel':
         shopApi.getCrossSellProducts(prodID).then(res => {
+          if(res.length === 0) {
+            setPopup(false)
+          }
           // console.log(res, 'PXOPXOXOOXOXOXOXOXOXOXOXOXOXXO')
           setUpCrossProd(res)
         })

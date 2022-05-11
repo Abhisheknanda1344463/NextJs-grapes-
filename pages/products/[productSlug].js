@@ -1,10 +1,10 @@
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import {useEffect} from 'react'
+import {useRouter} from 'next/router'
 
 import store from '../../store'
 import shopApi from '../../api/shop'
 import allActions from '../../services/actionsArray'
-import { generalProcessForAnyPage } from '../../services/utils'
+import {generalProcessForAnyPage} from '../../services/utils'
 import ShopPageProduct from '../../components/shop/ShopPageProduct'
 
 
@@ -13,7 +13,7 @@ export default function ProductInnerPage(props) {
   const prodID = props.product.data.product_id
   const cats = props.product.data.cats
   const checkRelatedProducts = props.relatedPproducts.filter(item => item.product_id !== prodID)
-  const { dispatch } = store
+  const {dispatch} = store
   useEffect(() => {
     window.history.replaceState(null, '', window.location.pathname)
     ///router.push(window.location.pathname, window.location.pathname);
@@ -31,8 +31,6 @@ export default function ProductInnerPage(props) {
       product={props.product}
       dispatches={props.dispatches}
       configurableVariantes={props.configurableVariantes}
-      cross_sell={props.cross_sell}
-      up_sell={props.up_sell}
       locale={props.locale}
       loading={true}
       bundle={props.bundle}
@@ -41,8 +39,8 @@ export default function ProductInnerPage(props) {
 }
 
 
-export async function getServerSideProps({ locale, locales, req, res, query }) {
-  const { productSlug } = query
+export async function getServerSideProps({locale, locales, req, res, query}) {
+  const {productSlug} = query
 
   const {
     locale: defaultLocaleSelected,
@@ -63,24 +61,6 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     limit: 8,
   })
 
-  const cross_sell = await shopApi.getCrossSellProducts(product.product_id, {
-    lang: selectedLocale,
-    currency: currency,
-    limit: 8,
-  })
-
-  const up_sell = await shopApi.getUpSellProducts(product.product_id, {
-    lang: selectedLocale,
-    currency: currency,
-    limit: 8,
-  })
-
-  // const bundle = await shopApi.getBundleProduct(product.product_id, {
-  //   lang: selectedLocale,
-  //   currency: currency,
-  //   limit: 8,
-  // })
-
   let configurabelConfigProduct = null
   let bundleProduct = null
 
@@ -91,11 +71,11 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     )
   }
 
-  if(product.type == "bundle") {
-    bundleProduct = await shopApi.getBundleProduct(product.product_id,{
+  if (product.type == "bundle") {
+    bundleProduct = await shopApi.getBundleProduct(product.product_id, {
       lang: selectedLocale,
       currency: currency,
-    } )
+    })
 
   }
   const dispatches = {
@@ -109,11 +89,9 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
       locale: selectedLocale,
       dispatches,
       productSlug: productSlug,
-      product: { data: product },
+      product: {data: product},
       relatedPproducts: relatedPproducts,
       configurableVariantes: configurabelConfigProduct,
-      cross_sell: cross_sell,
-      up_sell: up_sell,
       bundle: bundleProduct,
     },
   }

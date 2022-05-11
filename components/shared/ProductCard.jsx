@@ -1,30 +1,30 @@
 // react
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 //timezone
 import moment from 'moment'
 // third-party
 import classNames from 'classnames'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { toast } from 'react-toastify'
-import { useSelector } from 'react-redux'
-import { FormattedMessage } from 'react-intl'
-import { setPopup, setPopupName, setUpCrossProd, setTempData, setCrossValid } from '../../store/general'
-import { wishlistRemoveItem } from '../../store/wishlist'
+import {connect, useSelector} from 'react-redux'
+import {toast} from 'react-toastify'
+// import {useSelector} from 'react-redux'
+import {FormattedMessage} from 'react-intl'
+import {setPopup, setPopupName, setUpCrossProd, setTempData, setCrossValid} from '../../store/general'
+import {wishlistRemoveItem} from '../../store/wishlist'
 // application
 import Currency from './Currency'
 import AsyncAction from './AsyncAction'
 import Image from 'components/hoc/Image'
-import { CheckToastSvg, FailSvg, Wishlist16Svg } from '../../svg'
-import { url } from '../../services/utils'
-import { cartAddItem } from '../../store/cart'
-import { apiImageUrl, megaUrl } from '../../helper'
+import {CheckToastSvg, FailSvg, Wishlist16Svg} from '../../svg'
+import {url} from '../../services/utils'
+import {cartAddItem} from '../../store/cart'
+import {apiImageUrl, megaUrl} from '../../helper'
 import defoult from '../../images/defoultpic.png'
-import { compareAddItem } from '../../store/compare'
-import { quickviewOpen } from '../../store/quickview'
-import { wishlistAddItem } from '../../store/wishlist'
-import { useRouter } from 'next/router'
+import {compareAddItem} from '../../store/compare'
+import {quickviewOpen} from '../../store/quickview'
+import {wishlistAddItem} from '../../store/wishlist'
+import {useRouter} from 'next/router'
 import shopApi from '../../api/shop'
 
 
@@ -43,9 +43,8 @@ function ProductCard(props) {
     wishlist,
     wishlistRemoveItem,
   } = props
+  const locale = useSelector(state => state.locale.code)
   const [dimension, setDimension] = useState(1200)
-  const [noUpsel, setNoUpsel] = useState(true)
-  const [noCrossel, setNoCrossel] = useState(true)
   const router = useRouter()
   useEffect(() => {
     function handleResize() {
@@ -63,38 +62,20 @@ function ProductCard(props) {
   const getUpCrosselProd = (prodID, type) => {
     switch (type) {
       case 'upsel':
-        fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+        fetch(`${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=${locale}&currency=USD`)
           .then(res => res.json())
           .then(data => {
-            if (data.length === 0) {
-              setNoUpsel(true)
-              fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
-                .then(res2 => res2.json())
-                .then(data2 => {
-
-                  if (data2.length === 0) {
-                    setNoCrossel(true)
-                    setPopupName("")
-                  }
-                  setUpCrossProd(data2)
-                })
-            }
             setPopup(true)
             setUpCrossProd(data)
           })
         break
       case 'crossel':
-        fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=en&currency=USD`)
+        fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=${locale}&currency=USD`)
           .then(res => res.json())
           .then(data => {
-            if (data.length === 0) {
-              setNoCrossel(true)
-              setPopup(false)
-              setPopupName("")
+              setPopup(true)
+              setUpCrossProd(data)
             }
-            setPopup(true)
-            setUpCrossProd(data)
-          }
           )
         break
     }
@@ -103,10 +84,16 @@ function ProductCard(props) {
   }
 
   const openUpCrosProd = (product) => {
-    if (product?.up_sell.length === 0) {
-      getUpCrosselProd(product.product_id || product.product.id, 'crossel')
-      setPopupName('crossel')
-    } else if (product?.cross_sell.length === 0) {
+    if (product?.has_up_sell == 0) {
+      if (product?.has_cross_sell == 0) {
+        setPopupName('')
+        setPopup(false)
+      } else {
+        getUpCrosselProd(product.product_id || product.product.id, 'crossel')
+        setPopupName('crossel')
+      }
+
+    } else if (product?.has_cross_sell == 0) {
       setPopupName('')
       setPopup(false)
     } else {
@@ -116,8 +103,7 @@ function ProductCard(props) {
   }
 
   const addcart = () => {
-    // console.log(product, "produuuuuuuuuuuuuuuuuuu")
-    if (product?.up_sell.length === 0 && product?.cross_sell.length === 0) {
+    if (product?.has_up_sell == 0 && product?.has_cross_sell == 0) {
       return true
     }
     return false
@@ -157,6 +143,8 @@ function ProductCard(props) {
   let price
   let features
   if (product) {
+    // console.log(product.has_cross_sell, "has_cross_sell in product card___________")
+    // console.log(product.has_up_sell, "has_up_sell in product card___________")
     if (product.images && product.images.length > 0) {
       image = (
         <div className="product-card__image product-image">
@@ -172,7 +160,7 @@ function ProductCard(props) {
                   })}>
 
                   {
-                    product && product?.type === 'configurable'
+                    product && product?.type === 'configurable' || product?.type === 'bundle'
                       ? (
                         <Link href={url.product(product)}>
                           <button
@@ -191,6 +179,7 @@ function ProductCard(props) {
 
                         addcart()
                           ? (
+
                             <AsyncAction
                               action={() =>
                                 cartAddItem(
@@ -204,10 +193,11 @@ function ProductCard(props) {
                                   'homePage',
                                 )
                               }
-                              render={({ run, loading }) => (
+                              render={({run, loading}) => (
                                 <button
                                   type="button"
                                   onClick={(e) => {
+                                    // alert("addcart()")
                                     e.preventDefault()
                                     setCrossValid(false)
                                     run()
@@ -226,7 +216,7 @@ function ProductCard(props) {
                                 </button>
                               )}
                             />
-                          ) : product?.up_sell.length === 0 && product?.cross_sell.length > 0)
+                          ) : product?.has_up_sell == 0 && product?.has_cross_sell == 1)
                         ? (
                           <AsyncAction
                             action={() =>
@@ -241,10 +231,11 @@ function ProductCard(props) {
                                 'homePage',
                               )
                             }
-                            render={({ run, loading }) => (
+                            render={({run, loading}) => (
                               <button
                                 type="button"
                                 onClick={(e) => {
+                                  // alert("product?.has_up_sell == 0 && product?.has_cross_sell == 1")
                                   e.preventDefault()
                                   run()
                                   setTempData([product])
@@ -268,10 +259,11 @@ function ProductCard(props) {
                         )
                         : (
                           <AsyncAction
-                            render={({ run, loading }) => (
+                            render={({run, loading}) => (
                               <button
                                 type="button"
                                 onClick={(e) => {
+                                  // alert("else!!!!!")
                                   e.preventDefault()
                                   run()
                                   setTempData([product])
@@ -365,7 +357,7 @@ function ProductCard(props) {
                   {/*  )}*/}
                   {/*/>*/}
                   {
-                    product && product?.type === 'configurable'
+                    product && product?.type === 'configurable' || product?.type === 'bundle'
                       ? (
                         <Link href={url.product(product)}>
                           <button
@@ -395,7 +387,7 @@ function ProductCard(props) {
                               'homePage',
                             )
                           }
-                          render={({ run, loading }) => (
+                          render={({run, loading}) => (
                             <button
                               type="button"
                               onClick={(e) => {
@@ -418,7 +410,7 @@ function ProductCard(props) {
                             </button>
                           )}
                         />
-                        : product?.up_sell.length === 0 && product?.cross_sell.length > 0
+                        : product?.has_up_sell == 0 && product?.has_cross_sell != 0
                           ? <AsyncAction
                             action={() =>
                               cartAddItem(
@@ -432,7 +424,7 @@ function ProductCard(props) {
                                 'homePage',
                               )
                             }
-                            render={({ run, loading }) => (
+                            render={({run, loading}) => (
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -457,7 +449,7 @@ function ProductCard(props) {
                             )}
                           />
                           : <AsyncAction
-                            render={({ run, loading }) => (
+                            render={({run, loading}) => (
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -524,7 +516,7 @@ function ProductCard(props) {
     if (wishlistChekArray == undefined) {
       toast.success(
         <span className="d-flex chek-fms">
-          <CheckToastSvg />
+          <CheckToastSvg/>
           <FormattedMessage
             id="add-wish-list"
             defaultMessage={`Product "${product.name}" added to wish list`}
@@ -535,10 +527,10 @@ function ProductCard(props) {
         },
       )
     } else {
-      <AsyncAction action={wishlistRemoveItem(product.id)} />
+      <AsyncAction action={wishlistRemoveItem(product.id)}/>
       toast.success(
         <span className="d-flex chek-fms">
-          <CheckToastSvg />
+          <CheckToastSvg/>
           <FormattedMessage
             id="producthasalreadyinwishlist"
             defaultMessage={`The product "${product.name}" has already been added to the whishlist`}
@@ -561,7 +553,7 @@ function ProductCard(props) {
   if (!product?.special_price && CONFIG === 'configurable') {
     price = (
       <div className="product-card__prices">
-        <Currency value={product.formatted_price} />
+        <Currency value={product.formatted_price}/>
       </div>
     )
   } else if (
@@ -573,12 +565,12 @@ function ProductCard(props) {
       <div className="product-card__prices">
         <span className="product-card__new-price">
           <span className="product-card__symbol">֏</span>
-          <Currency value={Number(product.special_price).toFixed(0)} />
+          <Currency value={Number(product.special_price).toFixed(0)}/>
         </span>
         {
           <span className="product-card__old-price">
             <span className="product-card__symbol">֏</span>
-            <Currency value={Number(product.price).toFixed(0)} />
+            <Currency value={Number(product.price).toFixed(0)}/>
           </span>
         }
       </div>
@@ -588,12 +580,12 @@ function ProductCard(props) {
       <div className="product-card__prices">
         <span className="product-card__new-price">
           <span className="product-card__symbol">֏</span>
-          <Currency value={Number(product.special_price).toFixed(0)} />
+          <Currency value={Number(product.special_price).toFixed(0)}/>
         </span>
         {
           <span className="product-card__old-price">
             <span className="product-card__symbol">֏</span>
-            <Currency value={Number(product.price).toFixed(0)} />
+            <Currency value={Number(product.price).toFixed(0)}/>
           </span>
         }
       </div>
@@ -602,7 +594,7 @@ function ProductCard(props) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__symbol">֏</span>
-        <Currency value={Number(product.min_price).toFixed(0)} />
+        <Currency value={Number(product.min_price).toFixed(0)}/>
       </div>
     )
   } else {
@@ -610,7 +602,7 @@ function ProductCard(props) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__symbol">֏</span>
-        <Currency value={Number(product.min_price).toFixed(0)} />
+        <Currency value={Number(product.min_price).toFixed(0)}/>
       </div>
     )
   }
@@ -648,7 +640,7 @@ function ProductCard(props) {
                 />{' '}
                 :
                 <span className="text-success">
-                  <FormattedMessage id="instock" defaultMessage="In stock" />
+                  <FormattedMessage id="instock" defaultMessage="In stock"/>
                 </span>
               </div>
               {price}
@@ -658,7 +650,7 @@ function ProductCard(props) {
                   <span onClick={addAndRemoveWishList}>
                     <AsyncAction
                       action={() => wishlistAddItem(product, selectedData)}
-                      render={({ run, loading }) => (
+                      render={({run, loading}) => (
                         <div
                           type="button"
                           onClick={run}
@@ -670,7 +662,7 @@ function ProductCard(props) {
                           )}
                         >
                           {' '}
-                          <Wishlist16Svg />{' '}
+                          <Wishlist16Svg/>{' '}
                         </div>
                       )}
                     />
@@ -682,7 +674,7 @@ function ProductCard(props) {
                       e.preventDefault()
                       toast(
                         <span className="d-flex faild-toast-fms">
-                          <FailSvg />
+                          <FailSvg/>
                           <FormattedMessage
                             id="sign-or-register"
                             defaultMessage="Please sign in or register"
@@ -696,7 +688,7 @@ function ProductCard(props) {
                     }}
                     className="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist"
                   >
-                    <Wishlist16Svg />
+                    <Wishlist16Svg/>
                   </div>
                 )}
               </div>
@@ -735,7 +727,7 @@ function ProductCard(props) {
             {/*/>*/}
 
             {
-              product && product?.type === 'configurable'
+              product && product?.type === 'configurable' || product?.type === 'bundle'
                 ? (
                   <Link href={url.product(product)}>
                     <button
@@ -765,7 +757,7 @@ function ProductCard(props) {
                         'homePage',
                       )
                     }
-                    render={({ run, loading }) => (
+                    render={({run, loading}) => (
                       <button
                         type="button"
                         onClick={(e) => {
@@ -787,7 +779,7 @@ function ProductCard(props) {
                       </button>
                     )}
                   />
-                  : product?.up_sell.length === 0 && product?.cross_sell.length > 0
+                  : product?.has_up_sell == 0 && product?.has_cross_sell != 0
                     ? <AsyncAction
                       action={() =>
                         cartAddItem(
@@ -801,7 +793,7 @@ function ProductCard(props) {
                           'homePage',
                         )
                       }
-                      render={({ run, loading }) => (
+                      render={({run, loading}) => (
                         <button
                           type="button"
                           onClick={(e) => {
@@ -826,7 +818,7 @@ function ProductCard(props) {
                       )}
                     />
                     : <AsyncAction
-                      render={({ run, loading }) => (
+                      render={({run, loading}) => (
                         <button
                           type="button"
                           onClick={(e) => {
