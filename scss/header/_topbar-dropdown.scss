@@ -12,6 +12,7 @@ $local-button-padding: 10px;
 
   position: relative;
 }
+
 //
 //.dropdown-submenu-items {
 //  display: inline-block;
@@ -107,7 +108,7 @@ $local-button-padding: 10px;
     transform: rotateX(60deg);
     opacity: 0;
     transition: transform $local-transition-duration,
-    opacity $local-transition-duration, visibility 0s $local-transition-duration !important;
+      opacity $local-transition-duration, visibility 0s $local-transition-duration  !important;
 
     @include direction {
       #{$inset-inline-end}: 0;
