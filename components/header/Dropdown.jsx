@@ -190,18 +190,18 @@
 
 // *************** Functional Component ******************** //
 
-import React, {useState, useEffect, useRef} from 'react'
-import {useSelector} from 'react-redux'
+import React, { useState, useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 
 // third-party
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
-import {apiImageUrl} from '../../helper'
+import { apiImageUrl } from '../../helper'
 
 // application
 import Menu from './Menu'
 import Image from 'components/hoc/Image'
-import {ArrowRoundedDown7x5Svg} from '../../svg'
+import { ArrowRoundedDown7x5Svg } from '../../svg'
 
 
 const Dropdown = (props) => {
@@ -237,7 +237,7 @@ const Dropdown = (props) => {
   const handleItemClick = (item) => {
     // console.log(domain, "domain")
 
-    const {onClick} = props
+    const { onClick } = props
 
     setOpen(() => false)
 
@@ -246,7 +246,7 @@ const Dropdown = (props) => {
     }
   }
 
-  const {title, withIcons, items, locale, newLocal} = props
+  const { title, withIcons, items, locale, newLocal } = props
   let local = null
   const classes = classNames('topbar-dropdown', {
     'topbar-dropdown--opened': open,
@@ -262,13 +262,15 @@ const Dropdown = (props) => {
   if (props.for == 'language') {
     return (
       <div className={classes} ref={setWrapperRef}>
+
         {items.length > 1 ? (
           <button
             className="topbar-dropdown__btn"
             type="button"
             onClick={handleButtonClick}
           >
-            <span style={{paddingBottom: '3px', paddingRight: '10px'}}>
+
+            <span style={{ paddingBottom: '3px', paddingRight: '10px' }}>
               {local && local?.name}
             </span>
             <Image
@@ -281,30 +283,28 @@ const Dropdown = (props) => {
                   : `../../vendor/webkul/ui/assets/images/flag_${newLocal}.svg`
               }
             />
-
-
-            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow"/>
+            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow" />
           </button>
         ) : (
-            <button
-              className="topbar-dropdown__btn null-icon-fms"
-              type="button"
-              onClick={handleButtonClick}
-            >
-            <span style={{paddingBottom: '3px', paddingRight: '10px'}}>
+          <button
+            className="topbar-dropdown__btn null-icon-fms"
+            type="button"
+            onClick={handleButtonClick}
+          >
+            <span style={{ paddingBottom: '3px', paddingRight: '10px' }}>
               {local && local?.name}
             </span>
-              <Image
-                height={16}
-                width={20}
-                alt="language"
-                src={
-                  local && local?.locale_image
-                    ? `${apiImageUrl}/storage/${domain}/${local?.locale_image}`
-                    : `../../vendor/webkul/ui/assets/images/flag_${newLocal}.svg`
-                }
-              />
-            </button>
+            <Image
+              height={16}
+              width={20}
+              alt="language"
+              src={
+                local && local?.locale_image
+                  ? `${apiImageUrl}/storage/${domain}/${local?.locale_image}`
+                  : `../../vendor/webkul/ui/assets/images/flag_${newLocal}.svg`
+              }
+            />
+          </button>
         )}
         {items.length > 1 && (
           <div className={openDrpdownLanguageClasses}>
@@ -326,14 +326,14 @@ const Dropdown = (props) => {
           type="button"
           onClick={handleButtonClick}
         >
-          <span style={{paddingBottom: '3px'}}>
+          <span style={{ paddingBottom: '3px' }}>
             {props.current.name}
           </span>
-          <span style={{paddingBottom: '3px'}}>
+          <span style={{ paddingBottom: '3px' }}>
             {props.current.symbol}
           </span>
           {items.length > 0 ? (
-            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow"/>
+            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow" />
           ) : null}
         </button>
         {items.length > 0 && (
