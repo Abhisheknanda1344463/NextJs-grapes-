@@ -2,16 +2,17 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 
-import { apiImageUrl } from "../../helper";
+import {apiImageUrl} from "../../helper";
 import AppLink from "../shared/AppLink";
 import Image from "components/hoc/Image";
-import { ArrowRoundedRight6x9Svg } from "../../svg";
-import { url } from "../../services/utils";
+import {ArrowRoundedRight6x9Svg} from "../../svg";
+import {url} from "../../services/utils";
+
 function Menu(props) {
-  const { layout, withIcons, items, onClick, symbol } = props;
-  // console.log(props, "onClickonClick");
+  const {layout, withIcons, items, onClick, symbol} = props;
+  console.log(props, "onClickonClick");
   const domain = useSelector((state) => state.general.domain);
 
   const renderLink = (item, content) => {
@@ -48,13 +49,16 @@ function Menu(props) {
     let icon;
 
     if (item.children && item.children.length) {
-      arrow = <ArrowRoundedRight6x9Svg className="menu__arrow" />;
-    }
-
-    if (item.children && item.children.length) {
+      arrow = <ArrowRoundedRight6x9Svg className="menu__arrow"/>;
+      // }
+      //
+      // if (item.children && item.children.length) {
       submenu = (
         <div className="menu__submenu">
-          <Menu items={item.children} onClick={onClick} />
+          <Menu items={item.children} onClick={() => {
+            onClick()
+            console.log("work in if statement")
+          }}/>
         </div>
       );
     }
@@ -64,7 +68,7 @@ function Menu(props) {
         <div className="menu__icon">
           <Image
             src={`${apiImageUrl}/storage/${domain || process.env.themesName}/${item.locale_image
-              }`}
+            }`}
             alt="language"
             width={20}
             height={16}
@@ -112,7 +116,8 @@ Menu.defaultProps = {
   layout: "classic",
   withIcons: false,
   items: [],
-  onClick: () => { },
+  onClick: () => {
+  },
 };
 
 export default React.memo(Menu);
