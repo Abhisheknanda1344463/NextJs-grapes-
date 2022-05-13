@@ -32,26 +32,26 @@ function CrosselCard(props) {
   const backorders = useSelector(state => state.general.coreConfigs.catalog_inventory_stock_options_backorders)
   const outOfStock = useSelector(state => state.general.coreConfigs.catalog_products_homepage_out_of_stock_items)
 
-  useEffect(() => {
-    function handleResize() {
-      setDimension(window.innerWidth);
-    }
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  });
+  // useEffect(() => {
+  //   function handleResize() {
+  //     setDimension(window.innerWidth);
+  //   }
+  //
+  //   window.addEventListener("resize", handleResize);
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // });
 
   const productLink = "";
 
-  const isTablet = () => {
-    if (dimension >= 1024) {
-      return false;
-    } else {
-      return true;
-    }
-  };
+  // const isTablet = () => {
+  //   if (dimension >= 1024) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // };
 
 
   const handleChangeQuantity = (quantity) => {
@@ -64,9 +64,9 @@ function CrosselCard(props) {
   const signed = useSelector((state) => state.customer.authenticated);
 
   const containerClasses = classNames("product-card", {
-    "product-card--layout--grid product-card--size--sm": layout === "grid-sm",
-    "product-card--layout--grid product-card--size--nl": layout === "grid-nl",
-    "product-card--layout--grid product-card--size--lg": layout === "grid-lg",
+    // "product-card--layout--grid product-card--size--sm": layout === "grid-sm",
+    // "product-card--layout--grid product-card--size--nl": layout === "grid-nl",
+    // "product-card--layout--grid product-card--size--lg": layout === "grid-lg",
     "product-card--layout--list": layout === "list",
     "product-card--layout--horizontal": layout === "horizontal",
     "product-for--one-element": only,
@@ -81,100 +81,101 @@ function CrosselCard(props) {
     if (product.images && product.images.length > 0) {
       image = (
         <div className="product-card__image product-image">
-          {!isTablet() ? (
-            <Link href={url.product(product)}>
-              <div className="product-image__body product-image__body-fms">
-                <div className="item_overlay hide-for-tablet"></div>
-                <div className=""></div>
-                {product.images[0].path ? (
-                  <Image
-                    alt=""
-                    layout="fill"
-                    className="product-image__img"
-                    src={`${anotherUrl}/cache/medium/` + product.images[0].path}
-                  />
-                ) : (
-                  <Image
-                    alt=""
-                    layout="fill"
-                    src={`${anotherUrl}/cache/medium/${product.images[0]}`}
-                    className="product-image__img"
-                  />
-                )}
-              </div>
-            </Link>
-          ) : (
-            <Link
-              href={isTablet() ? url.product(product) : ""}
-              className="product-image__body"
-            >
-              <div className="product-image__body">
-                <div className="item_overlay hide-for-tablet"></div>
-                <div className="img_btn_wrapper">
-                  <div className="product__actions-item product-inner-quantity">
-                    <InputNumber
-                      id="product-quantity"
-                      aria-label="Quantity"
-                      className="product__quantity"
-                      size="lg"
-                      min={1}
-                      max={5000}
-                      value={quantity}
-                      onChange={handleChangeQuantity}
-                      // disabled={Addtocartdisabled}
-                    />
-                  </div>
-                  <div className={classNames(" ",
-                    {
-                      "button_disabled": product.qty === 0
-                        && backorders == 0
-                        && outOfStock == 1
-                    })}>
-                    <AsyncAction
-                      action={() =>
-                        cartAddItem(
-                          product,
-                          [],
-                          quantity,
-                          cartToken,
-                          customer,
-                          selectedData
-                        )
-                      }
-                      render={({run, loading}) => (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            run()
-                            // alert(quantity)
-                            // console.log(quantity, "quantity value ----")
-                          }}
-                          className={classNames(
-                            "btn btn-primary product-card__addtocart hide-for-tablet",
-                            {
-                              "btn-loading": loading,
-                            }
-                          )}
-                        >
-                          <FormattedMessage
-                            id="add.tocart"
-                            defaultMessage="Add to cart"
-                          />
-                        </button>
-                      )}
-                    />
-                  </div>
-
-                </div>
+          {/*{!isTablet() ? (*/}
+          <Link href={url.product(product)}>
+            <div className="product-image__body product-image__body-fms">
+              <div className="item_overlay hide-for-tablet"></div>
+              <div className=""></div>
+              {product.images[0].path ? (
                 <Image
                   alt=""
                   layout="fill"
                   className="product-image__img"
-                  src={`${anotherUrl}/cache/medium/` + product.images[0]}
+                  src={`${anotherUrl}/cache/medium/` + product.images[0].path}
                 />
-              </div>
-            </Link>
-          )}
+              ) : (
+                <Image
+                  alt=""
+                  layout="fill"
+                  src={`${anotherUrl}/cache/medium/${product.images[0]}`}
+                  className="product-image__img"
+                />
+              )}
+            </div>
+          </Link>
+          {/*) : (*/}
+          {/*  <Link*/}
+          {/*    href={isTablet() ? url.product(product) : ""}*/}
+          {/*    className="product-image__body"*/}
+          {/*  >*/}
+          {/*    <div className="product-image__body">*/}
+          {/*      <div className="item_overlay hide-for-tablet"></div>*/}
+          {/*      <div className="img_btn_wrapper">*/}
+          {/*        <div className="product__actions-item product-inner-quantity">*/}
+          {/*          <InputNumber*/}
+          {/*            id="product-quantity"*/}
+          {/*            aria-label="Quantity"*/}
+          {/*            className="product__quantity"*/}
+          {/*            size="lg"*/}
+          {/*            min={1}*/}
+          {/*            max={5000}*/}
+          {/*            value={quantity}*/}
+          {/*            onChange={handleChangeQuantity}*/}
+          {/*            // disabled={Addtocartdisabled}*/}
+          {/*          />*/}
+          {/*        </div>*/}
+          {/*        <div className={classNames("cross_btn",*/}
+          {/*          {*/}
+          {/*            "button_disabled": product.qty === 0*/}
+          {/*              && backorders == 0*/}
+          {/*              && outOfStock == 1*/}
+          {/*          })}>*/}
+          {/*          <AsyncAction*/}
+          {/*            action={() =>*/}
+          {/*              cartAddItem(*/}
+          {/*                product,*/}
+          {/*                [],*/}
+          {/*                quantity,*/}
+          {/*                cartToken,*/}
+          {/*                customer,*/}
+          {/*                selectedData*/}
+          {/*              )*/}
+          {/*            }*/}
+          {/*            render={({run, loading}) => (*/}
+          {/*              <button*/}
+          {/*                type="button"*/}
+          {/*                onClick={() => {*/}
+          {/*                  run()*/}
+          {/*                  // alert(quantity)*/}
+          {/*                  // console.log(quantity, "quantity value ----")*/}
+          {/*                }}*/}
+          {/*                className={classNames(*/}
+          {/*                  "btn btn-primary product-card__addtocart hide-for-tablet",*/}
+          {/*                  {*/}
+          {/*                    "btn-loading": loading,*/}
+          {/*                  }*/}
+          {/*                )}*/}
+          {/*              >*/}
+          {/*                <FormattedMessage*/}
+          {/*                  id="add.tocart"*/}
+          {/*                  defaultMessage="Add to cart"*/}
+          {/*                />*/}
+          {/*              </button>*/}
+          {/*            )}*/}
+          {/*          />*/}
+          {/*        </div>*/}
+
+          {/*      </div>*/}
+          {/*      <Image*/}
+          {/*        alt=""*/}
+          {/*        layout="fill"*/}
+          {/*        className="product-image__img"*/}
+          {/*        src={`${anotherUrl}/cache/medium/` + product.images[0]}*/}
+          {/*      />*/}
+          {/*    </div>*/}
+          {/*  </Link>*/}
+          {/*)*/}
+          {/* }*/}
         </div>
       );
     } else {
@@ -259,7 +260,7 @@ function CrosselCard(props) {
                     // disabled={Addtocartdisabled}
                   />
                 </div>
-                <div className={classNames(" ",
+                <div className={classNames("cross_btn",
                   {
                     "button_disabled": product.qty === 0
                       && backorders == 0
@@ -297,7 +298,7 @@ function CrosselCard(props) {
               <div className="product-card__actions">
                 <div className="product-card__buttons"></div>
               </div>
-              <div className={classNames(" ",
+              <div className={classNames("cross_btn",
                 {
                   "button_disabled": product.qty === 0
                     && backorders == 0

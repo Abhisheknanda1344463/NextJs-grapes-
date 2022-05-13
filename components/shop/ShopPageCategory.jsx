@@ -1,9 +1,9 @@
 // react
-import React, {useEffect, useReducer, useState, useRef} from "react";
+import React, {useEffect, useReducer, useState, useRef, useLayoutEffect} from "react";
 
 // third-party
 import PropTypes from "prop-types";
-import {connect} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import queryString from "query-string";
 import {useRouter} from "next/router";
 import {Helmet} from "react-helmet-async";
@@ -63,13 +63,13 @@ function parseQueryOptions(history) {
 function parseQueryFilters(history) {
   const query = queryString.parse(history);
   const filterValues = {};
-  Object.keys(query).forEach((param) => {
+  Object.keys(history).forEach((param) => {
     const mr = param.match(/^filter_([-_A-Za-z0-9]+)$/);
     if (!mr) {
       return;
     }
     const filterSlug = mr[1];
-    filterValues[filterSlug] = query[param];
+    filterValues[filterSlug] = history[param];
   });
   return filterValues;
 }
@@ -110,9 +110,44 @@ function buildQuery(options, filters) {
       params[`filter_${filterSlug}`] = filters[filterSlug];
     });
 
-  // console.log(queryString.stringify(params, { encode: false }), "BLABLABLABLABLABLABLABL")
   return queryString.stringify(params, {encode: false});
 }
+
+function buildInitialFilter(options, filters) {
+  const params = {};
+
+  if (options.savings !== "") {
+    params.savings = options.savings;
+  }
+  if (options.brand !== "") {
+    params.brand = options.brand;
+  }
+
+  if (options.search !== "") {
+    params.search = options.search;
+  }
+  params.category_id = options.category_id;
+  if (options.page !== "") {
+    params.page = options.page;
+  }
+
+  if (options.limit !== 12) {
+    params.limit = options.limit;
+  }
+
+  if (options.sort !== "default") {
+    params.sort = options.sort;
+  }
+
+  Object.keys(filters)
+    .filter((x) => x !== "category" && !!filters[x])
+    .forEach((filterSlug) => {
+      params[filterSlug] = filters[filterSlug];
+    });
+
+  return queryString.stringify(params, {encode: false});
+}
+
 
 const initialState = {
   init: false,
@@ -147,6 +182,7 @@ const initialState = {
    */
   filters: {},
 };
+
 
 export function reducer(state, action) {
   switch (action.type) {
@@ -186,13 +222,11 @@ export function reducer(state, action) {
 
     case "REMOVE_FILTER_VALUE":
       let dot = state.filters[action.filter].split(",");
-      // console.log(dot, "dotdotdotdotdotdotdtod")
       const index = dot.indexOf(action.value);
       if (index > -1) {
         dot.splice(index, 1);
       }
       dot = dot.join(",");
-      console.log(state, "statstatstetasattetstatstestastersatsertsatetsatertsatesqaet")
       return {
         ...state,
         options: {...state.options, page: 1},
@@ -207,12 +241,12 @@ export function reducer(state, action) {
       throw new Error();
   }
 }
-
 function init(state) {
-  const [options, filters] = parseQuery(window.history.search);
-
+  const [options, filters] = parseQuery(state);
   return {...state, options, filters};
 }
+
+
 
 function ShopPageCategory(props) {
   const {
@@ -252,6 +286,7 @@ function ShopPageCategory(props) {
   const prevStateFiltersRef = useRef({current: null});
   const prevLocationSearchRef = useRef({current: null});
 
+
   // ////Areg dont change
   const [productsList, setProductsList] = useState(allProduct);
 
@@ -263,8 +298,21 @@ function ShopPageCategory(props) {
   );
   const [filtersData, setFilters] = useState();
   const {query} = useRouter();
+  // const [dataFromQuery, setDataFromQuery] = useState({});
 
   useEffect(() => {
+    //Commented By Tigran And Manvel need to refactor
+    let params = Object.keys(router.query).length > 0 ? router.query : ''
+    let data = init(params)
+    for (const [key, value] of Object.entries(data.filters)) {
+      dispatch({
+        type: "SET_FILTER_VALUE",
+        filter: key,
+        value: value
+      });
+    }
+
+
     prevPageRef.current = page;
     prevLocaleRef.current = router.locale;
     prevCatIdRef.current = catID;
@@ -281,7 +329,7 @@ function ShopPageCategory(props) {
       prevPageRef.current != page
     ) {
       const query = buildQuery({...state.options, page: page}, state.filters);
-      // console.log(query, "queryqueryquery");
+      // setDataFromQuery(buildQuery({...state.options, page: page}, state.filters))
       prevStateFiltersRef.current = state.filters;
       prevStateOptionsRef.current = state.options;
       const location = `${window.location.pathname}${
@@ -303,6 +351,7 @@ function ShopPageCategory(props) {
     setMaxPrice(allProduct.dispatches.setInitialMaxPrice);
     setMinPrice(allProduct.dispatches.setInitialMinPrice);
   }, [router.locale, categorySlug, state.options]);
+
 
   if (state.productsListIsLoading && !productsList) {
     return <BlockLoader/>;
@@ -329,37 +378,37 @@ function ShopPageCategory(props) {
   let pageTitle = "Shop";
   let content = null;
 
-  const setSavings = (e, type) => {
-    e.preventDefault();
-    let inp = document.getElementById("savings_fm_id");
-    if (type == 0) {
-      if (inp.checked === true)
-        dispatch({
-          type: "SET_OPTION_VALUE",
-          option: "savings",
-          value: "",
-        });
-      else
-        dispatch({
-          type: "SET_OPTION_VALUE",
-          option: "savings",
-          value: true,
-        });
-    } else {
-      if (inp.checked === false)
-        dispatch({
-          type: "SET_OPTION_VALUE",
-          option: "savings",
-          value: "",
-        });
-      else
-        dispatch({
-          type: "SET_OPTION_VALUE",
-          option: "savings",
-          value: true,
-        });
-    }
-  };
+  // const setSavings = (e, type) => {
+  //   e.preventDefault();
+  //   let inp = document.getElementById("savings_fm_id");
+  //   if (type == 0) {
+  //     if (inp.checked === true)
+  //       dispatch({
+  //         type: "SET_OPTION_VALUE",
+  //         option: "savings",
+  //         value: "",
+  //       });
+  //     else
+  //       dispatch({
+  //         type: "SET_OPTION_VALUE",
+  //         option: "savings",
+  //         value: true,
+  //       });
+  //   } else {
+  //     if (inp.checked === false)
+  //       dispatch({
+  //         type: "SET_OPTION_VALUE",
+  //         option: "savings",
+  //         value: "",
+  //       });
+  //     else
+  //       dispatch({
+  //         type: "SET_OPTION_VALUE",
+  //         option: "savings",
+  //         value: true,
+  //       });
+  //   }
+  // };
 
   const productsView = (
     <ProductsView
@@ -456,6 +505,7 @@ function ShopPageCategory(props) {
         </div>
 
         <div className={`shop-layout shop-layout--sidebar--${sidebarPosition}`}>
+          {console.log(brands.length,"brands length")}
           {brands.length > 0 ? sidebarPosition === "start" && sidebar : " "}
           <div className="shop-layout__content">
             <div className="block block-fms">{productsView}</div>

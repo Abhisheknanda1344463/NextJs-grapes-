@@ -3,6 +3,7 @@ import React, {useCallback, useEffect, useState} from "react";
 import classNames from "classnames";
 import {FormattedMessage} from "react-intl";
 import {useSelector, connect} from "react-redux";
+import {useRouter} from "next/router";
 // import shopApi from "../../api/shop";
 // import { url } from "../../helper";
 // import Collapse from "../shared/Collapse";
@@ -27,7 +28,7 @@ const CheckFilterHandler = {
 function WidgetFilters(props) {
   const [filtersData, setFilters] = useState();
   const selectedData = useSelector((state) => state.locale.code);
-
+  const router = useRouter()
   const {
     // title,
     // filtersData,
@@ -57,7 +58,6 @@ function WidgetFilters(props) {
           value: value,
         });
       } else {
-        // console.log(value, "value in prododododododododododododododododododododododododod")
         dispatch({
           type: "SET_FILTER_VALUE",
           filter: filter,

@@ -64,7 +64,7 @@ function CrossSell({product, hasTitle}) {
           }}
         >
         <FormattedMessage
-          id="noThanks"
+          id="continue"
           defaultMessage="Continue"
         />
       </span>

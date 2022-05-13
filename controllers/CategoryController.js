@@ -87,6 +87,7 @@ function Get_Categoryes(props) {
     });
   } else {
     return new Promise((resolve, reject) => {
+      // console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
       resolve([]);
     });
   }

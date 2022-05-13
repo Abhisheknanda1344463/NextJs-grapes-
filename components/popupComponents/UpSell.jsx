@@ -84,12 +84,15 @@ function UpSell(props) {
           // defaultMessage={`You are 19$ away from this item`}
         />
       </h3>
+      <hr/>
 
-      <UpSellCard product={product} upCros={true}/>
+      <UpSellCard product={product} oldProduct={oldProduct} upCros={true}/>
       {/*<UpSellCard product={oldProduct} upCros={true}/>*/}
       {/*<ProductCard product={product} upCros={true}/>*/}
 
-      <div className="no-thanks upsell">
+      {/* this is old version of "No thanks logic",  keep this for some time*/}
+
+      {/*<div className="no-thanks upsell">
         <AsyncAction
           action={() =>
             cartAddItem(
@@ -122,7 +125,7 @@ function UpSell(props) {
           )}
         />
 
-      </div>
+      </div>*/}
     </div>
   )
 }

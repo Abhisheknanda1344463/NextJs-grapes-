@@ -56,7 +56,7 @@ function CrosselSecond({product}) {
         onClick={() => dispatch(setPopup(false))}
       >
         <FormattedMessage
-          id="noThanks"
+          id="continue"
           defaultMessage="Continue"
         />
       </span>
