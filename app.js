@@ -2,7 +2,7 @@ const express = require("express");
 const next = require("next");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const port = process.env.PORT || 3855;
+const port = process.env.PORT || 3800;
 const development = process.env.NODE_ENV !== "production";
 const app = next({ dev: development });
 const api = require("./routes/api.js");
@@ -65,7 +65,7 @@ app.prepare().then((request) => {
     ////   console.log(dbName.includes(".zegashop.com"));
     if (dbName.includes(".zegashop.com")) {
       var dataName = dbName.split(".zegashop.com");
-      console.log(dataName, "dataname in app js");
+      //// console.log(dataName);
       databaseName = dataName[0];
       process.env.domainName = dbName;
 
@@ -73,7 +73,9 @@ app.prepare().then((request) => {
     } else {
       process.env.domainName = dbName;
       databaseName = dbName.split(".")[0];
-
+      if (databaseName == "www") {
+        databaseName = dbName.split(".")[1];
+      }
       process.env.databaseName = databaseName;
     }
 

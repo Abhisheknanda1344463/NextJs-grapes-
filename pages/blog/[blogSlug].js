@@ -22,6 +22,7 @@ export default function Contact(props) {
 
   return (
     <BlogPagePost
+      dbName={props.dbName}
       blogSlug={query.blogSlug}
       locale={props.locale}
       blog={props.blog}
@@ -36,7 +37,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     "Cache-Control",
     "public, s-maxage=10, stale-while-revalidate=59"
   );
-
+  const dbName = req.headers["x-forwarded-host"];
   const {
     locale: defaultLocaleSelected,
     currency,
@@ -49,7 +50,9 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
   let blog = null;
 
   //// const settingsResponse = await ApiCustomSettingsAsync();
-  const { setCatgoies, setMenuList } = await ApiCategoriesAndMenues(selectedLocale);
+  const { setCatgoies, setMenuList } = await ApiCategoriesAndMenues(
+    selectedLocale
+  );
 
   dispatches = {
     ...generalDispatches.clientSide,
@@ -78,6 +81,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
       locale: selectedLocale,
       dispatches,
       blog: blog,
+      dbName: dbName,
     },
   };
 }

@@ -583,6 +583,11 @@ const shopApi = {
       .then((response) => response.json())
       .catch((err) => console.error(err));
   },
+  getCategoryBySlug(slug, dbName, locale) {
+    return fetch(domainUrl(`${dbName}/db/getProductIdBySlug/${slug}/${locale}`))
+      .then((response) => response.json())
+      .catch((err) => console.error(err));
+  },
 };
 
 export default shopApi;

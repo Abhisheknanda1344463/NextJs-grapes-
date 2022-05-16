@@ -23,7 +23,13 @@ export default function Page(props) {
   }, [props.locale]);
 
   if (query.pageSlug == "blogs") {
-    return <BlogPageCategory blog={props.blog} pageSlug={query.pageSlug} />;
+    return (
+      <BlogPageCategory
+        dbName={props.dbName}
+        blog={props.blog}
+        pageSlug={query.pageSlug}
+      />
+    );
   } else {
     return <SiteCustomPage pageSlug={query.pageSlug} content={props.content} />;
   }
@@ -46,6 +52,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
   const selectedLocale = locale !== "catchAll" ? locale : defaultLocaleSelected;
 
   let blog = null;
+  let databaseName = null;
   let content = null;
   let redirect = false;
   let dataContent;
@@ -57,7 +64,11 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     //     current_page: page || res.meta.current_page,
     //   };
     // });
-    content = await fetch(domainUrl(`${dbName}/db/cms/blogs?locale=${selectedLocale}&page=${page}&limit=${6}`));
+    content = await fetch(
+      domainUrl(
+        `${dbName}/db/cms/blogs?locale=${selectedLocale}&page=${page}&limit=${6}`
+      )
+    );
 
     dataContent = await content.json();
     blog = {
@@ -72,11 +83,27 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
 
     dataContent = await content.json();
   }
+
+  if (dbName.includes(".zegashop.com")) {
+    var dataName = dbName.split(".zegashop.com");
+    //// console.log(dataName);
+    databaseName = dataName[0];
+    process.env.domainName = dbName;
+
+    process.env.databaseName = databaseName;
+  } else {
+    process.env.domainName = dbName;
+    databaseName = dbName.split(".")[0];
+    if (databaseName == "www") {
+      databaseName = dbName.split(".")[1];
+    }
+    process.env.databaseName = databaseName;
+  }
   const dispatches = {
     ...generalDispatches.clientSide,
     ...generalDispatches.serverSide,
   };
-  console.log(blog, "blog in blogslug")
+  console.log(blog, "blog in blogslug");
 
   /////REMEBER NOT WORK
   // const metas = await fetch(
@@ -91,6 +118,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
       dispatches,
       redirect,
       metas: [],
+      dbName: databaseName,
       content: dataContent,
       blog: blog,
     },

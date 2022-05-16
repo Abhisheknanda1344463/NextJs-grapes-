@@ -1,6 +1,7 @@
 const CategoriesEn = require("../models/CategoriesEn.js");
 const CategoriesHy = require("../models/CategoriesHy.js");
 const CategoriesRu = require("../models/CategoriesRu.js");
+const Categories = require("../models/Categories.js");
 
 // const MenuEn = require("../models/MenusEn.js");
 // const MenuHy = require("../models/MenusHy.js");
@@ -92,6 +93,22 @@ function Get_Categoryes(props) {
     });
   }
 }
+function getCategoryBySlug(slug, locale) {
+  return new Promise((resolve, reject) => {
+    const modulesInfo = {
+      en: CategoriesEn,
+      hy: CategoriesHy,
+      ru: CategoriesRu,
+    };
+    const Module = modulesInfo[locale];
+    Module.findOne().then((res) => {
+      var asd = res.data.categories[0].children.filter((e) => e.slug == slug);
+      console.log(asd, "resres");
+      resolve(asd);
+    });
+  });
+}
 
 exports.Get_Menus = Get_Menus;
+exports.getCategoryBySlug = getCategoryBySlug;
 exports.Get_Categoryes = Get_Categoryes;
