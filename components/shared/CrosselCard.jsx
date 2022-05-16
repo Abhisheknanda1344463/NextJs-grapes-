@@ -21,15 +21,29 @@ import defoult from "../../images/defoultpic.png";
 import { compareAddItem } from "../../store/compare";
 import { quickviewOpen } from "../../store/quickview";
 import { wishlistAddItem } from "../../store/wishlist";
-import InputNumber from './InputNumber'
+import InputNumber from "./InputNumber";
 
 function CrosselCard(props) {
-  const { customer, product, layout, cartAddItem, wishlistAddItem, setPopup, only } = props;
+  const {
+    customer,
+    product,
+    layout,
+    cartAddItem,
+    wishlistAddItem,
+    setPopup,
+    only,
+  } = props;
   const [dimension, setDimension] = useState(1200);
-  const [quantity, setQuantity] = useState(1)
+  const [quantity, setQuantity] = useState(1);
 
-  const backorders = useSelector(state => state.general.coreConfigs.catalog_inventory_stock_options_backorders)
-  const outOfStock = useSelector(state => state.general.coreConfigs.catalog_products_homepage_out_of_stock_items)
+  const backorders = useSelector(
+    (state) =>
+      state.general.coreConfigs.catalog_inventory_stock_options_backorders
+  );
+  const outOfStock = useSelector(
+    (state) =>
+      state.general.coreConfigs.catalog_products_homepage_out_of_stock_items
+  );
 
   // useEffect(() => {
   //   function handleResize() {
@@ -52,11 +66,10 @@ function CrosselCard(props) {
   //   }
   // };
 
-
   const handleChangeQuantity = (quantity) => {
-    setQuantity(() => quantity)
-    console.log(quantity, "quantity in crosselcard")
-  }
+    setQuantity(() => quantity);
+    console.log(quantity, "quantity in crosselcard");
+  };
 
   const selectedData = useSelector((state) => state.locale.code);
   const cartToken = useSelector((state) => state.cartToken);
@@ -192,24 +205,17 @@ function CrosselCard(props) {
       );
     }
   } else {
-    return null
+    return null;
   }
-
 
   if (product?.type === "configurable") {
     price = (
-<<<<<<< HEAD
       <div className="product-card__prices">
         <Currency value={Number(product.min_price).toFixed(2)} /> {" ֏"}
-=======
-      <div className="product-card__prices cross__prods">
-        <Currency value={Number(product.min_price).toFixed(2)}/> {" $"}
->>>>>>> 7ee791e00b3eb363c2e20896bdaadd4e6cb22150
       </div>
     );
   } else if (product.formatted_special_price) {
     price = (
-<<<<<<< HEAD
       <div className="product-card__prices">
         <span className="product-card__new-price">
           <Currency value={product.formatted_special_price} /> {" ֏"}
@@ -217,141 +223,141 @@ function CrosselCard(props) {
         {
           <span className="product-card__old-price">
             <Currency value={product.formatted_price} /> {" ֏"}
-=======
-      <div className="product-card__prices cross__prods">
-        <span className="product-card__new-price cross__prods">
-          <Currency value={product.formatted_special_price}/> {" $"}
-        </span>
-        {
-          <span className="product-card__old-price cross__prods">
-            <Currency value={product.formatted_price}/> {" $"}
->>>>>>> 7ee791e00b3eb363c2e20896bdaadd4e6cb22150
           </span>
         }
       </div>
     );
   } else {
     price = (
-<<<<<<< HEAD
       <div className="product-card__prices">
-        <Currency value={product.formatted_price || Number(product.price).toFixed(2)} /> {" ֏"}
-=======
-      <div className="product-card__prices cross__prods">
-        <Currency value={product.formatted_price || Number(product.price).toFixed(2)}/> {" $"}
->>>>>>> 7ee791e00b3eb363c2e20896bdaadd4e6cb22150
+        <Currency
+          value={product.formatted_price || Number(product.price).toFixed(2)}
+        />{" "}
+        {" ֏"}
       </div>
     );
   }
 
   return (
     <React.Fragment>
-      {
-        product
-          ? <div className={containerClasses}>
-            <>
-              {badges}
-              {image}
+      {product ? (
+        <div className={containerClasses}>
+          <>
+            {badges}
+            {image}
 
-              <div className="product-card__info cross__prods">
-                <div className="product-card__info_sub cross__prods">
-                  <div className="product-card__name cross__prods">
-                    <Link href={url.product(product)}>{product.name || ""}</Link>
-                  </div>
-                  {price}
+            <div className="product-card__info cross__prods">
+              <div className="product-card__info_sub cross__prods">
+                <div className="product-card__name cross__prods">
+                  <Link href={url.product(product)}>{product.name || ""}</Link>
                 </div>
-                <div className="product-card-description cross__prods">
-                  {product.short_description
-                    ? product.short_description.replace(/<\/?[^>]+>/gi, "")
-                    : ""}{" "}
-                </div>
+                {price}
               </div>
-              <div className="crossel-button cross__prods">
-                <div className="product__actions-item product-inner-quantity cross__prods">
-                  <InputNumber
-                    id="product-quantity"
-                    aria-label="Quantity"
-                    className="product__quantity cross__prods"
-                    size="lg"
-                    min={1}
-                    max={5000}
-                    value={quantity}
-                    onChange={handleChangeQuantity}
+              <div className="product-card-description cross__prods">
+                {product.short_description
+                  ? product.short_description.replace(/<\/?[^>]+>/gi, "")
+                  : ""}{" "}
+              </div>
+            </div>
+            <div className="crossel-button cross__prods">
+              <div className="product__actions-item product-inner-quantity cross__prods">
+                <InputNumber
+                  id="product-quantity"
+                  aria-label="Quantity"
+                  className="product__quantity cross__prods"
+                  size="lg"
+                  min={1}
+                  max={5000}
+                  value={quantity}
+                  onChange={handleChangeQuantity}
                   // disabled={Addtocartdisabled}
-                  />
-                </div>
-                <div className={classNames("cross_btn cross__prods",
-                  {
-                    "button_disabled": product.qty === 0
-                      && backorders == 0
-                      && outOfStock == 1
-                  })}>
-                  <AsyncAction
-                    action={() =>
-                      cartAddItem(product, [], quantity, cartToken, customer, selectedData)
-                    }
-                    render={({ run, loading }) => (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          run();
-                          // setPopup(true);
-                        }}
-                        className={classNames(
-                          "btn btn-primary product-card__addtocart cross__prods",
-                          {
-                            "btn-loading": loading,
-                          }
-                        )}
-                      >
-                        <FormattedMessage
-                          id="add.tocart"
-                          defaultMessage="Add to cart"
-                        />
-                      </button>
-                    )}
-                  />
-                </div>
-
+                />
               </div>
-<<<<<<< HEAD
-              <div className="product-card__actions">
-                <div className="product-card__buttons"></div>
-              </div>
-              <div className={classNames("cross_btn",
-                {
-                  "button_disabled": product.qty === 0
-                    && backorders == 0
-                    && outOfStock == 1
-                })}>
+              <div
+                className={classNames("cross_btn cross__prods", {
+                  button_disabled:
+                    product.qty === 0 && backorders == 0 && outOfStock == 1,
+                })}
+              >
                 <AsyncAction
                   action={() =>
-                    cartAddItem(product, [], quantity, cartToken, customer, selectedData)
+                    cartAddItem(
+                      product,
+                      [],
+                      quantity,
+                      cartToken,
+                      customer,
+                      selectedData
+                    )
                   }
                   render={({ run, loading }) => (
                     <button
                       type="button"
-                      onClick={run}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        run();
+                        // setPopup(true);
+                      }}
                       className={classNames(
-                        "btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ",
+                        "btn btn-primary product-card__addtocart cross__prods",
                         {
                           "btn-loading": loading,
                         }
                       )}
                     >
-                      <FormattedMessage id="add.tocart" defaultMessage="Add to cart" />
+                      <FormattedMessage
+                        id="add.tocart"
+                        defaultMessage="Add to cart"
+                      />
                     </button>
                   )}
                 />
               </div>
-
-=======
->>>>>>> 7ee791e00b3eb363c2e20896bdaadd4e6cb22150
-            </>
-          </div>
-          : <></>
-      }
-
+            </div>
+            <div className="product-card__actions">
+              <div className="product-card__buttons"></div>
+            </div>
+            <div
+              className={classNames("cross_btn", {
+                button_disabled:
+                  product.qty === 0 && backorders == 0 && outOfStock == 1,
+              })}
+            >
+              <AsyncAction
+                action={() =>
+                  cartAddItem(
+                    product,
+                    [],
+                    quantity,
+                    cartToken,
+                    customer,
+                    selectedData
+                  )
+                }
+                render={({ run, loading }) => (
+                  <button
+                    type="button"
+                    onClick={run}
+                    className={classNames(
+                      "btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ",
+                      {
+                        "btn-loading": loading,
+                      }
+                    )}
+                  >
+                    <FormattedMessage
+                      id="add.tocart"
+                      defaultMessage="Add to cart"
+                    />
+                  </button>
+                )}
+              />
+            </div>
+          </>
+        </div>
+      ) : (
+        <></>
+      )}
     </React.Fragment>
   );
 }
