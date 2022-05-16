@@ -25,6 +25,7 @@ const UpSellCard = (props) => {
 
   const {
     product,
+    oldProduct,
     selectedData,
     cartToken,
     customer,
@@ -53,7 +54,7 @@ const UpSellCard = (props) => {
         break
       case 'crossel':
         shopApi.getCrossSellProducts(prodID).then(res => {
-          if(res.length === 0) {
+          if (res.length === 0) {
             setPopup(false)
           }
           // console.log(res, 'PXOPXOXOOXOXOXOXOXOXOXOXOXOXXO')
@@ -104,7 +105,13 @@ const UpSellCard = (props) => {
               {/*</div>*/}
 
               <div className="product__rating"></div>
-              <p className="f16">{product.sku}</p>
+              <p className="f16">
+                <FormattedMessage
+                  id="product_sku"
+                  defaultMessage="SKU"
+                />
+                {": "}
+                {product.sku}</p>
               <h1
                 className="product__name"
                 dangerouslySetInnerHTML={createMarkup(product.name)}
@@ -160,7 +167,7 @@ const UpSellCard = (props) => {
                       />
                       <span
                         className="product-card__symbol"
-                        style={{marginLeft: '5px'}}
+                        // style={{marginLeft: '5px'}}
                       >
                         ֏
                       </span>
@@ -180,7 +187,7 @@ const UpSellCard = (props) => {
                   <span>
                     <span
                       className="product-card__symbol"
-                      style={{marginLeft: '5px'}}
+                      // style={{marginLeft: '5px'}}
                     >
                       ֏
                     </span>
@@ -284,7 +291,7 @@ const UpSellCard = (props) => {
               <form className="product__options">
                 <div className="form-group product__option">
                   <div className="product__actions">
-                    <div className={classNames("product__actions-item product__actions-item--addtocart",
+                    <div className={classNames("product__actions-item product__actions-item--addtocart upsell",
                       {
                         "button_disabled": product.qty === 0
                           && backorders == 0
@@ -332,7 +339,7 @@ const UpSellCard = (props) => {
                                   // setPopup(true)
                                 }}
                                 className={classNames(
-                                  'btn btn-orange inner-addtocart rounded-pills btn-lg',
+                                  'btn btn-orange rounded-pills',
                                   {
                                     'btn-loading': loading,
                                   },
@@ -347,6 +354,41 @@ const UpSellCard = (props) => {
                           />
                         )
                       }
+
+                    </div>
+                    {/*  here goes to be a no thanks button*/}
+                    <div className="no-thanks upsell">
+                      <AsyncAction
+                        action={() =>
+                          cartAddItem(
+                            oldProduct,
+                            [],
+                            1,
+                            cartToken,
+                            customer,
+                            selectedData,
+                            null,
+                            '',
+                          )
+                        }
+                        render={({run, loading}) => (
+                          <span
+                            onClick={(e) => {
+                              e.preventDefault()
+                              run()
+                              setTempData(product)
+                              getUpCrosselProd(oldProduct.product_id || oldProduct.product.id, 'crossel')
+                              setPopupName('crossel')
+                              // setPopup(false)
+                            }}
+                          >
+              <FormattedMessage
+                id="noThanks"
+                defaultMessage="No, Thanks"
+              />
+            </span>
+                        )}
+                      />
 
                     </div>
                   </div>

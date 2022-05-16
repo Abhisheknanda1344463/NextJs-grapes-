@@ -8,9 +8,11 @@ import Link from "next/link";
 function AppLink(props) {
   const { external, children, ...otherProps } = props;
   let link;
-
+  console.log(props, "otherprops in applink")
   if (external) {
     const { href, replace, innerRef, ...linkProps } = otherProps;
+
+
     link = (
       <Link href={href} {...linkProps}>
         {children}

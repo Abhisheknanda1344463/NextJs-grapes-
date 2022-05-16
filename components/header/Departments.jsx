@@ -1,12 +1,12 @@
 // react
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, {Component} from "react";
+import {connect} from "react-redux";
 import Image from "components/hoc/Image";
-import { FormattedMessage } from "react-intl";
+import {FormattedMessage} from "react-intl";
 import MenuIcon from "../../images/MenuIcon.png";
 import DepartmentsLinks from "./DepartmentsLinks";
 import departmentsArea from "../../services/departmentsArea";
-import { VektorMenu } from "../../svg";
+import {VektorMenu} from "../../svg";
 
 class Departments extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class Departments extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    let { fixed, area, open } = this.state;
+    let {fixed, area, open} = this.state;
 
     if (prevState.fixed !== fixed) {
       const root = this.rootRef;
@@ -85,6 +85,7 @@ class Departments extends Component {
       }
     }
   }
+
   // changeColor() {
   //   this.setState({ red: !this.state.red });
   // }
@@ -106,9 +107,9 @@ class Departments extends Component {
   };
 
   handleButtonClick = () => {
-    console.log(this.state.open, "jkhdfkasdhksdjskdhaklaksvkajafkhakfjalkaklbjalkbf")
+    console.log(this.state.open, " - state is open?")
     this.setState({open: !this.state.open});
-    this.setState({ active: !this.state.active });
+    this.setState({active: !this.state.active});
   };
 
   handleTransitionEnd = (event) => {
@@ -136,7 +137,10 @@ class Departments extends Component {
         <button
           type="button"
           className="departments__button"
-          onClick={this.handleButtonClick}
+          onClick={() => {
+            this.handleButtonClick()
+            // console.log("google core web vitals")
+          }}
         >
           {/*<Menu18x14Svg className="departments__button-icon" />*/}
           {/* <Image
@@ -146,16 +150,17 @@ class Departments extends Component {
             width={25}
             height={19}
           /> */}
-          <VektorMenu />
+          <VektorMenu/>
           <span className="category-title-fms">
-            <FormattedMessage id="Menu.category" defaultMessage="Category" />
+            <FormattedMessage id="Menu.category" defaultMessage="Category"/>
           </span>
         </button>
       </div>
     );
   }
 }
-const mapStateToProps = ({ general: { categories } }) => ({
+
+const mapStateToProps = ({general: {categories}}) => ({
   categories,
 });
 
