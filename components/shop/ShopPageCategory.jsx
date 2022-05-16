@@ -523,14 +523,14 @@ function ShopPageCategory(props) {
         <meta name="keywords" content={`Catalog, ${categorySlug}`}/>
         <meta
           name="description"
-          content={`Marketin, Catalog ${categorySlug}`}
+          content={`Catalog ${categorySlug}`}
         />
         <meta
           property="og:title"
           content={`Shop Category Page — ${categorySlug}`}
         />
-        <meta property="og:description" content={`Zegashop ${categorySlug}`}/>
-        <meta property="og:image" content="Zegashop"/>
+        {/*<meta property="og:description" content={`Zegashop ${categorySlug}`}/>*/}
+        {/*<meta property="og:image" content="Zegashop"/>*/}
         <meta property="og:url" content={url + "/catalog/" + categorySlug}/>
       </Helmet>
       <div className="cat_blocks_fms">
