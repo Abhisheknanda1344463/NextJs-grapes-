@@ -65,7 +65,7 @@ app.prepare().then((request) => {
     ////   console.log(dbName.includes(".zegashop.com"));
     if (dbName.includes(".zegashop.com")) {
       var dataName = dbName.split(".zegashop.com");
-      //// console.log(dataName);
+      console.log(dataName, "dataname in app js");
       databaseName = dataName[0];
       process.env.domainName = dbName;
 
