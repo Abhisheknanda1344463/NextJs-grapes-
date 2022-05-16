@@ -17,9 +17,11 @@ function HomePageOne(props) {
   const [bestsellers, setBest] = useState(props.newProducts);
   const [featured, setfeatured] = useState(props.featuredProducts);
   const [dbName, setDomain] = useState(props.dbName);
+  const [domainName, _] = useState(props.domain);
+  // console.log(props, "props domain")
   const [confs, setConfs] = useState();
   const router = useRouter();
-  const domain = useSelector((state) => state.general.domain);
+  // const domain = useSelector((state) => state.general.domain);
   const hasBackorder = useSelector(
     (state) =>
       state.general.coreConfigs.catalog_inventory_stock_options_backorders
@@ -54,7 +56,7 @@ function HomePageOne(props) {
   const messageIntro = homepage_intro_text.props.defaultMessage;
   dispatch(setMetaPath(dbName))
   dispatch(setMetaTags(metaTags))
-  const upDomain = domain.charAt(0).toUpperCase() + domain.slice(1);
+  const upDomain = domainName.charAt(0).toUpperCase() + domainName.slice(1);
   const getHomeProducts = () => {
     try {
       fetch(
@@ -101,7 +103,9 @@ function HomePageOne(props) {
     setFirstLoad(false);
     ////  getFeaturedProducts();
   }, [router.locale]);
-  console.log(domain, 'domaindomaindomaindomain');
+
+  // const domName = dbName.split(".")[0];
+  // console.log(domName, "dom name in reactr")
   return (
     <React.Fragment>
       <Head>
@@ -116,7 +120,7 @@ function HomePageOne(props) {
         <meta
           property="og:image"
           name="image"
-          content={`${dbName}/storage${domain}/configuration/share_pic/share_pic.webp`}
+          content={`https://${dbName}/storage/${domainName}/configuration/share_pic/share_pic.webp`}
         />
       </Head>
       <BlockSlideShow history={history} />

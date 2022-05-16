@@ -189,6 +189,7 @@ class Product extends PureComponent {
   }
 
   handleTakeProd = (elem, type) => {
+    console.log(elem,"elem in handleTakeProd")
     if (type === 'radio' || type === 'select') {
       this.setState({
         ...this.state,
@@ -197,6 +198,7 @@ class Product extends PureComponent {
           [type]: [{ ...elem, quantity: 1 }],
         },
       })
+      console.log("iffffffffffffffffffffffffffffffffffff")
     } else {
       this.setState({
         ...this.state,
@@ -207,7 +209,10 @@ class Product extends PureComponent {
             : [{ ...elem, quantity: 1 }],
         },
       })
+      console.log(this.state.bundleProducts, "bundle product in elseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+      // console.log("elseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     }
+    // console.log(this.state.bundleProducts, "bundle product in function handleTakeProd")
   }
 
   handleChangeConfig = (products, attrId, attrCode, option) => {
@@ -310,6 +315,8 @@ class Product extends PureComponent {
         [typeId]: selectedItem,
       },
     })
+
+    console.log(this.state.bundleProducts, "bundle product in function handleId")
   }
 
   openUpCrosProd = (product) => {

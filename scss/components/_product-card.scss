@@ -85,6 +85,18 @@
   }
 }
 
+.product-card__image.cross__prods {
+  padding: 18px;
+  flex-shrink: 0;
+  min-height: 258px;
+
+  &:hover .item_overlay {
+    background-color: gray;
+  }
+}
+
+
+
 .product-card__quickview {
   z-index: 2;
   position: absolute;
