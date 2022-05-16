@@ -117,14 +117,15 @@ export async function getServerSideProps({
   if (categoriesResponse?.categories) {
     getItems(categoriesResponse.categories[0].children);
   }
-  if (categoryId && query.cat_id) {
-    await shopApi
-      .getCategoryBySlug(query.slug, dbName, selectedLocale)
-      .then((res) => {
-        console.log(res, "resresresres");
-        categoryId = res.id;
-      });
-  }
+  console.log(dbName, query.slug, "dbName");
+  await fetch(`https://${dbName}/api/test?slug=${query.slug}`)
+    .then((response) => response.json())
+    .then((response) => {
+      console.log(response, "asdsad");
+      categoryId = response.id;
+    })
+    .catch((err) => console.error(err));
+  console.log(categoryId, "categoryId");
   await shopApi
     .getFilters(categoryId ? categoryId : query.cat_id, {
       lang: selectedLocale,
@@ -143,7 +144,7 @@ export async function getServerSideProps({
       },
       location: "",
       dbName: dbName,
-      catID: query.cat_id,
+      catID: categoryId,
       window: null,
       limit: 6,
     })
@@ -242,7 +243,7 @@ export async function getServerSideProps({
       currency: { code: settingsResponse.data.currency.code },
       productsList: productsList,
       brandList: brands,
-      categoryId: query.cat_id,
+      categoryId: categoryId,
       dbName: dbName,
       categoryTitle,
       dispatches: dispatchesNew,
