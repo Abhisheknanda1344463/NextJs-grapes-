@@ -67,10 +67,10 @@ function CrosselCard(props) {
     // "product-card--layout--grid product-card--size--sm": layout === "grid-sm",
     // "product-card--layout--grid product-card--size--nl": layout === "grid-nl",
     // "product-card--layout--grid product-card--size--lg": layout === "grid-lg",
-    "product-card--layout--list": layout === "list",
-    "product-card--layout--horizontal": layout === "horizontal",
-    "product-for--one-element": only,
-    "product-for--one-element": only,
+    // "product-card--layout--list": layout === "list",
+    // "product-card--layout--horizontal": layout === "horizontal",
+    // "product-for--one-element": only,
+    // "product-for--one-element": only,
   });
 
   let badges = [];
@@ -80,17 +80,17 @@ function CrosselCard(props) {
   if (product) {
     if (product.images && product.images.length > 0) {
       image = (
-        <div className="product-card__image product-image">
+        <div className="product-card__image cross__prods product-image">
           {/*{!isTablet() ? (*/}
           <Link href={url.product(product)}>
-            <div className="product-image__body product-image__body-fms">
-              <div className="item_overlay hide-for-tablet"></div>
+            <div className="product-image__body cross__prods product-image__body-fms">
+              <div className="item_overlay hide-for-tablet cross__prods"></div>
               <div className=""></div>
               {product.images[0].path ? (
                 <Image
                   alt=""
                   layout="fill"
-                  className="product-image__img"
+                  className="product-image__img cross__prods"
                   src={`${anotherUrl}/cache/medium/` + product.images[0].path}
                 />
               ) : (
@@ -98,7 +98,7 @@ function CrosselCard(props) {
                   alt=""
                   layout="fill"
                   src={`${anotherUrl}/cache/medium/${product.images[0]}`}
-                  className="product-image__img"
+                  className="product-image__img cross__prods"
                 />
               )}
             </div>
@@ -180,10 +180,10 @@ function CrosselCard(props) {
       );
     } else {
       image = (
-        <div className="product-card__image product-image">
-          <div className="product-image__body product-image__defoult-fms">
+        <div className="product-card__image product-image cross__prods">
+          <div className="product-image__body product-image__defoult-fms cross__prods">
             <Image
-              className="product-image__img "
+              className="product-image__img cross__prods"
               src={defoult}
               alt="Picture is missing"
               layout="fill"
@@ -199,18 +199,18 @@ function CrosselCard(props) {
 
   if (product?.type === "configurable") {
     price = (
-      <div className="product-card__prices">
+      <div className="product-card__prices cross__prods">
         <Currency value={Number(product.min_price).toFixed(2)}/> {" $"}
       </div>
     );
   } else if (product.formatted_special_price) {
     price = (
-      <div className="product-card__prices">
-        <span className="product-card__new-price">
+      <div className="product-card__prices cross__prods">
+        <span className="product-card__new-price cross__prods">
           <Currency value={product.formatted_special_price}/> {" $"}
         </span>
         {
-          <span className="product-card__old-price">
+          <span className="product-card__old-price cross__prods">
             <Currency value={product.formatted_price}/> {" $"}
           </span>
         }
@@ -218,7 +218,7 @@ function CrosselCard(props) {
     );
   } else {
     price = (
-      <div className="product-card__prices">
+      <div className="product-card__prices cross__prods">
         <Currency value={product.formatted_price || Number(product.price).toFixed(2)}/> {" $"}
       </div>
     );
@@ -233,25 +233,25 @@ function CrosselCard(props) {
               {badges}
               {image}
 
-              <div className="product-card__info">
-                <div className="product-card__info_sub">
-                  <div className="product-card__name ">
+              <div className="product-card__info cross__prods">
+                <div className="product-card__info_sub cross__prods">
+                  <div className="product-card__name cross__prods">
                     <Link href={url.product(product)}>{product.name || ""}</Link>
                   </div>
                   {price}
                 </div>
-                <div className="product-card-description">
+                <div className="product-card-description cross__prods">
                   {product.short_description
                     ? product.short_description.replace(/<\/?[^>]+>/gi, "")
                     : ""}{" "}
                 </div>
               </div>
-              <div className="crossel-button">
-                <div className="product__actions-item product-inner-quantity">
+              <div className="crossel-button cross__prods">
+                <div className="product__actions-item product-inner-quantity cross__prods">
                   <InputNumber
                     id="product-quantity"
                     aria-label="Quantity"
-                    className="product__quantity"
+                    className="product__quantity cross__prods"
                     size="lg"
                     min={1}
                     max={5000}
@@ -260,7 +260,7 @@ function CrosselCard(props) {
                     // disabled={Addtocartdisabled}
                   />
                 </div>
-                <div className={classNames("cross_btn",
+                <div className={classNames("cross_btn cross__prods",
                   {
                     "button_disabled": product.qty === 0
                       && backorders == 0
@@ -279,7 +279,7 @@ function CrosselCard(props) {
                           // setPopup(true);
                         }}
                         className={classNames(
-                          "btn btn-primary product-card__addtocart hide-for-tablet",
+                          "btn btn-primary product-card__addtocart cross__prods",
                           {
                             "btn-loading": loading,
                           }
@@ -295,36 +295,6 @@ function CrosselCard(props) {
                 </div>
 
               </div>
-              <div className="product-card__actions">
-                <div className="product-card__buttons"></div>
-              </div>
-              <div className={classNames("cross_btn",
-                {
-                  "button_disabled": product.qty === 0
-                    && backorders == 0
-                    && outOfStock == 1
-                })}>
-                <AsyncAction
-                  action={() =>
-                    cartAddItem(product, [], quantity, cartToken, customer, selectedData)
-                  }
-                  render={({run, loading}) => (
-                    <button
-                      type="button"
-                      onClick={run}
-                      className={classNames(
-                        "btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ",
-                        {
-                          "btn-loading": loading,
-                        }
-                      )}
-                    >
-                      <FormattedMessage id="add.tocart" defaultMessage="Add to cart"/>
-                    </button>
-                  )}
-                />
-              </div>
-
             </>
           </div>
           : <></>

@@ -125,7 +125,7 @@ class ShopPageCheckout extends React.Component {
     )
       .then((responce) => responce.json())
       .then((res) => {
-        console.log(res.data.email, "responce in cuztomer token")
+        // console.log(res.data.email, "responce in cuztomer token")
         this.setState({ email: res.data?.email })
       })
     if (this.state.customer.token != '') {
@@ -134,7 +134,7 @@ class ShopPageCheckout extends React.Component {
       )
         .then((res) => res.json())
         .then((res) => {
-          console.log(res, 'res in shop page checkout')
+          // console.log(res, 'res in shop page checkout')
           this.setState({
             pastOrders: res.data,
             street: res.data[0]?.address1[0],

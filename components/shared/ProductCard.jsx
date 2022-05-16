@@ -8,7 +8,6 @@ import Link from 'next/link'
 import PropTypes from 'prop-types'
 import {connect, useSelector} from 'react-redux'
 import {toast} from 'react-toastify'
-// import {useSelector} from 'react-redux'
 import {FormattedMessage} from 'react-intl'
 import {setPopup, setPopupName, setUpCrossProd, setTempData, setCrossValid} from '../../store/general'
 import {wishlistRemoveItem} from '../../store/wishlist'
@@ -79,8 +78,6 @@ function ProductCard(props) {
           )
         break
     }
-
-
   }
 
   const openUpCrosProd = (product) => {
@@ -112,16 +109,11 @@ function ProductCard(props) {
   const productLink = ''
 
   const isTablet = () => {
-    // return dimension >= 1024
     if (dimension >= 1024) {
       return false
     } else {
       return true
     }
-  }
-
-  const al = (e) => {
-    alert(e)
   }
 
   const selectedData = useSelector((state) => state.locale.code)
@@ -143,8 +135,6 @@ function ProductCard(props) {
   let price
   let features
   if (product) {
-    // console.log(product.has_cross_sell, "has_cross_sell in product card___________")
-    // console.log(product.has_up_sell, "has_up_sell in product card___________")
     if (product.images && product.images.length > 0) {
       image = (
         <div className="product-card__image product-image">
@@ -313,49 +303,7 @@ function ProductCard(props) {
               <div className="product-image__body">
                 <div className="item_overlay hide-for-tablet"></div>
                 <div className="img_btn_wrapper">
-                  {/*<AsyncAction*/}
-                  {/*  // action={() =>*/}
-                  {/*  //   cartAddItem(*/}
-                  {/*  //     product,*/}
-                  {/*  //     [],*/}
-                  {/*  //     1,*/}
-                  {/*  //     cartToken,*/}
-                  {/*  //     customer,*/}
-                  {/*  //     selectedData,*/}
-                  {/*  //     null,*/}
-                  {/*  //     'homePage',*/}
-                  {/*  //   )*/}
-                  {/*  // }*/}
-                  {/*  render={({run, loading}) => (*/}
-                  {/*    <button*/}
-                  {/*      type="button"*/}
-                  {/*      onClick={() => {*/}
-                  {/*        // e.preventDefault()*/}
-                  {/*        run()*/}
-                  {/*        // product?.product?.up_sells.length === 0*/}
-                  {/*        //   ? getUpCrosselProd(product.product_id || product.product.id, 'crossel')*/}
-                  {/*        //   : getUpCrosselProd(product.product_id || product.product.id, 'upsel')*/}
-                  {/*        // product?.product?.up_sells.length === 0*/}
-                  {/*        //   ? setPopupName('crossel')*/}
-                  {/*        //   : setPopupName('upsell')*/}
-                  {/*        openUpCrosProd(product);*/}
-                  {/*        // setPopupName('upsell')*/}
-                  {/*        // setPopup(true)*/}
-                  {/*      }}*/}
-                  {/*      className={classNames(*/}
-                  {/*        'btn btn-primary product-card__addtocart hide-for-tablet',*/}
-                  {/*        {*/}
-                  {/*          'btn-loading': loading,*/}
-                  {/*        },*/}
-                  {/*      )}*/}
-                  {/*    >*/}
-                  {/*      <FormattedMessage*/}
-                  {/*        id="add.tocart"*/}
-                  {/*        defaultMessage="Add to cart"*/}
-                  {/*      />*/}
-                  {/*    </button>*/}
-                  {/*  )}*/}
-                  {/*/>*/}
+
                   {
                     product && product?.type === 'configurable' || product?.type === 'bundle'
                       ? (
@@ -694,38 +642,6 @@ function ProductCard(props) {
               </div>
             </div>
 
-            {/*<AsyncAction*/}
-            {/*  // action={`${noUpsel === 0 && noCrossel === 0 ? () => cartAddItem(product, [], 1, cartToken, customer, selectedData, null, 'homePage') : ""}`}*/}
-            {/*  // action={() => cartAddItem(product, [], 1, cartToken, customer, selectedData, null, 'homePage')}*/}
-            {/*  render={({run, loading}) => (*/}
-            {/*    <button*/}
-            {/*      type="button"*/}
-            {/*      onClick={() => {*/}
-            {/*        run()*/}
-            {/*        // product?.product?.up_sells.length === 0*/}
-            {/*        //   ? getUpCrosselProd(product.product_id || product.product.id, 'crossel')*/}
-            {/*        //   : getUpCrosselProd(product.product_id || product.product.id, 'upsel')*/}
-            {/*        // product?.product?.up_sells.length === 0*/}
-            {/*        //   ? setPopupName('crossel')*/}
-            {/*        //   : setPopupName('upsell')*/}
-            {/*        openUpCrosProd(product);*/}
-            {/*        // setPopup(true)*/}
-            {/*      }}*/}
-            {/*      className={classNames(*/}
-            {/*        'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ',*/}
-            {/*        {*/}
-            {/*          'btn-loading': loading,*/}
-            {/*        },*/}
-            {/*      )}*/}
-            {/*    >*/}
-            {/*      <FormattedMessage*/}
-            {/*        id="add.tocart"*/}
-            {/*        defaultMessage="Add to cart"*/}
-            {/*      />*/}
-            {/*    </button>*/}
-            {/*  )}*/}
-            {/*/>*/}
-
             {
               product && product?.type === 'configurable' || product?.type === 'bundle'
                 ? (
@@ -733,7 +649,7 @@ function ProductCard(props) {
                     <button
                       type="button"
                       className={classNames(
-                        'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fm',
+                        'btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms',
                       )}
                     >
                       <FormattedMessage

@@ -34,6 +34,7 @@ const product = [
 
 export default function BundleCheckbox(props) {
   // const product = props.praduct.products;
+  const prodType = "checkbox"
   const products = product.map((elem, index) => {
     return (
       <div className="bundle-radio-products" key={index}>
@@ -45,7 +46,9 @@ export default function BundleCheckbox(props) {
             name={elem.name}
             className="styled-checkbox"
             onClick={() => {
-              props.handleTakeProd(elem, props.praduct.type);
+              // alert(JSON.stringify(elem))
+              // props.handleTakeProd(elem, props.praduct.type);
+              props.handleTakeProd(elem, prodType);
             }}
           />
         </div>
