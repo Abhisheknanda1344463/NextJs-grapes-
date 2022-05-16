@@ -18,6 +18,7 @@ import { url } from "../../services/utils";
 import { apiImageUrl, apiUrlWithStore } from "../../helper";
 import { useSelector, useDispatch } from "react-redux";
 import { FormattedMessage } from "react-intl";
+import { removeCurrencyTemp } from '../../services/utils'
 import Image from "components/hoc/Image";
 import { cartUpdateQuantitiesSuccess } from "../../store/cart";
 function IndicatorCart(props) {
@@ -30,7 +31,7 @@ function IndicatorCart(props) {
   let dropdown;
   let totals;
   const CONFIG = "simple";
-  useEffect(() => {}, [selectedData]);
+  useEffect(() => { }, [selectedData]);
   const items = cart?.items.map((item, I) => {
     let image;
     // commented by David
@@ -110,13 +111,13 @@ function IndicatorCart(props) {
       price = (
         <div className="product-card__prices">
           <span className="product-card__new-price">
-            <span className="product-card__symbol">֏</span>
             <Currency value={Number(product.special_price).toFixed(0)} />
+            <span className="product-card__symbol">֏</span>
           </span>
           {
             <span className="product-card__old-price">
-              <span className="product-card__symbol">֏</span>
               <Currency value={Number(product.price).toFixed(0)} />
+              <span className="product-card__symbol">֏</span>
             </span>
           }
         </div>
@@ -125,13 +126,13 @@ function IndicatorCart(props) {
       price = (
         <div className="product-card__prices">
           <span className="product-card__new-price">
-            <span className="product-card__symbol">֏</span>
             <Currency value={Number(product.special_price).toFixed(0)} />
+            <span className="product-card__symbol">֏</span>
           </span>
           {
             <span className="product-card__old-price">
-              <span className="product-card__symbol">֏</span>
               <Currency value={Number(product.price).toFixed(0)} />
+              <span className="product-card__symbol">֏</span>
             </span>
           }
         </div>
@@ -174,15 +175,15 @@ function IndicatorCart(props) {
     else if (product?.product?.type === "configurable") {
       price = (
         <div className="product-card__prices">
-          <span className="product-card__symbol">֏</span>
           <Currency value={Number(product.min_price).toFixed(0)} />
+          <span className="product-card__symbol">֏</span> {/* temporary version */}
         </div>
       );
     } else {
       price = (
         <div className="product-card__prices">
-          <span className="product-card__symbol">֏</span>
           <Currency value={Number(product.price).toFixed(0)} />
+          <span className="product-card__symbol">֏</span>{/* temporary version */}
         </div>
       );
     }
@@ -197,6 +198,7 @@ function IndicatorCart(props) {
           <div className="dropcart__product-meta">
             <span className="dropcart__product-quantity">{item.quantity}</span>
             {" × "}
+            {console.log(removeCurrencyTemp(price))}
             <span className="dropcart__product-price">{price}</span>
           </div>
         </div>
@@ -209,11 +211,10 @@ function IndicatorCart(props) {
     dropdown = (
       <div className="dropcart">
         <div
-          className={`${
-            cart.items.length > 3
-              ? "dropcart__products-list_scroll"
-              : "dropcart__products-list"
-          }`}
+          className={`${cart.items.length > 3
+            ? "dropcart__products-list_scroll"
+            : "dropcart__products-list"
+            }`}
         >
           {items}
         </div>
@@ -227,7 +228,8 @@ function IndicatorCart(props) {
                   <FormattedMessage id="total" defaultMessage="Total" />{" "}
                 </th>
                 <td>
-                  <Currency value={cart.total} />
+                  {removeCurrencyTemp(cart.total)}  {/* temporary version */}
+                  {/* <Currency value={cart.total} /> */}
                 </td>
               </tr>
             </tbody>

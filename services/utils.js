@@ -21,6 +21,7 @@ export function getCategoryParents(category) {
     : [];
 }
 
+
 export function runFbPixelEvent(eventData) {
   const {
     general: { fbPixel },
@@ -200,4 +201,9 @@ export async function generalProcessForAnyPage(locale, dbName) {
     currency,
     dispatches,
   };
+}
+
+export function removeCurrencyTemp(total) {
+  let convertSymbols = total.toString().replace("$", "").replace(",", '').replace("֏", "")
+  return `${Number(convertSymbols)} ֏`
 }

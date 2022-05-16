@@ -1,26 +1,26 @@
 // react
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 
 // third-party
 import classNames from 'classnames'
-import {connect, useSelector} from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import Link from 'next/link'
 
 // application
 import AsyncAction from '../shared/AsyncAction'
-import {Cart16Svg} from '../../svg'
-import {cartAddItem} from '../../store/cart'
-import {url} from '../../services/utils'
+import { Cart16Svg } from '../../svg'
+import { cartAddItem } from '../../store/cart'
+import { url } from '../../services/utils'
 import Currency from '../shared/Currency'
-import {apiUrlWithStore, urlLink} from '../../helper'
+import { apiUrlWithStore, urlLink } from '../../helper'
 import Image from 'components/hoc/Image'
-import {defoult} from '../../images/defoultpic.png'
-import {FormattedMessage} from 'react-intl'
+import { defoult } from '../../images/defoultpic.png'
+import { FormattedMessage } from 'react-intl'
 
 
 function Suggestions(props) {
   // console.log(props, "prosp in suggestion")
-  const {context, className, products, cartAddItem} = props
+  const { context, className, products, cartAddItem } = props
   const rootClasses = classNames(
     `suggestions suggestions--location--${context}`,
     className,
@@ -54,22 +54,22 @@ function Suggestions(props) {
           : (
             <li key={product.product_id} className="suggestions__item">
               {product.images &&
-              product.images.length > 0 && (
-                <div className="suggestions__item-image product-image">
-                  <div className="search-product-image__body-fms">
-                    <Image
-                      className="product-image__img suggestion-img"
-                      src={
-                        `storage/${product.images[0].path}`
-                          ? `storage/${product.images[0].path}`
-                          : defoult
-                      }
-                      alt=""
-                      layout="fill"
-                    />
+                product.images.length > 0 && (
+                  <div className="suggestions__item-image product-image">
+                    <div className="search-product-image__body-fms">
+                      <Image
+                        className="product-image__img suggestion-img"
+                        src={
+                          `storage/${product.images[0].path}`
+                            ? `storage/${product.images[0].path}`
+                            : defoult
+                        }
+                        alt=""
+                        layout="fill"
+                      />
+                    </div>
                   </div>
-                </div>
-              ) ? (
+                ) ? (
                 <div className="suggestions__item-image product-image">
                   <div className="search-product-image__body-fms">
                     <Link href={url.product(product)}>
@@ -110,8 +110,6 @@ function Suggestions(props) {
                 <div className="suggestions__item-meta">SKU: {product.sku}</div>
               </div>
               <div className="suggestions__item-price">
-                {console.log(product, 'productproduct')}
-                Դ{' '}
                 <Currency
                   value={
                     product.formatted_special_price
@@ -120,6 +118,7 @@ function Suggestions(props) {
                       Number(product.min_price).toFixed(2)
                   }
                 />
+                ֏{' '}
               </div>
               {context === 'header' && (
                 <div className={classNames("suggestions__item-actions",
@@ -139,7 +138,7 @@ function Suggestions(props) {
                         selectedData,
                       )
                     }
-                    render={({run, loading}) => (
+                    render={({ run, loading }) => (
                       <button
                         type="button"
                         onClick={run}
@@ -151,7 +150,7 @@ function Suggestions(props) {
                           },
                         )}
                       >
-                        <Cart16Svg/>
+                        <Cart16Svg />
                       </button>
                     )}
                   />
@@ -160,7 +159,6 @@ function Suggestions(props) {
             </li>
           ) : (
           <div className="search__fm_dr_Message">
-            {console.log(product, "productId in Suggestion")}
             <FormattedMessage
               id="noMatching"
               defaultMessage="No matching items"
