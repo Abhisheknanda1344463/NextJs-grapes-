@@ -1,36 +1,49 @@
 // react
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 // third-party
 import classNames from "classnames";
 import Link from "next/link";
 import PropTypes from "prop-types";
-import {connect, useSelector} from "react-redux";
-import {toast} from "react-toastify";
-import {FormattedMessage} from "react-intl";
-import {setPopup} from "../../store/general";
+import { connect, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { FormattedMessage } from "react-intl";
+import { setPopup } from "../../store/general";
 // application
 import Currency from "./Currency";
 import AsyncAction from "./AsyncAction";
 import Image from "components/hoc/Image";
-import {Wishlist16Svg} from "../../svg";
-import {url} from "../../services/utils";
-import {cartAddItem} from "../../store/cart";
-import {url as anotherUrl} from "../../helper";
+import { Wishlist16Svg } from "../../svg";
+import { url } from "../../services/utils";
+import { cartAddItem } from "../../store/cart";
+import { url as anotherUrl } from "../../helper";
 import defoult from "../../images/defoultpic.png";
-import {compareAddItem} from "../../store/compare";
-import {quickviewOpen} from "../../store/quickview";
-import {wishlistAddItem} from "../../store/wishlist";
-import InputNumber from './InputNumber'
+import { compareAddItem } from "../../store/compare";
+import { quickviewOpen } from "../../store/quickview";
+import { wishlistAddItem } from "../../store/wishlist";
+import InputNumber from "./InputNumber";
 
 function CrosselCard(props) {
-  // console.log(props, "props in crossel card")
-  const {customer, product, layout, cartAddItem, wishlistAddItem, setPopup, only} = props;
+  const {
+    customer,
+    product,
+    layout,
+    cartAddItem,
+    wishlistAddItem,
+    setPopup,
+    only,
+  } = props;
   const [dimension, setDimension] = useState(1200);
-  const [quantity, setQuantity] = useState(1)
+  const [quantity, setQuantity] = useState(1);
 
-  const backorders = useSelector(state => state.general.coreConfigs.catalog_inventory_stock_options_backorders)
-  const outOfStock = useSelector(state => state.general.coreConfigs.catalog_products_homepage_out_of_stock_items)
+  const backorders = useSelector(
+    (state) =>
+      state.general.coreConfigs.catalog_inventory_stock_options_backorders
+  );
+  const outOfStock = useSelector(
+    (state) =>
+      state.general.coreConfigs.catalog_products_homepage_out_of_stock_items
+  );
 
   // useEffect(() => {
   //   function handleResize() {
@@ -53,11 +66,10 @@ function CrosselCard(props) {
   //   }
   // };
 
-
   const handleChangeQuantity = (quantity) => {
-    setQuantity(() => quantity)
-    console.log(quantity, "quantity in crosselcard")
-  }
+    setQuantity(() => quantity);
+    console.log(quantity, "quantity in crosselcard");
+  };
 
   const selectedData = useSelector((state) => state.locale.code);
   const cartToken = useSelector((state) => state.cartToken);
@@ -67,10 +79,10 @@ function CrosselCard(props) {
     // "product-card--layout--grid product-card--size--sm": layout === "grid-sm",
     // "product-card--layout--grid product-card--size--nl": layout === "grid-nl",
     // "product-card--layout--grid product-card--size--lg": layout === "grid-lg",
-    "product-card--layout--list": layout === "list",
-    "product-card--layout--horizontal": layout === "horizontal",
-    "product-for--one-element": only,
-    "product-for--one-element": only,
+    // "product-card--layout--list": layout === "list",
+    // "product-card--layout--horizontal": layout === "horizontal",
+    // "product-for--one-element": only,
+    // "product-for--one-element": only,
   });
 
   let badges = [];
@@ -80,17 +92,17 @@ function CrosselCard(props) {
   if (product) {
     if (product.images && product.images.length > 0) {
       image = (
-        <div className="product-card__image product-image">
+        <div className="product-card__image cross__prods product-image">
           {/*{!isTablet() ? (*/}
           <Link href={url.product(product)}>
-            <div className="product-image__body product-image__body-fms">
-              <div className="item_overlay hide-for-tablet"></div>
+            <div className="product-image__body cross__prods product-image__body-fms">
+              <div className="item_overlay hide-for-tablet cross__prods"></div>
               <div className=""></div>
               {product.images[0].path ? (
                 <Image
                   alt=""
                   layout="fill"
-                  className="product-image__img"
+                  className="product-image__img cross__prods"
                   src={`${anotherUrl}/cache/medium/` + product.images[0].path}
                 />
               ) : (
@@ -98,7 +110,7 @@ function CrosselCard(props) {
                   alt=""
                   layout="fill"
                   src={`${anotherUrl}/cache/medium/${product.images[0]}`}
-                  className="product-image__img"
+                  className="product-image__img cross__prods"
                 />
               )}
             </div>
@@ -180,10 +192,10 @@ function CrosselCard(props) {
       );
     } else {
       image = (
-        <div className="product-card__image product-image">
-          <div className="product-image__body product-image__defoult-fms">
+        <div className="product-card__image product-image cross__prods">
+          <div className="product-image__body product-image__defoult-fms cross__prods">
             <Image
-              className="product-image__img "
+              className="product-image__img cross__prods"
               src={defoult}
               alt="Picture is missing"
               layout="fill"
@@ -193,25 +205,24 @@ function CrosselCard(props) {
       );
     }
   } else {
-    return null
+    return null;
   }
-
 
   if (product?.type === "configurable") {
     price = (
       <div className="product-card__prices">
-        <Currency value={Number(product.min_price).toFixed(2)}/> {" $"}
+        <Currency value={Number(product.min_price).toFixed(2)} /> {" ֏"}
       </div>
     );
   } else if (product.formatted_special_price) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__new-price">
-          <Currency value={product.formatted_special_price}/> {" $"}
+          <Currency value={product.formatted_special_price} /> {" ֏"}
         </span>
         {
           <span className="product-card__old-price">
-            <Currency value={product.formatted_price}/> {" $"}
+            <Currency value={product.formatted_price} /> {" ֏"}
           </span>
         }
       </div>
@@ -219,117 +230,134 @@ function CrosselCard(props) {
   } else {
     price = (
       <div className="product-card__prices">
-        <Currency value={product.formatted_price || Number(product.price).toFixed(2)}/> {" $"}
+        <Currency
+          value={product.formatted_price || Number(product.price).toFixed(2)}
+        />{" "}
+        {" ֏"}
       </div>
     );
   }
 
   return (
     <React.Fragment>
-      {
-        product
-          ? <div className={containerClasses}>
-            <>
-              {badges}
-              {image}
+      {product ? (
+        <div className={containerClasses}>
+          <>
+            {badges}
+            {image}
 
-              <div className="product-card__info">
-                <div className="product-card__info_sub">
-                  <div className="product-card__name ">
-                    <Link href={url.product(product)}>{product.name || ""}</Link>
-                  </div>
-                  {price}
+            <div className="product-card__info cross__prods">
+              <div className="product-card__info_sub cross__prods">
+                <div className="product-card__name cross__prods">
+                  <Link href={url.product(product)}>{product.name || ""}</Link>
                 </div>
-                <div className="product-card-description">
-                  {product.short_description
-                    ? product.short_description.replace(/<\/?[^>]+>/gi, "")
-                    : ""}{" "}
-                </div>
+                {price}
               </div>
-              <div className="crossel-button">
-                <div className="product__actions-item product-inner-quantity">
-                  <InputNumber
-                    id="product-quantity"
-                    aria-label="Quantity"
-                    className="product__quantity"
-                    size="lg"
-                    min={1}
-                    max={5000}
-                    value={quantity}
-                    onChange={handleChangeQuantity}
-                    // disabled={Addtocartdisabled}
-                  />
-                </div>
-                <div className={classNames("cross_btn",
-                  {
-                    "button_disabled": product.qty === 0
-                      && backorders == 0
-                      && outOfStock == 1
-                  })}>
-                  <AsyncAction
-                    action={() =>
-                      cartAddItem(product, [], quantity, cartToken, customer, selectedData)
-                    }
-                    render={({run, loading}) => (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          run();
-                          // setPopup(true);
-                        }}
-                        className={classNames(
-                          "btn btn-primary product-card__addtocart hide-for-tablet",
-                          {
-                            "btn-loading": loading,
-                          }
-                        )}
-                      >
-                        <FormattedMessage
-                          id="add.tocart"
-                          defaultMessage="Add to cart"
-                        />
-                      </button>
-                    )}
-                  />
-                </div>
-
+              <div className="product-card-description cross__prods">
+                {product.short_description
+                  ? product.short_description.replace(/<\/?[^>]+>/gi, "")
+                  : ""}{" "}
               </div>
-              <div className="product-card__actions">
-                <div className="product-card__buttons"></div>
+            </div>
+            <div className="crossel-button cross__prods">
+              <div className="product__actions-item product-inner-quantity cross__prods">
+                <InputNumber
+                  id="product-quantity"
+                  aria-label="Quantity"
+                  className="product__quantity cross__prods"
+                  size="lg"
+                  min={1}
+                  max={5000}
+                  value={quantity}
+                  onChange={handleChangeQuantity}
+                  // disabled={Addtocartdisabled}
+                />
               </div>
-              <div className={classNames("cross_btn",
-                {
-                  "button_disabled": product.qty === 0
-                    && backorders == 0
-                    && outOfStock == 1
-                })}>
+              <div
+                className={classNames("cross_btn cross__prods", {
+                  button_disabled:
+                    product.qty === 0 && backorders == 0 && outOfStock == 1,
+                })}
+              >
                 <AsyncAction
                   action={() =>
-                    cartAddItem(product, [], quantity, cartToken, customer, selectedData)
+                    cartAddItem(
+                      product,
+                      [],
+                      quantity,
+                      cartToken,
+                      customer,
+                      selectedData
+                    )
                   }
-                  render={({run, loading}) => (
+                  render={({ run, loading }) => (
                     <button
                       type="button"
-                      onClick={run}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        run();
+                        // setPopup(true);
+                      }}
                       className={classNames(
-                        "btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ",
+                        "btn btn-primary product-card__addtocart cross__prods",
                         {
                           "btn-loading": loading,
                         }
                       )}
                     >
-                      <FormattedMessage id="add.tocart" defaultMessage="Add to cart"/>
+                      <FormattedMessage
+                        id="add.tocart"
+                        defaultMessage="Add to cart"
+                      />
                     </button>
                   )}
                 />
               </div>
-
-            </>
-          </div>
-          : <></>
-      }
-
+            </div>
+            <div className="product-card__actions">
+              <div className="product-card__buttons"></div>
+            </div>
+            <div
+              className={classNames("cross_btn", {
+                button_disabled:
+                  product.qty === 0 && backorders == 0 && outOfStock == 1,
+              })}
+            >
+              <AsyncAction
+                action={() =>
+                  cartAddItem(
+                    product,
+                    [],
+                    quantity,
+                    cartToken,
+                    customer,
+                    selectedData
+                  )
+                }
+                render={({ run, loading }) => (
+                  <button
+                    type="button"
+                    onClick={run}
+                    className={classNames(
+                      "btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ",
+                      {
+                        "btn-loading": loading,
+                      }
+                    )}
+                  >
+                    <FormattedMessage
+                      id="add.tocart"
+                      defaultMessage="Add to cart"
+                    />
+                  </button>
+                )}
+              />
+            </div>
+          </>
+        </div>
+      ) : (
+        <></>
+      )}
     </React.Fragment>
   );
 }

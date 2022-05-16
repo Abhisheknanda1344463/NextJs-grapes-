@@ -10,6 +10,7 @@ import BundleSelect from "./BundleSelect";
 // third-party
 
 export default function BundleProducts(props) {
+  console.log(props.selectedBundleProducts, "selectedBundleProducts in bundle producr....")
   // let bundls = props.options.map((elements, index) => {
   //   if (elements !== undefined && elements.type == "radio") {
   //     return <BundleRadio key={index} praduct={elements} {...props} />;

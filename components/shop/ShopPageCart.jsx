@@ -1,29 +1,29 @@
 import React, { Component, useState, useEffect } from 'react'
 
 // third-party
-import classNames                               from 'classnames'
-import { connect, useSelector, useDispatch }    from 'react-redux'
-import { Helmet }                               from 'react-helmet-async'
-import Link                                     from 'next/link'
-import { FormattedMessage }                     from 'react-intl'
-import { apiUrlWithStore }                      from '../../helper'
+import classNames from 'classnames'
+import { connect, useSelector, useDispatch } from 'react-redux'
+import { Helmet } from 'react-helmet-async'
+import Link from 'next/link'
+import { FormattedMessage } from 'react-intl'
+import { apiUrlWithStore } from '../../helper'
 // application
-import AsyncAction                              from '../shared/AsyncAction'
-import Currency                                 from '../shared/Currency'
-import InputNumber                              from '../shared/InputNumber'
-import PageHeader                               from '../shared/PageHeader'
+import AsyncAction from '../shared/AsyncAction'
+import Currency from '../shared/Currency'
+import InputNumber from '../shared/InputNumber'
+import PageHeader from '../shared/PageHeader'
 import { cartRemoveItem, cartUpdateQuantities } from '../../store/cart'
-import { Cross12Svg }                           from '../../svg'
-import { ArrowBackSvg, CartTrash }              from '../../svg'
-import { BackArrow }                            from '../../svg'
-import { url }                                  from '../../services/utils'
-import store                                    from '../../store'
+import { Cross12Svg } from '../../svg'
+import { ArrowBackSvg, CartTrash } from '../../svg'
+import { BackArrow } from '../../svg'
+import { url, removeCurrencyTemp } from '../../services/utils'
+import store from '../../store'
 //MOMENT
-import moment                                   from 'moment'
+import moment from 'moment'
 // data stubs
-import theme                                    from '../../data/theme'
-import { urlLink }                              from '../../helper'
-import Image                                    from 'components/hoc/Image'
+import theme from '../../data/theme'
+import { urlLink } from '../../helper'
+import Image from 'components/hoc/Image'
 
 
 
@@ -44,8 +44,8 @@ const ShopPageCart = (props) => {
     const qty = items.map((item) => {
       return {
         cartItem: 1,
-        itemId  : item.id,
-        value   : item.quantity,
+        itemId: item.id,
+        value: item.quantity,
       }
     })
     setQuantities(() => qty)
@@ -69,8 +69,8 @@ const ShopPageCart = (props) => {
 
     if (!found) {
       quant.push({
-        itemId  : item.id,
-        value   : quantity,
+        itemId: item.id,
+        value: quantity,
         cartItem: cartItem,
       })
     }
@@ -172,7 +172,7 @@ const ShopPageCart = (props) => {
 
             return (
               <button type="button" onClick={run} className={classes}>
-                <CartTrash/>
+                <CartTrash />
               </button>
             )
           }}
@@ -199,7 +199,7 @@ const ShopPageCart = (props) => {
 
             return (
               <button type="button" onClick={run} className={classes}>
-                <CartTrash/>
+                <CartTrash />
               </button>
             )
           }}
@@ -222,7 +222,7 @@ const ShopPageCart = (props) => {
       if (!product?.special_price && CONFIG === 'configurable') {
         price = (
           <div className="product-card__prices">
-            <Currency value={product.formatted_price}/>
+            <Currency value={product.formatted_price} />
           </div>
         )
       } else if (
@@ -233,28 +233,28 @@ const ShopPageCart = (props) => {
         price = (
           <div className="product-card__prices">
             <span className="product-card__new-price">
+              <Currency value={Number(product.special_price).toFixed(0)} />
               <span className="product-card__symbol">֏</span>
-              <Currency value={Number(product.special_price).toFixed(0)}/>
             </span>
             {
               <span className="product-card__old-price">
+                <Currency value={Number(product.price).toFixed(0)} />
                 <span className="product-card__symbol">֏</span>
-                <Currency value={Number(product.price).toFixed(0)}/>
               </span>
             }
           </div>
         )
-      } else if (product?.special_price ) {
+      } else if (product?.special_price) {
         price = (
           <div className="product-card__prices">
             <span className="product-card__new-price">
-              <span className="product-card__symbol">֏</span>
               <Currency value={Number(product.special_price).toFixed(0)} />
+              <span className="product-card__symbol">֏</span>
             </span>
             {
               <span className="product-card__old-price">
-                <span className="product-card__symbol">֏</span>
                 <Currency value={Number(product.price).toFixed(0)} />
+                <span className="product-card__symbol">֏</span>
               </span>
             }
           </div>
@@ -262,15 +262,15 @@ const ShopPageCart = (props) => {
       } else if (product?.product?.type === 'configurable') {
         price = (
           <div className="product-card__prices">
+            <Currency value={Number(product.min_price).toFixed(0)} />
             <span className="product-card__symbol">֏</span>
-            <Currency value={Number(product.min_price).toFixed(0)}/>
           </div>
         )
       } else {
         price = (
           <div className="product-card__prices">
+            <Currency value={Number(product.price).toFixed(0)} />
             <span className="product-card__symbol">֏</span>
-            <Currency value={Number(product.price).toFixed(0)}/>
           </div>
         )
       }
@@ -355,7 +355,7 @@ const ShopPageCart = (props) => {
           <td className="cart-table__column cart-table__column--quantity">
             <span className="d-none data-title-mob">
               {' '}
-              <FormattedMessage id="quantity" defaultMessage="Quantity"/>:
+              <FormattedMessage id="quantity" defaultMessage="Quantity" />:
             </span>
             <div className="delete-btn_shipping">
               {getItemQuantity(item) <= 1 && alternativelyRemoveButton}
@@ -382,7 +382,7 @@ const ShopPageCart = (props) => {
           </td>
           <td className="cart-table__column  cart-table__column--total column--total-fms pr-4">
             <span className="d-none data-title-mob">
-              <FormattedMessage id="total" defaultMessage="Total"/>:
+              <FormattedMessage id="total" defaultMessage="Total" />:
             </span>
             <span className="cart-table__column-fm">
               {/*need to refactor when start working in currency*/}
@@ -412,13 +412,13 @@ const ShopPageCart = (props) => {
     return (
       <React.Fragment>
         <thead className="cart__totals-header">
-        <tr>
-          <th>Subtotal</th>
-          <td>
-            <Currency value={cart.subtotal.toFixed(0)}/>
-            <span className="product-card__symbol">֏</span>
-          </td>
-        </tr>
+          <tr>
+            <th>Subtotal</th>
+            <td>
+              <Currency value={cart.subtotal.toFixed(0)} />
+              <span className="product-card__symbol">֏</span>
+            </td>
+          </tr>
         </thead>
         <tbody className="cart__totals-body"></tbody>
       </React.Fragment>
@@ -452,7 +452,7 @@ const ShopPageCart = (props) => {
               className={classes}
               disabled={!cartNeedUpdate()}
             >
-              <FormattedMessage id="updateCart" defaultMessage="Update Cart"/>
+              <FormattedMessage id="updateCart" defaultMessage="Update Cart" />
             </button>
           )
         }}
@@ -464,44 +464,44 @@ const ShopPageCart = (props) => {
         <div className="container cart-page-container">
           <table className="cart__table cart-table">
             <thead className="cart-table__head">
-            <tr className="cart-table__row">
-              <th className="cart-table__column cart-table__column--image text-right">
-                {/*<FormattedMessage*/}
-                {/*  id="wishList.image"*/}
-                {/*  defaultMessage="Image"*/}
-                {/*/>*/}
-                <FormattedMessage
-                  id="global.product"
-                  defaultMessage="Product"
+              <tr className="cart-table__row">
+                <th className="cart-table__column cart-table__column--image text-right">
+                  {/*<FormattedMessage*/}
+                  {/*  id="wishList.image"*/}
+                  {/*  defaultMessage="Image"*/}
+                  {/*/>*/}
+                  <FormattedMessage
+                    id="global.product"
+                    defaultMessage="Product"
+                  />
+                </th>
+                <th className="cart-table__column cart-table__column--product">
+                  {/*<FormattedMessage*/}
+                  {/*  id="global.product"*/}
+                  {/*  defaultMessage="Product"*/}
+                  {/*/>*/}
+                </th>
+                <th className="cart-table__column cart-table__column--price text-right">
+                  <FormattedMessage id="price" defaultMessage="Price" />
+                </th>
+                <th className="cart-table__column cart-table__column--quantity ">
+                  <FormattedMessage id="qty" defaultMessage="Quantity" />
+                </th>
+                <th className="cart-table__column cart-table__column--total ">
+                  <FormattedMessage id="total" defaultMessage="Total" />
+                </th>
+                <th
+                  className="cart-table__column cart-table__column--remove"
+                  aria-label="Remove"
                 />
-              </th>
-              <th className="cart-table__column cart-table__column--product">
-                {/*<FormattedMessage*/}
-                {/*  id="global.product"*/}
-                {/*  defaultMessage="Product"*/}
-                {/*/>*/}
-              </th>
-              <th className="cart-table__column cart-table__column--price text-right">
-                <FormattedMessage id="price" defaultMessage="Price"/>
-              </th>
-              <th className="cart-table__column cart-table__column--quantity ">
-                <FormattedMessage id="qty" defaultMessage="Quantity"/>
-              </th>
-              <th className="cart-table__column cart-table__column--total ">
-                <FormattedMessage id="total" defaultMessage="Total"/>
-              </th>
-              <th
-                className="cart-table__column cart-table__column--remove"
-                aria-label="Remove"
-              />
-            </tr>
+              </tr>
             </thead>
             <tbody className="cart-table__body">{renderItems()}</tbody>
           </table>
           <div className="cart__actions">
             <div className="cart__buttons d-flex justify-content-between">
               <div className="continue--arrow continue-shopping-title">
-                <ArrowBackSvg className="continue--arrow"/>
+                <ArrowBackSvg className="continue--arrow" />
                 <Link href="/">
                   <a>
                     <FormattedMessage
@@ -519,7 +519,8 @@ const ShopPageCart = (props) => {
                   />{' '}
                 </div>
                 <div>
-                  <Currency value={cart.total}/>
+                  {removeCurrencyTemp(cart.total)}  {/* temporary version */}
+                  {/* <Currency value={cart.total} /> */}
                 </div>
               </div>
 
@@ -532,7 +533,7 @@ const ShopPageCart = (props) => {
               className="btn text-light btn-orange btn-block  btn-lg cart__checkout-button f16"
             >
               <a className="btn text-light btn-orange btn-block  btn-lg cart__checkout-button f16">
-                <FormattedMessage id="checkout" defaultMessage="Checkout"/>
+                <FormattedMessage id="checkout" defaultMessage="Checkout" />
               </a>
             </Link>
           </div>
@@ -584,12 +585,12 @@ const ShopPageCart = (props) => {
   }
 
   const breadcrumb = [
-    { title: <FormattedMessage id="home" defaultMessage="Home"/>, url: '' },
+    { title: <FormattedMessage id="home" defaultMessage="Home" />, url: '' },
     {
       title: (
-        <FormattedMessage id="shopping.cart" defaultMessage="Shopping Cart"/>
+        <FormattedMessage id="shopping.cart" defaultMessage="Shopping Cart" />
       ),
-      url  : '',
+      url: '',
     },
   ]
 
@@ -610,7 +611,7 @@ const ShopPageCart = (props) => {
             <div className="block-empty__actions">
               <Link href="/">
                 <a className="btn btn-orange rounded-pill px-4 f16">
-                  <FormattedMessage id="continue" defaultMessage="continue"/>
+                  <FormattedMessage id="continue" defaultMessage="continue" />
                 </a>
               </Link>
             </div>
@@ -625,9 +626,9 @@ const ShopPageCart = (props) => {
         <title>{`Shopping Cart — ${theme.name}`}</title>
       </Helmet>
 
-      <PageHeader header="Shopping Cart" breadcrumb={breadcrumb}/>
+      <PageHeader header="Shopping Cart" breadcrumb={breadcrumb} />
       <div className="shopping-cart-text">
-        <FormattedMessage id="shopping.cart" defaultMessage="Shopping Cart"/>
+        <FormattedMessage id="shopping.cart" defaultMessage="Shopping Cart" />
       </div>
 
       {content}

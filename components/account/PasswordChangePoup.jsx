@@ -71,7 +71,7 @@ function PasswordChangePoup() {
   }, [password, password_confirmation])
 
   const invalidFields = classNames('btn btn-primary mt-2 mt-md-3 mt-lg-2 f15 px-4 py-2', {
-    'invalid-fields': !isValid || password_confirmation.value.length < 5 || password.value.length < 5,
+    'invalid-fields': !isValid || password_confirmation.value.length < 6 || password.value.length < 6
   })
 
   return (
@@ -83,7 +83,7 @@ function PasswordChangePoup() {
             defaultMessage="Change Password"
           />
         </h1>
-        <div className="modal-current-password new-passwords">
+        {/* <div className="modal-current-password new-passwords">
           <TextField
             style={{ width: "100%" }}
             id="outlined-email-input"
@@ -98,7 +98,7 @@ function PasswordChangePoup() {
             {...old_password}
             name="old_password"
           />
-        </div>
+        </div> */}
         <div className="modal-newpasswords new-passwords">
           <div className="modal-current-password">
             <TextField
@@ -156,7 +156,7 @@ function PasswordChangePoup() {
               )
             }
             {
-              password_confirmation.value !== "" && password_confirmation.value.length < 5 ? (
+              password_confirmation.value !== "" && password_confirmation.value.length < 6 ? (
                 <div className="error-message-change-password">
                   <FormattedMessage
                     id="password.minLength"
@@ -170,7 +170,7 @@ function PasswordChangePoup() {
           </div>
         </div>
         <button
-          disabled={!isValid || password_confirmation.value.length < 5 || password.value.length < 5}
+          disabled={!isValid || password_confirmation.value.length < 6 || password.value.length < 6}
           type="submit"
           className={invalidFields}
           onClick={changePassword}

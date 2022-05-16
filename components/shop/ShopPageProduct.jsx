@@ -155,11 +155,16 @@ function ShopPageProduct(props) {
         <title>{`${product.data.name} — ${theme.name}`}</title>
       </Helmet>
 
-      <Head>
-        <meta property="og:title" name="title" content={product?.data?.meta_title ? product?.data?.meta_title : ""} />
-        <meta property="og:description" name="description" content={product?.data?.meta_description ? product?.data?.meta_description : ""} />
-        <meta property="og:keywords" name="keywords" content={product?.data?.meta_keywords ? product?.data?.meta_keywords : ""} />
-      </Head>
+      {/*<Head>*/}
+      {/*  <meta property="og:title" name="title" content={product?.data?.meta_title ? product?.data?.meta_title : ""} />*/}
+      {/*  <meta property="og:description" name="description" content={product?.data?.meta_description ? product?.data?.meta_description : ""} />*/}
+      {/*  <meta property="og:keywords" name="keywords" content={product?.data?.meta_keywords ? product?.data?.meta_keywords : ""} />*/}
+      {/*  <meta*/}
+      {/*    property="og:image"*/}
+      {/*    name="image"*/}
+      {/*    content={`https://blabla.zegashop.com${product?.data?.base_imag?.url}`}*/}
+      {/*  />*/}
+      {/*</Head>*/}
       <PageHeader breadcrumb={breadcrumb} />
 
       <div className="take-product-page">

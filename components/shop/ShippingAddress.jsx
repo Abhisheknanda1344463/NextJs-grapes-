@@ -62,9 +62,8 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
     selectCountry = (
       <div className="select-container">
         <select
-          className={`checkout-select checkout-input custom-select-mark ${
-            state.country ? "dark-opacity" : ""
-          }`}
+          className={`checkout-select checkout-input custom-select-mark ${state.country ? "dark-opacity" : ""
+            }`}
           name="country"
           onChange={(e) => {
             handleChange(e);
@@ -83,7 +82,7 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
           </FormattedMessage>
           {countryList.map((option, index) => {
             return (
-              <option key={index} e={option.name}>
+              <option key={index} e={option.name} >
                 {option.name}
               </option>
             );
@@ -113,9 +112,8 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
           <select
             name="states"
             onChange={handleChange}
-            className={`checkout-select checkout-input custom-select-mark ${
-              state.country ? "dark-opacity" : ""
-            }`}
+            className={`checkout-select checkout-input custom-select-mark ${state.country ? "dark-opacity" : ""
+              }`}
           >
             <option selected="true" disabled="disabled">
               Select State
@@ -135,7 +133,6 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
 
   let pastAddresses = state.pastOrders.map((address, index) => {
     const description = `${address.city} ${address.address1} ${address.postcode} ${address.first_name} ${address.last_name}`;
-
     return (
       <div
         key={address.id}
@@ -168,8 +165,8 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
   return (
     <div className="mx-4 mt-4">
       {state.customer.authenticated &&
-      state.pastOrders &&
-      state.pastOrders.length > 0 ? (
+        state.pastOrders &&
+        state.pastOrders.length > 0 ? (
         <>
           <div className="checkout-card-title-fms ">
             <FormattedMessage
@@ -219,8 +216,8 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
         style={{
           display:
             state.customer.authenticated &&
-            state.pastOrders &&
-            state.pastOrders.length > 0
+              state.pastOrders &&
+              state.pastOrders.length > 0
               ? newAddressInputs
               : "block",
         }}
@@ -360,9 +357,8 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
             </div>
             {selectState}
             <div
-              className={`form-group checkout-style col-12 col-md-6 ${
-                selectState == "" ? "c-pl-2" : "c-pr-2"
-              }`}
+              className={`form-group checkout-style col-12 col-md-6 ${selectState == "" ? "c-pl-2" : "c-pr-2"
+                }`}
             >
               <TextField
                 id="outlined-postal-input"
@@ -387,9 +383,8 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
               )}
             </div>
             <div
-              className={`form-group checkout-style col-12 col-md-6 ${
-                selectState == "" ? "c-pr-2" : "c-pl-2"
-              }`}
+              className={`form-group checkout-style col-12 col-md-6 ${selectState == "" ? "c-pr-2" : "c-pl-2"
+                }`}
             >
               <TextField
                 id="outlined-phone-input"
