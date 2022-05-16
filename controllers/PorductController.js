@@ -2,7 +2,7 @@ const fs = require("fs");
 const NewProductsEn = require("../models/NewProductsEn.js");
 const NewProductsHy = require("../models/NewProductsHy.js");
 const NewProductsRu = require("../models/NewProductsRu.js");
-const {apiImageUrl} = require("../helper.js");
+const { apiImageUrl } = require("../helper.js");
 
 const FeaturedProductsEn = require("../models/FeaturedProductsEn.js");
 const FeaturedProductsHy = require("../models/FeaturedProductsHy.js");
@@ -23,7 +23,7 @@ const BundleProducts = require("../models/BundleProducts.js");
 const ProductAttributeValues = require("../models/ProductAttributeValues.js");
 const Attributes = require("../models/Attributes.js");
 const AttributeOptions = require("../models/AttributeOptions.js");
-const {type} = require("os");
+const { type } = require("os");
 
 // const CategoryFilterableAttributes = require("../models/CategoryFilterableAttributes.js");
 
@@ -46,7 +46,7 @@ function makeImageClone(path) {
   };
 }
 
-function defaultFilter({key, options}) {
+function defaultFilter({ key, options }) {
   let dynamicSearchKey = null;
   switch (typeof options[key]) {
     case "boolean":
@@ -72,33 +72,33 @@ function defaultFilter({key, options}) {
     value = options[key];
   }
 
-  return {[dynamicSearchKey]: value};
+  return { [dynamicSearchKey]: value };
 }
 
-function build({flatProducts, locale, resolve, ...rest}) {
+function build({ flatProducts, locale, resolve, ...rest }) {
   const promiseArray = flatProducts.map((item) => {
     return new Promise((resolve, reject) => {
       const product = parseClone(item);
       const productId = product.product_id;
       const p1 = new Promise((resolve, reject1) => {
-        ProductImages.find({product_id: productId})
-          .then((res) => resolve({ProductImages: res}))
+        ProductImages.find({ product_id: productId })
+          .then((res) => resolve({ ProductImages: res }))
           .catch((err) => reject1(err));
       });
       const p2 = new Promise((resolve, reject2) => {
-        ProductFlat.find({locale, product_id: productId})
-          .then((res) => resolve({productFlat: res}))
+        ProductFlat.find({ locale, product_id: productId })
+          .then((res) => resolve({ productFlat: res }))
           .catch((err) => reject2(err));
       });
       const p3 = new Promise((resolve, reject3) => {
-        ProductInventories.find({product_id: productId})
-          .then((res) => resolve({ProductInventories: res}))
+        ProductInventories.find({ product_id: productId })
+          .then((res) => resolve({ ProductInventories: res }))
           .catch((err) => reject3(err));
       });
 
       const p4 = new Promise((resolve, reject4) => {
-        Products.find({id: productId})
-          .then((res) => resolve({Products: res}))
+        Products.find({ id: productId })
+          .then((res) => resolve({ Products: res }))
           .catch((err) => reject4(err));
       });
 
@@ -112,7 +112,7 @@ function build({flatProducts, locale, resolve, ...rest}) {
           );
           const allProducts = parseClone(collection.Products[0] || []);
           if (imagesData[0] && imagesData[0].path) {
-            const {path} = imagesData[0];
+            const { path } = imagesData[0];
             const base_imag = makeImageClone(path);
             const images = imagesData.map((e) => makeImageClone(e.path));
             var variants = [];
@@ -185,7 +185,7 @@ function build({flatProducts, locale, resolve, ...rest}) {
   });
 }
 
-function buildProductsListCollection({flat, savings, price, ...rest}) {
+function buildProductsListCollection({ flat, savings, price, ...rest }) {
   /**
    *  @info switch cases for filters
    *  @params savings and prices are the uniq filters, for them working another logic
@@ -193,7 +193,7 @@ function buildProductsListCollection({flat, savings, price, ...rest}) {
    * */
 
   if (flat) {
-    const {prices, flatProducts} = rest;
+    const { prices, flatProducts } = rest;
     let object;
     if (price) {
       const [from, to] = price.split(",");
@@ -232,9 +232,9 @@ function arrayConvertToObject(response) {
           [n]: next[n],
         };
       }, {});
-      return {...prev, ...array};
+      return { ...prev, ...array };
     } else {
-      return {...prev, [keys]: next[keys]};
+      return { ...prev, [keys]: next[keys] };
     }
   }, {});
 
@@ -245,25 +245,25 @@ function arrayConvertToObject(response) {
   // }, {})
 }
 
-function Get_New_And_Futured_Products({locale, limit, currency, ...rest}) {
+function Get_New_And_Futured_Products({ locale, limit, currency, ...rest }) {
   return new Promise((resolve, reject) => {
     const futuredProducts = new Promise((resolve, reject) => {
-      ProductFlat.find({new: 1, locale})
+      ProductFlat.find({ new: 1, locale })
         .limit(limit)
         .then((flatProducts) => {
-          build({flatProducts, locale, resolve, type: "featured", ...rest});
+          build({ flatProducts, locale, resolve, type: "featured", ...rest });
         });
     });
     const newProducts = new Promise((resolve, reject) => {
-      ProductFlat.find({featured: 1, locale})
+      ProductFlat.find({ featured: 1, locale })
         .limit(limit)
         .then((flatProducts) => {
-          build({flatProducts, locale, resolve, type: "new", ...rest});
+          build({ flatProducts, locale, resolve, type: "new", ...rest });
         });
     });
     const minPriceGenerator = new Promise((resolve, reject) => {
-      ProductFlat.find({min_price: "0.0000", locale}).then((flatProducts) => {
-        build({flatProducts, locale, resolve, type: "elipse", ...rest});
+      ProductFlat.find({ min_price: "0.0000", locale }).then((flatProducts) => {
+        build({ flatProducts, locale, resolve, type: "elipse", ...rest });
       });
     });
     return Promise.all([futuredProducts, newProducts, minPriceGenerator]).then(
@@ -313,7 +313,7 @@ function Get_New_And_Futured_Products({locale, limit, currency, ...rest}) {
 
 function Get_Product_list(options) {
   //limit, category_id, currency,
-  const {locale: defaultLocale, limit: limitproduct, page, ...rest} = options;
+  const { locale: defaultLocale, limit: limitproduct, page, ...rest } = options;
   const limit = limitproduct || 20;
   // console.log(
   //   defaultLocale,
@@ -349,14 +349,14 @@ function Get_Product_list(options) {
         default:
           searchKeys = {
             ...searchKeys,
-            ...defaultFilter({key, options, searchKeys}),
+            ...defaultFilter({ key, options, searchKeys }),
           };
       }
     }
   }
 
   return new Promise((resolve, reject) => {
-    ProductsCategories.find({category_id: options.category_id}).then(
+    ProductsCategories.find({ category_id: options.category_id }).then(
       (res) => {
         const productIdsByCategory = res.map((e) => e.product_id);
         // console.log(searchKeys, "searchKeys");
@@ -367,9 +367,9 @@ function Get_Product_list(options) {
             typeof searchKeys[next] == "object" &&
             searchKeys[next]?.length > 0
           ) {
-            return {...acc, [next]: {$in: searchKeys[next]}};
+            return { ...acc, [next]: { $in: searchKeys[next] } };
           } else {
-            return {...acc, [next]: searchKeys[next]};
+            return { ...acc, [next]: searchKeys[next] };
           }
         }, {});
         // console.log(
@@ -380,8 +380,7 @@ function Get_Product_list(options) {
         if (Object.keys(buildQueryParams)[0] !== "text_value") {
           var productIds;
           // console.log(buildQueryParams, "buildQueryParams");
-          ProductAttributeValues.find({...buildQueryParams}).then((res) => {
-
+          ProductAttributeValues.find({ ...buildQueryParams }).then((res) => {
             // console.log(productIdsByCategory, "productIdsByCategory");
             productIds = productIdsByCategory.filter((id) => {
               const find = res.find((e) => e.product_id == id);
@@ -406,6 +405,9 @@ function Get_Product_list(options) {
                     id: { $in: productIds },
                     type: "configurable",
                   }).then((items) => {
+                    if (items.length == 0) {
+                      resolve({ arrayData });
+                    }
                     items.map((item, index) => {
                       const itemProduct = parseClone(item);
 
@@ -435,7 +437,7 @@ function Get_Product_list(options) {
               if (productIds.length > 0) {
                 object = {
                   locale: locale,
-                  product_id: {$in: productIds},
+                  product_id: { $in: productIds },
                 };
               } else {
                 object = {
@@ -470,14 +472,14 @@ function Get_Product_list(options) {
 
                 object = {
                   ...object,
-                  special_price: {$ne: null},
+                  special_price: { $ne: null },
                 };
 
                 ProductFlat.where("special_price_from")
                   .lte(date_now)
                   .where("special_price_to")
                   .gte(date_now)
-                  .countDocuments({...object})
+                  .countDocuments({ ...object })
                   .exec((count_error, count) => {
                     const pageCount = Math.ceil(count / limit);
                     const skip = (+page - 1) * limit;
@@ -506,12 +508,12 @@ function Get_Product_list(options) {
                       });
                   });
               } else {
-                ProductFlat.countDocuments({...object}).exec(
+                ProductFlat.countDocuments({ ...object }).exec(
                   (count_error, count) => {
                     const pageCount = Math.ceil(count / limit);
                     const skip = (+page - 1) * limit;
                     // console.log(skip, +limit, page, "asdsads");
-                    ProductFlat.find({...object})
+                    ProductFlat.find({ ...object })
                       .skip(skip)
                       .limit(+limit)
                       .then((flatProducts) => {
@@ -568,11 +570,11 @@ function Get_Product_list(options) {
           );
 
           ProductFlat.find({
-            name: {$regex: Object.values(buildQueryParams)[0], $options: "i"},
+            name: { $regex: Object.values(buildQueryParams)[0], $options: "i" },
             locale: locale,
             // name: { $regex: ".*" + Object.values(buildQueryParams)[0] + ".*" },
           }).then((flatProducts) => {
-            build({flatProducts, locale, resolve, type: "data", ...rest});
+            build({ flatProducts, locale, resolve, type: "data", ...rest });
           });
         }
       }
@@ -581,60 +583,59 @@ function Get_Product_list(options) {
 }
 
 function Get_Products_By_Slug(params, options) {
-  const {locale, token} = options;
-  const {productSlug} = params;
+  const { locale, token } = options;
+  const { productSlug } = params;
   return new Promise((resolve, reject) => {
     ProductFlat.findOne({
       $or: [
-        {locale: locale, url_key: productSlug},
+        { locale: locale, url_key: productSlug },
         // { locale: "en", url_key: productSlug },
       ],
     }) // make flat by locale request
       .then((item) => {
         const productFlat = parseClone(item);
-        const {product_id} = productFlat;
+        const { product_id } = productFlat;
         const p1 = new Promise((resolve, reject1) => {
-          ProductImages.find({product_id})
+          ProductImages.find({ product_id })
             .then((res) => {
-              resolve({ProductImages: res});
+              resolve({ ProductImages: res });
             })
             .catch((err) => reject1(err));
         });
 
         const p2 = new Promise((resolve, reject2) => {
-          Products.findOne({id: product_id})
+          Products.findOne({ id: product_id })
             .then((res) => {
-              resolve({Products: res});
+              resolve({ Products: res });
             })
             .catch((err) => reject2(err));
         });
 
         const p3 = new Promise((resolve, reject3) => {
-          ProductInventories.find({product_id})
+          ProductInventories.find({ product_id })
             .then((res) => {
-              resolve({ProductInventories: res});
+              resolve({ ProductInventories: res });
             })
             .catch((err) => reject3(err));
         });
 
         const p4 = new Promise((resolve, reject4) => {
-          ProductsCategories.find({product_id})
+          ProductsCategories.find({ product_id })
             .then((res) => {
-              resolve({cats: res.map((e) => e.category_id)});
+              resolve({ cats: res.map((e) => e.category_id) });
             })
             .catch((err) => reject4(err));
         });
 
-
         // overwrite only if configurable product, check is that need simple products
         const variants = new Promise((resolve, reject4) => {
-          Products.find({parent_id: product_id}).then((products) => {
+          Products.find({ parent_id: product_id }).then((products) => {
             const productsIds = products.map((product) => product.id);
 
             const images = new Promise((resolve, reject) => {
-              ProductImages.find({product_id: {$in: productsIds}})
+              ProductImages.find({ product_id: { $in: productsIds } })
                 .then((images) => {
-                  resolve({variantsImages: images});
+                  resolve({ variantsImages: images });
                 })
                 .catch((err) => reject(err));
             });
@@ -642,17 +643,17 @@ function Get_Products_By_Slug(params, options) {
             const flates = new Promise((resolve, reject) => {
               ProductFlat.find({
                 locale: locale,
-                product_id: {$in: productsIds},
+                product_id: { $in: productsIds },
               }).then((flats) => {
                 // console.log(flats, "productsIdsproductsIdsproductsIds");
-                resolve({variantsFlates: flats});
+                resolve({ variantsFlates: flats });
               });
             });
 
             const inventories = new Promise((resolve, reject) => {
-              ProductInventories.find({product_id: {$in: productsIds}})
+              ProductInventories.find({ product_id: { $in: productsIds } })
                 .then((inventories) => {
-                  resolve({variantsInventories: inventories});
+                  resolve({ variantsInventories: inventories });
                 })
                 .catch((err) => reject(err));
             });
@@ -672,7 +673,7 @@ function Get_Products_By_Slug(params, options) {
                     (e) => e.product_id === currentProduct.product_id
                   );
 
-                  const {path} = imagesFind[0];
+                  const { path } = imagesFind[0];
                   const base_imag = makeImageClone(path);
                   const images = imagesFind.map((e) => makeImageClone(e.path));
                   delete currentProduct["product"];
@@ -686,20 +687,20 @@ function Get_Products_By_Slug(params, options) {
                   variants.push(object);
                 }
 
-                resolve({variants});
+                resolve({ variants });
               }
             );
           });
         });
 
         const bundle_options = new Promise((resolve, reject) => {
-          Products.find({parent_id: product_id}).then((products) => {
+          Products.find({ parent_id: product_id }).then((products) => {
             const productsIds = products.map((product) => product.id);
 
             const images = new Promise((resolve, reject) => {
-              ProductImages.find({product_id: {$in: productsIds}})
+              ProductImages.find({ product_id: { $in: productsIds } })
                 .then((images) => {
-                  resolve({bundleImages: images});
+                  resolve({ bundleImages: images });
                 })
                 .catch((err) => reject(err));
             });
@@ -707,17 +708,17 @@ function Get_Products_By_Slug(params, options) {
             const flates = new Promise((resolve, reject) => {
               ProductFlat.find({
                 locale: locale,
-                product_id: {$in: productsIds},
+                product_id: { $in: productsIds },
               }).then((flats) => {
                 // console.log(flats, "productsIdsproductsIdsproductsIds");
-                resolve({bundleFlates: flats});
+                resolve({ bundleFlates: flats });
               });
             });
 
             const inventories = new Promise((resolve, reject) => {
-              ProductInventories.find({product_id: {$in: productsIds}})
+              ProductInventories.find({ product_id: { $in: productsIds } })
                 .then((inventories) => {
-                  resolve({bundleInventories: inventories});
+                  resolve({ bundleInventories: inventories });
                 })
                 .catch((err) => reject(err));
             });
@@ -738,7 +739,7 @@ function Get_Products_By_Slug(params, options) {
                     (e) => e.product_id === currentProduct.product_id
                   );
 
-                  const {path} = imagesFind[0];
+                  const { path } = imagesFind[0];
                   const base_imag = makeImageClone(path);
                   const images = imagesFind.map((e) => makeImageClone(e.path));
                   delete currentProduct["product"];
@@ -752,66 +753,61 @@ function Get_Products_By_Slug(params, options) {
                   bundle_options.push(object);
                 }
 
-                resolve({bundle_options});
+                resolve({ bundle_options });
               }
             );
           });
         });
 
-        return Promise.all([
-          p1,
-          p2,
-          p3,
-          p4,
-          variants,
-          bundle_options,
-        ]).then((response) => {
-          const collection = arrayConvertToObject(response);
+        return Promise.all([p1, p2, p3, p4, variants, bundle_options]).then(
+          (response) => {
+            const collection = arrayConvertToObject(response);
 
-          const variants = collection.variants;
-          const bundle_options = collection.bundle_options;
-          const cats = parseClone(collection.cats);
-          const flatData = parseClone(productFlat || []);
-          const products = parseClone(collection.Products);
-          const imagesData = parseClone(collection.ProductImages);
-          const inventoriesData = parseClone(
-            collection.ProductInventories[0] || []
-          );
-          const {path} = imagesData[0];
-          const base_imag = makeImageClone(path);
-          const images = imagesData.map((e) => makeImageClone(e.path));
-          ////  flatData["parent_id"] = flatData["product"].parent_id;
-          delete flatData["product"];
+            const variants = collection.variants;
+            const bundle_options = collection.bundle_options;
+            const cats = parseClone(collection.cats);
+            const flatData = parseClone(productFlat || []);
+            const products = parseClone(collection.Products);
+            const imagesData = parseClone(collection.ProductImages);
+            const inventoriesData = parseClone(
+              collection.ProductInventories[0] || []
+            );
+            const { path } = imagesData[0];
+            const base_imag = makeImageClone(path);
+            const images = imagesData.map((e) => makeImageClone(e.path));
+            ////  flatData["parent_id"] = flatData["product"].parent_id;
+            delete flatData["product"];
 
-          const obj = {
-            ...products,
-            ...flatData,
-            ...inventoriesData,
-            cats,
-            images,
-            base_imag,
-            variants: variants,
-            bundle_options: bundle_options,
-          };
+            const obj = {
+              ...products,
+              ...flatData,
+              ...inventoriesData,
+              cats,
+              images,
+              base_imag,
+              variants: variants,
+              bundle_options: bundle_options,
+            };
 
-          resolve(obj);
-        });
+            resolve(obj);
+          }
+        );
       });
   }).catch((err) => reject(err));
 }
 
 function Get_Related_Products(options) {
   // currency: AMD / will work on it
-  const {locale, limit, currency, category_id, product_id} = options;
+  const { locale, limit, currency, category_id, product_id } = options;
   // console.log(category_id, 'category id in product controller')
   return new Promise((resolve, reject) => {
     RelatedProducts.find({
-      parent_id: {$in: product_id.split(",")},
+      parent_id: { $in: product_id.split(",") },
     }).then((res) => {
       // console.log(res.length, 'related res in test')
       if (res.length > 0) {
         const productIds = res.map((e) => e.child_id);
-        Products.find({id: {$in: productIds}})
+        Products.find({ id: { $in: productIds } })
           .limit(8)
           .then((products) => {
             const promiseArray = products.map((item) => {
@@ -819,25 +815,25 @@ function Get_Related_Products(options) {
                 const product = parseClone(item);
 
                 const p1 = new Promise((resolve1, reject1) => {
-                  ProductImages.find({product_id: product.id})
+                  ProductImages.find({ product_id: product.id })
                     .then((res) => {
-                      resolve1({ProductImages: res});
+                      resolve1({ ProductImages: res });
                     })
                     .catch((err) => reject(err));
                 });
 
                 const p2 = new Promise((resolve2, reject2) => {
-                  ProductFlat.find({locale, product_id: product.id})
+                  ProductFlat.find({ locale, product_id: product.id })
                     .then((res) => {
-                      resolve2({productFlat: res});
+                      resolve2({ productFlat: res });
                     })
                     .catch((err) => reject(err));
                 });
 
                 const p3 = new Promise((resolve3, reject3) => {
-                  ProductInventories.find({product_id: product.id})
+                  ProductInventories.find({ product_id: product.id })
                     .then((res) => {
-                      resolve3({ProductInventories: res});
+                      resolve3({ ProductInventories: res });
                     })
                     .catch((err) => reject(err));
                 });
@@ -846,17 +842,19 @@ function Get_Related_Products(options) {
                   const collection = arrayConvertToObject(response);
                   const imagesData = parseClone(collection.ProductImages);
                   const flatData = parseClone(collection.productFlat[0] || []);
-                  const inventoriesData = parseClone(collection.ProductInventories[0] || []);
+                  const inventoriesData = parseClone(
+                    collection.ProductInventories[0] || []
+                  );
                   if (imagesData.length == 0) {
                     const obj = {
                       ...product,
                       ...flatData,
-                      ...inventoriesData
+                      ...inventoriesData,
                     };
 
                     resolve(obj);
                   } else {
-                    const {path} = imagesData[0];
+                    const { path } = imagesData[0];
                     const base_imag = makeImageClone(path);
                     const images = imagesData.map((e) =>
                       makeImageClone(e.path)
@@ -882,12 +880,12 @@ function Get_Related_Products(options) {
           });
       } else {
         ProductsCategories.find({
-          category_id: {$in: category_id.split(",")},
+          category_id: { $in: category_id.split(",") },
         }).then((res) => {
           // console.log(res, 'else res in test')
           const productIds = res.map((e) => e.product_id);
           // console.log(productIds, 'else product id in product controller')
-          Products.find({id: {$in: productIds}})
+          Products.find({ id: { $in: productIds } })
             .limit(8)
             .then((products) => {
               const promiseArray = products.map((item) => {
@@ -900,47 +898,52 @@ function Get_Related_Products(options) {
                   const product = parseClone(item);
 
                   const p1 = new Promise((resolve1, reject1) => {
-                    ProductImages.find({product_id: product.id})
+                    ProductImages.find({ product_id: product.id })
                       .then((res) => {
-                        resolve1({ProductImages: res});
+                        resolve1({ ProductImages: res });
                       })
                       .catch((err) => reject(err));
                   });
 
                   const p2 = new Promise((resolve2, reject2) => {
-                    ProductFlat.find({locale, product_id: product.id})
+                    ProductFlat.find({ locale, product_id: product.id })
                       .then((res) => {
-                        resolve2({productFlat: res});
+                        resolve2({ productFlat: res });
                       })
                       .catch((err) => reject(err));
                   });
 
                   const p3 = new Promise((resolve3, reject3) => {
-                    ProductInventories.find({product_id: product.id})
+                    ProductInventories.find({ product_id: product.id })
                       .then((res) => {
-                        resolve3({ProductInventories: res});
+                        resolve3({ ProductInventories: res });
                       })
                       .catch((err) => reject(err));
                   });
 
-
                   return Promise.all([p1, p2, p3]).then((response) => {
                     const collection = arrayConvertToObject(response);
                     const imagesData = parseClone(collection.ProductImages);
-                    const flatData = parseClone(collection.productFlat[0] || []);
-                    const inventoriesData = parseClone(collection.ProductInventories[0] || []);
+                    const flatData = parseClone(
+                      collection.productFlat[0] || []
+                    );
+                    const inventoriesData = parseClone(
+                      collection.ProductInventories[0] || []
+                    );
                     if (imagesData.length == 0) {
                       const obj = {
                         ...product,
                         ...flatData,
-                        ...inventoriesData
+                        ...inventoriesData,
                       };
 
                       resolve(obj);
                     } else {
-                      const {path} = imagesData[0];
+                      const { path } = imagesData[0];
                       const base_imag = makeImageClone(path);
-                      const images = imagesData.map((e) => makeImageClone(e.path));
+                      const images = imagesData.map((e) =>
+                        makeImageClone(e.path)
+                      );
 
                       const obj = {
                         ...product,
@@ -968,14 +971,14 @@ function Get_Related_Products(options) {
 }
 
 function Get_Up_Sell_Products(options) {
-  const {locale, limit, currency, product_id} = options;
+  const { locale, limit, currency, product_id } = options;
   return new Promise((resolve, reject) => {
     UpSellProducts.find({
-      parent_id: {$in: product_id.split(",")},
+      parent_id: { $in: product_id.split(",") },
     }).then((res) => {
       if (res.length > 0) {
         const productIds = res.map((e) => e.child_id);
-        Products.find({id: {$in: productIds}})
+        Products.find({ id: { $in: productIds } })
           .limit(8)
           .then((products) => {
             const promiseArray = products.map((item) => {
@@ -983,25 +986,25 @@ function Get_Up_Sell_Products(options) {
                 const product = parseClone(item);
 
                 const p1 = new Promise((resolve1, reject1) => {
-                  ProductImages.find({product_id: product.id})
+                  ProductImages.find({ product_id: product.id })
                     .then((res) => {
-                      resolve1({ProductImages: res});
+                      resolve1({ ProductImages: res });
                     })
                     .catch((err) => reject(err));
                 });
 
                 const p2 = new Promise((resolve2, reject2) => {
-                  ProductFlat.find({locale, product_id: product.id})
+                  ProductFlat.find({ locale, product_id: product.id })
                     .then((res) => {
-                      resolve2({productFlat: res});
+                      resolve2({ productFlat: res });
                     })
                     .catch((err) => reject(err));
                 });
 
                 const p3 = new Promise((resolve3, reject3) => {
-                  ProductInventories.find({product_id: product.id})
+                  ProductInventories.find({ product_id: product.id })
                     .then((res) => {
-                      resolve3({ProductInventories: res});
+                      resolve3({ ProductInventories: res });
                     })
                     .catch((err) => reject(err));
                 });
@@ -1022,7 +1025,7 @@ function Get_Up_Sell_Products(options) {
 
                     resolve(obj);
                   } else {
-                    const {path} = imagesData[0];
+                    const { path } = imagesData[0];
                     const base_imag = makeImageClone(path);
                     const images = imagesData.map((e) =>
                       makeImageClone(e.path)
@@ -1054,14 +1057,14 @@ function Get_Up_Sell_Products(options) {
 }
 
 function Get_Cross_Sell_Products(options) {
-  const {locale, limit, currency, product_id} = options;
+  const { locale, limit, currency, product_id } = options;
   return new Promise((resolve, reject) => {
     CrosselProducts.find({
-      parent_id: {$in: product_id.split(",")},
+      parent_id: { $in: product_id.split(",") },
     }).then((res) => {
       if (res.length > 0) {
         const productIds = res.map((e) => e.child_id);
-        Products.find({id: {$in: productIds}})
+        Products.find({ id: { $in: productIds } })
           .limit(8)
           .then((products) => {
             const promiseArray = products.map((item) => {
@@ -1069,25 +1072,25 @@ function Get_Cross_Sell_Products(options) {
                 const product = parseClone(item);
 
                 const p1 = new Promise((resolve1, reject1) => {
-                  ProductImages.find({product_id: product.id})
+                  ProductImages.find({ product_id: product.id })
                     .then((res) => {
-                      resolve1({ProductImages: res});
+                      resolve1({ ProductImages: res });
                     })
                     .catch((err) => reject(err));
                 });
 
                 const p2 = new Promise((resolve2, reject2) => {
-                  ProductFlat.find({locale, product_id: product.id})
+                  ProductFlat.find({ locale, product_id: product.id })
                     .then((res) => {
-                      resolve2({productFlat: res});
+                      resolve2({ productFlat: res });
                     })
                     .catch((err) => reject(err));
                 });
 
                 const p3 = new Promise((resolve3, reject3) => {
-                  ProductInventories.find({product_id: product.id})
+                  ProductInventories.find({ product_id: product.id })
                     .then((res) => {
-                      resolve3({ProductInventories: res});
+                      resolve3({ ProductInventories: res });
                     })
                     .catch((err) => reject(err));
                 });
@@ -1108,7 +1111,7 @@ function Get_Cross_Sell_Products(options) {
 
                     resolve(obj);
                   } else {
-                    const {path} = imagesData[0];
+                    const { path } = imagesData[0];
                     const base_imag = makeImageClone(path);
                     const images = imagesData.map((e) =>
                       makeImageClone(e.path)
@@ -1141,10 +1144,10 @@ function Get_Cross_Sell_Products(options) {
 function Get_Configurable_Config(configurableId) {
   return new Promise((resolve, reject) => {
     // there are problem in Admin, attributes collection is empty
-    Products.findOne({id: configurableId}).then((items) => {
+    Products.findOne({ id: configurableId }).then((items) => {
       const product = parseClone(items);
 
-      ProductSuperAttributes.find({product_id: product.id}).then(
+      ProductSuperAttributes.find({ product_id: product.id }).then(
         (productSuperAttribute) => {
           const superAttributes = parseClone(productSuperAttribute);
           const attrinutesKeysList = superAttributes.map((attrObj) => {
@@ -1157,14 +1160,14 @@ function Get_Configurable_Config(configurableId) {
           });
 
           return new Promise((resolve, reject) => {
-            Attributes.find({code: {$in: attrinutesKeysList}}).then(
+            Attributes.find({ code: { $in: attrinutesKeysList } }).then(
               (items) => {
                 const attributes = parseClone(items);
                 const attributesId = attributes.map((e) => e.id);
 
                 return new Promise((resolve, reject) => {
                   AttributeOptions.find({
-                    attribute_id: {$in: attributesId},
+                    attribute_id: { $in: attributesId },
                   }).then((items) => {
                     resolve(parseClone(items));
                   });
@@ -1178,7 +1181,7 @@ function Get_Configurable_Config(configurableId) {
               }
             );
           }).then(
-            ({attributesId, attributes: responseAttributes, options}) => {
+            ({ attributesId, attributes: responseAttributes, options }) => {
               // in each option need be [product_id]
 
               // // overwrite promise All
@@ -1186,21 +1189,21 @@ function Get_Configurable_Config(configurableId) {
               // // Products
 
               ProductAttributeValues.find({
-                attribute_id: {$in: attributesId},
+                attribute_id: { $in: attributesId },
               }).then((res) => {
                 const productsAttributesValues = parseClone(res);
                 // console.log(
                 //   productsAttributesValues,
                 //   "productsAttributesValuesproductsAttributesValues"
                 // );
-                Products.find({parent_id: product.id}).then((items) => {
+                Products.find({ parent_id: product.id }).then((items) => {
                   const simplesProducts = parseClone(items);
                   const simplesProductsIds = simplesProducts.map((e) => e.id);
                   // ########################################## attributes
 
                   let index = {};
                   let attributes = responseAttributes.map((attr) => {
-                    const {code} = attr;
+                    const { code } = attr;
 
                     const customOptionsCollection = [];
                     const attributeValuesFiltered = productsAttributesValues
@@ -1232,7 +1235,7 @@ function Get_Configurable_Config(configurableId) {
                       if (index[attributeValue.product_id]) {
                         index[attributeValue.product_id][
                           attributeValue.attribute_id
-                          ] = optionId;
+                        ] = optionId;
                       } else {
                         index[attributeValue.product_id] = {
                           [attributeValue.attribute_id]: optionId,
@@ -1297,7 +1300,7 @@ function Get_Configurable_Config(configurableId) {
                       }
                     });
 
-                    const {product_id} = superAttributes.find((superAttr) => {
+                    const { product_id } = superAttributes.find((superAttr) => {
                       const keys = Object.keys(superAttr);
                       if (keys.includes(code)) {
                         return superAttr;
@@ -1317,27 +1320,27 @@ function Get_Configurable_Config(configurableId) {
                   // ########################################## varaints image
                   const imageVariants = new Promise((resolve, reject) => {
                     ProductImages.find({
-                      product_id: {$in: items.map((e) => e.id)},
+                      product_id: { $in: items.map((e) => e.id) },
                     }).then((images) => {
                       const imagesCollection = images.reduce((acc, next) => {
                         if (acc[next.product_id]?.length > 0) {
                           const newArray = acc[next.product_id];
                           newArray.unshift(makeImageClone(next.path));
-                          return {...acc, [next.product_id]: [newArray]};
+                          return { ...acc, [next.product_id]: [newArray] };
                         }
                         return {
                           ...acc,
                           [next.product_id]: [makeImageClone(next.path)],
                         };
                       }, {});
-                      resolve({images: imagesCollection});
+                      resolve({ images: imagesCollection });
                     });
                   });
 
                   // ########################################## varaints price
                   const imagePriceVariantes = new Promise((resolve, reject) => {
                     ProductFlat.find({
-                      product_id: {$in: items.map((e) => e.id)},
+                      product_id: { $in: items.map((e) => e.id) },
                     })
                       .then((flats) => {
                         const titleDescVariantes = flats.reduce((acc, next) => {
@@ -1400,7 +1403,7 @@ function Get_Configurable_Config(configurableId) {
                         // variant_videos: {526: [], 527: []}
                       };
 
-                      resolve({data: mainResponse});
+                      resolve({ data: mainResponse });
                     }
                   );
                 });
@@ -1420,41 +1423,41 @@ function Get_Bundle_Prods(options) {
 
   return new Promise((resolve, reject) => {
     const p1 = new Promise((resolve, reject1) => {
-      ProductImages.find({product_id: bundleId})
-        .then((res) => resolve({ProductImages: res}))
+      ProductImages.find({ product_id: bundleId })
+        .then((res) => resolve({ ProductImages: res }))
         .catch((err) => reject1(err));
     });
 
     const p2 = new Promise((resolve, reject2) => {
-      ProductFlat.find({locale, product_id: bundleId})
-        .then((res) => resolve({productFlat: res}))
+      ProductFlat.find({ locale, product_id: bundleId })
+        .then((res) => resolve({ productFlat: res }))
         .catch((err) => reject2(err));
     });
 
     const p3 = new Promise((resolve, reject3) => {
-      ProductInventories.find({product_id: bundleId})
-        .then((res) => resolve({ProductInventories: res}))
+      ProductInventories.find({ product_id: bundleId })
+        .then((res) => resolve({ ProductInventories: res }))
         .catch((err) => reject3(err));
     });
 
     const p4 = new Promise((resolve, reject4) => {
-      Products.find({id: bundleId})
-        .then((res) => resolve({Products: res}))
+      Products.find({ id: bundleId })
+        .then((res) => resolve({ Products: res }))
         .catch((err) => reject4(err));
     });
 
     const p5 = new Promise((resolve, reject5) => {
-      BundleOptions.find({product_id: bundleId})
+      BundleOptions.find({ product_id: bundleId })
         .then((bundOptions) => {
           const bundleProd = parseClone(bundOptions);
           /**/
           bundleProd.forEach((forItem) => {
-            BundleProducts.find({product_bundle_option_id: forItem.id}).then(
+            BundleProducts.find({ product_bundle_option_id: forItem.id }).then(
               (item) => {
                 ProductFlat.find({
                   $and: [
-                    {product_id: item[0].product_id},
-                    {locale: locale},
+                    { product_id: item[0].product_id },
+                    { locale: locale },
                   ],
                 }).then((flatProducts) => {
                   const promiseArray = flatProducts.map((item) => {
@@ -1462,24 +1465,24 @@ function Get_Bundle_Prods(options) {
                       const product = parseClone(item);
                       const productId = product.product_id;
                       const p1 = new Promise((resolve, reject1) => {
-                        ProductImages.find({product_id: productId})
-                          .then((res) => resolve({ProductImages: res}))
+                        ProductImages.find({ product_id: productId })
+                          .then((res) => resolve({ ProductImages: res }))
                           .catch((err) => reject1(err));
                       });
                       const p2 = new Promise((resolve, reject2) => {
-                        ProductFlat.find({locale, product_id: productId})
-                          .then((res) => resolve({productFlat: res}))
+                        ProductFlat.find({ locale, product_id: productId })
+                          .then((res) => resolve({ productFlat: res }))
                           .catch((err) => reject2(err));
                       });
                       const p3 = new Promise((resolve, reject3) => {
-                        ProductInventories.find({product_id: productId})
-                          .then((res) => resolve({ProductInventories: res}))
+                        ProductInventories.find({ product_id: productId })
+                          .then((res) => resolve({ ProductInventories: res }))
                           .catch((err) => reject3(err));
                       });
 
                       const p4 = new Promise((resolve, reject4) => {
-                        Products.find({id: productId})
-                          .then((res) => resolve({Products: res}))
+                        Products.find({ id: productId })
+                          .then((res) => resolve({ Products: res }))
                           .catch((err) => reject4(err));
                       });
 
@@ -1500,7 +1503,7 @@ function Get_Bundle_Prods(options) {
                           );
 
                           if (imagesData[0] && imagesData[0].path) {
-                            const {path} = imagesData[0];
+                            const { path } = imagesData[0];
                             const base_imag = makeImageClone(path);
                             const images = imagesData.map((e) =>
                               makeImageClone(e.path)
@@ -1524,7 +1527,7 @@ function Get_Bundle_Prods(options) {
                   });
 
                   return Promise.all(promiseArray).then((response) => {
-                    combineArr = [...combineArr, {popo: response}];
+                    combineArr = [...combineArr, { popo: response }];
                     console.log(response, "===========================");
                     resolve(combineArr);
                   });
@@ -1534,7 +1537,7 @@ function Get_Bundle_Prods(options) {
           });
           /**/
           console.log(combineArr, "______________________");
-          resolve({BundleOptions: combineArr});
+          resolve({ BundleOptions: combineArr });
         })
         .catch((err) => reject5(err));
     });
@@ -1551,7 +1554,7 @@ function Get_Bundle_Prods(options) {
       const allProducts = parseClone(collection.Products[0] || []);
 
       if (imagesData[0] && imagesData[0].path) {
-        const {path} = imagesData[0];
+        const { path } = imagesData[0];
         const base_imag = makeImageClone(path);
         const images = imagesData.map((e) => makeImageClone(e.path));
 
@@ -1601,7 +1604,7 @@ function Get_Product_Type() {
 
 function GetFiltreConfig(id) {
   return new Promise((resolve, reject) => {
-    ProductFlat.find({parent_id: id})
+    ProductFlat.find({ parent_id: id })
       .then((res) => resolve(res))
       .catch((err) => reject(err));
   });

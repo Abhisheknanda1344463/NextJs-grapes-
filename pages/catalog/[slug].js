@@ -177,16 +177,13 @@ export async function getServerSideProps({
                   if (e == key) {
                     let splited = filterValues[key].split(",");
 
-
                     // console.log(splited, "splited ------------")
-                    checkData[index][keyIndex] = splited.filter(
-                      (s) => {
-                        // console.log(s, "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-                        // console.log(e, "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-                        // console.log(response, "responseresponseresponseresponseresponseresponse")
-                        return s == response[e]
-                      }
-                    );
+                    checkData[index][keyIndex] = splited.filter((s) => {
+                      // console.log(s, "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+                      // console.log(e, "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+                      // console.log(response, "responseresponseresponseresponseresponseresponse")
+                      return s == response[e];
+                    });
                     // console.log(checkData, "checkdata____-----____");
                     if (checkData[index][keyIndex].length > 0) {
                       return true;
