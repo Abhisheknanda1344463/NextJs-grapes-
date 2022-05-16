@@ -1,24 +1,24 @@
 // react
-import React, { PureComponent, useState, useEffect } from 'react'
+import React, {PureComponent, useState, useEffect} from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
-import { connect, useSelector, useDispatch } from 'react-redux'
-import { toast } from 'react-toastify'
-import { FormattedMessage } from 'react-intl'
-import { Helmet } from 'react-helmet-async'
-import { wishlistRemoveItem } from '../../store/wishlist'
-import { url, apiImageUrl, megaUrl } from '../../helper'
+import {connect, useSelector, useDispatch} from 'react-redux'
+import {toast} from 'react-toastify'
+import {FormattedMessage} from 'react-intl'
+import {Helmet} from 'react-helmet-async'
+import {wishlistRemoveItem} from '../../store/wishlist'
+import {url, apiImageUrl, megaUrl} from '../../helper'
 import Currency from './Currency'
 import AsyncAction from './AsyncAction'
 import InputNumber from './InputNumber'
-import { AddImages } from '../../store/image'
+import {AddImages} from '../../store/image'
 import ProductGallery from './ProductGallery'
-import { cartAddItem } from '../../store/cart'
-import { AddCartToken } from '../../store/token'
-import { compareAddItem } from '../../store/compare'
-import { wishlistAddItem } from '../../store/wishlist'
-import { removeCurrencyTemp } from '../../services/utils'
-import { setPopup, setPopupName, setUpCrossProd, setTempData, setCrossValid } from '../../store/general'
+import {cartAddItem} from '../../store/cart'
+import {AddCartToken} from '../../store/token'
+import {compareAddItem} from '../../store/compare'
+import {wishlistAddItem} from '../../store/wishlist'
+import {removeCurrencyTemp} from '../../services/utils'
+import {setPopup, setPopupName, setUpCrossProd, setTempData, setCrossValid} from '../../store/general'
 import {
   CheckToastSvg,
   FailSvg,
@@ -28,7 +28,7 @@ import {
 import moment from 'moment'
 import ConfigurableFilters from '../configurableFilters'
 import BundleProducts from 'components/shop/productBundleFikter/BundleProducts'
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
 
 
 class Product extends PureComponent {
@@ -143,18 +143,18 @@ class Product extends PureComponent {
   }
 
   createMarkup(item) {
-    return { __html: item }
+    return {__html: item}
   }
 
   handleChangeQuantity = (quantity) => {
-    this.setState({ quantity })
+    this.setState({quantity})
   }
 
   setInitialAndUpdatedData(data) {
     // this.props.configurableVariantes.data
     if (this.props.product.data.type === 'configurable') {
       if (data && Object.keys(data.index).length > 0) {
-        const { index, attributes } = data
+        const {index, attributes} = data
         let collectionDefaultValues = {}
         const [productId, defaultAttributesData] = Object.entries(index)[0]
         const oldVariants = JSON.parse(
@@ -172,30 +172,30 @@ class Product extends PureComponent {
           product: product,
         })
         for (let attrId in defaultAttributesData) {
-          const { options: defaultOptions, code } = attributes.find(
+          const {options: defaultOptions, code} = attributes.find(
             (attr) => attr.id == attrId,
           )
           const defaultOption = defaultOptions.find((option) => {
             return option.id == defaultAttributesData[attrId]
           })
-          collectionDefaultValues[code] = { ...defaultOption, code: code }
+          collectionDefaultValues[code] = {...defaultOption, code: code}
         }
         this.setState({
           configurablesData: data,
-          selectedConfigs: { ...collectionDefaultValues },
+          selectedConfigs: {...collectionDefaultValues},
         })
       }
     }
   }
 
   handleTakeProd = (elem, type) => {
-    console.log(elem,"elem in handleTakeProd")
+    console.log(elem, "elem in handleTakeProd")
     if (type === 'radio' || type === 'select') {
       this.setState({
         ...this.state,
         bundleProducts: {
           ...this.state.bundleProducts,
-          [type]: [{ ...elem, quantity: 1 }],
+          [type]: [{...elem, quantity: 1}],
         },
       })
       console.log("iffffffffffffffffffffffffffffffffffff")
@@ -205,8 +205,8 @@ class Product extends PureComponent {
         bundleProducts: {
           ...this.state.bundleProducts,
           [type]: this.state.bundleProducts[type]
-            ? [...this.state.bundleProducts[type], { ...elem, quantity: 1 }]
-            : [{ ...elem, quantity: 1 }],
+            ? [...this.state.bundleProducts[type], {...elem, quantity: 1}]
+            : [{...elem, quantity: 1}],
         },
       })
       console.log(this.state.bundleProducts, "bundle product in elseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
@@ -223,7 +223,7 @@ class Product extends PureComponent {
      *  optionId:   Object,   option code
      */
 
-    // changes radiocbutton
+      // changes radiocbutton
 
     const attrLength = Object.keys(this.state.selectedConfigs).length
     const changedConfig = {
@@ -254,7 +254,7 @@ class Product extends PureComponent {
         const prodId = changedConfig[option].products[i]
 
         for (let key in configsData) {
-          const { products } = configsData[key]
+          const {products} = configsData[key]
           if (products.includes(prodId)) {
             count++
           }
@@ -290,7 +290,7 @@ class Product extends PureComponent {
 
     this.setState({
       product,
-      selectedConfigs: { ...changedConfig, ...configsData },
+      selectedConfigs: {...changedConfig, ...configsData},
     })
   }
 
@@ -374,7 +374,7 @@ class Product extends PureComponent {
     } = this.props
     console.log(this.props, "this pros in product")
 
-    const { quantity, product } = this.state
+    const {quantity, product} = this.state
     const maxQty = this.props.bOrder ? 50000 : product.data.qty
     // let Addtocartdisabled = this.props.bOrder ? "" : "disabled";
     let Addtocartdisabled = ''
@@ -397,7 +397,7 @@ class Product extends PureComponent {
       if (wishlistChekArray == undefined) {
         toast.success(
           <span className="d-flex chek-fms">
-            <CheckToastSvg />
+            <CheckToastSvg/>
             <FormattedMessage
               id="add-wish-list"
               defaultMessage={`Product "${product.data.name}" added to wish list`}
@@ -408,10 +408,10 @@ class Product extends PureComponent {
           },
         )
       } else {
-        <AsyncAction action={wishlistRemoveItem(product.data.id)} />
+        <AsyncAction action={wishlistRemoveItem(product.data.id)}/>
         toast.success(
           <span className="d-flex chek-fms">
-            <CheckToastSvg />
+            <CheckToastSvg/>
             <FormattedMessage
               id="producthasalreadyinwishlist"
               defaultMessage={`The product "${product.data.name}" has already been added to the whishlist`}
@@ -471,7 +471,7 @@ class Product extends PureComponent {
             content={product.data.name ? product.data.name : ''}
             data-react-helmet={true}
           />
-          <meta property="og:url" content={product.data.name} />
+          <meta property="og:url" content={product.data.name}/>
           <meta
             property="og:title"
             content={product.data.name}
@@ -485,12 +485,12 @@ class Product extends PureComponent {
         </Helmet>
         <div className={`product product--layout--${layout}`}>
           <div className="product__content">
-            <ProductGallery layout={layout} images={product.data.images} ups={false} />
+            <ProductGallery layout={layout} images={product.data.images} ups={false}/>
             <div className="product__info">
               <div className="product__wishlist-compare">
                 <AsyncAction
                   action={() => wishlistAddItem(product, this.state.locale)}
-                  render={({ run, loading }) => (
+                  render={({run, loading}) => (
                     <button
                       type="button"
                       data-toggle="tooltip"
@@ -504,7 +504,7 @@ class Product extends PureComponent {
                         },
                       )}
                     >
-                      <Wishlist16Svg />
+                      <Wishlist16Svg/>
                     </button>
                   )}
                 />
@@ -533,11 +533,11 @@ class Product extends PureComponent {
                 {/*)}*/}
                 {/*   need to refacor when add function checking currency*/}
                 {product.data.special_price &&
-                  date_now >= date_from &&
-                  date_now <= date_to ? (
+                date_now >= date_from &&
+                date_now <= date_to ? (
                   <>
                     <span className="product-card__new-price">
-                      {removeCurrencyTemp(product.data.special_price)}  {/* temporary version */}
+                      {removeCurrencyTemp(product.data.special_price)} {/* temporary version */}
                       {/* <Currency
                         value={Number(product.data.special_price).toFixed(0)}
                       /> */}
@@ -550,7 +550,7 @@ class Product extends PureComponent {
                     </span>
 
                     <span className="product-card__old-price">
-                      {removeCurrencyTemp(product.data.price)}  {/* temporary version */}
+                      {removeCurrencyTemp(product.data.price)} {/* temporary version */}
                       {/* <Currency value={Number(product.data.price).toFixed(0)} /> */}
                       {/* <span
                         className="product-card__symbol"
@@ -563,7 +563,7 @@ class Product extends PureComponent {
                 ) : product?.data.special_price ? (
                   <>
                     <span className="product-card__new-price">
-                      {removeCurrencyTemp(product.data.special_price)}  {/* temporary version */}
+                      {removeCurrencyTemp(product.data.special_price)} {/* temporary version */}
                       {/* <Currency
                         value={Number(product.data.special_price).toFixed(0)}
                       />
@@ -576,7 +576,7 @@ class Product extends PureComponent {
                     </span>
 
                     <span className="product-card__old-price">
-                      {removeCurrencyTemp(product.data.price)}  {/* temporary version */}
+                      {removeCurrencyTemp(product.data.price)} {/* temporary version */}
                       {/* <Currency value={Number(product.data.price).toFixed(0)} />
                       <span
                         className="product-card__symbol"
@@ -588,7 +588,7 @@ class Product extends PureComponent {
                   </>
                 ) : (
                   <span>
-                    {product.data.price > 0 ? removeCurrencyTemp(product.data.price) : ""}  {/* temporary version */}
+                    {product.data.price > 0 ? removeCurrencyTemp(product.data.price) : ""} {/* temporary version */}
                     {/* <span
                       className="product-card__symbol"
                       style={{ marginLeft: '5px' }}
@@ -657,35 +657,35 @@ class Product extends PureComponent {
                   <span
                     className={
                       product.data.qty > 0
-                        || product.data.qty === 0
-                        && this.props.backorders == 1
+                      || product.data.qty === 0
+                      && this.props.backorders == 1
                         ? `text-success`
                         : product.data.qty === 0
-                          && this.props.backorders == 0
+                        && this.props.backorders == 0
                           ? `text-danger`
                           : `text-danger`
                     }
-                    style={{ fontSize: '18px' }}
+                    style={{fontSize: '18px'}}
                   >
                     {product.data.qty > 0 ? (
-                      <FormattedMessage
-                        id="instock"
-                        defaultMessage="In stock"
-                      />
-                    ) :
+                        <FormattedMessage
+                          id="instock"
+                          defaultMessage="In stock"
+                        />
+                      ) :
                       product.data.qty === 0
-                        && this.props.backorders == 1
-                        && this.props.outOfStock == 0 ||
-                        product.data.qty === 0
-                        && this.props.backorders == 1
-                        && this.props.outOfStock == 1 ? (
+                      && this.props.backorders == 1
+                      && this.props.outOfStock == 0 ||
+                      product.data.qty === 0
+                      && this.props.backorders == 1
+                      && this.props.outOfStock == 1 ? (
                         <FormattedMessage
                           id="instock"
                           defaultMessage="In stock"
                         />
                       ) : product.data.qty === 0
-                        && this.props.backorders == 0
-                        && this.props.outOfStock == 1 ? (
+                      && this.props.backorders == 0
+                      && this.props.outOfStock == 1 ? (
                         <FormattedMessage
                           id="outOfStock"
                           defaultMessage="Not available"
@@ -706,7 +706,7 @@ class Product extends PureComponent {
                 <span className="text-success">
                   {' '}
                   {product.data.qty > 0 ? (
-                    <FormattedMessage id="inStock" defaultMessage="Available" />
+                    <FormattedMessage id="inStock" defaultMessage="Available"/>
                   ) : (
                     <FormattedMessage
                       id="outOfStock"
@@ -731,61 +731,16 @@ class Product extends PureComponent {
                         disabled={Addtocartdisabled}
                       />
                     </div>
-                    <div className={classNames("product__actions-item product__actions-item--addtocart",
-                      {
-                        "button_disabled": product.data.qty === 0
-                          && this.props.backorders == 0
-                          && this.props.outOfStock == 1
-                      })}>
-                      {
-                        this.addcart()
-                          ? (
-                            <AsyncAction
-                              action={() =>
-                                cartAddItem(
-                                  product.data,
-                                  [],
-                                  quantity,
-                                  this.state.token,
-                                  this.state.customer,
-                                  this.state.locale,
-                                  product?.data?.type == 'bundle'
-                                    ? {
-                                      bundle_options: product.data.bundle_options,
-                                      selectedOptions: this.state.bundleProducts,
-                                    }
-                                    : null,
-                                )
-                              }
-                              render={({ run, loading }) => (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    // alert("this.addcart()")
-                                    // alert(quantity)
-                                    this.props.setCrossValid(false)
-                                    run()
-                                  }}
-                                  disabled={Addtocartdisabled}
-                                  className={classNames(
-                                    'btn btn-orange inner-addtocart rounded-pills btn-lg',
-                                    {
-                                      'btn-loading': loading,
-                                    },
-                                  )}
-                                >
-                                  <FormattedMessage
-                                    id="add.tocart"
-                                    defaultMessage="Add to cart"
-                                  />
-                                </button>
-                              )
-                              }
-                            />
-                          )
-                          : product?.data?.has_up_sell == 0 && product?.data?.has_cross_sell == 1
-                            ?
-                            (
+                    <div style={{display: "flex", justifyContent: "space-between", margin: "auto"}}>
+                      <div className={classNames("product__actions-item product__actions-item--addtocart",
+                        {
+                          "button_disabled": product.data.qty === 0
+                            && this.props.backorders == 0
+                            && this.props.outOfStock == 1
+                        })}>
+                        {
+                          this.addcart()
+                            ? (
                               <AsyncAction
                                 action={() =>
                                   cartAddItem(
@@ -803,50 +758,14 @@ class Product extends PureComponent {
                                       : null,
                                   )
                                 }
-                                render={({ run, loading }) => (
+                                render={({run, loading}) => (
                                   <button
                                     type="button"
                                     onClick={() => {
-                                      // alert("this.props?.upSell?.length === 0 && this.props?.crossSell?.length > 0")
-                                      run()
-                                      this.props.setTempData([product.data])
-                                      this.props.setPopup(true);
-                                      this.props.setCrossValid(true)
-                                      this.openUpCrosProd(product)
-                                    }}
-                                    disabled={Addtocartdisabled}
-                                    className={classNames(
-                                      'btn btn-orange inner-addtocart rounded-pills btn-lg',
-                                      {
-                                        'btn-loading': loading,
-                                      },
-                                    )}
-                                  >
-                                    <FormattedMessage
-                                      id="add.tocart"
-                                      defaultMessage="Add to cart"
-                                    />
-                                  </button>
-                                )}
-                              />
-                            )
-                            :
-                            (
-                              <AsyncAction
-                                render={({ run, loading }) => (
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      run()
-                                      // alert("else")
-                                      // this.props?.has_up_sell != 0
-                                      this.props.setTempData([product.data])
-                                      this.props.setPopup(true)
+                                      // alert("this.addcart()")
+                                      // alert(quantity)
                                       this.props.setCrossValid(false)
-
-                                      this.openUpCrosProd(product)
-
-
+                                      run()
                                     }}
                                     disabled={Addtocartdisabled}
                                     className={classNames(
@@ -861,19 +780,101 @@ class Product extends PureComponent {
                                       defaultMessage="Add to cart"
                                     />
                                   </button>
-                                )}
+                                )
+                                }
                               />
                             )
-                      }
-                    </div>
-                    {signed ? (
-                      <div className="product__actions-item product__actions-item--wishlist">
+                            : product?.data?.has_up_sell == 0 && product?.data?.has_cross_sell == 1
+                              ?
+                              (
+                                <AsyncAction
+                                  action={() =>
+                                    cartAddItem(
+                                      product.data,
+                                      [],
+                                      quantity,
+                                      this.state.token,
+                                      this.state.customer,
+                                      this.state.locale,
+                                      product?.data?.type == 'bundle'
+                                        ? {
+                                          bundle_options: product.data.bundle_options,
+                                          selectedOptions: this.state.bundleProducts,
+                                        }
+                                        : null,
+                                    )
+                                  }
+                                  render={({run, loading}) => (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        // alert("this.props?.upSell?.length === 0 && this.props?.crossSell?.length > 0")
+                                        run()
+                                        this.props.setTempData([product.data])
+                                        this.props.setPopup(true);
+                                        this.props.setCrossValid(true)
+                                        this.openUpCrosProd(product)
+                                      }}
+                                      disabled={Addtocartdisabled}
+                                      className={classNames(
+                                        'btn btn-orange inner-addtocart rounded-pills btn-lg',
+                                        {
+                                          'btn-loading': loading,
+                                        },
+                                      )}
+                                    >
+                                      <FormattedMessage
+                                        id="add.tocart"
+                                        defaultMessage="Add to cart"
+                                      />
+                                    </button>
+                                  )}
+                                />
+                              )
+                              :
+                              (
+                                <AsyncAction
+                                  render={({run, loading}) => (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        run()
+                                        // alert("else")
+                                        // this.props?.has_up_sell != 0
+                                        this.props.setTempData([product.data])
+                                        this.props.setPopup(true)
+                                        this.props.setCrossValid(false)
+
+                                        this.openUpCrosProd(product)
+
+
+                                      }}
+                                      disabled={Addtocartdisabled}
+                                      className={classNames(
+                                        'btn btn-orange inner-addtocart rounded-pills btn-lg',
+                                        {
+                                          'btn-loading': loading,
+                                        },
+                                      )}
+                                    >
+                                      <FormattedMessage
+                                        id="add.tocart"
+                                        defaultMessage="Add to cart"
+                                      />
+                                    </button>
+                                  )}
+                                />
+                              )
+                        }
+                      </div>
+                      {signed ? (
+                        <div className="product__actions-item product__actions-item--wishlist">
                         <span onClick={addAndRemoveWishList}>
                           <AsyncAction
                             action={() =>
                               wishlistAddItem(product.data, this.state.locale)
                             }
-                            render={({ run, loading }) => (
+                            render={({run, loading}) => (
                               <button
                                 type="button"
                                 data-toggle="tooltip"
@@ -886,36 +887,37 @@ class Product extends PureComponent {
                                   },
                                 )}
                               >
-                                <InnerWishlist className="inner-wishlist" />
+                                <InnerWishlist className="inner-wishlist"/>
                               </button>
                             )}
                           />
                         </span>
-                      </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault()
-                          toast(
-                            <span className="d-flex faild-toast-fms">
-                              <FailSvg />
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            toast(
+                              <span className="d-flex faild-toast-fms">
+                              <FailSvg/>
                               <FormattedMessage
                                 id="sign-or-register"
                                 defaultMessage="Please sign in or register"
                               />
                             </span>,
-                            {
-                              hideProgressBar: true,
-                              className: 'wishlist-toast',
-                            },
-                          )
-                        }}
-                        className="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist"
-                      >
-                        <InnerWishlist className="inner-wishlist" />
-                      </button>
-                    )}
+                              {
+                                hideProgressBar: true,
+                                className: 'wishlist-toast',
+                              },
+                            )
+                          }}
+                          className="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist"
+                        >
+                          <InnerWishlist className="inner-wishlist"/>
+                        </button>
+                      )}
+                    </div>
                     <div className="product__actions-item product__actions-item--compare"></div>
                   </div>
                 </div>
@@ -924,10 +926,10 @@ class Product extends PureComponent {
           </div>
           <div className="product-inner-long-description">
             <div className="product-inner-description-title">
-              <div style={{ display: "flex", justifyContent: "center", gap: "50px" }}>
+              <div style={{display: "flex", justifyContent: "center", gap: "50px"}}>
                 <span
                   ref={this.descriptionRef}
-                  className={classNames("desc-heade-title", { "active-title": desc })}
+                  className={classNames("desc-heade-title", {"active-title": desc})}
                   onClick={this.changeDescription}
                   id="description"
                 >

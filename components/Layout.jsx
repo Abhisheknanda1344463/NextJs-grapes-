@@ -137,15 +137,15 @@ function Layout(props) {
     <div>
       <Head>
         <title>{`${upDomain}`}</title>
-        <meta
-          name="description"
-          content={theme.fullName}
-          data-react-helmet={true}
-        />
+        {/*<meta*/}
+        {/*  name="description"*/}
+        {/*  content={theme.fullName}*/}
+        {/*  data-react-helmet={true}*/}
+        {/*/>*/}
         <link rel="canonical" href={`${upDomain}`} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta property="og:description" content={`${theme.fullName}`} />
-        <meta property="og:title" name="title" content={`${theme.fullName}`} />
+        {/*<meta property="og:description" content={`${theme.fullName}`} />*/}
+        {/*<meta property="og:title" name="title" content={`${theme.fullName}`} />*/}
         <meta
           property="og:keywords"
           name="keywords"

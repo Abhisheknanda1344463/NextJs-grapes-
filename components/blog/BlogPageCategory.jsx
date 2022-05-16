@@ -140,7 +140,7 @@ const BlogPageCategory = (props) => {
         <title>{`Blog Category Page — ${theme.name}`}</title>
         <meta
           name="description"
-          content={`Zegashop - ${theme.name} - ${theme.description}`}
+          content={`${theme.name} - ${theme.description}`}
         />
 
         <script
