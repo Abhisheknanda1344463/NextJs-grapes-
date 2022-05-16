@@ -5,20 +5,11 @@ import Head from "next/head";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import Link from "next/link";
-import defaultImage from '../../images/defoultpic.png'
-// // application
-// import BlogCommentsList from './BlogCommentsList';
-
-// // data stubs
-// import comments from '../../data/blogPostComments';
-// import posts from '../../data/blogPosts';
-// import { url } from '../../helper';
-// import SitePageNotFound from '../site/SitePageNotFound';
-// import { Redirect, Route } from 'react-router-dom';
+import defaultImage from "../../images/defoultpic.png";
 import Image from "components/hoc/Image";
 
 export default function BlogPost(props) {
-  const { layout, blog } = props;
+  const { layout, blog, dbName } = props;
   // console.log(blog, "blog in blog post")
   const postClasses = classNames("post__content typography", {
     "typography--expanded": layout === "full",
@@ -30,13 +21,21 @@ export default function BlogPost(props) {
   const createMarkup = (item) => {
     return { __html: item };
   };
-  console.log(blog, 'blogblogblogblog');
+  console.log(blog, "blogblogblogblog");
   return (
     <>
       <Head>
         <meta property="og:title" name="title" content={blog?.meta_title} />
-        <meta property="og:description" name="description" content={blog?.meta_description} />
-        <meta property="og:keywords" name="keywords" content={blog?.meta_keywords} />
+        <meta
+          property="og:description"
+          name="description"
+          content={blog?.meta_description}
+        />
+        <meta
+          property="og:keywords"
+          name="keywords"
+          content={blog?.meta_keywords}
+        />
       </Head>
       <div className={`block post post--layout--${layout}`}>
         <div
@@ -49,9 +48,13 @@ export default function BlogPost(props) {
         </div>
 
         <div className="post__featured">
-          {/* <Link href="/" > */}
-          <Image src={`${blog.image ? blog.image : defaultImage.src}`} alt="" layout="fill" />
-          {/* </Link>*/}
+          <Image
+            src={`/storage/${dbName}/${
+              blog.image ? blog.image : defaultImage.src
+            }`}
+            alt=""
+            layout="fill"
+          />
         </div>
 
         <div

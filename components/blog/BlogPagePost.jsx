@@ -33,18 +33,6 @@ export default function BlogPagePost(props) {
       prevBlogSlugRef.current != blogSlug ||
       prevLocaleCodeRef.current != selectedData
     ) {
-      // fetch(`${url}/api/cms/blog/${blogSlug}?locale=${selectedData}`)
-      //   .then((res) => {
-      //     if (res.ok) {
-      //       return res.json();
-      //     } else {
-      //       setRedirect(true);
-      //     }
-      //   })
-      //   .then((responce) => {
-      //     setBlog(responce.data);
-      //   });
-      console.log(blog, "blogblogblog");
       setBlog(props.blog[0]);
       prevBlogSlugRef.current = blogSlug;
       prevLocaleCodeRef.current = selectedData;
@@ -62,7 +50,7 @@ export default function BlogPagePost(props) {
   content = (
     <div className="row justify-content-center">
       <div className="col-md-12 col-lg-9 col-xl-8">
-        <BlogPost blog={bogOne} layout={layout} />
+        <BlogPost blog={bogOne} dbName={props.dbName} layout={layout} />
       </div>
     </div>
   );

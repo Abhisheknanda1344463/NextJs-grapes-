@@ -5,20 +5,20 @@ import Link from "next/link";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
-import defaultImage from '../../images/defoultpic.png'
+import defaultImage from "../../images/defoultpic.png";
 
 function PostCard(props) {
-  const { post, layout, } = props;
+  const { post, layout, dbName } = props;
   const cardClasses = classNames("post-card", {
     "post-card--layout--grid": ["grid-nl", "grid-lg"].includes(layout),
     "post-card--layout--list": ["list-nl", "list-sm"].includes(layout),
     "post-card--size--nl": ["grid-nl", "list-nl"].includes(layout),
     "post-card--size--lg": layout === "grid-lg",
-    "post-card--size--sm": layout === "list-sm"
+    "post-card--size--sm": layout === "list-sm",
   });
 
   let day = new Date(post.created_at);
-  console.log(defaultImage,"defaultImage   in create")
+  console.log(defaultImage, "defaultImage   in create");
   let dd = String(day.getDate()).padStart(2, "0");
   let mm = String(day.getMonth() + 1).padStart(2, "0"); //January is 0!
   let yyyy = day.getFullYear();
@@ -30,7 +30,15 @@ function PostCard(props) {
       <div className="post-card__image">
         <Link href={`/blog/${post.url_key}`}>
           <a>
-            <img alt="post-image" src={`${post.image ? post.image : defaultImage.src} `} layout="fill" />
+            <img
+              alt="post-image"
+              src={`${
+                post.image
+                  ? `/storage/${dbName}/` + post.image
+                  : defaultImage.src
+              } `}
+              layout="fill"
+            />
           </a>
         </Link>
       </div>
@@ -65,7 +73,7 @@ PostCard.propTypes = {
    * post card layout
    * one of ['grid-nl', 'grid-lg', 'list-nl', 'list-sm']
    */
-  layout: PropTypes.oneOf(["grid-nl", "grid-lg", "list-nl", "list-sm"])
+  layout: PropTypes.oneOf(["grid-nl", "grid-lg", "list-nl", "list-sm"]),
 };
 
 export default PostCard;

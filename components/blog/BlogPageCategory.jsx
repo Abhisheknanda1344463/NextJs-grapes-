@@ -86,7 +86,7 @@ const BlogPageCategory = (props) => {
     setPage(page);
   };
 
-  const { layout, sidebarPosition } = props;
+  const { layout, sidebarPosition, dbName } = props;
 
   const breadcrumb = [
     { title: <FormattedMessage id="home" defaultMessage="Home" />, url: "" },
@@ -129,7 +129,7 @@ const BlogPageCategory = (props) => {
 
     return (
       <div key={post.id} className="posts-list__item">
-        <PostCard post={post} layout={postLayout} />
+        <PostCard post={post} dbName={dbName} layout={postLayout} />
       </div>
     );
   });

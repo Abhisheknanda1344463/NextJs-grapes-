@@ -88,6 +88,7 @@ export async function getServerSideProps({
     brands = [],
     productsList = [],
     newdata = [];
+  newdata = false;
   // console.log(
   //   selectedLocale,
   //   locale,
@@ -116,7 +117,14 @@ export async function getServerSideProps({
   if (categoriesResponse?.categories) {
     getItems(categoriesResponse.categories[0].children);
   }
-
+  if (categoryId && query.cat_id) {
+    await shopApi
+      .getCategoryBySlug(query.slug, dbName, selectedLocale)
+      .then((res) => {
+        console.log(res, "resresresres");
+        categoryId = res.id;
+      });
+  }
   await shopApi
     .getFilters(categoryId ? categoryId : query.cat_id, {
       lang: selectedLocale,
