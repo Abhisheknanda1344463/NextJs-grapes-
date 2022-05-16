@@ -1,22 +1,22 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import {toast} from 'react-toastify'
-import {Helmet} from 'react-helmet-async'
-import {wishlistRemoveItem} from '../../store/wishlist'
-import {url} from '../../services/utils'
+import { toast } from 'react-toastify'
+import { Helmet } from 'react-helmet-async'
+import { wishlistRemoveItem } from '../../store/wishlist'
+import { url } from '../../services/utils'
 import Currency from './Currency'
 import InputNumber from './InputNumber'
-import {AddImages} from '../../store/image'
-import {AddCartToken} from '../../store/token'
-import {compareAddItem} from '../../store/compare'
-import {wishlistAddItem} from '../../store/wishlist'
+import { AddImages } from '../../store/image'
+import { AddCartToken } from '../../store/token'
+import { compareAddItem } from '../../store/compare'
+import { wishlistAddItem } from '../../store/wishlist'
 import ProductGallery from './ProductGallery'
 import AsyncAction from './AsyncAction'
-import {cartAddItem, cartRemoveItem} from '../../store/cart'
+import { cartAddItem, cartRemoveItem } from '../../store/cart'
 import classNames from 'classnames'
-import {FormattedMessage} from 'react-intl'
-import {connect, useSelector, useDispatch} from 'react-redux'
-import {setPopup, setPopupName, setUpCrossProd, setTempData} from '../../store/general'
+import { FormattedMessage } from 'react-intl'
+import { connect, useSelector, useDispatch } from 'react-redux'
+import { setPopup, setPopupName, setUpCrossProd, setTempData } from '../../store/general'
 import shopApi from '../../api/shop'
 import Link from 'next/link'
 
@@ -35,15 +35,8 @@ const UpSellCard = (props) => {
     setUpCrossProd,
     setTempData,
   } = props
-  const dispatch = useDispatch()
-  // const [quantity, setQuantity] = useState(1)
-  // const selectedData = useSelector((state) => state.locale.code)
-  // const token = useSelector((state) => state.customer.token)
-  // const cartToken = useSelector((state) => state.cartToken)
-  // const customer = useSelector((state) => state.customer)
   const backorders = useSelector(state => state.general.coreConfigs.catalog_inventory_stock_options_backorders)
   const outOfStock = useSelector(state => state.general.coreConfigs.catalog_products_homepage_out_of_stock_items)
-  // const oldProd = useSelector(state => state.general.temporaryData[0])
 
   const getUpCrosselProd = (prodID, type) => {
     switch (type) {
@@ -57,7 +50,6 @@ const UpSellCard = (props) => {
           if (res.length === 0) {
             setPopup(false)
           }
-          // console.log(res, 'PXOPXOXOOXOXOXOXOXOXOXOXOXOXXO')
           setUpCrossProd(res)
         })
         break
@@ -66,7 +58,7 @@ const UpSellCard = (props) => {
   }
 
   const createMarkup = (item) => {
-    return {__html: item}
+    return { __html: item }
   }
   //
   // const handleChangeQuantity = (quantity) => {
@@ -79,7 +71,7 @@ const UpSellCard = (props) => {
         product && product.images && (
 
           <div className="product__content">
-            <ProductGallery images={product.images} ups={true}/>
+            <ProductGallery images={product.images} ups={true} />
             <div className="product__info">
               {/*<div className="product__wishlist-compare">*/}
               {/*  <AsyncAction*/}
@@ -167,17 +159,17 @@ const UpSellCard = (props) => {
                       />
                       <span
                         className="product-card__symbol"
-                        // style={{marginLeft: '5px'}}
+                      // style={{marginLeft: '5px'}}
                       >
                         ֏
                       </span>
                     </span>
 
                     <span className="product-card__old-price">
-                      <Currency value={Number(product.price).toFixed(0)}/>
+                      <Currency value={Number(product.price).toFixed(0)} />
                       <span
                         className="product-card__symbol"
-                        style={{marginLeft: '5px'}}
+                        style={{ marginLeft: '5px' }}
                       >
                         ֏
                       </span>
@@ -185,12 +177,7 @@ const UpSellCard = (props) => {
                   </>
                 ) : (
                   <span>
-                    <span
-                      className="product-card__symbol"
-                      // style={{marginLeft: '5px'}}
-                    >
-                      ֏
-                    </span>
+
                     <Currency
                       value={
                         product.price > 0
@@ -199,6 +186,12 @@ const UpSellCard = (props) => {
                         // : ''
                       }
                     />
+                    <span
+                      className="product-card__symbol"
+                    // style={{marginLeft: '5px'}}
+                    >
+                      ֏
+                    </span>
                   </span>
                 )}
               </div>
@@ -206,8 +199,8 @@ const UpSellCard = (props) => {
                 {product.price_html
                   ? product.price_html.map((e, i) => (
                     <span key={i} className="product_price_html">
-                        {e}
-                      </span>
+                      {e}
+                    </span>
                   ))
                   : ''}
               </div>
@@ -230,35 +223,35 @@ const UpSellCard = (props) => {
                   <span
                     className={
                       product.qty > 0
-                      || product.qty === 0
-                      && backorders == 1
+                        || product.qty === 0
+                        && backorders == 1
                         ? `text-success`
                         : product.qty === 0
-                        && backorders == 0
+                          && backorders == 0
                           ? `text-danger`
                           : `text-danger`
                     }
-                    style={{fontSize: '18px'}}
+                    style={{ fontSize: '18px' }}
                   >
                     {product.qty > 0 ? (
-                        <FormattedMessage
-                          id="instock"
-                          defaultMessage="In stock"
-                        />
-                      ) :
+                      <FormattedMessage
+                        id="instock"
+                        defaultMessage="In stock"
+                      />
+                    ) :
                       product.qty === 0
-                      && backorders == 1
-                      && outOfStock == 0 ||
-                      product.qty === 0
-                      && backorders == 1
-                      && outOfStock == 1 ? (
+                        && backorders == 1
+                        && outOfStock == 0 ||
+                        product.qty === 0
+                        && backorders == 1
+                        && outOfStock == 1 ? (
                         <FormattedMessage
                           id="instock"
                           defaultMessage="In stock"
                         />
                       ) : product.qty === 0
-                      && backorders == 0
-                      && outOfStock == 1 ? (
+                        && backorders == 0
+                        && outOfStock == 1 ? (
                         <FormattedMessage
                           id="outOfStock"
                           defaultMessage="Not available"
@@ -279,7 +272,7 @@ const UpSellCard = (props) => {
                 <span className="text-success">
                   {' '}
                   {product.qty > 0 ? (
-                    <FormattedMessage id="inStock" defaultMessage="Available"/>
+                    <FormattedMessage id="inStock" defaultMessage="Available" />
                   ) : (
                     <FormattedMessage
                       id="outOfStock"
@@ -328,7 +321,7 @@ const UpSellCard = (props) => {
                                 'homePage',
                               )
                             }
-                            render={({run, loading}) => (
+                            render={({ run, loading }) => (
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -371,7 +364,7 @@ const UpSellCard = (props) => {
                             '',
                           )
                         }
-                        render={({run, loading}) => (
+                        render={({ run, loading }) => (
                           <span
                             onClick={(e) => {
                               e.preventDefault()
@@ -382,11 +375,11 @@ const UpSellCard = (props) => {
                               // setPopup(false)
                             }}
                           >
-              <FormattedMessage
-                id="noThanks"
-                defaultMessage="No, Thanks"
-              />
-            </span>
+                            <FormattedMessage
+                              id="noThanks"
+                              defaultMessage="No, Thanks"
+                            />
+                          </span>
                         )}
                       />
 

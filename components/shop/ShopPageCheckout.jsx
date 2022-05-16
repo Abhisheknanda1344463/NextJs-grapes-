@@ -16,6 +16,7 @@ import { cartUpdateData, cartRemoveAllItems } from '../../store/cart'
 import CreditCartSvg from '../../svg/creditCart.svg'
 import { runFbPixelEvent } from '../../services/utils'
 import TextField from '@mui/material/TextField'
+import { removeCurrencyTemp } from '../../services/utils'
 //momemt js
 import moment from 'moment'
 
@@ -64,7 +65,7 @@ class ShopPageCheckout extends React.Component {
       shipingPhone: '',
       phone: '',
       email: '',
-      country: '',
+      country: 'United States',
       states: '',
       city: '',
       apartment: '',
@@ -78,7 +79,7 @@ class ShopPageCheckout extends React.Component {
       billApartment: '',
       billCity: '',
       billPost: '',
-      billCountry: '',
+      billCountry: 'United States',
       billState: '',
 
       billCountryList: [],
@@ -209,11 +210,46 @@ class ShopPageCheckout extends React.Component {
   }
 
 
+  calcCartTotal = (total, shipingRate) => {/* retur current total or caclulate current total with shipingRate |calcCartTotal()|*/
+    let convertSymbols = total.toString().replace("$", "").replace(",", '')
+    if (shipingRate && total) {
+      let result = (Number(convertSymbols) + Number(shipingRate))
+      return `֏ ${result.toFixed(2)}`
+    } else {
+
+      return `${Number(convertSymbols)} ֏`
+    }
+  }
+
   getCartCustomer = () => {
     if (this.state.customer && this.state.customer.token) {
       fetch(
         apiUrlWithStore(
           `/api/checkout/cart?token=` + this.state.customer.token,
+        ),
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+        .then((response) => response.json())
+        .then((res) => {
+          if (!res.data.coupon_code) {
+            this.setState({ addCupone: '' })
+          }
+          this.props.cartUpdateData({
+            total: res.data.base_grand_total,
+            coupon_code: res.data.coupon_code,
+            coupon_discount: res.data.base_discount,
+          })
+        })
+    } else {
+      fetch(
+        apiUrlWithStore(
+          `/api/checkout/cart?token=` + this.state.token.cartToken,
         ),
         {
           method: 'GET',
@@ -244,7 +280,7 @@ class ShopPageCheckout extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         code: this.state.addCupone,
-        token: this.state.customer.token,
+        // token: this.state.customer.token,
       }),
     }
     if (this.state.addCupone || methods == 'DELETE') {
@@ -384,14 +420,14 @@ class ShopPageCheckout extends React.Component {
     //   ''
     // )
     let coupondiscount = this.props.cart.coupon_code && this.props.cart.coupon_discount > 0 ? (
-      <td className="coupon-content">
+      <td className="coupon-content" colSpan={2}>
         <div className="coupon-content-block">
           <div className="coupon-content-block-title">
             <FormattedMessage id="discount.cupon" defaultMessage="Discount" />
           </div>
           <div className="coupon-content-block-value">
-            -${this.props && this.props.cart
-              ? Number(this.props.cart.coupon_discount).toFixed(2)
+            -{this.props && this.props.cart
+              ? removeCurrencyTemp(this.props.cart.coupon_discount)
               : ""}</div>
         </div>
       </td>
@@ -413,16 +449,21 @@ class ShopPageCheckout extends React.Component {
       <tr key={item.id}>
         <td>{`${item.product.name}`}</td>
         <td className="responsive-checkout-text">
-          {/*{console.log("item",item)}*/}
-          {`${item.quantity} ×`}
+          {`${item.quantity} × `}
           {item.product?.special_price &&
             date_now >= item.product.special_price_from &&
             date_now <= item.product.special_price_to ? (
-            <Currency value={Number(item.product.special_price).toFixed(0)} />
+            // temporary version check wehen start multi Currency 
+            removeCurrencyTemp(item.product.special_price)
+            // <Currency value={Number(item.product.special_price).toFixed(0)} />
           ) : item.product?.special_price
-            ? <Currency value={Number(item.product.special_price).toFixed(0)} /> : (
-              <Currency value={Number(item.product.price).toFixed(0)} />
+            ? removeCurrencyTemp(item.product.special_price) : (
+              removeCurrencyTemp(item.product.price)
             )}
+
+          {/* <Currency value={Number(item.product.special_price).toFixed(0)} /> : (
+              <Currency value={Number(item.product.price).toFixed(0)} />
+            )} */}
           {/*{item.product.formatted_price*/}
           {/*  ? item.product.formatted_special_price != "$0.00"*/}
           {/*    ? item.product.formatted_special_price*/}
@@ -473,7 +514,9 @@ class ShopPageCheckout extends React.Component {
               <FormattedMessage id="total" defaultMessage="Total" />
             </th>
             <td className="responsive-checkout-text">
-              <Currency value={cart.total} />
+              {this.calcCartTotal(cart.total, this.state.shippingMethodRate)}
+              {/*comented Ny Manvel We can use this component when check currency */}
+              {/* <Currency value={cart.total} /> */}
             </td>
           </tr>
         </tfoot>

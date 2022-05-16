@@ -1,31 +1,30 @@
 // react
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 // third-party
 import classNames from "classnames";
 import Link from "next/link";
 import PropTypes from "prop-types";
-import {connect, useSelector} from "react-redux";
-import {toast} from "react-toastify";
-import {FormattedMessage} from "react-intl";
-import {setPopup} from "../../store/general";
+import { connect, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { FormattedMessage } from "react-intl";
+import { setPopup } from "../../store/general";
 // application
 import Currency from "./Currency";
 import AsyncAction from "./AsyncAction";
 import Image from "components/hoc/Image";
-import {Wishlist16Svg} from "../../svg";
-import {url} from "../../services/utils";
-import {cartAddItem} from "../../store/cart";
-import {url as anotherUrl} from "../../helper";
+import { Wishlist16Svg } from "../../svg";
+import { url } from "../../services/utils";
+import { cartAddItem } from "../../store/cart";
+import { url as anotherUrl } from "../../helper";
 import defoult from "../../images/defoultpic.png";
-import {compareAddItem} from "../../store/compare";
-import {quickviewOpen} from "../../store/quickview";
-import {wishlistAddItem} from "../../store/wishlist";
+import { compareAddItem } from "../../store/compare";
+import { quickviewOpen } from "../../store/quickview";
+import { wishlistAddItem } from "../../store/wishlist";
 import InputNumber from './InputNumber'
 
 function CrosselCard(props) {
-  // console.log(props, "props in crossel card")
-  const {customer, product, layout, cartAddItem, wishlistAddItem, setPopup, only} = props;
+  const { customer, product, layout, cartAddItem, wishlistAddItem, setPopup, only } = props;
   const [dimension, setDimension] = useState(1200);
   const [quantity, setQuantity] = useState(1)
 
@@ -200,18 +199,18 @@ function CrosselCard(props) {
   if (product?.type === "configurable") {
     price = (
       <div className="product-card__prices">
-        <Currency value={Number(product.min_price).toFixed(2)}/> {" $"}
+        <Currency value={Number(product.min_price).toFixed(2)} /> {" ֏"}
       </div>
     );
   } else if (product.formatted_special_price) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__new-price">
-          <Currency value={product.formatted_special_price}/> {" $"}
+          <Currency value={product.formatted_special_price} /> {" ֏"}
         </span>
         {
           <span className="product-card__old-price">
-            <Currency value={product.formatted_price}/> {" $"}
+            <Currency value={product.formatted_price} /> {" ֏"}
           </span>
         }
       </div>
@@ -219,7 +218,7 @@ function CrosselCard(props) {
   } else {
     price = (
       <div className="product-card__prices">
-        <Currency value={product.formatted_price || Number(product.price).toFixed(2)}/> {" $"}
+        <Currency value={product.formatted_price || Number(product.price).toFixed(2)} /> {" ֏"}
       </div>
     );
   }
@@ -257,7 +256,7 @@ function CrosselCard(props) {
                     max={5000}
                     value={quantity}
                     onChange={handleChangeQuantity}
-                    // disabled={Addtocartdisabled}
+                  // disabled={Addtocartdisabled}
                   />
                 </div>
                 <div className={classNames("cross_btn",
@@ -270,7 +269,7 @@ function CrosselCard(props) {
                     action={() =>
                       cartAddItem(product, [], quantity, cartToken, customer, selectedData)
                     }
-                    render={({run, loading}) => (
+                    render={({ run, loading }) => (
                       <button
                         type="button"
                         onClick={(e) => {
@@ -308,7 +307,7 @@ function CrosselCard(props) {
                   action={() =>
                     cartAddItem(product, [], quantity, cartToken, customer, selectedData)
                   }
-                  render={({run, loading}) => (
+                  render={({ run, loading }) => (
                     <button
                       type="button"
                       onClick={run}
@@ -319,7 +318,7 @@ function CrosselCard(props) {
                         }
                       )}
                     >
-                      <FormattedMessage id="add.tocart" defaultMessage="Add to cart"/>
+                      <FormattedMessage id="add.tocart" defaultMessage="Add to cart" />
                     </button>
                   )}
                 />

@@ -1,30 +1,30 @@
 // react
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 //timezone
 import moment from 'moment'
 // third-party
 import classNames from 'classnames'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
-import {connect, useSelector} from 'react-redux'
-import {toast} from 'react-toastify'
+import { connect, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 // import {useSelector} from 'react-redux'
-import {FormattedMessage} from 'react-intl'
-import {setPopup, setPopupName, setUpCrossProd, setTempData, setCrossValid} from '../../store/general'
-import {wishlistRemoveItem} from '../../store/wishlist'
+import { FormattedMessage } from 'react-intl'
+import { setPopup, setPopupName, setUpCrossProd, setTempData, setCrossValid } from '../../store/general'
+import { wishlistRemoveItem } from '../../store/wishlist'
 // application
 import Currency from './Currency'
 import AsyncAction from './AsyncAction'
 import Image from 'components/hoc/Image'
-import {CheckToastSvg, FailSvg, Wishlist16Svg} from '../../svg'
-import {url} from '../../services/utils'
-import {cartAddItem} from '../../store/cart'
-import {apiImageUrl, megaUrl} from '../../helper'
+import { CheckToastSvg, FailSvg, Wishlist16Svg } from '../../svg'
+import { url } from '../../services/utils'
+import { cartAddItem } from '../../store/cart'
+import { apiImageUrl, megaUrl } from '../../helper'
 import defoult from '../../images/defoultpic.png'
-import {compareAddItem} from '../../store/compare'
-import {quickviewOpen} from '../../store/quickview'
-import {wishlistAddItem} from '../../store/wishlist'
-import {useRouter} from 'next/router'
+import { compareAddItem } from '../../store/compare'
+import { quickviewOpen } from '../../store/quickview'
+import { wishlistAddItem } from '../../store/wishlist'
+import { useRouter } from 'next/router'
 import shopApi from '../../api/shop'
 
 
@@ -73,9 +73,9 @@ function ProductCard(props) {
         fetch(`${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=${locale}&currency=USD`)
           .then(res => res.json())
           .then(data => {
-              setPopup(true)
-              setUpCrossProd(data)
-            }
+            setPopup(true)
+            setUpCrossProd(data)
+          }
           )
         break
     }
@@ -193,7 +193,7 @@ function ProductCard(props) {
                                   'homePage',
                                 )
                               }
-                              render={({run, loading}) => (
+                              render={({ run, loading }) => (
                                 <button
                                   type="button"
                                   onClick={(e) => {
@@ -231,7 +231,7 @@ function ProductCard(props) {
                                 'homePage',
                               )
                             }
-                            render={({run, loading}) => (
+                            render={({ run, loading }) => (
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -259,7 +259,7 @@ function ProductCard(props) {
                         )
                         : (
                           <AsyncAction
-                            render={({run, loading}) => (
+                            render={({ run, loading }) => (
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -387,7 +387,7 @@ function ProductCard(props) {
                               'homePage',
                             )
                           }
-                          render={({run, loading}) => (
+                          render={({ run, loading }) => (
                             <button
                               type="button"
                               onClick={(e) => {
@@ -424,7 +424,7 @@ function ProductCard(props) {
                                 'homePage',
                               )
                             }
-                            render={({run, loading}) => (
+                            render={({ run, loading }) => (
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -449,7 +449,7 @@ function ProductCard(props) {
                             )}
                           />
                           : <AsyncAction
-                            render={({run, loading}) => (
+                            render={({ run, loading }) => (
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -516,7 +516,7 @@ function ProductCard(props) {
     if (wishlistChekArray == undefined) {
       toast.success(
         <span className="d-flex chek-fms">
-          <CheckToastSvg/>
+          <CheckToastSvg />
           <FormattedMessage
             id="add-wish-list"
             defaultMessage={`Product "${product.name}" added to wish list`}
@@ -527,10 +527,10 @@ function ProductCard(props) {
         },
       )
     } else {
-      <AsyncAction action={wishlistRemoveItem(product.id)}/>
+      <AsyncAction action={wishlistRemoveItem(product.id)} />
       toast.success(
         <span className="d-flex chek-fms">
-          <CheckToastSvg/>
+          <CheckToastSvg />
           <FormattedMessage
             id="producthasalreadyinwishlist"
             defaultMessage={`The product "${product.name}" has already been added to the whishlist`}
@@ -553,7 +553,7 @@ function ProductCard(props) {
   if (!product?.special_price && CONFIG === 'configurable') {
     price = (
       <div className="product-card__prices">
-        <Currency value={product.formatted_price}/>
+        <Currency value={product.formatted_price} />
       </div>
     )
   } else if (
@@ -564,13 +564,13 @@ function ProductCard(props) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__new-price">
+          <Currency value={Number(product.special_price).toFixed(0)} />
           <span className="product-card__symbol">֏</span>
-          <Currency value={Number(product.special_price).toFixed(0)}/>
         </span>
         {
           <span className="product-card__old-price">
+            <Currency value={Number(product.price).toFixed(0)} />
             <span className="product-card__symbol">֏</span>
-            <Currency value={Number(product.price).toFixed(0)}/>
           </span>
         }
       </div>
@@ -579,13 +579,13 @@ function ProductCard(props) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__new-price">
+          <Currency value={Number(product.special_price).toFixed(0)} />
           <span className="product-card__symbol">֏</span>
-          <Currency value={Number(product.special_price).toFixed(0)}/>
         </span>
         {
           <span className="product-card__old-price">
+            <Currency value={Number(product.price).toFixed(0)} />
             <span className="product-card__symbol">֏</span>
-            <Currency value={Number(product.price).toFixed(0)}/>
           </span>
         }
       </div>
@@ -593,16 +593,16 @@ function ProductCard(props) {
   } else if (product?.type === 'configurable') {
     price = (
       <div className="product-card__prices">
+        <Currency value={Number(product.min_price).toFixed(0)} />
         <span className="product-card__symbol">֏</span>
-        <Currency value={Number(product.min_price).toFixed(0)}/>
       </div>
     )
   } else {
 
     price = (
       <div className="product-card__prices">
+        <Currency value={Number(product.min_price).toFixed(0)} />
         <span className="product-card__symbol">֏</span>
-        <Currency value={Number(product.min_price).toFixed(0)}/>
       </div>
     )
   }
@@ -640,7 +640,7 @@ function ProductCard(props) {
                 />{' '}
                 :
                 <span className="text-success">
-                  <FormattedMessage id="instock" defaultMessage="In stock"/>
+                  <FormattedMessage id="instock" defaultMessage="In stock" />
                 </span>
               </div>
               {price}
@@ -650,7 +650,7 @@ function ProductCard(props) {
                   <span onClick={addAndRemoveWishList}>
                     <AsyncAction
                       action={() => wishlistAddItem(product, selectedData)}
-                      render={({run, loading}) => (
+                      render={({ run, loading }) => (
                         <div
                           type="button"
                           onClick={run}
@@ -662,7 +662,7 @@ function ProductCard(props) {
                           )}
                         >
                           {' '}
-                          <Wishlist16Svg/>{' '}
+                          <Wishlist16Svg />{' '}
                         </div>
                       )}
                     />
@@ -674,7 +674,7 @@ function ProductCard(props) {
                       e.preventDefault()
                       toast(
                         <span className="d-flex faild-toast-fms">
-                          <FailSvg/>
+                          <FailSvg />
                           <FormattedMessage
                             id="sign-or-register"
                             defaultMessage="Please sign in or register"
@@ -688,7 +688,7 @@ function ProductCard(props) {
                     }}
                     className="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist"
                   >
-                    <Wishlist16Svg/>
+                    <Wishlist16Svg />
                   </div>
                 )}
               </div>
@@ -757,7 +757,7 @@ function ProductCard(props) {
                         'homePage',
                       )
                     }
-                    render={({run, loading}) => (
+                    render={({ run, loading }) => (
                       <button
                         type="button"
                         onClick={(e) => {
@@ -793,7 +793,7 @@ function ProductCard(props) {
                           'homePage',
                         )
                       }
-                      render={({run, loading}) => (
+                      render={({ run, loading }) => (
                         <button
                           type="button"
                           onClick={(e) => {
@@ -818,7 +818,7 @@ function ProductCard(props) {
                       )}
                     />
                     : <AsyncAction
-                      render={({run, loading}) => (
+                      render={({ run, loading }) => (
                         <button
                           type="button"
                           onClick={(e) => {
