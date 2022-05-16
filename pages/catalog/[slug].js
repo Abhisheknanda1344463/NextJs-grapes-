@@ -169,25 +169,22 @@ export async function getServerSideProps({
               let checkData = [];
               // console.log(el, "asasa");
               el.variants.map((response, keyIndex) => {
-                console.log(response, "response________________________")
+                // console.log(response, "response________________________")
                 checkData[index] = [];
-                console.log(index,"index in checkdata")
+                // console.log(index,"index in checkdata")
                 checkFiltre[index] = Object.keys(response).filter((e) => {
-                  console.log(e + " = e", key + " = key")
+                  // console.log(e + " = e", key + " = key")
                   if (e == key) {
                     let splited = filterValues[key].split(",");
 
-
-                    console.log(splited, "splited ------------")
-                    checkData[index][keyIndex] = splited.filter(
-                      (s) => {
-                        console.log(s, "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-                        console.log(e, "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-                        console.log(response, "responseresponseresponseresponseresponseresponse")
-                        s == response[e]
-                      }
-                    );
-                    console.log(checkData, "checkdata____-----____");
+                    // console.log(splited, "splited ------------")
+                    checkData[index][keyIndex] = splited.filter((s) => {
+                      // console.log(s, "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+                      // console.log(e, "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+                      // console.log(response, "responseresponseresponseresponseresponseresponse")
+                      return s == response[e];
+                    });
+                    // console.log(checkData, "checkdata____-----____");
                     if (checkData[index][keyIndex].length > 0) {
                       return true;
                     } else {
