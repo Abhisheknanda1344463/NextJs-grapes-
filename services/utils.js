@@ -205,5 +205,6 @@ export async function generalProcessForAnyPage(locale, dbName) {
 
 export function removeCurrencyTemp(total) {
   let convertSymbols = total.toString().replace("$", "").replace(",", '').replace("֏", "")
-  return `${Number(convertSymbols)} ֏`
+  let result = convertSymbols.replace(/\s/g, '').slice(0, -2)
+  return `${Number(result)} ֏`
 }

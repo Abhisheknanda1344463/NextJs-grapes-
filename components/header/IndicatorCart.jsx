@@ -198,7 +198,6 @@ function IndicatorCart(props) {
           <div className="dropcart__product-meta">
             <span className="dropcart__product-quantity">{item.quantity}</span>
             {" × "}
-            {console.log(removeCurrencyTemp(price))}
             <span className="dropcart__product-price">{price}</span>
           </div>
         </div>

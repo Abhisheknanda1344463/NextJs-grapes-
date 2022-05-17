@@ -213,11 +213,12 @@ class ShopPageCheckout extends React.Component {
   calcCartTotal = (total, shipingRate) => {/* retur current total or caclulate current total with shipingRate |calcCartTotal()|*/
     let convertSymbols = total.toString().replace("$", "").replace(",", '')
     if (shipingRate && total) {
-      let result = (Number(convertSymbols) + Number(shipingRate))
-      return `֏ ${result.toFixed(2)}`
+      let value = convertSymbols.replace(/\s/g, '').slice(0, -3)
+      let result = (Number(value) + Number(shipingRate))
+      return `֏ ${result}`
     } else {
-
-      return `${Number(convertSymbols)} ֏`
+      let current = convertSymbols.replace(/\s/g, '').slice(0, -3)
+      return `${Number(current)} ֏`
     }
   }
 

@@ -129,6 +129,7 @@ function addItem(state, product, options, quantity, CartItemID) {
   }
 
   // const subtotal = calcSubtotal(newItems);
+  //so when we use formated_grand_total with spaces please check // take into consideration grand_total
   const subtotal = CartItemID.formated_grand_total;
   const total = calcTotal(subtotal, state.extraLines);
   return {

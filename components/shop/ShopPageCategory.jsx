@@ -241,11 +241,11 @@ export function reducer(state, action) {
       throw new Error();
   }
 }
+
 function init(state) {
   const [options, filters] = parseQuery(state);
   return {...state, options, filters};
 }
-
 
 
 function ShopPageCategory(props) {
@@ -462,17 +462,17 @@ function ShopPageCategory(props) {
             />
           </div> */}
           <div>
-            <WidgetFilters
-              filters={brands}
-              dispatch={dispatch}
-              stateFilters={state}
-              values={state.filters}
-              catID={catID}
-              maxPrice={maxPrice}
-              minPrice={minPrice}
-              initialMaxPrice={props.initialMaxPrice}
-              initialMinPrice={props.initialMinPrice}
-            />
+            {/*<WidgetFilters*/}
+            {/*  filters={brands}*/}
+            {/*  dispatch={dispatch}*/}
+            {/*  stateFilters={state}*/}
+            {/*  values={state.filters}*/}
+            {/*  catID={catID}*/}
+            {/*  maxPrice={maxPrice}*/}
+            {/*  minPrice={minPrice}*/}
+            {/*  initialMaxPrice={props.initialMaxPrice}*/}
+            {/*  initialMinPrice={props.initialMinPrice}*/}
+            {/*/>*/}
           </div>
         </div>
       </CategorySidebarItem>
@@ -482,13 +482,14 @@ function ShopPageCategory(props) {
   if (columns > 3 && productsList.length > 0) {
     content = (
       <div className="container_fm">
-        <div className="block">{productsView}</div>
-        {sidebarComponent}
+        {/*<div className="block">{productsView}</div>*/}
+        {/*{sidebarComponent}*/}
       </div>
     );
   } else {
     const sidebar = (
-      <div className="shop-layout__sidebar">{sidebarComponent}</div>
+      // <div className="shop-layout__sidebar">{sidebarComponent}</div>
+      <></>
     );
     content = (
       <div className="container_fm category-container">
@@ -505,7 +506,7 @@ function ShopPageCategory(props) {
         </div>
 
         <div className={`shop-layout shop-layout--sidebar--${sidebarPosition}`}>
-          {console.log(brands.length,"brands length")}
+          {console.log(brands.length, "brands length")}
           {brands.length > 0 ? sidebarPosition === "start" && sidebar : " "}
           <div className="shop-layout__content">
             <div className="block block-fms">{productsView}</div>
