@@ -51,7 +51,7 @@ class ShopPageCheckout extends React.Component {
       checkbox: false,
       token: this.props.token,
       locale: this.props.locale,
-      payment: 'cashondelivery',
+      payment: '',
       payments: this.props.payments,
       inputsDataForParent: false,
       notes: '',
@@ -110,6 +110,9 @@ class ShopPageCheckout extends React.Component {
     this.abortController = new AbortController()
     this.single = this.abortController
     runFbPixelEvent({ name: 'Checkout Page' })
+    this.setState({
+      payment: this.props.payments.length > 0 ? this.props.payments[0].key : ""
+    })
 
     fetch(apiUrlWithStore(`/api/country-states?pagination=0`))
       .then((res) => res.json())
@@ -215,7 +218,7 @@ class ShopPageCheckout extends React.Component {
     if (shipingRate && total) {
       let value = convertSymbols.replace(/\s/g, '').slice(0, -3)
       let result = (Number(value) + Number(shipingRate))
-      return `֏ ${result}`
+      return `${result} ֏`
     } else {
       let current = convertSymbols.replace(/\s/g, '').slice(0, -3)
       return `${Number(current)} ֏`
@@ -499,6 +502,7 @@ class ShopPageCheckout extends React.Component {
               </th>
               <td className="responsive-checkout-text">
                 <Currency value={this.state.shippingMethodRate} />
+                <span class="product-card__symbol">֏</span>
               </td>
             </tr>
           ) : (
@@ -946,7 +950,6 @@ class ShopPageCheckout extends React.Component {
           api_token: this.state.token.cartToken,
         }),
       }
-
       save_shipping = {
         method: 'POST',
         headers: headers,
@@ -1481,6 +1484,7 @@ class ShopPageCheckout extends React.Component {
                     <button
                       onClick={this.handleSubmit}
                       type="submit"
+                      disabled={this.props.payments.length <= 0}
                       style={{ width: '50%', fontSize: '18px' }}
                       className={
                         !this.state.loading

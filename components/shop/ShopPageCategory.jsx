@@ -1,23 +1,23 @@
 // react
-import React, {useEffect, useReducer, useState, useRef, useLayoutEffect} from "react";
+import React, { useEffect, useReducer, useState, useRef, useLayoutEffect } from "react";
 
 // third-party
 import PropTypes from "prop-types";
-import {connect, useSelector} from "react-redux";
+import { connect, useSelector } from "react-redux";
 import queryString from "query-string";
-import {useRouter} from "next/router";
-import {Helmet} from "react-helmet-async";
-import {FormattedMessage} from "react-intl";
+import { useRouter } from "next/router";
+import { Helmet } from "react-helmet-async";
+import { FormattedMessage } from "react-intl";
 
 // application
 import shopApi from "../../api/shop";
-import {url} from "../../services/utils";
+import { url } from "../../services/utils";
 import ProductsView from "./ProductsView";
 import Pagination from "../shared/Pagination";
 import PageHeader from "../shared/PageHeader";
 import BlockLoader from "../blocks/BlockLoader";
 import CategorySidebar from "./CategorySidebar";
-import {sidebarClose} from "../../store/sidebar";
+import { sidebarClose } from "../../store/sidebar";
 import WidgetFilters from "../widgets/WidgetFilters";
 import CategorySidebarItem from "./CategorySidebarItem";
 import {
@@ -110,7 +110,7 @@ function buildQuery(options, filters) {
       params[`filter_${filterSlug}`] = filters[filterSlug];
     });
 
-  return queryString.stringify(params, {encode: false});
+  return queryString.stringify(params, { encode: false });
 }
 
 function buildInitialFilter(options, filters) {
@@ -145,7 +145,7 @@ function buildInitialFilter(options, filters) {
       params[filterSlug] = filters[filterSlug];
     });
 
-  return queryString.stringify(params, {encode: false});
+  return queryString.stringify(params, { encode: false });
 }
 
 
@@ -194,7 +194,7 @@ export function reducer(state, action) {
         category: action.category,
       };
     case "FETCH_PRODUCTS_LIST":
-      return {...state, productsListIsLoading: true};
+      return { ...state, productsListIsLoading: true };
     case "FETCH_PRODUCTS_LIST_SUCCESS":
       return {
         ...state,
@@ -204,12 +204,12 @@ export function reducer(state, action) {
     case "SET_OPTION_VALUE":
       return {
         ...state,
-        options: {...state.options, page: 1, [action.option]: action.value},
+        options: { ...state.options, page: 1, [action.option]: action.value },
       };
     case "SET_FILTER_VALUE":
       return {
         ...state,
-        options: {...state.options, page: 1},
+        options: { ...state.options, page: 1 },
         filters: {
           ...state.filters,
           [action.filter]:
@@ -229,12 +229,12 @@ export function reducer(state, action) {
       dot = dot.join(",");
       return {
         ...state,
-        options: {...state.options, page: 1},
-        filters: {...state.filters, [action.filter]: dot},
+        options: { ...state.options, page: 1 },
+        filters: { ...state.filters, [action.filter]: dot },
       };
 
     case "RESET_FILTERS":
-      return {...state, options: {}, filters: {}};
+      return { ...state, options: {}, filters: {} };
     case "RESET":
       return state.init ? initialState : state;
     default:
@@ -244,7 +244,7 @@ export function reducer(state, action) {
 
 function init(state) {
   const [options, filters] = parseQuery(state);
-  return {...state, options, filters};
+  return { ...state, options, filters };
 }
 
 
@@ -273,7 +273,7 @@ function ShopPageCategory(props) {
   const [brands, setBrands] = useState(brandList);
   const [catID, setCatID] = useState(props.categoryId);
   const [catTitle, setTitle] = useState(props.categoryTitle);
-  const {page: selectedPage} = router.query;
+  const { page: selectedPage } = router.query;
   const [page, setPage] = useState(selectedPage);
 
   const offcanvas = columns === 3 ? "mobile" : "always";
@@ -282,9 +282,9 @@ function ShopPageCategory(props) {
   const prevLocaleRef = useRef();
   const prevCurrencyRef = useRef();
   const prevCategorySlugRef = useRef();
-  const prevStateOptionsRef = useRef({current: null});
-  const prevStateFiltersRef = useRef({current: null});
-  const prevLocationSearchRef = useRef({current: null});
+  const prevStateOptionsRef = useRef({ current: null });
+  const prevStateFiltersRef = useRef({ current: null });
+  const prevLocationSearchRef = useRef({ current: null });
 
 
   // ////Areg dont change
@@ -297,7 +297,7 @@ function ShopPageCategory(props) {
     allProduct.dispatches.setInitialMinPrice
   );
   const [filtersData, setFilters] = useState();
-  const {query} = useRouter();
+  const { query } = useRouter();
   // const [dataFromQuery, setDataFromQuery] = useState({});
 
   useEffect(() => {
@@ -328,15 +328,14 @@ function ShopPageCategory(props) {
       prevStateOptionsRef.current != state.options ||
       prevPageRef.current != page
     ) {
-      const query = buildQuery({...state.options, page: page}, state.filters);
+      const query = buildQuery({ ...state.options, page: page }, state.filters);
       // setDataFromQuery(buildQuery({...state.options, page: page}, state.filters))
       prevStateFiltersRef.current = state.filters;
       prevStateOptionsRef.current = state.options;
-      const location = `${window.location.pathname}${
-        query
-          ? `?cat_id=${props.categoryId}&${query}`
-          : `?cat_id=${props.categoryId}`
-      }`
+      const location = `${window.location.pathname}${query
+        ? `?cat_id=${props.categoryId}&${query}`
+        : `?cat_id=${props.categoryId}`
+        }`
       router.push(location, location);
     }
   }, [state.filters, state.options, page]);
@@ -354,12 +353,12 @@ function ShopPageCategory(props) {
 
 
   if (state.productsListIsLoading && !productsList) {
-    return <BlockLoader/>;
+    return <BlockLoader />;
   }
 
   const breadcrumb = [
     {
-      title: <FormattedMessage id="home" defaultMessage="Գլխավոր"/>,
+      title: <FormattedMessage id="home" defaultMessage="Գլխավոր" />,
       url: url.home(),
     },
     {
@@ -521,7 +520,7 @@ function ShopPageCategory(props) {
     <React.Fragment>
       <Helmet>
         <title>{`Shop Category Page — ${categorySlug}`}</title>
-        <meta name="keywords" content={`Catalog, ${categorySlug}`}/>
+        <meta name="keywords" content={`Catalog, ${categorySlug}`} />
         <meta
           name="description"
           content={`Catalog ${categorySlug}`}
@@ -532,18 +531,18 @@ function ShopPageCategory(props) {
         />
         {/*<meta property="og:description" content={`Zegashop ${categorySlug}`}/>*/}
         {/*<meta property="og:image" content="Zegashop"/>*/}
-        <meta property="og:url" content={url + "/catalog/" + categorySlug}/>
+        <meta property="og:url" content={url + "/catalog/" + categorySlug} />
       </Helmet>
       <div className="cat_blocks_fms">
-        <PageHeader header={pageTitle} breadcrumb={breadcrumb}/>
+        <PageHeader header={pageTitle} breadcrumb={breadcrumb} />
         {content}
         <div className="block">
           <div className="posts-view">
             <div className="posts-view__pagination">
               {productsList &&
-              //////FIXME CHANGE TO LIMIT
-              productsList.data.length < 20 &&
-              page == 1 ? (
+                //////FIXME CHANGE TO LIMIT
+                productsList.data.length < 20 &&
+                page == 1 ? (
                 <></>
               ) : (
                 <Pagination
