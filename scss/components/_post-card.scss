@@ -6,13 +6,16 @@
 
 .post-card {
 }
+
 .post-card__image {
   position: relative;
   overflow: hidden;
   border-radius: 1.5px;
+  width: 100%;
 
   img {
     max-width: 100%;
+    width: 100%;
   }
 
   ::before {
@@ -35,6 +38,7 @@
     }
   }
 }
+
 .post-card__category {
   font-size: 14px;
   color: $post-card-meta-font-color;
@@ -43,14 +47,17 @@
     color: inherit;
     transition: 0.15s;
   }
+
   a:hover {
     color: $link-hover-color;
   }
 }
+
 .post-card__date {
   font-size: 14px;
   color: $post-card-meta-font-color;
 }
+
 .post-card__name {
   font-size: 20px;
   line-height: 1.125;
@@ -66,10 +73,12 @@
     color: inherit;
     transition: 0.15s;
   }
+
   a:hover {
     color: $link-hover-color;
   }
 }
+
 .post-card__content {
   font-size: 15px;
   line-height: 24px;
@@ -90,6 +99,7 @@
       color: $link-hover-color;
     }
   }
+
   .post-card__date {
     margin-top: 8px;
     font-size: 15px;
@@ -122,6 +132,7 @@
   &.post-card--size--nl {
     @include post-card-list-nl();
   }
+
   &.post-card--size--sm {
     @include post-card-list-sm();
   }

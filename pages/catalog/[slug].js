@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import ShopPageCategory from "../../components/shop/ShopPageCategory";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import shopApi from "../../api/shop";
 import store from "../../store";
-import { ApiCustomSettingsAsync } from "../../services/utils";
+import {ApiCustomSettingsAsync} from "../../services/utils";
 import serverSideActions from "../../services/serverSide";
 import allActions from "../../services/actionsArray";
+import Head from 'next/head'
 
 import clientSideActions from "../../services/clientSide";
-import { generalProcessForAnyPage } from "../../services/utils";
+import {generalProcessForAnyPage} from "../../services/utils";
 
 export default function Catlog(props) {
-  const { query } = useRouter();
+  const {query} = useRouter();
   const router = useRouter();
-  const { dispatch } = store;
+  const {dispatch} = store;
   const [change, setChange] = useState(false);
-  ////console.log(props.locale, "props.localeprops.locale");
-  // console.log(props, "props in categories");
+
   // useEffect(() => {
   //   /// window.history.replaceState(null, "", window.location.href);
   //   router.push(window.location.pathname, window.location.pathname);
@@ -27,37 +27,70 @@ export default function Catlog(props) {
       dispatch(allActions[actionKey](props.dispatches[actionKey]));
     }
   }, [props.locale]);
-
+  const logoPath = `configuration/logo/logo.webp`
   return (
-    <ShopPageCategory
-      columns={3}
-      viewMode="grid"
-      sidebarPosition="start"
-      categorySlug={query.slug}
-      locale={props.locale}
-      dbName={props.dbName}
-      setChange={setChange}
-      productsList={props.productsList}
-      data={props.productsList.data}
-      page={props.productsList.page}
-      {...props}
-    />
+    <>
+      <Head>
+        <meta property="og:title" name="title"
+              content={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}/>
+        <meta property="og:description" name="description"
+              content={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}/>
+        <meta property="og:keywords" name="keywords"
+              content={props.metaOptions.meta_keywords ? props.metaOptions.meta_keywords : props.categoryTitle}/>
+        <meta
+          property="og:image"
+          name="image"
+          content={`https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image ? props.metaOptions.image : logoPath}`}
+        />
+      </Head>
+      <ShopPageCategory
+        columns={3}
+        viewMode="grid"
+        sidebarPosition="start"
+        categorySlug={query.slug}
+        locale={props.locale}
+        dbName={props.dbName}
+        setChange={setChange}
+        productsList={props.productsList}
+        data={props.productsList.data}
+        page={props.productsList.page}
+        {...props}
+      />
+    </>
   );
 }
 
 export async function getServerSideProps({
-  ///query: { slug },
-  locale,
-  locales,
-  req,
-  query,
-  res,
-}) {
+                                           ///query: { slug },
+                                           locale,
+                                           locales,
+                                           req,
+                                           query,
+                                           res,
+                                         }) {
   res.setHeader(
     "Cache-Control",
     "public, s-maxage=10, stale-while-revalidate=59"
   );
   const dbName = req.headers["x-forwarded-host"];
+
+  var databaseName;
+  ////   console.log(dbName.includes(".zegashop.com"));
+  if (dbName.includes(".zegashop.com")) {
+    var dataName = dbName.split(".zegashop.com");
+    //// console.log(dataName);
+    databaseName = dataName[0];
+    process.env.domainName = dbName;
+
+    process.env.databaseName = databaseName;
+  } else {
+    process.env.domainName = dbName;
+    databaseName = dbName.split(".")[0];
+    if (databaseName == "www") {
+      databaseName = dbName.split(".")[1];
+    }
+    process.env.databaseName = databaseName;
+  }
   /////FIXME WE DONT NEED ALL THIS DATA
   const {
     locale: defaultLocaleSelected,
@@ -84,17 +117,12 @@ export async function getServerSideProps({
   const selectedLocale = locale != "catchAll" ? locale : defaultLocaleSelected;
   let categoryId,
     categoryTitle,
+    metaOptions,
     dispatches,
     brands = [],
     productsList = [],
     newdata = [];
   newdata = false;
-  // console.log(
-  //   selectedLocale,
-  //   locale,
-  //   defaultLocaleSelected,
-  //   "selectedLocaleselectedLocaleselectedLocale"
-  // );
 
   const settingsResponse = await ApiCustomSettingsAsync(selectedLocale);
 
@@ -104,6 +132,15 @@ export async function getServerSideProps({
 
   function getItems(array) {
     array.forEach((e, i) => {
+      if (e.slug == query.slug) {
+        metaOptions = {
+          meta_title: e.meta_title,
+          meta_description: e.meta_description,
+          meta_keywords: e.meta_keywords,
+        }
+        console.log(e, "e in categories___________")
+
+      }
       if (e.slug == query.slug && e.children?.length === 0) {
         categoryId = e.id;
         categoryTitle = e.name;
@@ -121,15 +158,15 @@ export async function getServerSideProps({
   await fetch(`https://${dbName}/api/test?slug=${query.slug}`)
     .then((response) => response.json())
     .then((response) => {
-      console.log(response, "asdsad");
+      // console.log(response, "response in product____________________________________________________")
       categoryId = response.id;
+      metaOptions.image = response.image
     })
     .catch((err) => console.error(err));
-  console.log(categoryId, "categoryId");
   await shopApi
     .getFilters(categoryId ? categoryId : query.cat_id, {
       lang: selectedLocale,
-      currency: { code: settingsResponse.data.currency.code },
+      currency: {code: settingsResponse.data.currency.code},
       limit: 8,
     })
     .then((data) => {
@@ -139,7 +176,7 @@ export async function getServerSideProps({
   await shopApi
     .getProductsList({
       options: {
-        currency: { code: settingsResponse.data.currency.code },
+        currency: {code: settingsResponse.data.currency.code},
         locale: selectedLocale,
       },
       location: "",
@@ -159,7 +196,6 @@ export async function getServerSideProps({
           let checkFiltre = [];
           let checkFiltreConfig = [];
           checkedFiltres = Object.keys(filterValues).map((key, index) => {
-            // console.log(el, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeellllllllllllllll")
             if (el.type == "simple") {
               checkFiltre[index] = Object.keys(el).filter((e) => {
                 if (e == key) {
@@ -176,24 +212,15 @@ export async function getServerSideProps({
               });
             } else if (el.type == "configurable") {
               let checkData = [];
-              // console.log(el, "asasa");
               el.variants.map((response, keyIndex) => {
-                // console.log(response, "response________________________")
                 checkData[index] = [];
-                // console.log(index,"index in checkdata")
                 checkFiltre[index] = Object.keys(response).filter((e) => {
-                  // console.log(e + " = e", key + " = key")
                   if (e == key) {
                     let splited = filterValues[key].split(",");
 
-                    // console.log(splited, "splited ------------")
                     checkData[index][keyIndex] = splited.filter((s) => {
-                      // console.log(s, "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-                      // console.log(e, "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-                      // console.log(response, "responseresponseresponseresponseresponseresponse")
                       return s == response[e];
                     });
-                    // console.log(checkData, "checkdata____-----____");
                     if (checkData[index][keyIndex].length > 0) {
                       return true;
                     } else {
@@ -205,7 +232,6 @@ export async function getServerSideProps({
                 });
               });
 
-              // console.log(checkData, "asd");
             }
           });
           var result = checkFiltre.filter((e) => e.length);
@@ -214,7 +240,6 @@ export async function getServerSideProps({
           } else {
             var resultConfig = false;
           }
-          // console.log(resultConfig, "resultConfig");
           if (
             result.length == Object.keys(filterValues).length ||
             resultConfig.length == Object.keys(filterValues).length
@@ -240,14 +265,16 @@ export async function getServerSideProps({
   };
   return {
     props: {
-      currency: { code: settingsResponse.data.currency.code },
+      currency: {code: settingsResponse.data.currency.code},
       productsList: productsList,
       brandList: brands,
       categoryId: categoryId,
       dbName: dbName,
+      domain: databaseName,
       categoryTitle,
       dispatches: dispatchesNew,
       locale: selectedLocale,
+      metaOptions,
     },
   };
 }
