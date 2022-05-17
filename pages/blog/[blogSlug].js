@@ -38,6 +38,23 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     "public, s-maxage=10, stale-while-revalidate=59"
   );
   const dbName = req.headers["x-forwarded-host"];
+  var databaseName;
+  ////   console.log(dbName.includes(".zegashop.com"));
+  if (dbName.includes(".zegashop.com")) {
+    var dataName = dbName.split(".zegashop.com");
+    //// console.log(dataName);
+    databaseName = dataName[0];
+    process.env.domainName = dbName;
+
+    process.env.databaseName = databaseName;
+  } else {
+    process.env.domainName = dbName;
+    databaseName = dbName.split(".")[0];
+    if (databaseName == "www") {
+      databaseName = dbName.split(".")[1];
+    }
+    process.env.databaseName = databaseName;
+  }
   const {
     locale: defaultLocaleSelected,
     currency,

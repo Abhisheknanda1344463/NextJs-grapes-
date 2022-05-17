@@ -21,7 +21,6 @@ export function getCategoryParents(category) {
     : [];
 }
 
-
 export function runFbPixelEvent(eventData) {
   const {
     general: { fbPixel },
@@ -164,7 +163,6 @@ export function genereateReadyArray(array) {
   });
 }
 
-
 export async function generalProcessForAnyPage(locale, dbName) {
   /// let locale = null;
   let currency = null;
@@ -204,7 +202,11 @@ export async function generalProcessForAnyPage(locale, dbName) {
 }
 
 export function removeCurrencyTemp(total) {
-  let convertSymbols = total.toString().replace("$", "").replace(",", '').replace("֏", "")
-  let result = convertSymbols.replace(/\s/g, '').slice(0, -2)
-  return `${Number(result)} ֏`
+  let convertSymbols = total
+    .toString()
+    .replace("$", "")
+    .replace(",", "")
+    .replace("֏", "");
+  let result = convertSymbols.replace(/\s/g, "").slice(0, -2);
+  return `${Number(result)} ֏`;
 }

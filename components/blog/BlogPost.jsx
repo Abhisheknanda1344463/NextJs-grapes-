@@ -22,6 +22,14 @@ export default function BlogPost(props) {
     return { __html: item };
   };
   console.log(blog, "blogblogblogblog");
+  let day = new Date(blog.created_at);
+  console.log(defaultImage, "defaultImage   in create");
+  let dd = String(day.getDate()).padStart(2, "0");
+  let mm = String(day.getMonth() + 1).padStart(2, "0"); //January is 0!
+  let yyyy = day.getFullYear();
+
+  day = dd + "/" + mm + "/" + yyyy;
+
   return (
     <>
       <Head>
@@ -43,7 +51,7 @@ export default function BlogPost(props) {
         >
           <h1 className="post-header__title">{blog.title}</h1>
           <div className="post-header__meta">
-            <div className="post-header__meta-item"> {blog.created_at}</div>
+            <div className="post-header__meta-item"> {day}</div>
           </div>
         </div>
 
