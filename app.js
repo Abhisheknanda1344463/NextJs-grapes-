@@ -2,7 +2,7 @@ const express = require("express");
 const next = require("next");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const port = process.env.PORT || 3200;
+const port = process.env.PORT || 3855;
 const development = process.env.NODE_ENV !== "production";
 const app = next({ dev: development });
 const api = require("./routes/api.js");
