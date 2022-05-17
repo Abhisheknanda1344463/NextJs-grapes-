@@ -1,25 +1,25 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import store from "../store";
-import {domainUrl} from "../helper";
-import {useSelector} from "react-redux"
+import { domainUrl } from "../helper";
+import { useSelector } from "react-redux"
 import serverSideActions from "../services/serverSide";
 import clientSideActions from "../services/clientSide";
 import HomePageOne from "../components/home/HomePageOne";
-import {generalProcessForAnyPage} from "../services/utils";
+import { generalProcessForAnyPage } from "../services/utils";
 import allActions from "../services/actionsArray";
 
 function Home({
-                locale,
-                newProducts,
-                featuredProducts,
-                metas,
-                dbName,
-                dispatches: dispatchesNew,
-                currency,
-                domain,
-              }) {
-  const {dispatch} = store;
+  locale,
+  newProducts,
+  featuredProducts,
+  metas,
+  dbName,
+  dispatches: dispatchesNew,
+  currency,
+  domain,
+}) {
+  const { dispatch } = store;
   const firstLoad = true;
   // const domain = useSelector((state) => state.general.domain);
   useEffect(() => {
@@ -52,7 +52,7 @@ function Home({
   );
 }
 
-export async function getServerSideProps({locale, locales, req, res}) {
+export async function getServerSideProps({ locale, locales, req, res }) {
   // res.setHeader(
   //   "Cache-Control",
   //   "public, s-maxage=10, stale-while-revalidate=59"
@@ -98,7 +98,6 @@ export async function getServerSideProps({locale, locales, req, res}) {
     )
   );
   const parsed = await response.json();
-
   const metas = await fetch(
     domainUrl(`${dbName}/db/get-meta?locale=${selectedLocale}`)
   );
