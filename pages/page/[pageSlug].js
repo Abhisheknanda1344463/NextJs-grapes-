@@ -31,7 +31,8 @@ export default function Page(props) {
       />
     );
   } else {
-    return <SiteCustomPage pageSlug={query.pageSlug} content={props.content} />;
+    return <SiteCustomPage pageSlug={query.pageSlug} content={props.content} domain={props.domain} dbName={props.dbName}
+    />;
   }
 }
 
@@ -119,6 +120,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
       redirect,
       metas: [],
       dbName: databaseName,
+      domain: dbName,
       content: dataContent,
       blog: blog,
     },

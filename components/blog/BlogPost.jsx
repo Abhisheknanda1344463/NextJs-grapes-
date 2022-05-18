@@ -28,19 +28,20 @@ export default function BlogPost(props) {
   let yyyy = day.getFullYear();
 
   day = dd + "/" + mm + "/" + yyyy;
+  console.log(blog, "blog in blogpost")
   return (
     <>
       <Head>
-        <meta property="og:title" name="title" content={blog?.meta_title}/>
+        <meta property="og:title" name="title" content={blog?.meta_title || blog?.blog_title}/>
         <meta
           property="og:description"
           name="description"
-          content={blog?.meta_description}
+          content={blog?.meta_description || blog?.blog_title}
         />
         <meta
           property="og:keywords"
           name="keywords"
-          content={blog?.meta_keywords}
+          content={blog?.meta_keywords || blog?.blog_title}
         />
       </Head>
       <div className={`block post post--layout--${layout}`}>

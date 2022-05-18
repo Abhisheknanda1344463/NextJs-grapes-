@@ -137,10 +137,10 @@ const BlogPageCategory = (props) => {
   return (
     <React.Fragment>
       <Head>
-        <title>{`Blog Category Page — ${theme.name}`}</title>
+        <title>{`Blog Category Page — ${dbName}`}</title>
         <meta
           name="description"
-          content={`${theme.name} - ${theme.description}`}
+          content={`${dbName}`}
         />
 
         <script
