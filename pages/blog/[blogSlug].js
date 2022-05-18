@@ -26,6 +26,7 @@ export default function Contact(props) {
       blogSlug={query.blogSlug}
       locale={props.locale}
       blog={props.blog}
+      domain={props.domain}
     />
   );
 }
@@ -39,10 +40,10 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
   );
   const dbName = req.headers["x-forwarded-host"];
   var databaseName;
-  ////   console.log(dbName.includes(".zegashop.com"));
+
   if (dbName.includes(".zegashop.com")) {
     var dataName = dbName.split(".zegashop.com");
-    //// console.log(dataName);
+
     databaseName = dataName[0];
     process.env.domainName = dbName;
 
@@ -78,17 +79,11 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     setMenuList,
   };
   /// locale = selectedLocale;
-  // console.log(blogSlug, "11111111111111");
-  // console.log(
-  //   `${url}/cms/blog/${blogSlug}?locale=${locale}`,
-  //   "${url}/cms/blog/${blogSlug}?locale=${locale}"
-  // );
+
   if (blogSlug != "undefined") {
-    // console.log(blogSlug, "222222222222");
     await fetch(`${url}/db/cms/blog/${blogSlug}?locale=${selectedLocale}`)
       .then((res) => res.json())
       .then((responce) => {
-        // console.log(responce.data, "responce.dataresponce.dataresponce.data");
         blog = responce.data;
       });
   }
@@ -99,6 +94,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
       dispatches,
       blog: blog,
       dbName: dbName,
+      domain: databaseName,
     },
   };
 }

@@ -18,7 +18,7 @@ function PostCard(props) {
   });
 
   let day = new Date(post.created_at);
-  console.log(defaultImage, "defaultImage   in create");
+
   let dd = String(day.getDate()).padStart(2, "0");
   let mm = String(day.getMonth() + 1).padStart(2, "0"); //January is 0!
   let yyyy = day.getFullYear();
