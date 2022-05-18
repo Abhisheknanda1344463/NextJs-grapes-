@@ -67,7 +67,7 @@ export default function BlogPagePost(props) {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{`Blog Post Page — ${theme.name}`}</title>
+        <title>{`Blog Post Page — ${props.dbName}`}</title>
       </Helmet>
 
       <PageHeader breadcrumb={breadcrumbs} />

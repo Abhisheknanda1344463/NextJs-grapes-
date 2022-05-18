@@ -1,18 +1,19 @@
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+import {useEffect} from "react";
+import {useRouter} from "next/router";
 import BlogPagePost from "../../components/blog/BlogPagePost";
 
 import store from "../../store";
-import { url } from "../../helper";
+import {url} from "../../helper";
 import allActions from "../../services/actionsArray";
 import {
   ApiCustomSettingsAsync,
   ApiCategoriesAndMenues,
 } from "../../services/utils";
-import { generalProcessForAnyPage } from "../../services/utils";
+import {generalProcessForAnyPage} from "../../services/utils";
+
 export default function Contact(props) {
-  const { query } = useRouter();
-  const { dispatch } = store;
+  const {query} = useRouter();
+  const {dispatch} = store;
 
   useEffect(() => {
     for (let actionKey in props.dispatches) {
@@ -21,18 +22,20 @@ export default function Contact(props) {
   }, [props.locale]);
 
   return (
-    <BlogPagePost
-      dbName={props.dbName}
-      blogSlug={query.blogSlug}
-      locale={props.locale}
-      blog={props.blog}
-      domain={props.domain}
-    />
+
+      <BlogPagePost
+        dbName={props.dbName}
+        blogSlug={query.blogSlug}
+        locale={props.locale}
+        blog={props.blog}
+        domain={props.domain}
+      />
+
   );
 }
 
-export async function getServerSideProps({ locale, locales, req, res, query }) {
-  const { blogSlug } = query;
+export async function getServerSideProps({locale, locales, req, res, query}) {
+  const {blogSlug} = query;
   //   const { locale: stateLocale, currency: stateCurrency } = store.getState();
   res.setHeader(
     "Cache-Control",
@@ -68,7 +71,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
   let blog = null;
 
   //// const settingsResponse = await ApiCustomSettingsAsync();
-  const { setCatgoies, setMenuList } = await ApiCategoriesAndMenues(
+  const {setCatgoies, setMenuList} = await ApiCategoriesAndMenues(
     selectedLocale
   );
 

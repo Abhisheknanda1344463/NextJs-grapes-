@@ -60,7 +60,7 @@ function SiteCustomPage(props) {
         <meta property="og:keywords" name="keywords" content={metaKeywords} />
       </Head>
       <div>
-        <Content text={content} {...props} isTable={isTable} />
+        <Content text={content} {...props} isTable={isTable} domain={props.domain} dbName={props.dbName}/>
       </div>
     </React.Fragment >
   );
