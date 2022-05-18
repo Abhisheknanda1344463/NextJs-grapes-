@@ -21,7 +21,7 @@ import {
   SET_UP_CROSS_PRODS,
   SET_TEMPORARY_DATA,
   SET_DB_NAME,
-  SET_META_TAGS
+  SET_META_TAGS,
 } from "./generalActionTypes";
 // console.log(SET_TEMPORARY_DATA, "data valid in general reducerx")
 // console.log(SET_VALID_CROSS, "cros valid in general reducerx")
