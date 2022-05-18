@@ -29,7 +29,7 @@ const BlogPageCategory = (props) => {
   const [page, setPage] = useState(props.blog.current_page);
   const [blogs, setBlogs] = useState(props.blog.data);
   const [total, setTotal] = useState(props.blog.total);
-  // console.log(props, "props in blopg page category")
+  console.log(props, "props in blopg page category")
 
   const prevLocaleCodeRef = useRef();
   const prevPageRef = useRef();
@@ -92,9 +92,9 @@ const BlogPageCategory = (props) => {
     { title: <FormattedMessage id="home" defaultMessage="Home" />, url: "" },
     {
       title: <FormattedMessage id="blog" defaultMessage="Blog" />,
-      url: "/blog",
+      url: "/page/blogs",
     },
-    { title: <FormattedMessage id="news" defaultMessage="News" />, url: "" },
+    // { title: <FormattedMessage id="news" defaultMessage="News" />, url: "" },
   ];
 
   if (!props.blog.data) {

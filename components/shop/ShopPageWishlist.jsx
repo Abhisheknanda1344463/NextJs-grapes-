@@ -279,7 +279,7 @@ function ShopPageWishlist(props) {
           </h3>
           <div className="block-empty__actions">
             <Link href="/">
-              <a className="btn btn-orange rounded-pill f16">
+              <a className="btn btn-orange btn-primary f16">
                 <FormattedMessage id="continue" defaultMessage="Continue" />
               </a>
             </Link>

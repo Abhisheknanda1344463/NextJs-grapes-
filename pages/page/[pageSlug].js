@@ -86,7 +86,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
 
   if (dbName.includes(".zegashop.com")) {
     var dataName = dbName.split(".zegashop.com");
-    //// console.log(dataName);
+
     databaseName = dataName[0];
     process.env.domainName = dbName;
 
@@ -103,7 +103,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     ...generalDispatches.clientSide,
     ...generalDispatches.serverSide,
   };
-  console.log(blog, "blog in blogslug");
+
 
   /////REMEBER NOT WORK
   // const metas = await fetch(

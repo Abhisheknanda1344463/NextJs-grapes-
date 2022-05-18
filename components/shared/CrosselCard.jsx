@@ -1,26 +1,26 @@
 // react
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 
 // third-party
 import classNames from "classnames";
 import Link from "next/link";
 import PropTypes from "prop-types";
-import { connect, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { FormattedMessage } from "react-intl";
-import { setPopup } from "../../store/general";
+import {connect, useSelector} from "react-redux";
+import {toast} from "react-toastify";
+import {FormattedMessage} from "react-intl";
+import {setPopup} from "../../store/general";
 // application
 import Currency from "./Currency";
 import AsyncAction from "./AsyncAction";
 import Image from "components/hoc/Image";
-import { Wishlist16Svg } from "../../svg";
-import { url } from "../../services/utils";
-import { cartAddItem } from "../../store/cart";
-import { url as anotherUrl } from "../../helper";
+import {Wishlist16Svg} from "../../svg";
+import {url} from "../../services/utils";
+import {cartAddItem} from "../../store/cart";
+import {url as anotherUrl} from "../../helper";
 import defoult from "../../images/defoultpic.png";
-import { compareAddItem } from "../../store/compare";
-import { quickviewOpen } from "../../store/quickview";
-import { wishlistAddItem } from "../../store/wishlist";
+import {compareAddItem} from "../../store/compare";
+import {quickviewOpen} from "../../store/quickview";
+import {wishlistAddItem} from "../../store/wishlist";
 import InputNumber from "./InputNumber";
 
 function CrosselCard(props) {
@@ -211,18 +211,18 @@ function CrosselCard(props) {
   if (product?.type === "configurable") {
     price = (
       <div className="product-card__prices">
-        <Currency value={Number(product.min_price).toFixed(2)} /> {" ֏"}
+        <Currency value={Number(product.min_price).toFixed(2)}/> {" ֏"}
       </div>
     );
   } else if (product.formatted_special_price) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__new-price">
-          <Currency value={product.formatted_special_price} /> {" ֏"}
+          <Currency value={product.formatted_special_price}/> {" ֏"}
         </span>
         {
           <span className="product-card__old-price">
-            <Currency value={product.formatted_price} /> {" ֏"}
+            <Currency value={product.formatted_price}/> {" ֏"}
           </span>
         }
       </div>
@@ -290,7 +290,7 @@ function CrosselCard(props) {
                       selectedData
                     )
                   }
-                  render={({ run, loading }) => (
+                  render={({run, loading}) => (
                     <button
                       type="button"
                       onClick={(e) => {
@@ -316,42 +316,6 @@ function CrosselCard(props) {
             </div>
             <div className="product-card__actions">
               <div className="product-card__buttons"></div>
-            </div>
-            <div
-              className={classNames("cross_btn", {
-                button_disabled:
-                  product.qty === 0 && backorders == 0 && outOfStock == 1,
-              })}
-            >
-              <AsyncAction
-                action={() =>
-                  cartAddItem(
-                    product,
-                    [],
-                    quantity,
-                    cartToken,
-                    customer,
-                    selectedData
-                  )
-                }
-                render={({ run, loading }) => (
-                  <button
-                    type="button"
-                    onClick={run}
-                    className={classNames(
-                      "btn btn-primary product-card__addtocart-tablet show-for-tablet btn-primary-fms ",
-                      {
-                        "btn-loading": loading,
-                      }
-                    )}
-                  >
-                    <FormattedMessage
-                      id="add.tocart"
-                      defaultMessage="Add to cart"
-                    />
-                  </button>
-                )}
-              />
             </div>
           </>
         </div>

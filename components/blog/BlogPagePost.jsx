@@ -38,7 +38,7 @@ export default function BlogPagePost(props) {
       prevLocaleCodeRef.current = selectedData;
     }
   }, [blogSlug, props.locale]);
-  console.log(blog, "blogblogblog");
+
   if (redirect) {
     return router.push("/404");
   }
@@ -50,7 +50,7 @@ export default function BlogPagePost(props) {
   content = (
     <div className="row justify-content-center">
       <div className="col-md-12 col-lg-9 col-xl-8">
-        <BlogPost blog={bogOne} dbName={props.dbName} layout={layout} />
+        <BlogPost blog={bogOne} dbName={props.dbName} layout={layout} domain={props.domain}/>
       </div>
     </div>
   );
@@ -59,7 +59,7 @@ export default function BlogPagePost(props) {
     { title: <FormattedMessage id="home" defaultMessage="Home" />, url: "" },
     {
       title: <FormattedMessage id="blog" defaultMessage="Blog" />,
-      url: "/blog",
+      url: "/page/blogs",
     },
     { title: <FormattedMessage id="news" defaultMessage="News" />, url: "" },
   ];

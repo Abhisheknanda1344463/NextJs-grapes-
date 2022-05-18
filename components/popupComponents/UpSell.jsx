@@ -71,7 +71,7 @@ function UpSell(props) {
 
   // console.log(oldPrice, "old price")
   // console.log(newPrice, "new Price")
-  currentPrice = Number(newPrice) < Number(oldPrice) ? "ups!!!" : ((newPrice - oldPrice) + "$")
+  currentPrice = Number(newPrice) < Number(oldPrice) ? "ups!!!" : ((newPrice - oldPrice) + " ֏")
   // console.log(currentPrice, "current price in upsell")
 
 

@@ -610,7 +610,7 @@ const ShopPageCart = (props) => {
             </h3>
             <div className="block-empty__actions">
               <Link href="/">
-                <a className="btn btn-orange rounded-pill px-4 f16">
+                <a className="btn btn-orange btn-primary px-4 f16">
                   <FormattedMessage id="continue" defaultMessage="continue" />
                 </a>
               </Link>
