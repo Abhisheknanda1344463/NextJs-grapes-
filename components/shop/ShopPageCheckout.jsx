@@ -18,7 +18,7 @@ import { runFbPixelEvent } from '../../services/utils'
 import TextField from '@mui/material/TextField'
 import { removeCurrencyTemp } from '../../services/utils'
 //momemt js
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 
 
@@ -448,7 +448,7 @@ class ShopPageCheckout extends React.Component {
   renderCart() {
     const { cart } = this.props
     let newDate = new Date()
-    const date_now = moment(newDate).format('YYYY-MM-DD')
+    const date_now = moment(newDate * 1000).tz("Asia/Yerevan").format("YYYY-MM-DD");
     const items = cart.items.map((item) => (
       <tr key={item.id}>
         <td>{`${item.product.name}`}</td>
@@ -502,7 +502,7 @@ class ShopPageCheckout extends React.Component {
               </th>
               <td className="responsive-checkout-text">
                 <Currency value={this.state.shippingMethodRate} />
-                <span class="product-card__symbol">֏</span>
+                <span className="product-card__symbol">֏</span>
               </td>
             </tr>
           ) : (

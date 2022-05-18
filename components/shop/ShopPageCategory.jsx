@@ -461,17 +461,17 @@ function ShopPageCategory(props) {
             />
           </div> */}
           <div>
-            {/*<WidgetFilters*/}
-            {/*  filters={brands}*/}
-            {/*  dispatch={dispatch}*/}
-            {/*  stateFilters={state}*/}
-            {/*  values={state.filters}*/}
-            {/*  catID={catID}*/}
-            {/*  maxPrice={maxPrice}*/}
-            {/*  minPrice={minPrice}*/}
-            {/*  initialMaxPrice={props.initialMaxPrice}*/}
-            {/*  initialMinPrice={props.initialMinPrice}*/}
-            {/*/>*/}
+            {/*<WidgetFilters
+              filters={brands}
+              dispatch={dispatch}
+              stateFilters={state}
+              values={state.filters}
+              catID={catID}
+              maxPrice={maxPrice}
+              minPrice={minPrice}
+              initialMaxPrice={props.initialMaxPrice}
+              initialMinPrice={props.initialMinPrice}
+            />*/}
           </div>
         </div>
       </CategorySidebarItem>
@@ -481,8 +481,8 @@ function ShopPageCategory(props) {
   if (columns > 3 && productsList.length > 0) {
     content = (
       <div className="container_fm">
-        {/*<div className="block">{productsView}</div>*/}
-        {/*{sidebarComponent}*/}
+        {/*<div className="block">{productsView}</div>
+        {sidebarComponent}*/}
       </div>
     );
   } else {

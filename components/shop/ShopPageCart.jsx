@@ -19,7 +19,7 @@ import { BackArrow } from '../../svg'
 import { url, removeCurrencyTemp } from '../../services/utils'
 import store from '../../store'
 //MOMENT
-import moment from 'moment'
+import moment from 'moment-timezone'
 // data stubs
 import theme from '../../data/theme'
 import { urlLink } from '../../helper'
@@ -209,16 +209,10 @@ const ShopPageCart = (props) => {
       const product = cart.items[index].product
       const CONFIG = 'simple'
       let price
-
-      let newDate = new Date()
-      const date_from = moment
-        .unix(product.special_price_from)
-        .format('YYYY-MM-DD')
-      const date_now = moment(newDate).format('YYYY-MM-DD')
-      const date_to = moment
-        .unix(product.special_price_to)
-        .format('YYYY-MM-DD')
-
+      let newDate = new Date();
+      let date_from = moment(product.special_price_from * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+      let date_to = moment(product.special_price_to * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+      const date_now = moment(newDate * 1000).tz("Asia/Yerevan").format("YYYY-MM-DD");
       if (!product?.special_price && CONFIG === 'configurable') {
         price = (
           <div className="product-card__prices">
