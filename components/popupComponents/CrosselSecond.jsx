@@ -36,19 +36,6 @@ function CrosselSecond({product}) {
 
         </>
 
-
-        {/*{*/}
-        {/*  product.length <= 3*/}
-        {/*    ? <><CrosselCard product={product[2]} only={true}/></>*/}
-        {/*    : product.slice(2, 2).map((prod, ind) => (*/}
-        {/*      <>*/}
-        {/*        <CrosselCard product={prod} key={ind}/>*/}
-        {/*      </>*/}
-        {/*    ))*/}
-        {/*    */}
-        {/*}*/}
-
-
       </div>
 
       <span

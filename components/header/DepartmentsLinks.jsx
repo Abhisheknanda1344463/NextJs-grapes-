@@ -43,7 +43,7 @@ function DepartmentsLinks(props) {
           <div className="departments__menu">
             <Menu items={department.children} onClick={()=> {
               props.func()
-              console.log(props.func(), "props in ")
+              // console.log(props.func(), "props in ")
             }} />
           </div>
         );
@@ -59,7 +59,7 @@ function DepartmentsLinks(props) {
           description: department.meta_description || department.description,
         },
       });
-      // console.log(props.func, "props func in props")
+
 
       return (
         <React.Fragment>
@@ -67,7 +67,7 @@ function DepartmentsLinks(props) {
             <Link href={url.category(department)}>
               <a onClick={() => {
                 props.func()
-                console.log(props.func, "props func onclick")
+                // console.log(props.func, "props func onclick")
               }}>
                  {/*<FormattedMessage id={department.slug} defaultMessage={department.name} />*/}
                 {department.name}

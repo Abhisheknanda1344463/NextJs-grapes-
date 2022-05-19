@@ -16,7 +16,7 @@ import { cartAddItem, cartRemoveItem } from '../../store/cart'
 import classNames from 'classnames'
 import { FormattedMessage } from 'react-intl'
 import { connect, useSelector, useDispatch } from 'react-redux'
-import { setPopup, setPopupName, setUpCrossProd, setTempData } from '../../store/general'
+import { setPopup, setPopupName, setUpCrossProd, setTempData ,setCrossValid} from '../../store/general'
 import shopApi from '../../api/shop'
 import Link from 'next/link'
 
@@ -34,6 +34,7 @@ const UpSellCard = (props) => {
     setPopup,
     setUpCrossProd,
     setTempData,
+    setCrossValid,
   } = props
   const backorders = useSelector(state => state.general.coreConfigs.catalog_inventory_stock_options_backorders)
   const outOfStock = useSelector(state => state.general.coreConfigs.catalog_products_homepage_out_of_stock_items)
@@ -372,6 +373,8 @@ const UpSellCard = (props) => {
                               setTempData(product)
                               getUpCrosselProd(oldProduct.product_id || oldProduct.product.id, 'crossel')
                               setPopupName('crossel')
+                              setCrossValid(true)
+
                               // setPopup(false)
                             }}
                           >
@@ -409,6 +412,7 @@ const mapDispatchToProps = {
   setPopup,
   setUpCrossProd,
   setTempData,
+  setCrossValid,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpSellCard)

@@ -34,20 +34,20 @@ function Home({
     <>
       <Head>
         <title>{dbName}</title>
-        <meta name="title" content={metaTags.meta_title}/>
-        <meta name="description" content={metaTags.meta_description}/>
-        <meta name="keywords" content={metaTags.meta_keywords}/>
-        <meta property="og:title" name="title" content={metaTags.meta_title}/>
-        <meta property="og:description" name="description" content={metaTags.meta_description}/>
-        <meta property="og:keywords" name="keywords" content={metaTags.meta_keywords}/>
+        <meta name="title" content={metaTags.meta_title || dbName}/>
+        <meta name="description" content={metaTags.meta_description || dbName}/>
+        <meta name="keywords" content={metaTags.meta_keywords || dbName}/>
+        <meta property="og:title" name="title" content={metaTags.meta_title || dbName}/>
+        <meta property="og:description" name="description" content={metaTags.meta_description || dbName}/>
+        <meta property="og:keywords" name="keywords" content={metaTags.meta_keywords || dbName}/>
         <meta
           property="og:image"
           name="image"
           content={`https://${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}
         />
         <meta name="twitter:card" content="summary_large_image"/>
-        <meta name="twitter:title" content={metaTags.meta_title}/>
-        <meta name="twitter:description" content={metaTags.meta_description}/>
+        <meta name="twitter:title" content={metaTags.meta_title || dbName}/>
+        <meta name="twitter:description" content={metaTags.meta_description || dbName}/>
         <meta name="twitter:image"
               content={`https://${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}/>
       </Head>
