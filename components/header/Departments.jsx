@@ -34,6 +34,7 @@ class Departments extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     let {fixed, area, open} = this.state;
+    console.log(fixed,area,open, "fixed - area - open in departments")
 
     if (prevState.fixed !== fixed) {
       const root = this.rootRef;
@@ -48,6 +49,7 @@ class Departments extends Component {
 
         const height =
           areaBottom - (content.getBoundingClientRect().top + window.scrollY);
+
 
         content.style.height = `${height}px`;
         content.getBoundingClientRect(); // force reflow
@@ -74,6 +76,7 @@ class Departments extends Component {
         const root = this.rootRef;
         const content = root.querySelector(".departments__links-wrapper");
         const startHeight = content.getBoundingClientRect().height;
+
 
         content.style.height = `${startHeight}px`;
 
@@ -107,7 +110,6 @@ class Departments extends Component {
   };
 
   handleButtonClick = () => {
-    console.log(this.state.open, " - state is open?")
     this.setState({open: !this.state.open});
     this.setState({active: !this.state.active});
   };
@@ -139,7 +141,7 @@ class Departments extends Component {
           className="departments__button"
           onClick={() => {
             this.handleButtonClick()
-            // console.log("google core web vitals")
+
           }}
         >
           {/*<Menu18x14Svg className="departments__button-icon" />*/}

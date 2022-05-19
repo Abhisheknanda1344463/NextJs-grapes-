@@ -72,10 +72,10 @@ function ProductsView (props) {
   const filtersCount = Object.keys(filters)
     .map((x) => filters[x])
     .filter((x) => x).length
-  const arrayMeta = []
+  // const arrayMeta = []
   const productsListItems = productsList['data'].map((product, index) => {
-    arrayMeta.push(<meta name="description" content={product.description}/>)
-    arrayMeta.push(<meta name="name" content={product.name}/>)
+    // arrayMeta.push(<meta name="description" content={product.description}/>)
+    // arrayMeta.push(<meta name="name" content={product.name}/>)
 
     return (
       <>
@@ -152,7 +152,7 @@ function ProductsView (props) {
 
   return (
     <>
-      <Helmet>{arrayMeta}</Helmet>
+      {/*<Helmet>{arrayMeta}</Helmet>*/}
       <div className={rootClasses}>
         <div className="products-view__loader"/>
         {content}

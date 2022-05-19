@@ -505,7 +505,7 @@ function ShopPageCategory(props) {
         </div>
 
         <div className={`shop-layout shop-layout--sidebar--${sidebarPosition}`}>
-          {console.log(brands.length, "brands length")}
+          {/*{console.log(brands.length, "brands length")}*/}
           {brands.length > 0 ? sidebarPosition === "start" && sidebar : " "}
           <div className="shop-layout__content">
             <div className="block block-fms">{productsView}</div>

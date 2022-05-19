@@ -21,7 +21,7 @@ function BlockProducts(props) {
   let large = null
   let smalls = null
 
-  const arrayMeta = []
+  // const arrayMeta = []
 
   const schemaProducts = {
     '@context': '/products',
@@ -43,8 +43,8 @@ function BlockProducts(props) {
 
     const productsList = products.map((product, index) => {
       //these arrayMetas were commented for some reason....
-      arrayMeta.push(<meta name="name" content={product.name}/>)
-      arrayMeta.push(<meta name="description" content={product.meta_description}/>)
+      // arrayMeta.push(<meta name="name" content={product.name}/>)
+      // arrayMeta.push(<meta name="description" content={product.meta_description}/>)
 
       schemaProducts.itemListElement.push({
         '@type': 'ListItem',
@@ -88,8 +88,8 @@ function BlockProducts(props) {
               },
             })
             //these arrayMetas were commented for some reason....
-            arrayMeta.push(<meta name="name" content={product.name}/>)
-            arrayMeta.push(<meta name="description" content={product.meta_description}/>)
+            // arrayMeta.push(<meta name="name" content={product.name}/>)
+            // arrayMeta.push(<meta name="description" content={product.meta_description}/>)
             return (
               product.qty === 0 && backorders == 0 && outOfStock == 0
                 ? <></>
@@ -104,11 +104,11 @@ function BlockProducts(props) {
       )
   }
 
-  console.log(arrayMeta, "")
+  // console.log(arrayMeta, "")
   return (
     <React.Fragment>
       <Head>
-        {arrayMeta.map(item => item)}
+        {/*{arrayMeta.map(item => item)}*/}
         <script type="application/ld+json"
                 dangerouslySetInnerHTML={{__html: JSON.stringify(schemaProducts)}}
         />
