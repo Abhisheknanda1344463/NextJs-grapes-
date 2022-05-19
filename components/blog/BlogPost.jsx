@@ -28,52 +28,37 @@ export default function BlogPost(props) {
   let yyyy = day.getFullYear();
 
   day = dd + "/" + mm + "/" + yyyy;
-  console.log(blog, "blog in blogpost")
+
   return (
-    <>
-      <Head>
-        <meta property="og:title" name="title" content={blog?.meta_title || blog?.blog_title}/>
-        <meta
-          property="og:description"
-          name="description"
-          content={blog?.meta_description || blog?.blog_title}
-        />
-        <meta
-          property="og:keywords"
-          name="keywords"
-          content={blog?.meta_keywords || blog?.blog_title}
-        />
-      </Head>
-      <div className={`block post post--layout--${layout}`}>
-        <div
-          className={`post__header post-header post-header--layout--${layout}`}
-        >
-          <h1 className="post-header__title">
-            <FormattedMessage id="blog_title" defaultMessage={blog.blog_title}/>
-          </h1>
-          <div className="post-header__meta">
-            <div className="post-header__meta-item"> {day}</div>
-          </div>
+    <div className={`block post post--layout--${layout}`}>
+      <div
+        className={`post__header post-header post-header--layout--${layout}`}
+      >
+        <h1 className="post-header__title">
+          <FormattedMessage id="blog_title" defaultMessage={blog.blog_title}/>
+        </h1>
+        <div className="post-header__meta">
+          <div className="post-header__meta-item"> {day}</div>
         </div>
+      </div>
 
-        <div className="post__featured">
-          <Image
-            src={
-              blog.image
-                ? `/storage/${domain}/${blog.image}`
-                : `/${defaultImage.src}`
-            }
-            alt=""
-            layout="fill"
-          />
-        </div>
-
-        <div
-          className={postClasses}
-          dangerouslySetInnerHTML={createMarkup(blog.html_content)}
+      <div className="post__featured">
+        <Image
+          src={
+            blog.image
+              ? `/storage/${domain}/${blog.image}`
+              : `/${defaultImage.src}`
+          }
+          alt=""
+          layout="fill"
         />
       </div>
-    </>
+
+      <div
+        className={postClasses}
+        dangerouslySetInnerHTML={createMarkup(blog.html_content)}
+      />
+    </div>
   );
 }
 

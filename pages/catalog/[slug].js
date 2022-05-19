@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import ShopPageCategory from "../../components/shop/ShopPageCategory";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import shopApi from "../../api/shop";
 import store from "../../store";
 import moment from "moment"
 import m from "moment-timezone"
-import { ApiCustomSettingsAsync } from "../../services/utils";
+import {ApiCustomSettingsAsync} from "../../services/utils";
 import serverSideActions from "../../services/serverSide";
 import allActions from "../../services/actionsArray";
 import Head from 'next/head'
 
 import clientSideActions from "../../services/clientSide";
-import { generalProcessForAnyPage } from "../../services/utils";
+import {generalProcessForAnyPage} from "../../services/utils";
 
 export default function Catlog(props) {
-  const { query } = useRouter();
+  const {query} = useRouter();
   const router = useRouter();
-  const { dispatch } = store;
+  const {dispatch} = store;
   const [change, setChange] = useState(false);
 
   // useEffect(() => {
@@ -33,17 +33,25 @@ export default function Catlog(props) {
   return (
     <>
       <Head>
+        <title>{query.slug}</title>
         <meta property="og:title" name="title"
-          content={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName} />
+              content={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}/>
         <meta property="og:description" name="description"
-          content={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle} />
+              content={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}/>
         <meta property="og:keywords" name="keywords"
-          content={props.metaOptions.meta_keywords ? props.metaOptions.meta_keywords : props.categoryTitle} />
+              content={props.metaOptions.meta_keywords ? props.metaOptions.meta_keywords : props.categoryTitle}/>
         <meta
           property="og:image"
           name="image"
           content={`https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image ? props.metaOptions.image : logoPath}`}
         />
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:title"
+              content={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}/>
+        <meta name="twitter:description"
+              content={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}/>
+        <meta name="twitter:image"
+              content={`https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image ? props.metaOptions.image : logoPath}`}/>
       </Head>
       <ShopPageCategory
         columns={3}
@@ -63,13 +71,13 @@ export default function Catlog(props) {
 }
 
 export async function getServerSideProps({
-  ///query: { slug },
-  locale,
-  locales,
-  req,
-  query,
-  res,
-}) {
+                                           ///query: { slug },
+                                           locale,
+                                           locales,
+                                           req,
+                                           query,
+                                           res,
+                                         }) {
   res.setHeader(
     "Cache-Control",
     "public, s-maxage=10, stale-while-revalidate=59"
@@ -167,7 +175,7 @@ export async function getServerSideProps({
   await shopApi
     .getFilters(categoryId ? categoryId : query.cat_id, {
       lang: selectedLocale,
-      currency: { code: settingsResponse.data.currency.code },
+      currency: {code: settingsResponse.data.currency.code},
       limit: 8,
     })
     .then((data) => {
@@ -177,7 +185,7 @@ export async function getServerSideProps({
   await shopApi
     .getProductsList({
       options: {
-        currency: { code: settingsResponse.data.currency.code },
+        currency: {code: settingsResponse.data.currency.code},
         locale: selectedLocale,
       },
       location: "",
@@ -284,7 +292,7 @@ export async function getServerSideProps({
   };
   return {
     props: {
-      currency: { code: settingsResponse.data.currency.code },
+      currency: {code: settingsResponse.data.currency.code},
       productsList: productsList,
       brandList: brands,
       categoryId: categoryId,

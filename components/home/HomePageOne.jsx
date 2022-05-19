@@ -1,12 +1,12 @@
-import React, { useEffect, useState, memo, useRef } from "react";
+import React, {useEffect, useState, memo, useRef} from "react";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { setMetaPath, setMetaTags } from "../../store/general";
-import { useSelector, useDispatch } from "react-redux";
-import { FormattedMessage } from "react-intl";
+import {useRouter} from "next/router";
+import {setMetaPath, setMetaTags} from "../../store/general";
+import {useSelector, useDispatch} from "react-redux";
+import {FormattedMessage} from "react-intl";
 import BlockProducts from "../blocks/BlockProducts";
 import BlockSlideShow from "../blocks/BlockSlideShow";
-import { apiUrlWithStore, urlLink } from "../../helper";
+import {apiUrlWithStore, urlLink} from "../../helper";
 // import BlockFeatures from "../blocks/BlockFeatures";
 // import payload from "../builder/state.json";
 // import Heading from "../builder/heading/Heading.jsx";
@@ -37,16 +37,16 @@ function HomePageOne(props) {
   const [componenet, setComponnent] = useState([]);
   const [componenetData, setComponnentData] = useState([]);
   const newCollection = (
-    <FormattedMessage id="shop-title" defaultMessage="Shop" />
+    <FormattedMessage id="shop-title" defaultMessage="Shop"/>
   );
   const saleCollection = (
-    <FormattedMessage id="shop.one" defaultMessage="Saled products" />
+    <FormattedMessage id="shop.one" defaultMessage="Saled products"/>
   );
   const homepage_title_text = (
-    <FormattedMessage id="homepage_title_text" defaultMessage="Home" />
+    <FormattedMessage id="homepage_title_text" defaultMessage="Home"/>
   );
   const homepage_intro_text = (
-    <FormattedMessage id="homepage_intro_text" defaultMessage="Home Page" />
+    <FormattedMessage id="homepage_intro_text" defaultMessage="Home Page"/>
   );
   const history = useRouter();
   const prevCurrencyCodeRef = useRef();
@@ -56,7 +56,7 @@ function HomePageOne(props) {
   const messageIntro = homepage_intro_text.props.defaultMessage;
   dispatch(setMetaPath(dbName))
   dispatch(setMetaTags(metaTags))
-  const upDomain = domainName.charAt(0).toUpperCase() + domainName.slice(1);
+  // const upDomain = domainName.charAt(0).toUpperCase() + domainName.slice(1);
   const getHomeProducts = () => {
     try {
       fetch(
@@ -108,22 +108,7 @@ function HomePageOne(props) {
   // console.log(domName, "dom name in reactr")
   return (
     <React.Fragment>
-      <Head>
-        <title>{dbName}</title>
-        <link rel="canonical" href={`${upDomain}`} />
-        <meta name="title" content={metaTags.meta_title} />
-        <meta name="description" content={metaTags.meta_description} />
-        <meta name="keywords" content={metaTags.meta_keywords} />
-        <meta property="og:title" name="title" content={metaTags.meta_title} />
-        <meta property="og:description" name="description" content={metaTags.meta_description} />
-        <meta property="og:keywords" name="keywords" content={metaTags.meta_keywords} />
-        <meta
-          property="og:image"
-          name="image"
-          content={`https://${dbName}/storage/${domainName}/configuration/share_pic/share_pic.webp`}
-        />
-      </Head>
-      <BlockSlideShow history={history} />
+      <BlockSlideShow history={history}/>
       {messageTitle || messageIntro ? (
         <div className="container welcome-title">
           <h1>{homepage_title_text}</h1>

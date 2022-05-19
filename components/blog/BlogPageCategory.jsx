@@ -1,9 +1,9 @@
 // react
-import React, { useState, useRef } from "react";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { FormattedMessage } from "react-intl";
-import { Helmet } from "react-helmet-async";
+import React, {useState, useRef} from "react";
+import {useEffect} from "react";
+import {useSelector} from "react-redux";
+import {FormattedMessage} from "react-intl";
+import {Helmet} from "react-helmet-async";
 import queryString from "query-string";
 import Head from "next/head";
 
@@ -14,14 +14,14 @@ import PageHeader from "../shared/PageHeader";
 import Pagination from "../shared/Pagination";
 import PostCard from "../shared/PostCard";
 import theme from "../../data/theme";
-import { url, apiUrlWithStore } from "../../helper";
+import {url, apiUrlWithStore} from "../../helper";
 
 function buildQuery(options) {
   const params = {};
   if (options.page !== 1) {
     params.page = options.page;
   }
-  return queryString.stringify(params, { encode: false });
+  return queryString.stringify(params, {encode: false});
 }
 
 const BlogPageCategory = (props) => {
@@ -41,7 +41,7 @@ const BlogPageCategory = (props) => {
 
   useEffect(() => {
     if (page > 1) {
-      const query = buildQuery({ page });
+      const query = buildQuery({page});
       const location = `${window.location.pathname}${query ? "?" : ""}${query}`;
       window.history.replaceState(null, "", location);
     } else {
@@ -86,19 +86,15 @@ const BlogPageCategory = (props) => {
     setPage(page);
   };
 
-  const { layout, sidebarPosition, dbName } = props;
+  const {layout, sidebarPosition, dbName, domain} = props;
 
   const breadcrumb = [
-    { title: <FormattedMessage id="home" defaultMessage="Home" />, url: "" },
-    {
-      title: <FormattedMessage id="blog" defaultMessage="Blog" />,
-      url: "/page/blogs",
-    },
-    // { title: <FormattedMessage id="news" defaultMessage="News" />, url: "" },
+    {title: <FormattedMessage id="home" defaultMessage="Home"/>, url: ""},
+    {title: <FormattedMessage id="blog" defaultMessage="Blog"/>, url: "/page/blogs"},
   ];
 
   if (!props.blog.data) {
-    return <BlockLoader />;
+    return <BlockLoader/>;
   }
 
   const schemaBlog = {
@@ -129,32 +125,44 @@ const BlogPageCategory = (props) => {
 
     return (
       <div key={post.id} className="posts-list__item">
-        <PostCard post={post} dbName={dbName} layout={postLayout} />
+        <PostCard post={post} dbName={dbName} layout={postLayout} domain={domain}/>
       </div>
     );
   });
-
+  const logoPath = `configuration/logo/logo.webp`;
   return (
     <React.Fragment>
       <Head>
-        <title>{`Blog Category Page — ${dbName}`}</title>
+        <title>{`Blog Category Page — ${props.pageSlug}`}</title>
+        <meta name="title" content={props.pageSlug}/>
+        <meta name="description" content={props.pageSlug}/>
+        <meta name="keywords" content={props.pageSlug}/>
+        <meta property="og:title" name="title" content={props.pageSlug}/>
+        <meta property="og:description" name="description" content={props.pageSlug}/>
+        <meta property="og:keywords" name="keywords" content={props.pageSlug}/>
         <meta
-          name="description"
-          content={`${dbName}`}
+          property="og:image"
+          name="image"
+          content={`https://${props.domain}/storage/${props.dbName}/${logoPath}`}
         />
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:title" content={props.pageSlug}/>
+        <meta name="twitter:description" content={props.pageSlug}/>
+        <meta name="twitter:image"
+              content={`https://${props.domain}/storage/${props.dbName}/${logoPath}`}/>
 
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaBlog) }}
+          dangerouslySetInnerHTML={{__html: JSON.stringify(schemaBlog)}}
         />
       </Head>
-      <PageHeader header="Latest News" breadcrumb={breadcrumb} />
+      <PageHeader header="Latest News" breadcrumb={breadcrumb}/>
       <div className="container">
         <div className="row">
           {/* {sidebarStart} */}
           <div className="col-12 col-md-12">
             <h1 className="blog-page-title">
-              <FormattedMessage id="blog" defaultMessage="Blog" />
+              <FormattedMessage id="blog" defaultMessage="Blog"/>
             </h1>
             {postsList.length ? (
               <div className="block">
