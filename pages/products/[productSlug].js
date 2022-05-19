@@ -15,7 +15,7 @@ export default function ProductInnerPage(props) {
   const cats = props.product.data.cats
   const checkRelatedProducts = props.relatedPproducts.filter(item => item.product_id !== prodID)
   const dbName = useSelector(state => state.general.dbName);
-  console.log(dbName, "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
+  // console.log(dbName, "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
   const {dispatch} = store
   useEffect(() => {
     window.history.replaceState(null, '', window.location.pathname)
@@ -30,7 +30,7 @@ export default function ProductInnerPage(props) {
   // useEffect(() => {
   //
   // },[])
-  console.log(props, "prosp in product slug")
+
   return (
     <>
       <Head>
@@ -45,6 +45,10 @@ export default function ProductInnerPage(props) {
           name="image"
           content={`https://${dbName}/storage/${props?.product?.data?.base_imag?.path}`}
         />
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:title" content={props?.product?.data?.meta_title ? props?.product?.data?.meta_title : props?.product?.data?.name}/>
+        <meta name="twitter:description" content={props?.product?.data?.meta_description ? props?.product?.data?.meta_description : props?.product?.data?.name}/>
+        <meta name="twitter:image" content={`https://${dbName}/storage/${props?.product?.data?.base_imag?.path}`}/>
       </Head>
       <ShopPageProduct
         layout="standard"

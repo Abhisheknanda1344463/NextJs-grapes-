@@ -8,7 +8,7 @@ import { FormattedMessage } from "react-intl";
 import defaultImage from "../../images/defoultpic.png";
 
 function PostCard(props) {
-  const { post, layout, dbName } = props;
+  const { post, layout, dbName, domain } = props;
   const cardClasses = classNames("post-card", {
     "post-card--layout--grid": ["grid-nl", "grid-lg"].includes(layout),
     "post-card--layout--list": ["list-nl", "list-sm"].includes(layout),

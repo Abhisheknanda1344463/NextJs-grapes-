@@ -28,6 +28,7 @@ export default function Page(props) {
         dbName={props.dbName}
         blog={props.blog}
         pageSlug={query.pageSlug}
+        domain={props.domain}
       />
     );
   } else {

@@ -1,25 +1,25 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import Head from "next/head";
 import store from "../store";
-import { domainUrl } from "../helper";
-import { useSelector } from "react-redux"
+import {domainUrl} from "../helper";
+import {useSelector} from "react-redux"
 import serverSideActions from "../services/serverSide";
 import clientSideActions from "../services/clientSide";
 import HomePageOne from "../components/home/HomePageOne";
-import { generalProcessForAnyPage } from "../services/utils";
+import {generalProcessForAnyPage} from "../services/utils";
 import allActions from "../services/actionsArray";
 
 function Home({
-  locale,
-  newProducts,
-  featuredProducts,
-  metas,
-  dbName,
-  dispatches: dispatchesNew,
-  currency,
-  domain,
-}) {
-  const { dispatch } = store;
+                locale,
+                newProducts,
+                featuredProducts,
+                metas,
+                dbName,
+                dispatches: dispatchesNew,
+                currency,
+                domain,
+              }) {
+  const {dispatch} = store;
   const firstLoad = true;
   // const domain = useSelector((state) => state.general.domain);
   useEffect(() => {
@@ -28,15 +28,29 @@ function Home({
     }
   }, [locale]);
 
+  const metaTags = metas ? JSON.parse(metas[0].home_seo) : "";
+
   return (
-    <React.Fragment>
-      {/*<Head>*/}
-      {/*  <meta*/}
-      {/*    property="og:image"*/}
-      {/*    name="image"*/}
-      {/*    content={`${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}*/}
-      {/*  />*/}
-      {/*</Head>*/}
+    <>
+      <Head>
+        <title>{dbName}</title>
+        <meta name="title" content={metaTags.meta_title}/>
+        <meta name="description" content={metaTags.meta_description}/>
+        <meta name="keywords" content={metaTags.meta_keywords}/>
+        <meta property="og:title" name="title" content={metaTags.meta_title}/>
+        <meta property="og:description" name="description" content={metaTags.meta_description}/>
+        <meta property="og:keywords" name="keywords" content={metaTags.meta_keywords}/>
+        <meta
+          property="og:image"
+          name="image"
+          content={`https://${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}
+        />
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:title" content={metaTags.meta_title}/>
+        <meta name="twitter:description" content={metaTags.meta_description}/>
+        <meta name="twitter:image"
+              content={`https://${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}/>
+      </Head>
       <HomePageOne
         locale={locale}
         currency={currency}
@@ -48,11 +62,11 @@ function Home({
         dbName={dbName}
         domain={domain}
       />
-    </React.Fragment>
+    </>
   );
 }
 
-export async function getServerSideProps({ locale, locales, req, res }) {
+export async function getServerSideProps({locale, locales, req, res}) {
   // res.setHeader(
   //   "Cache-Control",
   //   "public, s-maxage=10, stale-while-revalidate=59"
@@ -60,7 +74,7 @@ export async function getServerSideProps({ locale, locales, req, res }) {
   const dbName = req.headers["x-forwarded-host"];
 
   var databaseName;
-  ////   console.log(dbName.includes(".zegashop.com"));
+
   if (dbName.includes(".zegashop.com")) {
     var dataName = dbName.split(".zegashop.com");
     console.log(dataName, "dataname in app js");
@@ -75,23 +89,13 @@ export async function getServerSideProps({ locale, locales, req, res }) {
     process.env.databaseName = databaseName;
   }
 
-  // console.log(databaseName, "name in index js")
-
-  /// console.log(dbName, "reqreqreq");
   const {
     locale: defaultLocaleSelected,
     currency,
     dispatches: generalDispatches,
   } = await generalProcessForAnyPage(locale, dbName);
-  // console.log(req.domainName, dbName, "reqreqreq");
 
   const selectedLocale = locale != "catchAll" ? locale : defaultLocaleSelected;
-  // console.log(
-  //   domainUrl(
-  //     dbName + `/db/home-products?locale=${selectedLocale}&currency=${currency}`
-  //   ),
-  //   "asdsads"
-  // );
   const response = await fetch(
     domainUrl(
       dbName + `/db/home-products?locale=${selectedLocale}&currency=${currency}`
@@ -104,7 +108,6 @@ export async function getServerSideProps({ locale, locales, req, res }) {
 
   const data = await metas.json();
 
-  // console.log(data.data, "metas in homepage")
 
   const dispatches = {
     ...generalDispatches.clientSide,
