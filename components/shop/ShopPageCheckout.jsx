@@ -4,7 +4,7 @@ import Router from 'next/router'
 import { url, apiUrlWithStore } from '../../helper'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
-import { Check9x7Svg, IdramPosSVG, TelcellPosSVG } from '../../svg'
+import { Check9x7Svg, IdramPosSVG, TelcellPosSVG, PaypalPosSVG } from '../../svg'
 import Currency from '../shared/Currency'
 import Collapse from '../shared/Collapse'
 import PageHeader from '../shared/PageHeader'
@@ -532,6 +532,7 @@ class ShopPageCheckout extends React.Component {
   renderPaymentsList() {
     const { payment: currentPayment } = this.state
     const payments = this.state.payments.map((payment) => {
+      console.log(payment, 'paymentpaymentpayment');
       const renderPayment = ({ setItemRef, setContentRef }, index) => (
         <li className="payment-methods__item" ref={setItemRef} key={index}>
           <label className="payment-methods__item-header">
@@ -556,13 +557,14 @@ class ShopPageCheckout extends React.Component {
                 ? <CreditCartSvg />
                 : payment.method == 'idram_vpos' ? <IdramPosSVG />
                   : payment.method == 'telcell_vpos' ? <TelcellPosSVG />
-                    // : payment.method == "paypal_vpos" ? <PaypalPosSVG />
-                    : (
-                      <FormattedMessage
-                        id={payment.key}
-                        defaultMessage={payment.title}
-                      />
-                    )}
+                    : payment.method == "paypal_vpos" ? <PaypalPosSVG />
+                      : payment.method == "paypal_standard" ? <PaypalPosSVG />
+                        : (
+                          <FormattedMessage
+                            id={payment.key}
+                            defaultMessage={payment.title}
+                          />
+                        )}
             </span>
           </label>
           <div className="payment-methods__item-container" ref={setContentRef}>
@@ -636,6 +638,7 @@ class ShopPageCheckout extends React.Component {
       checkbox,
     } = this.state
     let object = {}
+    console.log(this.state, 'jdshfjhjghfjg')
 
     if (email === '' || validEmailRegex.test(this.state.email) == false) {
       object.email = 'Email is not valid!'
@@ -681,6 +684,9 @@ class ShopPageCheckout extends React.Component {
       object.checkbox = ''
     }
 
+
+
+
     if (Object.keys(object).length > 0) {
       this.setState(
         {
@@ -694,6 +700,7 @@ class ShopPageCheckout extends React.Component {
         },
       )
     }
+
     if (Object.keys(this.state.addressOption).length > 0) {
       this.setState({
         street: this.state.addressOption.address1[0],
@@ -701,7 +708,7 @@ class ShopPageCheckout extends React.Component {
         lname: this.state.addressOption.last_name,
         city: this.state.addressOption.city,
         country: this.state.addressOption.country,
-        states: this.state.state || 'no state',
+        states: this.state.state || this.state.country,
         postal: this.state.addressOption.postcode,
         phone: this.state.addressOption.phone,
         email: this.state.email,
@@ -780,8 +787,8 @@ class ShopPageCheckout extends React.Component {
         first_name: this.state.addressOption.first_name,
         last_name: this.state.addressOption.last_name,
         city: this.state.addressOption.city,
-        country: this.state.addressOption.country,
-        state: this.state.state || 'no state',
+        country: this.state.addressOption.country.code,
+        state: this.state.state || this.state.country,
         postcode: this.state.addressOption.postcode,
         phone: this.state.addressOption.phone,
         // apartment: this.state.addressOption.apartment,
@@ -801,7 +808,6 @@ class ShopPageCheckout extends React.Component {
           state,
           apartment,
         } = this.state
-
         const {
           city: cityTwo,
           country: countryTwo,
@@ -846,8 +852,8 @@ class ShopPageCheckout extends React.Component {
             first_name: this.state.fullName,
             last_name: this.state.lname,
             city: this.state.city,
-            country: this.state.country,
-            state: this.state.state || 'no state',
+            country: this.state.country.code,
+            state: this.state.state || this.state.country,
             postcode: this.state.postal,
             phone: this.state.phone,
             // apartment: this.state.apartment,
@@ -864,8 +870,8 @@ class ShopPageCheckout extends React.Component {
             first_name: this.state.fullName,
             last_name: this.state.lname,
             city: this.state.city,
-            country: this.state.country,
-            state: this.state.state || 'no state',
+            country: this.state.country.code,
+            state: this.state.state || this.state.country,
             postcode: this.state.postal,
             phone: this.state.phone,
             // apartment: this.state.apartment,
@@ -883,8 +889,8 @@ class ShopPageCheckout extends React.Component {
           first_name: this.state.fullName,
           last_name: this.state.lname,
           city: this.state.city,
-          country: this.state.country,
-          state: this.state.state || 'no state',
+          country: this.state.country.code,
+          state: this.state.state || this.state.country,
           postcode: this.state.postal,
           phone: this.state.phone,
           // apartment: this.state.apartment,
@@ -1016,7 +1022,7 @@ class ShopPageCheckout extends React.Component {
                               Router.push(url)
                             }
 
-                            this.props.cartRemoveAllItems()
+                            // this.props.cartRemoveAllItems()
                           }
                         })
                         .catch((err) => console.log(err, 'err'))
@@ -1054,9 +1060,23 @@ class ShopPageCheckout extends React.Component {
     value = object?.target?.value || object.value
 
     this.setState({
-      [name]: value,
+      state: value
     })
 
+    this.setState({
+      [name]: value,
+    })
+    this.state.billCountryList.forEach((item) => {
+      if (item.name === value) {
+        let obj = {
+          name: item.name,
+          code: item.code
+        }
+        this.setState({
+          country: obj,
+        })
+      }
+    })
     this.setState({
       errors: {
         ...this.state.errors,
@@ -1077,6 +1097,7 @@ class ShopPageCheckout extends React.Component {
       addressOption: { ...obj },
     })
   }
+
 
   render() {
     let selectCountry

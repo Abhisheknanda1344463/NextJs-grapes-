@@ -136,27 +136,27 @@ function Layout(props) {
   return (
     <div>
       {/*<Head>*/}
-        {/*<title>{`${upDomain}`}</title>*/}
-        {/*<meta*/}
-        {/*  name="description"*/}
-        {/*  content={theme.fullName}*/}
-        {/*  data-react-helmet={true}*/}
-        {/*/>*/}
-        {/*<link rel="canonical" href={`${upDomain}`} />*/}
-        {/*<meta name="twitter:card" content="summary_large_image" />*/}
-        {/*<meta property="og:description" content={`${theme.fullName}`} />*/}
-        {/*<meta property="og:title" name="title" content={`${theme.fullName}`} />*/}
-        {/*<meta*/}
-        {/*  property="og:keywords"*/}
-        {/*  name="keywords"*/}
-        {/*  content={`${theme.fullName}`}*/}
-        {/*/>*/}
+      {/*<title>{`${upDomain}`}</title>*/}
+      {/*<meta*/}
+      {/*  name="description"*/}
+      {/*  content={theme.fullName}*/}
+      {/*  data-react-helmet={true}*/}
+      {/*/>*/}
+      {/*<link rel="canonical" href={`${upDomain}`} />*/}
+      {/*<meta name="twitter:card" content="summary_large_image" />*/}
+      {/*<meta property="og:description" content={`${theme.fullName}`} />*/}
+      {/*<meta property="og:title" name="title" content={`${theme.fullName}`} />*/}
+      {/*<meta*/}
+      {/*  property="og:keywords"*/}
+      {/*  name="keywords"*/}
+      {/*  content={`${theme.fullName}`}*/}
+      {/*/>*/}
 
-        {/*<meta*/}
-        {/*  property="og:image"*/}
-        {/*  name="image"*/}
-        {/*  content={`${dbName}/storage${domain}/configuration/share_pic/share_pic.webp`}*/}
-        {/*/>*/}
+      {/*<meta*/}
+      {/*  property="og:image"*/}
+      {/*  name="image"*/}
+      {/*  content={`${dbName}/storage${domain}/configuration/share_pic/share_pic.webp`}*/}
+      {/*/>*/}
       {/*</Head>*/}
       <ToastContainer autoClose={3000} />
       {isMobile && <MobileMenu />}
