@@ -12,7 +12,7 @@ import {url} from "../../services/utils";
 
 function Menu(props) {
   const {layout, withIcons, items, onClick, symbol} = props;
-  console.log(props, "onClickonClick");
+
   const domain = useSelector((state) => state.general.domain);
 
   const renderLink = (item, content) => {
@@ -22,9 +22,7 @@ function Menu(props) {
         <AppLink
           {...item.props}
           href={url.category(item)}
-          onClick={() => {
-            onClick(item)
-          }}
+          onClick={() => onClick(item)}
         >
           <a>{content}</a>
         </AppLink>
@@ -33,9 +31,7 @@ function Menu(props) {
       link = (
         <button
           type="button"
-          onClick={() => {
-            onClick(item)
-          }}>
+          onClick={() => onClick(item)}>
           {content}
         </button>
       );
@@ -50,15 +46,12 @@ function Menu(props) {
 
     if (item.children && item.children.length) {
       arrow = <ArrowRoundedRight6x9Svg className="menu__arrow"/>;
-      // }
-      //
-      // if (item.children && item.children.length) {
       submenu = (
         <div className="menu__submenu">
-          <Menu items={item.children} onClick={() => {
-            onClick()
-            console.log("work in if statement")
-          }}/>
+          <Menu
+            items={item.children}
+            onClick={onClick}
+          />
         </div>
       );
     }
@@ -67,8 +60,7 @@ function Menu(props) {
       icon = (
         <div className="menu__icon">
           <Image
-            src={`${apiImageUrl}/storage/${domain || process.env.themesName}/${item.locale_image
-            }`}
+            src={`${apiImageUrl}/storage/${domain || process.env.themesName}/${item.locale_image}`}
             alt="language"
             width={20}
             height={16}

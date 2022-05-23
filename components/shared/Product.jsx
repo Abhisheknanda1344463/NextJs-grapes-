@@ -728,7 +728,6 @@ class Product extends PureComponent {
                         disabled={Addtocartdisabled}
                       />
                     </div>
-                    <div style={{ display: "flex", justifyContent: "space-between", margin: "auto" }}>
                       <div className={classNames("product__actions-item product__actions-item--addtocart",
                         {
                           "button_disabled": product.data.qty === 0
@@ -914,7 +913,6 @@ class Product extends PureComponent {
                           <InnerWishlist className="inner-wishlist" />
                         </button>
                       )}
-                    </div>
                     <div className="product__actions-item product__actions-item--compare"></div>
                   </div>
                 </div>

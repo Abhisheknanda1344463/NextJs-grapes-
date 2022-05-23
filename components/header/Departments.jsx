@@ -34,7 +34,6 @@ class Departments extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     let {fixed, area, open} = this.state;
-    console.log(fixed,area,open, "fixed - area - open in departments")
 
     if (prevState.fixed !== fixed) {
       const root = this.rootRef;
@@ -47,9 +46,7 @@ class Departments extends Component {
         root.classList.remove("departments--transition");
         root.classList.add("departments--fixed", "departments--opened");
 
-        const height =
-          areaBottom - (content.getBoundingClientRect().top + window.scrollY);
-
+        const height = areaBottom - (content.getBoundingClientRect().top + window.scrollY);
 
         content.style.height = `${height}px`;
         content.getBoundingClientRect(); // force reflow
@@ -82,16 +79,13 @@ class Departments extends Component {
 
         root.classList.add("departments--transition");
         root.classList.remove("departments--opened");
-
+        console.log(root, "rooooot")
+        console.log(content, "conteeeeeeeeent")
         content.getBoundingClientRect(); // force reflow
         content.style.height = "";
       }
     }
   }
-
-  // changeColor() {
-  //   this.setState({ red: !this.state.red });
-  // }
 
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.handleOutsideClick);
@@ -116,8 +110,7 @@ class Departments extends Component {
 
   handleTransitionEnd = (event) => {
     if (this.rootRef && event.propertyName === "height") {
-      this.rootRef.querySelector(".departments__links-wrapper").style.height =
-        "";
+      this.rootRef.querySelector(".departments__links-wrapper").style.height = "";
       this.rootRef.classList.remove("departments--transition");
     }
   };
