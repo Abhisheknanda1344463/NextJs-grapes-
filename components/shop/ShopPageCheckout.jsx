@@ -65,7 +65,7 @@ class ShopPageCheckout extends React.Component {
       shipingPhone: '',
       phone: '',
       email: '',
-      country: 'United States',
+      country: { code: 'US', name: 'United States' },
       states: '',
       city: '',
       apartment: '',
@@ -79,7 +79,7 @@ class ShopPageCheckout extends React.Component {
       billApartment: '',
       billCity: '',
       billPost: '',
-      billCountry: 'United States',
+      billCountry: { code: 'US', name: 'United States' },
       billState: '',
 
       billCountryList: [],
@@ -138,19 +138,20 @@ class ShopPageCheckout extends React.Component {
       )
         .then((res) => res.json())
         .then((res) => {
-          // console.log(res, 'res in shop page checkout')
-          this.setState({
-            pastOrders: res.data,
-            street: res.data[0]?.address1[0],
-            city: res.data[0]?.city,
-            country: res.data[0]?.country,
-            fullName: res.data[0]?.first_name,
-            lname: res.data[0]?.last_name,
-            phone: res.data[0]?.phone,
-            postal: res.data[0]?.postcode,
-            state: res.data[0]?.state,
-            apartment: res.data[0]?.address1[1],
-          })
+          if (res.data.length > 0) {
+            this.setState({
+              pastOrders: res.data,
+              street: res.data[0]?.address1[0],
+              city: res.data[0]?.city,
+              country: res.data[0]?.country,
+              fullName: res.data[0]?.first_name,
+              lname: res.data[0]?.last_name,
+              phone: res.data[0]?.phone,
+              postal: res.data[0]?.postcode,
+              state: res.data[0]?.state,
+              apartment: res.data[0]?.address1[1],
+            })
+          }
         })
 
     }
@@ -532,7 +533,6 @@ class ShopPageCheckout extends React.Component {
   renderPaymentsList() {
     const { payment: currentPayment } = this.state
     const payments = this.state.payments.map((payment) => {
-      console.log(payment, 'paymentpaymentpayment');
       const renderPayment = ({ setItemRef, setContentRef }, index) => (
         <li className="payment-methods__item" ref={setItemRef} key={index}>
           <label className="payment-methods__item-header">

@@ -48,7 +48,12 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
       .then((res) => setCountryStates(res));
   }, []);
 
+
+
+
+  console.log(countryList, ';countryListcountryListcountryList');
   useEffect(() => {
+
     fetch(apiUrlWithStore(`/api/countries?pagination=0`))
       .then((res) => res.json())
       .then((res) => setCountryList(res.data.reverse()));
@@ -416,4 +421,4 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
   );
 }
 
-export default memo(ShippingAddress);
+export default ShippingAddress;

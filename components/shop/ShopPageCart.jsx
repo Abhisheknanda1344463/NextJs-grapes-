@@ -164,16 +164,21 @@ const ShopPageCart = (props) => {
           }
           render={({ run, loading }) => {
             const classes = classNames(
-              'btn btn-light btn-sm btn-svg-icon del-icon-fms',
+              'btn text-light btn-orange btn-block  btn-sm cart__checkout-button f16',
               {
                 'btn-loading': loading,
               },
             )
 
             return (
-              <button type="button" onClick={run} className={classes}>
-                <CartTrash />
-              </button>
+              <div onClick={run}>
+                <a className={classes} style={{ marginRight: "40px", minWidth: "100px" }}>
+                  <FormattedMessage id="delete" defaultMessage="Delete" />
+                </a>
+              </div>
+              // <button type="button" onClick={run} className={classes}>
+              //   <CartTrash />
+              // </button>
             )
           }}
         />
