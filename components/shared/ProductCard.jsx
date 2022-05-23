@@ -502,7 +502,6 @@ function ProductCard(props) {
   let date_to = moment(product.special_price_to * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
   const date_now = moment(newDate * 1000).tz("Asia/Yerevan").format("YYYY-MM-DD");
 
-
   if (!product?.special_price && CONFIG === "configurable") {
     price = (
       <div className="product-card__prices">
@@ -517,12 +516,12 @@ function ProductCard(props) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__new-price">
-          <Currency value={Number(product.special_price).toFixed(0)} />
+          <Currency value={parseFloat(product.special_price).toFixed(0)} />
           <span className="product-card__symbol">֏</span>
         </span>
         {
           <span className="product-card__old-price">
-            <Currency value={Number(product.price).toFixed(0)} />
+            <Currency value={parseFloat(product.price).toFixed(0)} />
             <span className="product-card__symbol">֏</span>
           </span>
         }
@@ -532,12 +531,12 @@ function ProductCard(props) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__new-price">
-          <Currency value={Number(product.special_price).toFixed(0)} />
+          <Currency value={parseFloat(product.special_price).toFixed(0)} />
           <span className="product-card__symbol">֏</span>
         </span>
         {
           <span className="product-card__old-price">
-            <Currency value={Number(product.price).toFixed(0)} />
+            <Currency value={parseFloat(product.price).toFixed(0)} />
             <span className="product-card__symbol">֏</span>
           </span>
         }
@@ -546,14 +545,14 @@ function ProductCard(props) {
   } else if (product?.type === "configurable") {
     price = (
       <div className="product-card__prices">
-        <Currency value={Number(product.min_price).toFixed(0)} />
+        <Currency value={parseFloat(product.min_price).toFixed(0)} />
         <span className="product-card__symbol">֏</span>
       </div>
     );
   } else {
     price = (
       <div className="product-card__prices">
-        <Currency value={Number(product.min_price).toFixed(0)} />
+        <Currency value={parseFloat(product.min_price).toFixed(0)} />
         <span className="product-card__symbol">֏</span>
       </div>
     );

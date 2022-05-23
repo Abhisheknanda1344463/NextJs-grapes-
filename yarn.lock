@@ -623,6 +623,18 @@
   "resolved" "https://registry.npmjs.org/@sindresorhus/is/-/is-0.14.0.tgz"
   "version" "0.14.0"
 
+"@stripe/react-stripe-js@^1.8.0":
+  "integrity" "sha512-WtF2mIWJKnyAaZledC48NfynFckEseCPG8tybwFgisFxHvLPKrArlLISJOi2cjIY20DkMAkSkdlEljXifJi0ZA=="
+  "resolved" "https://registry.npmjs.org/@stripe/react-stripe-js/-/react-stripe-js-1.8.0.tgz"
+  "version" "1.8.0"
+  dependencies:
+    "prop-types" "^15.7.2"
+
+"@stripe/stripe-js@^1.29.0":
+  "integrity" "sha512-OsUxk0VLlum8E2d6onlEdKuQcvLMs7qTrOXCnl/BGV3fAm65qr6h3e1IZ5AX4lgUlPRrzRcddSOA5DvkKKYLvg=="
+  "resolved" "https://registry.npmjs.org/@stripe/stripe-js/-/stripe-js-1.29.0.tgz"
+  "version" "1.29.0"
+
 "@szmarczak/http-timer@^1.1.2":
   "integrity" "sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA=="
   "resolved" "https://registry.npmjs.org/@szmarczak/http-timer/-/http-timer-1.1.2.tgz"
