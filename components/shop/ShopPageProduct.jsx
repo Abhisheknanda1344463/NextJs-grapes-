@@ -1,30 +1,29 @@
 // react
-import React, { useEffect, useState, useRef } from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import PropTypes from 'prop-types'
 import Head from "next/head";
-import { useSelector } from 'react-redux'
-import { Helmet } from 'react-helmet-async'
-import { FormattedMessage } from 'react-intl'
+import {useSelector} from 'react-redux'
+import {Helmet} from 'react-helmet-async'
+import {FormattedMessage} from 'react-intl'
 import theme from '../../data/theme'
 import shopApi from '../../api/shop'
 import Product from '../shared/Product'
-import { url } from '../../services/utils'
+import {url} from '../../services/utils'
 import PageHeader from '../shared/PageHeader'
 import BlockLoader from '../blocks/BlockLoader'
 import WidgetProducts from '../widgets/WidgetProducts'
 import categories from '../../data/shopWidgetCategories'
 import WidgetCategories from '../widgets/WidgetCategories'
 import BlockProductsCarousel from '../blocks/BlockProductsCarousel'
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
 
 
 function ShopPageProduct(props) {
 
-  const {productSlug, layout, product, sidebarPosition, locale, loading, up_sell, cross_sell, bundle} = props
+  const {productSlug, layout, product, sidebarPosition, locale, loading, bundle, dbName} = props
   const [isLoading, setIsLoading] = useState(loading)
   const [relatedProducts, setRelatedProducts] = useState(props.relatedPproducts)
   const router = useRouter()
-  console.log(bundle, "bundle in ShopPageProduct.js")
   ////const [product, setProduct] = useState(data);
 
   const customer = useSelector((state) => state.customer)
@@ -55,18 +54,18 @@ function ShopPageProduct(props) {
   // }, [router.locale, productSlug]);
 
   if (isLoading) {
-    return <BlockLoader />
+    return <BlockLoader/>
   }
   const breadcrumb = [
     {
-      title: <FormattedMessage id="home" defaultMessage="Home" />,
+      title: <FormattedMessage id="home" defaultMessage="Home"/>,
       url: url.home(),
     },
-    { title: product.data.name, url: url.product(product.data) },
+    {title: product.data.name, url: url.product(product.data)},
   ]
 
   const related = (
-    <FormattedMessage id="relatedProducts" defaultMessage="Related products" />
+    <FormattedMessage id="relatedProducts" defaultMessage="Related products"/>
   )
 
   let content
@@ -76,7 +75,7 @@ function ShopPageProduct(props) {
       <div className="shop-layout__sidebar">
         <div className="block block-sidebar">
           <div className="block-sidebar__item">
-            <WidgetCategories categories={categories} location="shop" />
+            <WidgetCategories categories={categories} location="shop"/>
           </div>
           <div className="block-sidebar__item d-none d-lg-block">
             {/*<WidgetProducts title="Latest Products" products={crossProducts}/>*/}
@@ -96,10 +95,8 @@ function ShopPageProduct(props) {
                 productSlug={productSlug}
                 configurableVariantes={props?.configurableVariantes || null}
                 locale={router.locale}
-                up_sell={up_sell ? up_sell : []}
-                cross_sell={cross_sell ? cross_sell : []}
                 bundle={bundle}
-
+                dbName={dbName}
               />
               {/*<ProductTabs withSidebar />*/}
             </div>
@@ -110,7 +107,7 @@ function ShopPageProduct(props) {
                 layout="grid-4-sm"
                 products={Object.values(props.relatedPproducts)}
                 locale={router.locale}
-              // withSidebar
+                // withSidebar
               />
             )}
           </div>
@@ -130,9 +127,8 @@ function ShopPageProduct(props) {
               customer={customer}
               configurableVariantes={props?.configurableVariantes || null}
               locale={router.locale}
-              up_sell={up_sell ? up_sell : []}
-              cross_sell={cross_sell ? cross_sell : []}
               bundle={bundle}
+              dbName={dbName}
             />
           </div>
         </div>
@@ -165,7 +161,7 @@ function ShopPageProduct(props) {
       {/*    content={`https://blabla.zegashop.com${product?.data?.base_imag?.url}`}*/}
       {/*  />*/}
       {/*</Head>*/}
-      <PageHeader breadcrumb={breadcrumb} />
+      <PageHeader breadcrumb={breadcrumb}/>
 
       <div className="take-product-page">
         {content}

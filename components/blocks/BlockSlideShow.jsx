@@ -107,7 +107,7 @@ class BlockSlideShow extends React.PureComponent {
                 <div className="block-slideshow__slide-button">
                   <button
                     onClick={() => openNewTabClickBuyNow(slide.slider_path)}
-                    className="btn btn-orange slideshow-btn rounded-pill"
+                    className="btn btn-orange slideshow-btn"
                   >
                     <FormattedMessage
                       id="slideshow-btn"

@@ -1,30 +1,30 @@
 // react
-import React, { useCallback, useState } from 'react'
+import React, {useCallback, useState} from 'react'
 
 // third-party
-import classNames       from 'classnames'
-import PropTypes        from 'prop-types'
-import { connect }      from 'react-redux'
-import { useSelector }  from 'react-redux'
+import classNames from 'classnames'
+import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
+import {useSelector} from 'react-redux'
 // application
-import Pagination       from '../shared/Pagination'
-import ProductCard      from '../shared/ProductCard'
-import { Filters16Svg } from '../../svg'
-import { sidebarOpen }  from '../../store/sidebar'
+import Pagination from '../shared/Pagination'
+import ProductCard from '../shared/ProductCard'
+import {Filters16Svg} from '../../svg'
+import {sidebarOpen} from '../../store/sidebar'
 
-import { Helmet }           from 'react-helmet-async'
-import { FormattedMessage } from 'react-intl'
-import Arrow                from '../../custom-svg/arrow.svg'
+import {Helmet} from 'react-helmet-async'
+import Head from "next/head";
+import {FormattedMessage} from 'react-intl'
+import Arrow from '../../custom-svg/arrow.svg'
 
 
-
-function useSetOption (option, filter, dispatch) {
+function useSetOption(option, filter, dispatch) {
   const callback = useCallback(filter, [])
 
   return useCallback(
     (data) => {
       dispatch({
-        type : 'SET_OPTION_VALUE',
+        type: 'SET_OPTION_VALUE',
         option,
         value: callback(data),
       })
@@ -34,21 +34,21 @@ function useSetOption (option, filter, dispatch) {
 }
 
 
-function ProductsView (props) {
+function ProductsView(props) {
   const {
-          length,
-          locale,
-          isLoading,
-          productsList,
-          options,
-          filters,
-          dispatch,
-          layout: propsLayout,
-          grid,
-          offcanvas,
-          sidebarOpen,
-          forPage,
-        } = props
+    length,
+    locale,
+    isLoading,
+    productsList,
+    options,
+    filters,
+    dispatch,
+    layout: propsLayout,
+    grid,
+    offcanvas,
+    sidebarOpen,
+    forPage,
+  } = props
   const [layout, setLayout] = useState(propsLayout)
 
   const customer = useSelector((state) => state.customer)
@@ -67,15 +67,38 @@ function ProductsView (props) {
   )
 
   const handleResetFilters = useCallback(() => {
-    dispatch({ type: 'RESET_FILTERS' })
+    dispatch({type: 'RESET_FILTERS'})
   }, [dispatch])
   const filtersCount = Object.keys(filters)
     .map((x) => filters[x])
     .filter((x) => x).length
+
+
+  const schemaCategoryPage = {
+    "@context": `https://schema.org/`,
+    "@type": "Product",
+    // "image": `${this.state.product?.data?.images[0].medium_image_url}`,
+    "name": `Products in Category`,
+    "offers": [],
+    // "description":`${this.state.product.data.description}`,
+    // "url": `${dbName}/products/${this.props.productSlug}`,
+  }
+
   // const arrayMeta = []
   const productsListItems = productsList['data'].map((product, index) => {
+    // console.log(productsList.data, "productList data in category")
     // arrayMeta.push(<meta name="description" content={product.description}/>)
     // arrayMeta.push(<meta name="name" content={product.name}/>)
+
+    schemaCategoryPage.offers.push({
+      "@type": "ListItem",
+      "item": {
+        "id": product.url_key,
+        "name": product.name,
+        "image": product.images[0].medium_image_url,
+        "description": product.description,
+      },
+    })
 
     return (
       <>
@@ -152,7 +175,12 @@ function ProductsView (props) {
 
   return (
     <>
-      {/*<Helmet>{arrayMeta}</Helmet>*/}
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{__html: JSON.stringify(schemaCategoryPage)}}
+        />
+      </Head>
       <div className={rootClasses}>
         <div className="products-view__loader"/>
         {content}
@@ -200,8 +228,8 @@ ProductsView.propTypes = {
 }
 
 ProductsView.defaultProps = {
-  layout   : 'grid',
-  grid     : 'grid-3-sidebar',
+  layout: 'grid',
+  grid: 'grid-3-sidebar',
   offcanvas: 'mobile',
 }
 

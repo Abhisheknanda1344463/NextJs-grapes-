@@ -11,6 +11,7 @@ import ProductCard from '../shared/ProductCard'
 import {Helmet} from 'react-helmet-async'
 import PopupModal from 'components/popupComponents/PopupModal'
 import Head from 'next/head'
+import {url} from "../../helper";
 
 
 function BlockProducts(props) {
@@ -24,10 +25,11 @@ function BlockProducts(props) {
   // const arrayMeta = []
 
   const schemaProducts = {
-    '@context': '/products',
+    "@context": `https://schema.org/`,
     '@type': 'ItemList',
     'name': 'Products',
     'itemListElement': [],
+    url:`${url}`
   }
 
   if (featuredProduct) {

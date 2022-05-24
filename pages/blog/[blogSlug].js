@@ -1,6 +1,7 @@
 import {useEffect} from "react";
 import {useRouter} from "next/router";
 import BlogPagePost from "../../components/blog/BlogPagePost";
+import {MetaWrapper} from "../../components/MetaWrapper";
 import Head from "next/head";
 import store from "../../store";
 import {url} from "../../helper";
@@ -23,32 +24,13 @@ export default function Contact(props) {
   const logoPath = `configuration/logo/logo.webp`;
 
   return (
-    <>
-      <Head>
-        <title>{`Blog Post Page — ${props.dbName}`}</title>
-        <meta property="og:title" name="title" content={props.blog[0]?.meta_title || props.blog[0]?.blog_title}/>
-        <meta
-          property="og:description"
-          name="description"
-          content={props.blog[0]?.meta_description || props.blog[0]?.blog_title}
-        />
-        <meta
-          property="og:keywords"
-          name="keywords"
-          content={props.blog[0]?.meta_keywords || props.blog[0]?.blog_title}
-        />
-        <meta
-          property="og:image"
-          name="image"
-          content={
-            props.blog[0]?.image ? `https://${props.dbName}/storage/${props.domain}/${props.blog[0].image}` : `https://${props.dbName}/storage/${props.domain}/${logoPath}`}
-        />
-        <meta name="twitter:card" content="summary_large_image"/>
-        <meta name="twitter:title" content={props.blog[0]?.meta_title || props.blog[0]?.blog_title}/>
-        <meta name="twitter:description" content={props.blog[0]?.meta_description || props.blog[0]?.blog_title}/>
-        <meta name="twitter:image"
-              content={props.blog[0]?.image ? `https://${props.dbName}/storage/${props.domain}/${props.blog[0].image}` : `https://${props.dbName}/storage/${props.domain}/${logoPath}`}/>
-      </Head>
+    <MetaWrapper
+      title={`Blog Post Page — ${props.dbName}`}
+      m_title={props.blog[0]?.meta_title || props.blog[0]?.blog_title}
+      m_desc={props.blog[0]?.meta_description || props.blog[0]?.blog_title}
+      m_key={props.blog[0]?.meta_keywords || props.blog[0]?.blog_title}
+      m_img={props.blog[0]?.image && `https://${props.dbName}/storage/${props.domain}/${props.blog[0].image}`}
+    >
       <BlogPagePost
         dbName={props.dbName}
         blogSlug={query.blogSlug}
@@ -56,7 +38,41 @@ export default function Contact(props) {
         blog={props.blog}
         domain={props.domain}
       />
-    </>
+    </MetaWrapper>
+    // <>
+    //   <Head>
+    //     <title>{`Blog Post Page — ${props.dbName}`}</title>
+    //     <meta property="og:title" name="title" content={props.blog[0]?.meta_title || props.blog[0]?.blog_title}/>
+    //     <meta
+    //       property="og:description"
+    //       name="description"
+    //       content={props.blog[0]?.meta_description || props.blog[0]?.blog_title}
+    //     />
+    //     <meta
+    //       property="og:keywords"
+    //       name="keywords"
+    //       content={props.blog[0]?.meta_keywords || props.blog[0]?.blog_title}
+    //     />
+    //     <meta
+    //       property="og:image"
+    //       name="image"
+    //       content={
+    //         props.blog[0]?.image ? `https://${props.dbName}/storage/${props.domain}/${props.blog[0].image}` : `https://${props.dbName}/storage/${props.domain}/${logoPath}`}
+    //     />
+    //     <meta name="twitter:card" content="summary_large_image"/>
+    //     <meta name="twitter:title" content={props.blog[0]?.meta_title || props.blog[0]?.blog_title}/>
+    //     <meta name="twitter:description" content={props.blog[0]?.meta_description || props.blog[0]?.blog_title}/>
+    //     <meta name="twitter:image"
+    //           content={props.blog[0]?.image ? `https://${props.dbName}/storage/${props.domain}/${props.blog[0].image}` : `https://${props.dbName}/storage/${props.domain}/${logoPath}`}/>
+    //   </Head>
+    //   <BlogPagePost
+    //     dbName={props.dbName}
+    //     blogSlug={query.blogSlug}
+    //     locale={props.locale}
+    //     blog={props.blog}
+    //     domain={props.domain}
+    //   />
+    // </>
   );
 }
 
