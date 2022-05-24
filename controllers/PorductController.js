@@ -85,11 +85,11 @@ function build({ flatProducts, locale, resolve, ...rest }) {
           .then((res) => resolve({ ProductImages: res }))
           .catch((err) => reject1(err));
       });
-      const p2 = new Promise((resolve, reject2) => {
-        ProductFlat.find({ locale, product_id: productId })
-          .then((res) => resolve({ productFlat: res }))
-          .catch((err) => reject2(err));
-      });
+      // const p2 = new Promise((resolve, reject2) => {
+      //   ProductFlat.find({ locale, product_id: productId })
+      //     .then((res) => resolve({ productFlat: res }))
+      //     .catch((err) => reject2(err));
+      // });
       const p3 = new Promise((resolve, reject3) => {
         ProductInventories.find({ product_id: productId })
           .then((res) => resolve({ ProductInventories: res }))
@@ -102,15 +102,15 @@ function build({ flatProducts, locale, resolve, ...rest }) {
           .catch((err) => reject4(err));
       });
 
-      return Promise.all([p1, p2, p3, p4])
+      return Promise.all([p1, p3, p4])
         .then((response) => {
           const collection = arrayConvertToObject(response);
           const imagesData = parseClone(collection.ProductImages);
-          const flatData = parseClone(collection.productFlat[0] || []);
+          const flatData = parseClone(flatProducts || []);
           const inventoriesData = parseClone(
             collection.ProductInventories[0] || []
           );
-          const allProducts = parseClone(collection.Products[0] || []);
+          const allProducts = parseClone(flatProducts || []);
           if (imagesData[0] && imagesData[0].path) {
             const { path } = imagesData[0];
             const base_imag = makeImageClone(path);
@@ -244,26 +244,92 @@ function arrayConvertToObject(response) {
   // }, {})
 }
 
-function Get_New_And_Futured_Products({ locale, limit, currency, ...rest }) {
+function Get_New_And_Futured_Products({
+  locale,
+  limit,
+  currency,
+  rate,
+  ...rest
+}) {
   return new Promise((resolve, reject) => {
     const futuredProducts = new Promise((resolve, reject) => {
+      var changedData;
       ProductFlat.find({ new: 1, locale })
         .limit(limit)
         .then((flatProducts) => {
-          build({ flatProducts, locale, resolve, type: "featured", ...rest });
+          /// flatProducts = parseClone(flatProducts);
+          return (changedData = flatProducts.map((el) => {
+            var paramsArray = parseClone(el);
+            changeRate(paramsArray, rate);
+            return paramsArray;
+          }));
+        })
+        .then(() => {
+          console.log(changedData, "changedData");
+          build({
+            flatProducts: changedData,
+            locale,
+            resolve,
+            type: "featured",
+            ...rest,
+          });
         });
     });
     const newProducts = new Promise((resolve, reject) => {
+      var changedData;
       ProductFlat.find({ featured: 1, locale })
         .limit(limit)
         .then((flatProducts) => {
-          build({ flatProducts, locale, resolve, type: "new", ...rest });
+          ////  flatProducts = parseClone(flatProducts);
+          changedData = flatProducts.map((el) => {
+            var paramsArray = parseClone(el);
+            changeRate(paramsArray, rate);
+            return paramsArray;
+          });
+          build({
+            flatProducts: changedData,
+            locale,
+            resolve,
+            type: "new",
+            ...rest,
+          });
         });
+      // .then(() => {
+      //   ////    console.log(changedData);
+      //   build({
+      //     flatProducts: changedData,
+      //     locale,
+      //     resolve,
+      //     type: "new",
+      //     ...rest,
+      //   });
+      // });
     });
     const minPriceGenerator = new Promise((resolve, reject) => {
+      var changedData;
       ProductFlat.find({ min_price: "0.0000", locale }).then((flatProducts) => {
-        build({ flatProducts, locale, resolve, type: "elipse", ...rest });
+        changedData = flatProducts.map((el) => {
+          var paramsArray = parseClone(el);
+          changeRate(paramsArray, rate);
+          return paramsArray;
+        });
+        build({
+          flatProducts: changedData,
+          locale,
+          resolve,
+          type: "elipse",
+          ...rest,
+        });
       });
+      // .then(() => {
+      //   build({
+      //     flatProducts: changedData,
+      //     locale,
+      //     resolve,
+      //     type: "elipse",
+      //     ...rest,
+      //   });
+      // });
     });
     return Promise.all([futuredProducts, newProducts, minPriceGenerator]).then(
       (response) => {
@@ -309,6 +375,27 @@ function Get_New_And_Futured_Products({ locale, limit, currency, ...rest }) {
 //       .catch((err) => reject(err));
 //   })
 // }
+
+function changeRate(item, rate) {
+  ////REMEBER ADD SPECIAL PRICE CHECK AND CHANGE MIN PRICE MAX PRICE
+  ///// REMEMBER NOT WORK WITH RELETED CONFIG
+  if (item.length > 0) {
+    item.map((el) => {
+      el.min_price = parseFloat(el.min_price) * rate;
+      el.max_price = parseFloat(el.max_price) * rate;
+      el.special_price = parseFloat(el.special_price) * rate;
+      el.price = parseFloat(el.price) * rate;
+      return el;
+    });
+    return item;
+  } else {
+    item.min_price = parseFloat(item.min_price) * rate;
+    item.max_price = parseFloat(item.max_price) * rate;
+    item.special_price = parseFloat(item.special_price) * rate;
+    item.price = parseFloat(item.price) * rate;
+    return item;
+  }
+}
 
 function Get_Product_list(options) {
   //limit, category_id, currency,
@@ -388,7 +475,7 @@ function Get_Product_list(options) {
               }
             });
             if (productIds.length == 0) {
-              console.log(productIds, "ther is upssssssssssssss");
+              ///   console.log(productIds, "ther is upssssssssssssss");
 
               // return build([]);
               return [];
@@ -416,7 +503,7 @@ function Get_Product_list(options) {
                         })
                         .then(() => {
                           var products = arrayData.concat(itemProduct);
-                          console.log(arrayData, "arrayData");
+                          ///      console.log(arrayData, "arrayData");
                           resolve({ products });
                         });
                     });
@@ -562,12 +649,6 @@ function Get_Product_list(options) {
             );
           });
         } else {
-          console.log(
-            buildQueryParams,
-            locale,
-            "buildQueryParamsbuildQueryParamsbuildQueryParams"
-          );
-
           ProductFlat.find({
             name: { $regex: Object.values(buildQueryParams)[0], $options: "i" },
             locale: locale,
@@ -582,7 +663,7 @@ function Get_Product_list(options) {
 }
 
 function Get_Products_By_Slug(params, options) {
-  const { locale, token } = options;
+  const { locale, token, rate } = options;
   const { productSlug } = params;
   return new Promise((resolve, reject) => {
     ProductFlat.findOne({
@@ -592,8 +673,11 @@ function Get_Products_By_Slug(params, options) {
       ],
     }) // make flat by locale request
       .then((item) => {
-        const productFlat = parseClone(item);
-        const { product_id } = productFlat;
+        var productFlat = parseClone(item);
+        if (productFlat.price) {
+          changeRate(productFlat, rate);
+        }
+        var product_id = productFlat.product_id;
         const p1 = new Promise((resolve, reject1) => {
           ProductImages.find({ product_id })
             .then((res) => {
@@ -603,7 +687,7 @@ function Get_Products_By_Slug(params, options) {
         });
 
         const p2 = new Promise((resolve, reject2) => {
-          Products.findOne({ id: product_id })
+          Products.findOne({ id: productFlat.product_id })
             .then((res) => {
               resolve({ Products: res });
             })
@@ -630,7 +714,6 @@ function Get_Products_By_Slug(params, options) {
         const variants = new Promise((resolve, reject4) => {
           Products.find({ parent_id: product_id }).then((products) => {
             const productsIds = products.map((product) => product.id);
-
             const images = new Promise((resolve, reject) => {
               ProductImages.find({ product_id: { $in: productsIds } })
                 .then((images) => {
@@ -644,7 +727,8 @@ function Get_Products_By_Slug(params, options) {
                 locale: locale,
                 product_id: { $in: productsIds },
               }).then((flats) => {
-                // console.log(flats, "productsIdsproductsIdsproductsIds");
+                changeRate(flats, rate);
+
                 resolve({ variantsFlates: flats });
               });
             });
@@ -724,7 +808,7 @@ function Get_Products_By_Slug(params, options) {
 
             return Promise.all([images, flates, inventories]).then(
               (response) => {
-                console.log(response, "response in bundle");
+                ///   console.log(response, "response in bundle");
                 const collection = arrayConvertToObject(parseClone(response));
 
                 const bundle_options = [];
@@ -797,7 +881,7 @@ function Get_Products_By_Slug(params, options) {
 
 function Get_Related_Products(options) {
   // currency: AMD / will work on it
-  const { locale, limit, currency, category_id, product_id } = options;
+  const { locale, limit, currency, category_id, product_id, rate } = options;
   // console.log(category_id, 'category id in product controller')
   return new Promise((resolve, reject) => {
     RelatedProducts.find({
@@ -812,7 +896,7 @@ function Get_Related_Products(options) {
             const promiseArray = products.map((item) => {
               return new Promise((resolve, reject) => {
                 const product = parseClone(item);
-
+                changeRate(product, rate);
                 const p1 = new Promise((resolve1, reject1) => {
                   ProductImages.find({ product_id: product.id })
                     .then((res) => {
@@ -895,7 +979,6 @@ function Get_Related_Products(options) {
 
                 return new Promise((resolve, reject) => {
                   const product = parseClone(item);
-
                   const p1 = new Promise((resolve1, reject1) => {
                     ProductImages.find({ product_id: product.id })
                       .then((res) => {
@@ -907,6 +990,8 @@ function Get_Related_Products(options) {
                   const p2 = new Promise((resolve2, reject2) => {
                     ProductFlat.find({ locale, product_id: product.id })
                       .then((res) => {
+                        ///  console.log(res, "raterateraterate");
+                        changeRate(res, rate);
                         resolve2({ productFlat: res });
                       })
                       .catch((err) => reject(err));
@@ -983,7 +1068,6 @@ function Get_Up_Sell_Products(options) {
             const promiseArray = products.map((item) => {
               return new Promise((resolve, reject) => {
                 const product = parseClone(item);
-
                 const p1 = new Promise((resolve1, reject1) => {
                   ProductImages.find({ product_id: product.id })
                     .then((res) => {
@@ -995,6 +1079,7 @@ function Get_Up_Sell_Products(options) {
                 const p2 = new Promise((resolve2, reject2) => {
                   ProductFlat.find({ locale, product_id: product.id })
                     .then((res) => {
+                      changeRate(res, options.rate);
                       resolve2({ productFlat: res });
                     })
                     .catch((err) => reject(err));
@@ -1057,6 +1142,7 @@ function Get_Up_Sell_Products(options) {
 
 function Get_Cross_Sell_Products(options) {
   const { locale, limit, currency, product_id } = options;
+  console.log(options, "optionsoptionsoptions");
   return new Promise((resolve, reject) => {
     CrosselProducts.find({
       parent_id: { $in: product_id.split(",") },
@@ -1081,6 +1167,7 @@ function Get_Cross_Sell_Products(options) {
                 const p2 = new Promise((resolve2, reject2) => {
                   ProductFlat.find({ locale, product_id: product.id })
                     .then((res) => {
+                      changeRate(res, options.rate);
                       resolve2({ productFlat: res });
                     })
                     .catch((err) => reject(err));
@@ -1433,7 +1520,7 @@ function Get_Bundle_Prods(options) {
             resolve(prox);
           });
         }).then((it) => {
-          console.log(it, "XXXXXXXXXXXXXXXXXXXXXXX");
+          ////    console.log(it, "XXXXXXXXXXXXXXXXXXXXXXX");
         });
         // console.log(bundle_options, "LLLLLLLLLLLLLLLLLLLLLLLLLLLL")
         // console.log(bundle_options_ids, "OOOOOOOOOOOOOOOOOOOOOO")

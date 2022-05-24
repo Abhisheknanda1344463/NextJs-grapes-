@@ -11,14 +11,25 @@ import Head from "next/head";
 import {useSelector} from "react-redux"
 
 export default function ProductInnerPage(props) {
-  const query = useRouter()
-  const prodID = props.product.data.product_id
-  const cats = props.product.data.cats
-  const checkRelatedProducts = props.relatedPproducts.filter(item => item.product_id !== prodID)
-
-  const {dispatch} = store
+  const query = useRouter();
+  const prodID = props.product.data.product_id;
+  const cats = props.product.data.cats;
+  const checkRelatedProducts = props.relatedPproducts.filter(
+    (item) => item.product_id !== prodID
+  );
+  const dbName = useSelector((state) => state.general.dbName);
+  const { dispatch } = store;
   useEffect(() => {
-    window.history.replaceState(null, '', window.location.pathname)
+    if (!props.currencies) {
+      window.history.replaceState(null, "", window.location.pathname);
+    } else {
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + `?currencies=${props.currencies}`
+      );
+    }
+
     ///router.push(window.location.pathname, window.location.pathname);
   }, [props.productSlug])
   useEffect(() => {
@@ -40,6 +51,7 @@ export default function ProductInnerPage(props) {
       m_img={props.dbName && `https://${props.dbName}/storage/${props?.product?.data?.base_imag?.path}`}
     >
       <ShopPageProduct
+        rate={props.rate}
         layout="standard"
         productSlug={props.productSlug}
         relatedPproducts={checkRelatedProducts}
@@ -87,82 +99,102 @@ export default function ProductInnerPage(props) {
   )
 }
 
+export async function getServerSideProps({ locale, locales, req, res, query }) {
+  ///////FIXME WE HAVE PROBLEM WITH RELETED PRODUCTS PRICE WITH CURENCY
 
-export async function getServerSideProps({locale, locales, req, res, query}) {
-  const {productSlug} = query
-
-  const {
-    locale: defaultLocaleSelected,
-    token,
-    currency,
-    dispatches: generalDispatches,
-  } = await generalProcessForAnyPage(locale)
+  const { productSlug } = query;
+  var selectedCurency;
+  var databaseName;
+  var selectedCurency;
+  var selectedRate;
 
   const dbName = req.headers["x-forwarded-host"];
-  var databaseName;
+  ////CHECKING CURRENCY
+  if (req.query.currencies != "") {
+    selectedCurency = req.query.currencies;
+  } else {
+    selectedCurency = currency;
+  }
 
+  ////GETTING DOMAIN
   if (dbName.includes(".zegashop.com")) {
     var dataName = dbName.split(".zegashop.com");
-
     databaseName = dataName[0];
     process.env.domainName = dbName;
-
     process.env.databaseName = databaseName;
   } else {
     process.env.domainName = dbName;
-    databaseName = dbName.split(".")[0];
-    if (databaseName == "www") {
-      databaseName = dbName.split(".")[1];
-    }
+    databaseName =
+      dbName.split(".")[0] == "www"
+        ? dbName.split(".")[1]
+        : dbName.split(".")[0];
+
     process.env.databaseName = databaseName;
   }
-
-
-  const selectedLocale = locale !== 'catchAll' ? locale : defaultLocaleSelected
+  const {
+    locale: defaultLocaleSelected,
+    currency,
+    rate,
+    token,
+    dispatches: generalDispatches,
+  } = await generalProcessForAnyPage(locale, dbName, selectedCurency);
+  ////GETTING RATE FOR CURRENCY
+  if (req.query.currencies != "") {
+    selectedRate = rate.currencies_new.find(
+      (item) => item.code == selectedCurency
+    );
+  }
+  const selectedLocale = locale !== "catchAll" ? locale : defaultLocaleSelected;
 
   const product = await shopApi.getProductBySlug(productSlug, {
     lang: selectedLocale,
     token: token,
-  })
-  const relatedPproducts = await shopApi.getRelatedProducts(product.cats, product.product_id, {
-    lang: selectedLocale,
-    currency: currency,
-    limit: 8,
-  })
+    selectedRate: selectedRate?.exchange_rate.rate || 1,
+  });
+  const relatedPproducts = await shopApi.getRelatedProducts(
+    product.cats,
+    product.product_id,
+    {
+      lang: selectedLocale,
+      currency: selectedRate,
+      limit: 8,
+      selectedRate: selectedRate?.exchange_rate.rate || 1,
+    }
+  );
 
-  let configurabelConfigProduct = null
-  let bundleProduct = null
+  let configurabelConfigProduct = null;
+  let bundleProduct = null;
 
-  if (product.type == 'configurable') {
-    const configurableId = product.parent_id || product.product_id
+  if (product.type == "configurable") {
+    const configurableId = product.parent_id || product.product_id;
     configurabelConfigProduct = await shopApi.getConfigurabelConfigProduct(
-      configurableId,
-    )
+      configurableId
+    );
   }
 
   if (product.type == "bundle") {
     bundleProduct = await shopApi.getBundleProduct(product.product_id, {
       lang: selectedLocale,
       currency: currency,
-    })
-
+    });
   }
   const dispatches = {
     ...generalDispatches.clientSide,
     ...generalDispatches.serverSide,
-  }
-
+  };
 
   return {
     props: {
       locale: selectedLocale,
       dispatches,
+      rate: selectedRate?.exchange_rate.rate || 1,
+      currencies: selectedCurency,
       productSlug: productSlug,
-      product: {data: product},
+      product: { data: product },
       relatedPproducts: relatedPproducts,
       configurableVariantes: configurabelConfigProduct,
       bundle: bundleProduct,
       dbName,
     },
-  }
+  };
 }

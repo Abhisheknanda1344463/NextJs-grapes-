@@ -186,6 +186,7 @@ router.get("/home-products", function (req, res) {
   const options = {
     locale: req.query.locale,
     currency: req.query.currency,
+    rate: req.query.rate,
     limit: 8,
   };
   ProductControllers.Get_New_And_Futured_Products(options).then((products) => {

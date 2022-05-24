@@ -103,7 +103,7 @@ function getCategoryBySlug(slug, locale) {
     const Module = modulesInfo[locale];
     Module.findOne().then((res) => {
       var asd = res.data.categories[0].children.filter((e) => e.slug == slug);
-      console.log(asd, "resres");
+      ///  console.log(asd, "resres");
       resolve(asd);
     });
   });

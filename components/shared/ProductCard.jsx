@@ -63,10 +63,11 @@ function ProductCard(props) {
   });
 
   const getUpCrosselProd = (prodID, type) => {
+    ///  console.log(props.rate, "props.rateprops.rateprops.rate");
     switch (type) {
       case "upsel":
         fetch(
-          `${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=${locale}&currency=USD`
+          `${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=${locale}&currency=${props.currency}&rate=${props.rate}`
         )
           .then((res) => res.json())
           .then((data) => {
@@ -76,7 +77,7 @@ function ProductCard(props) {
         break;
       case "crossel":
         fetch(
-          `${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=${locale}&currency=USD`
+          `${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=${locale}&currency=${props.currency}&rate=${props.rate}`
         )
           .then((res) => res.json())
           .then((data) => {
@@ -161,7 +162,7 @@ function ProductCard(props) {
                   })}
                 >
                   {(product && product?.type === "configurable") ||
-                    product?.type === "bundle" ? (
+                  product?.type === "bundle" ? (
                     <Link href={url.product(product)}>
                       <button
                         type="button"
@@ -176,48 +177,48 @@ function ProductCard(props) {
                       </button>
                     </Link>
                   ) : (
-                    addcart() ? (
-                      <AsyncAction
-                        action={() =>
-                          cartAddItem(
-                            product,
-                            [],
-                            1,
-                            cartToken,
-                            customer,
-                            selectedData,
-                            null,
-                            "homePage"
-                          )
-                        }
-                        render={({ run, loading }) => (
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              // alert("addcart()")
-                              e.preventDefault();
-                              setCrossValid(false);
-                              run();
-                            }}
-                            className={classNames(
-                              "btn btn-primary product-card__addtocart hide-for-tablet",
-                              {
-                                "btn-loading": loading,
-                              }
-                            )}
-                          >
-                            <FormattedMessage
-                              id="add.tocart"
-                              defaultMessage="Add to cart"
-                            />
-                          </button>
-                        )}
-                      />
-                    ) : (
-                      product?.has_up_sell == 0 &&
-                      product?.has_cross_sell == 1
-                    )
-                  ) ? (
+                      addcart() ? (
+                        <AsyncAction
+                          action={() =>
+                            cartAddItem(
+                              product,
+                              [],
+                              1,
+                              cartToken,
+                              customer,
+                              selectedData,
+                              null,
+                              "homePage"
+                            )
+                          }
+                          render={({ run, loading }) => (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                // alert("addcart()")
+                                e.preventDefault();
+                                setCrossValid(false);
+                                run();
+                              }}
+                              className={classNames(
+                                "btn btn-primary product-card__addtocart hide-for-tablet",
+                                {
+                                  "btn-loading": loading,
+                                }
+                              )}
+                            >
+                              <FormattedMessage
+                                id="add.tocart"
+                                defaultMessage="Add to cart"
+                              />
+                            </button>
+                          )}
+                        />
+                      ) : (
+                        product?.has_up_sell == 0 &&
+                        product?.has_cross_sell == 1
+                      )
+                    ) ? (
                     <AsyncAction
                       action={() =>
                         cartAddItem(
@@ -313,7 +314,7 @@ function ProductCard(props) {
                 <div className="item_overlay hide-for-tablet"></div>
                 <div className="img_btn_wrapper">
                   {(product && product?.type === "configurable") ||
-                    product?.type === "bundle" ? (
+                  product?.type === "bundle" ? (
                     <Link href={url.product(product)}>
                       <button
                         type="button"
@@ -498,9 +499,15 @@ function ProductCard(props) {
   };
 
   let newDate = new Date();
-  let date_from = moment(product.special_price_from * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
-  let date_to = moment(product.special_price_to * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
-  const date_now = moment(newDate * 1000).tz("Asia/Yerevan").format("YYYY-MM-DD");
+  let date_from = moment(product.special_price_from * 1000)
+    .tz("Asia/Yerevan")
+    .format("YYYY-MM-DD");
+  let date_to = moment(product.special_price_to * 1000)
+    .tz("Asia/Yerevan")
+    .format("YYYY-MM-DD");
+  const date_now = moment(newDate * 1000)
+    .tz("Asia/Yerevan")
+    .format("YYYY-MM-DD");
 
   if (!product?.special_price && CONFIG === "configurable") {
     price = (
@@ -649,7 +656,7 @@ function ProductCard(props) {
             </div>
 
             {(product && product?.type === "configurable") ||
-              product?.type === "bundle" ? (
+            product?.type === "bundle" ? (
               <Link href={url.product(product)}>
                 <button
                   type="button"

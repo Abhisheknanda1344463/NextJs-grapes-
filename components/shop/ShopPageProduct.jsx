@@ -1,21 +1,21 @@
 // react
-import React, {useEffect, useState, useRef} from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import Head from "next/head";
-import {useSelector} from 'react-redux'
-import {Helmet} from 'react-helmet-async'
-import {FormattedMessage} from 'react-intl'
+import { useSelector } from 'react-redux'
+import { Helmet } from 'react-helmet-async'
+import { FormattedMessage } from 'react-intl'
 import theme from '../../data/theme'
 import shopApi from '../../api/shop'
 import Product from '../shared/Product'
-import {url} from '../../services/utils'
+import { url } from '../../services/utils'
 import PageHeader from '../shared/PageHeader'
 import BlockLoader from '../blocks/BlockLoader'
 import WidgetProducts from '../widgets/WidgetProducts'
 import categories from '../../data/shopWidgetCategories'
 import WidgetCategories from '../widgets/WidgetCategories'
 import BlockProductsCarousel from '../blocks/BlockProductsCarousel'
-import {useRouter} from 'next/router'
+import { useRouter } from 'next/router'
 
 
 function ShopPageProduct(props) {
@@ -75,7 +75,7 @@ function ShopPageProduct(props) {
       <div className="shop-layout__sidebar">
         <div className="block block-sidebar">
           <div className="block-sidebar__item">
-            <WidgetCategories categories={categories} location="shop"/>
+            <WidgetCategories categories={categories} location="shop" />
           </div>
           <div className="block-sidebar__item d-none d-lg-block">
             {/*<WidgetProducts title="Latest Products" products={crossProducts}/>*/}
@@ -97,6 +97,7 @@ function ShopPageProduct(props) {
                 locale={router.locale}
                 bundle={bundle}
                 dbName={dbName}
+                rate={props.rate}
               />
               {/*<ProductTabs withSidebar />*/}
             </div>
@@ -107,7 +108,7 @@ function ShopPageProduct(props) {
                 layout="grid-4-sm"
                 products={Object.values(props.relatedPproducts)}
                 locale={router.locale}
-                // withSidebar
+              // withSidebar
               />
             )}
           </div>
@@ -129,6 +130,7 @@ function ShopPageProduct(props) {
               locale={router.locale}
               bundle={bundle}
               dbName={dbName}
+              rate={props.rate}
             />
           </div>
         </div>

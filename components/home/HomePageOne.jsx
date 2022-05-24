@@ -1,12 +1,12 @@
-import React, {useEffect, useState, memo, useRef} from "react";
+import React, { useEffect, useState, memo, useRef } from "react";
 import Head from "next/head";
-import {useRouter} from "next/router";
-import {setMetaPath, setMetaTags} from "../../store/general";
-import {useSelector, useDispatch} from "react-redux";
-import {FormattedMessage} from "react-intl";
+import { useRouter } from "next/router";
+import { setMetaPath, setMetaTags } from "../../store/general";
+import { useSelector, useDispatch } from "react-redux";
+import { FormattedMessage } from "react-intl";
 import BlockProducts from "../blocks/BlockProducts";
 import BlockSlideShow from "../blocks/BlockSlideShow";
-import {apiUrlWithStore, urlLink} from "../../helper";
+import { apiUrlWithStore, urlLink } from "../../helper";
 // import BlockFeatures from "../blocks/BlockFeatures";
 // import payload from "../builder/state.json";
 // import Heading from "../builder/heading/Heading.jsx";
@@ -37,16 +37,16 @@ function HomePageOne(props) {
   const [componenet, setComponnent] = useState([]);
   const [componenetData, setComponnentData] = useState([]);
   const newCollection = (
-    <FormattedMessage id="shop-title" defaultMessage="Shop"/>
+    <FormattedMessage id="shop-title" defaultMessage="Shop" />
   );
   const saleCollection = (
-    <FormattedMessage id="shop.one" defaultMessage="Saled products"/>
+    <FormattedMessage id="shop.one" defaultMessage="Saled products" />
   );
   const homepage_title_text = (
-    <FormattedMessage id="homepage_title_text" defaultMessage="Home"/>
+    <FormattedMessage id="homepage_title_text" defaultMessage="Home" />
   );
   const homepage_intro_text = (
-    <FormattedMessage id="homepage_intro_text" defaultMessage="Home Page"/>
+    <FormattedMessage id="homepage_intro_text" defaultMessage="Home Page" />
   );
   const history = useRouter();
   const prevCurrencyCodeRef = useRef();
@@ -54,61 +54,28 @@ function HomePageOne(props) {
   const metaTags = props?.metas ? JSON.parse(props.metas[0].home_seo) : "";
   const messageTitle = homepage_title_text.props.defaultMessage;
   const messageIntro = homepage_intro_text.props.defaultMessage;
-  dispatch(setMetaPath(dbName))
-  dispatch(setMetaTags(metaTags))
-  // const upDomain = domainName.charAt(0).toUpperCase() + domainName.slice(1);
-  const getHomeProducts = () => {
-    try {
-      fetch(
-        apiUrlWithStore(
-          `/db/home-products?locale=${router.locale}&currency=AMD&limit=6`
-        )
-      )
-        .then((response) => response.json())
-        .then((res) => {
-          if (res && res.newProduct) {
-            const setBestArray = Object.values(res.newProduct).filter(
-              (product) => {
-                if (product?.name && product?.description) {
-                  return product;
-                }
-              }
-            );
-            setBest(setBestArray);
-          }
-          if (res && res.featuredProducts) {
-            const setfeaturedArray = Object.values(res.featuredProducts).filter(
-              (product) => {
-                if (product?.name && product?.description) {
-                  return product;
-                }
-              }
-            );
-            setfeatured(setfeaturedArray);
-          }
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  dispatch(setMetaPath(dbName));
+  dispatch(setMetaTags(metaTags));
 
   useEffect(() => {
-    if (prevCurrencyCodeRef.current != "AMD") {
-      prevCurrencyCodeRef.current = "AMD";
-      prevLocaleCodeRef.current = router.locale;
+    if (prevCurrencyCodeRef.current != props.currency) {
+      prevCurrencyCodeRef.current = props.currency;
+      setBest(props.newProducts);
+      setfeatured(props.featuredProducts);
+      // prevLocaleCodeRef.current = router.locale;
     }
-    if (!firstLoad) {
-      getHomeProducts();
-    }
-    setFirstLoad(false);
+    // if (!firstLoad) {
+    //   getHomeProducts();
+    // }
+    // setFirstLoad(false);
     ////  getFeaturedProducts();
-  }, [router.locale]);
+  }, [router.locale, props.currency]);
 
   // const domName = dbName.split(".")[0];
   // console.log(domName, "dom name in reactr")
   return (
     <React.Fragment>
-      <BlockSlideShow history={history}/>
+      <BlockSlideShow history={history} />
       {messageTitle || messageIntro ? (
         <div className="container welcome-title">
           <h1>{homepage_title_text}</h1>
@@ -122,6 +89,7 @@ function HomePageOne(props) {
           customer={customer}
           title={newCollection}
           dbName={dbName}
+          rate={props.rate}
           // homepage_title_text={homepage_title_text}
           // homepage_intro_text={homepage_intro_text}
           products={bestsellers}
@@ -143,6 +111,7 @@ function HomePageOne(props) {
           layout="large-first"
           customer={customer}
           dbName={dbName}
+          rate={props.rate}
           products={featured}
           title={saleCollection}
           addInClass={featured.length <= 4 ? "small" : "larg"}

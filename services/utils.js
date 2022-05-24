@@ -7,7 +7,32 @@ export const url = {
 
   catalog: () => "/catalog",
 
-  category: (category) => `/catalog/${category.slug}?cat_id=${category.id}`,
+  // category: (category, query) =>
+  //   `/catalog/${category.slug}?cat_id=${category.id}`,
+  category: (category) => {
+    var newUrl = "";
+    console.log(
+      category,
+
+      "queryqueryquery"
+    );
+    if (category.query) {
+      // query.map((el, index) => {
+      //   if (index == 0) {
+      //     newUrl = `?${Object.keys(el)}=${Object.values(el)}`;
+      //   } else {
+      //     newUrl += `&${Object.keys(el)}=${Object.values(el)}`;
+      //   }
+      // });
+      return `/catalog/${
+        category.slug ? category.slug : category.department.slug
+      }?currencies=${category.query}`;
+    } else {
+      return `/catalog/${
+        category.slug ? category.slug : category.department.slug
+      }`;
+    }
+  },
 
   product: (product) => {
     return `/products/${product.url_key}`;
@@ -32,7 +57,7 @@ export function runFbPixelEvent(eventData) {
   }, 500);
 }
 
-export async function ApiCustomSettingsAsync(locale, dbName) {
+export async function ApiCustomSettingsAsync(locale, dbName, selectedCurency) {
   const settingsResponse = await fetch(`${originalUrl}/db/custom-settingss`);
   // const translations = await shopApi.translations;
   // await fetch(`${originalUrl}/db/translations`);
@@ -64,13 +89,26 @@ export async function ApiCustomSettingsAsync(locale, dbName) {
   };
 
   if (channel_info) {
-    const { locales, currencies, base_currency_id, default_locale_id } =
-      channel_info[0];
+    const {
+      locales,
+      currencies,
+      currencies_new,
+      base_currency_id,
+      default_locale_id,
+    } = channel_info[0];
     dispatches["clientSide"]["setLocaleList"] = locales || false;
     dispatches["clientSide"]["changeLocale"] =
       locale != "catchAll" ? locale : default_locale_id;
     dispatches["clientSide"]["setCurrencies"] = currencies || false;
     dispatches["clientSide"]["changeCurrency"] = base_currency_id || false;
+    ///   console.log(currencies_new, "currencies_newcurrencies_new");
+    dispatches["clientSide"]["setRate"] =
+      {
+        list: currencies_new,
+        current: selectedCurency
+          ? currencies_new.find((item) => item.code == selectedCurency)
+          : currencies_new.find((item) => item.id === base_currency_id),
+      } || false;
 
     data = {
       locale: locales.find((item) => {
@@ -80,6 +118,10 @@ export async function ApiCustomSettingsAsync(locale, dbName) {
           return item.id === default_locale_id;
         }
       }),
+      rate: {
+        currencies_new,
+        current: currencies_new.find((item) => item.id === base_currency_id),
+      },
       currency: currencies.find((currency) => currency.id === base_currency_id),
     };
   }
@@ -163,23 +205,25 @@ export function genereateReadyArray(array) {
   });
 }
 
-export async function generalProcessForAnyPage(locale, dbName) {
+export async function generalProcessForAnyPage(
+  locale,
+  dbName,
+  selectedCurency
+) {
   /// let locale = null;
   let currency = null;
   let dispatches = null;
 
   ////////TODO FIX THIS PART
   ////console.log(locale);
-  const settingsResponse = await ApiCustomSettingsAsync(locale, dbName);
-  // console.log(
-  //   locale !== "catchAll" ? locale : settingsResponse.data.locale.code,
-  //   "asdsads"
-  // );
+  const settingsResponse = await ApiCustomSettingsAsync(
+    locale,
+    dbName,
+    selectedCurency
+  );
   const { setCatgoies, setMenuList } = await ApiCategoriesAndMenues(
     locale !== "catchAll" ? locale : settingsResponse.data.locale.code
   );
-
-  // ...settingsResponse.dispatches, setCatgoies, setMenuList
   dispatches = {
     serverSide: {
       ...settingsResponse.dispatches.serverSide,
@@ -196,6 +240,7 @@ export async function generalProcessForAnyPage(locale, dbName) {
 
   return {
     locale: settingsResponse.data.locale.code,
+    rate: settingsResponse.data.rate,
     currency,
     dispatches,
   };
