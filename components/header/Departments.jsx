@@ -79,8 +79,7 @@ class Departments extends Component {
 
         root.classList.add("departments--transition");
         root.classList.remove("departments--opened");
-        console.log(root, "rooooot")
-        console.log(content, "conteeeeeeeeent")
+
         content.getBoundingClientRect(); // force reflow
         content.style.height = "";
       }

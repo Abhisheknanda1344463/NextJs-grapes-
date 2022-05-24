@@ -16,13 +16,14 @@ import {useRouter} from 'next/router'
 function DepartmentsLinks(props) {
   const router = useRouter()
   const selectedData = useSelector((state) => state.locale.code);
+  const dbName = useSelector(state => state.general.dbName)
   // const slugID = useSelector((state) => state.general.categories && state.general.categories[0].children.map(item => item.slug));
   const dispatch = useDispatch();
   const depart = props?.dep;
   const schemaCategories = {
-    "@context": "/",
+    "@context": `https://schema.org/`,
     "@type": "Menu",
-    url: "/",
+    url: `/`,
     name: "Categories",
     description: "Categories description",
     hasMenuSection: [],

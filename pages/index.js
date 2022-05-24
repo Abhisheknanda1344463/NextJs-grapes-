@@ -8,6 +8,7 @@ import clientSideActions from "../services/clientSide";
 import HomePageOne from "../components/home/HomePageOne";
 import {generalProcessForAnyPage} from "../services/utils";
 import allActions from "../services/actionsArray";
+import {MetaWrapper} from "../components/MetaWrapper"
 
 function Home({
                 locale,
@@ -29,28 +30,14 @@ function Home({
   }, [locale]);
 
   const metaTags = metas ? JSON.parse(metas[0].home_seo) : "";
-
   return (
-    <>
-      <Head>
-        <title>{dbName}</title>
-        <meta name="title" content={metaTags.meta_title || dbName}/>
-        <meta name="description" content={metaTags.meta_description || dbName}/>
-        <meta name="keywords" content={metaTags.meta_keywords || dbName}/>
-        <meta property="og:title" name="title" content={metaTags.meta_title || dbName}/>
-        <meta property="og:description" name="description" content={metaTags.meta_description || dbName}/>
-        <meta property="og:keywords" name="keywords" content={metaTags.meta_keywords || dbName}/>
-        <meta
-          property="og:image"
-          name="image"
-          content={`https://${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}
-        />
-        <meta name="twitter:card" content="summary_large_image"/>
-        <meta name="twitter:title" content={metaTags.meta_title || dbName}/>
-        <meta name="twitter:description" content={metaTags.meta_description || dbName}/>
-        <meta name="twitter:image"
-              content={`https://${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}/>
-      </Head>
+    <MetaWrapper
+      title={dbName}
+      m_title={metaTags.meta_title || dbName}
+      m_desc={metaTags.meta_description || dbName}
+      m_key={metaTags.meta_keywords || dbName}
+      m_img={`https://${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}
+    >
       <HomePageOne
         locale={locale}
         currency={currency}
@@ -62,7 +49,40 @@ function Home({
         dbName={dbName}
         domain={domain}
       />
-    </>
+    </MetaWrapper>
+    // <>
+    //   <Head>
+    //     <title>{dbName}</title>
+    //     <meta name="title" content={metaTags.meta_title || dbName}/>
+    //     <meta name="description" content={metaTags.meta_description || dbName}/>
+    //     <meta name="keywords" content={metaTags.meta_keywords || dbName}/>
+    //     <meta property="og:title" name="title" content={metaTags.meta_title || dbName}/>
+    //     <meta property="og:description" name="description" content={metaTags.meta_description || dbName}/>
+    //     <meta property="og:keywords" name="keywords" content={metaTags.meta_keywords || dbName}/>
+    //     <meta
+    //       property="og:image"
+    //       name="image"
+    //       content={`https://${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}
+    //     />
+    //     <meta property="og:type" content="website"/>
+    //     <meta name="twitter:card" content="summary_large_image"/>
+    //     <meta name="twitter:title" content={metaTags.meta_title || dbName}/>
+    //     <meta name="twitter:description" content={metaTags.meta_description || dbName}/>
+    //     <meta name="twitter:image"
+    //           content={`https://${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}/>
+    //   </Head>
+    //   <HomePageOne
+    //     locale={locale}
+    //     currency={currency}
+    //     headerLayout="default"
+    //     newProducts={newProducts}
+    //     featuredProducts={featuredProducts}
+    //     metas={metas}
+    //     firstLoad={firstLoad}
+    //     dbName={dbName}
+    //     domain={domain}
+    //   />
+    // </>
   );
 }
 
@@ -77,7 +97,7 @@ export async function getServerSideProps({locale, locales, req, res}) {
 
   if (dbName.includes(".zegashop.com")) {
     var dataName = dbName.split(".zegashop.com");
-    console.log(dataName, "dataname in app js");
+    // console.log(dataName, "dataname in app js");
     databaseName = dataName[0];
     process.env.domainName = dbName;
 

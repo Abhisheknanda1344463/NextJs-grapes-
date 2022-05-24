@@ -107,12 +107,11 @@ function NavLinks(props) {
     }
 
     sortedNavLinks = Object.values(withOutParentId);
-    console.log(sortedNavLinks,"ksjfhkjhfhttps://blabla.zegashop.com/")
   }
 
   if (sortedNavLinks) {
     const schemaLinks = {
-      "@context": "/",
+      "@context": `https://schema.org/`,
       "@type": "Menu",
       url: "/",
       name: "MenuItems",

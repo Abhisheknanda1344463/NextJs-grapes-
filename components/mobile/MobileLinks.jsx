@@ -15,7 +15,6 @@ import { url } from "../../services/utils";
 
 function MobileLinks(props) {
   const { links, level, onItemClick } = props
-  console.log(links, "links in mobile")
 
   const handleItemClick = (item) => {
     if (onItemClick) {

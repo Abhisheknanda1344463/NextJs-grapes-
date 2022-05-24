@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import ShopPageCategory from "../../components/shop/ShopPageCategory";
+import {MetaWrapper} from "../../components/MetaWrapper";
 import {useRouter} from "next/router";
 import shopApi from "../../api/shop";
 import store from "../../store";
@@ -30,29 +31,15 @@ export default function Catlog(props) {
     }
   }, [props.locale]);
   const logoPath = `configuration/logo/logo.webp`
+  console.log(props.metaOptions.image && `https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image}`, "dfkgsdkgkgjka")
   return (
-    <>
-      <Head>
-        <title>{query.slug}</title>
-        <meta property="og:title" name="title"
-              content={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}/>
-        <meta property="og:description" name="description"
-              content={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}/>
-        <meta property="og:keywords" name="keywords"
-              content={props.metaOptions.meta_keywords ? props.metaOptions.meta_keywords : props.categoryTitle}/>
-        <meta
-          property="og:image"
-          name="image"
-          content={`https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image ? props.metaOptions.image : logoPath}`}
-        />
-        <meta name="twitter:card" content="summary_large_image"/>
-        <meta name="twitter:title"
-              content={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}/>
-        <meta name="twitter:description"
-              content={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}/>
-        <meta name="twitter:image"
-              content={`https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image ? props.metaOptions.image : logoPath}`}/>
-      </Head>
+    <MetaWrapper
+      title={query.slug}
+      m_title={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}
+      m_desc={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}
+      m_key={props.metaOptions.meta_keywords ? props.metaOptions.meta_keywords : props.categoryTitle}
+      m_img={props.metaOptions.image && `https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image}`}
+    >
       <ShopPageCategory
         columns={3}
         viewMode="grid"
@@ -66,7 +53,43 @@ export default function Catlog(props) {
         page={props.productsList.page}
         {...props}
       />
-    </>
+    </MetaWrapper>
+    // <>
+    //   <Head>
+    //     <title>{query.slug}</title>
+    //     <meta property="og:title" name="title"
+    //           content={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}/>
+    //     <meta property="og:description" name="description"
+    //           content={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}/>
+    //     <meta property="og:keywords" name="keywords"
+    //           content={props.metaOptions.meta_keywords ? props.metaOptions.meta_keywords : props.categoryTitle}/>
+    //     <meta
+    //       property="og:image"
+    //       name="image"
+    //       content={`https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image ? props.metaOptions.image : logoPath}`}
+    //     />
+    //     <meta name="twitter:card" content="summary_large_image"/>
+    //     <meta name="twitter:title"
+    //           content={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}/>
+    //     <meta name="twitter:description"
+    //           content={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}/>
+    //     <meta name="twitter:image"
+    //           content={`https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image ? props.metaOptions.image : logoPath}`}/>
+    //   </Head>
+    //   <ShopPageCategory
+    //     columns={3}
+    //     viewMode="grid"
+    //     sidebarPosition="start"
+    //     categorySlug={query.slug}
+    //     locale={props.locale}
+    //     dbName={props.dbName}
+    //     setChange={setChange}
+    //     productsList={props.productsList}
+    //     data={props.productsList.data}
+    //     page={props.productsList.page}
+    //     {...props}
+    //   />
+    // </>
   );
 }
 
