@@ -26,10 +26,10 @@ function BlockProducts(props) {
 
   const schemaProducts = {
     "@context": `https://schema.org/`,
-    '@type': 'ItemList',
+    '@type': 'Product',
     'name': 'Products',
-    'itemListElement': [],
-    url:`${url}`
+    'offers': [],
+    url: `${url}`
   }
 
   if (featuredProduct) {
@@ -44,18 +44,18 @@ function BlockProducts(props) {
   if (products.length > 0) {
 
     const productsList = products.map((product, index) => {
+      console.log(product, "proucts in lock products")
       //these arrayMetas were commented for some reason....
       // arrayMeta.push(<meta name="name" content={product.name}/>)
       // arrayMeta.push(<meta name="description" content={product.meta_description}/>)
 
-      schemaProducts.itemListElement.push({
-        '@type': 'ListItem',
-        'position': products.indexOf(product),
-        'item': {
-          'name': product.name,
-          'description': product.meta_description || product.description,
-          'price': product.formatted_price,
-        },
+      schemaProducts.offers.push({
+        '@type': 'Offer',
+        "sku": product.sku,
+        "image": product.base_imag.medium_image_url,
+        'name': product.name,
+        'description': product.meta_description || product.description,
+        'price': product.special_price || product.price,
       })
 
       return (
@@ -80,14 +80,13 @@ function BlockProducts(props) {
         <div className="block-products__list">
           {products.map((product, index) => {
 
-            schemaProducts.itemListElement.push({
-              '@type': 'ListItem',
-              'position': products.indexOf(product),
-              'item': {
-                'name': product.name,
-                'description': product.meta_description || product.description,
-                'price': product.formatted_price,
-              },
+            schemaProducts.offers.push({
+              '@type': 'Offer',
+              "sku": product.sku,
+              "image": product.base_imag.medium_image_url,
+              'name': product.name,
+              'description': product.meta_description || product.description,
+              'price': product.special_price || product.price,
             })
             //these arrayMetas were commented for some reason....
             // arrayMeta.push(<meta name="name" content={product.name}/>)
