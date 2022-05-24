@@ -9,7 +9,7 @@ import {cartAddItem} from '../../store/cart'
 import shopApi from '../../api/shop'
 import {setPopup, setPopupName, setUpCrossProd, setTempData} from '../../store/general'
 
-// import CrosselCard from "components/shared/CrosselCard";
+
 function UpSell(props) {
   const {
     selectedData,
@@ -29,13 +29,11 @@ function UpSell(props) {
     switch (type) {
       case 'upsel':
         shopApi.getUpSellProducts(prodID).then(res => {
-          console.log(res, "result in UPSEEEELLLLLLL")
           setUpCrossProd(res)
         })
         break
       case 'crossel':
         shopApi.getCrossSellProducts(prodID).then(res => {
-          console.log(res, "result in UPSEEEELLLLLLL")
           if (res.length === 0) {
             setPopup(false)
           }
@@ -45,17 +43,6 @@ function UpSell(props) {
     }
   }
 
-  // const dispatch = useDispatch();
-  // const selectedData = useSelector((state) => state.locale.code)
-  // const cartToken = useSelector((state) => state.cartToken)
-  // const customer = useSelector((state) => state.customer)
-  // const oldProduct = useSelector(state => state.general.temporaryData[0]);
-  // console.log(product, "-upsell")
-  // console.log(oldProduct, "-oldProduct")
-  // const oldPrice = oldProduct?.min_price
-  // const newPrice = Number(product?.min_price).toFixed(2);
-  // const curretPrice = (newPrice - oldPrice) < oldPrice ? "" : newPrice - oldPrice
-  // const curretPrice = (newPrice - oldPrice)
   let newPrice, oldPrice, currentPrice;
   if (oldProduct?.special_price) {
     oldPrice = oldProduct?.special_price
@@ -69,10 +56,7 @@ function UpSell(props) {
     newPrice = product?.min_price
   }
 
-  // console.log(oldPrice, "old price")
-  // console.log(newPrice, "new Price")
-  currentPrice = Number(newPrice) < Number(oldPrice) ? "ups!!!" : ((newPrice - oldPrice) + "$")
-  // console.log(currentPrice, "current price in upsell")
+  currentPrice = Number(newPrice) < Number(oldPrice) ? "ups!!!" : ((newPrice - oldPrice) + " ֏")
 
 
   return (
@@ -81,14 +65,11 @@ function UpSell(props) {
         <FormattedMessage
           id="upSell-title"
           defaultMessage={`You are ${currentPrice} away from this item`}
-          // defaultMessage={`You are 19$ away from this item`}
         />
       </h3>
       <hr/>
 
       <UpSellCard product={product} oldProduct={oldProduct} upCros={true}/>
-      {/*<UpSellCard product={oldProduct} upCros={true}/>*/}
-      {/*<ProductCard product={product} upCros={true}/>*/}
 
       {/* this is old version of "No thanks logic",  keep this for some time*/}
 

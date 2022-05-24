@@ -6,7 +6,6 @@
 //     src: local('Mardoto'), url('/fonts/Mardoto-Medium-_2_.woff') format('woff');
 //   }
 
-
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -66,6 +65,7 @@
 .search__button {
   position: absolute;
   right: 5px;
+  top: -5px;
   //comment by Manvel
   // top: 50%;
   transform: translate(-10px, 75%);
@@ -412,7 +412,6 @@
 
 @media screen and (max-width: 382px) {
   .block-header__title__custom {
-
     &::after,
     &:before {
       margin: 0 5px;
@@ -424,7 +423,6 @@
 
 @media screen and (max-width: 382px) {
   .block-header__title__custom {
-
     &::after,
     &:before {
       margin: 0 5px;
@@ -454,9 +452,9 @@
   visibility: visible;
   border: 1px solid #f5f4f4;
   border-radius: 4px;
-  //max-height: 200px;
-  //overflow-x: hidden;
-  //overflow-y:scroll;
+  max-height: 425px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /***Shop***/
@@ -1026,7 +1024,6 @@
 }
 
 @media screen and (max-width: 600px) {
-
   // .product-card-parent {
   //   max-width: 30%;
   // }
@@ -1385,7 +1382,6 @@
 }
 
 @media screen and (max-width: 568px) {
-
   // .block-slideshow__slide-image--desktop {
   //     display: none;
   // }
@@ -1469,7 +1465,6 @@
   }
 
   .product-card__prices {
-
     //flex-direction: column;
     .product-card__old-price {
       //margin-left: unset;
@@ -1563,8 +1558,13 @@
 
 .inner-addtocart {
   font-size: 16px;
-  padding: 9px 5px;
+  padding: 9px 60px;
 }
+
+//.inner-addtocart.inner_design {
+//  font-size: 16px;
+//  padding: 9px 5px;
+//}
 
 .f16 {
   font-size: 16px;
@@ -1573,7 +1573,6 @@
     width: 100% !important;
   }
 }
-
 
 .block-products-carousel__cell {
   padding: 0px 10px;
@@ -1647,7 +1646,6 @@
 }
 
 @media screen and (max-width: 767px) {
-
   .cart-table__column--quantity,
   .cart-table__column--total {
     display: flex;
@@ -1665,7 +1663,6 @@
   }
 
   .mobile-checkout-style {
-
     .c-pl-2,
     .c-pl-2 {
       padding: 0 !important;
@@ -2027,7 +2024,7 @@
 }
 
 .coupon-content {
-  width: 100%
+  width: 100%;
 }
 
 .coupon-content-block {
@@ -2060,7 +2057,6 @@
   }
 }
 
-
 @media screen and(max-width: 767px) {
   .password-responsive {
     font-size: 15px;
@@ -2075,7 +2071,6 @@
   width: 40px !important;
   height: 40px;
 }
-
 
 .coupon-code {
   .coupon-code__list {
@@ -2599,9 +2594,9 @@ thead .cart-table__column--total {
 }
 
 .menu--layout--classic {
-  position: absolute;
-  right: -190px;
-  top: inherit;
+  //position: absolute;
+  //right: -190px;
+  //top: inherit;
 }
 
 .departments__item--menu {
@@ -2754,7 +2749,7 @@ thead .cart-table__column--total {
 .responsive-checkout-text {
   text-align: right;
   font-size: 18px;
-  width: 100%;
+  width: auto;
 }
 
 @media (max-width: breakpoint(xs-end)) {
@@ -2827,7 +2822,6 @@ thead .cart-table__column--total {
 }
 
 @media screen and(max-width: 767px) {
-
   .checkout-select,
   .checkout-select-billing {
     max-width: 470px;
@@ -2970,7 +2964,6 @@ thead .cart-table__column--total {
 }
 
 @media screen and(max-width: 991px) {
-
   .footer-contacts__contacts,
   .mobile-footer-content {
     max-width: 184px;
@@ -3085,7 +3078,6 @@ thead .cart-table__column--total {
 }
 
 @media screen and (min-width: 576px) and (max-width: 600px) {
-
   .mobile-footer-dropdowns-list,
   .mobile-footer-newsletter {
     width: 45%;
@@ -3397,7 +3389,6 @@ thead .cart-table__column--total {
   }
 
   .bottom-nav-item.false {
-
     // a {
     //   height: 30px;
     //   width: 100%;
@@ -3572,13 +3563,12 @@ thead .cart-table__column--total {
       }
     }
 
-
     .product__actions-item {
       margin: 0;
       flex: 1 !important;
 
       .product__quantity {
-        width: 100% !important
+        width: 100% !important;
       }
 
       input {
@@ -3593,7 +3583,7 @@ thead .cart-table__column--total {
 .modal-content.active.upsell {
   max-width: 720px !important;
   min-height: 398px !important;
-  background: #FFFFFF !important;
+  background: #ffffff !important;
   border-radius: 10px !important;
   padding: 20px !important;
   box-sizing: border-box !important;
@@ -3615,7 +3605,7 @@ thead .cart-table__column--total {
   }
 
   .btn.btn-orange.rounded-pills {
-    height: 100% !important
+    height: 100% !important;
   }
 
   .product__actions {
@@ -3630,7 +3620,6 @@ thead .cart-table__column--total {
   .product-inner-description-title {
     font-weight: 600 !important;
   }
-
 
   //.product__gallery {
   //  display: flex !important;
@@ -3650,7 +3639,7 @@ thead .cart-table__column--total {
 .modal-content.active.crossel2 {
   max-width: 780px !important;
   min-height: 600px !important;
-  background: #FFFFFF !important;
+  background: #ffffff !important;
   border-radius: 10px !important;
   box-sizing: border-box !important;
   padding-bottom: 40px;
@@ -3689,7 +3678,6 @@ thead .cart-table__column--total {
   .product-card__name {
     margin: 0 !important;
   }
-
 }
 
 .crossel-content {
@@ -3715,7 +3703,6 @@ thead .cart-table__column--total {
   cursor: pointer;
 }
 
-
 .product-for--one-element {
   width: 100% !important;
 }
@@ -3723,22 +3710,21 @@ thead .cart-table__column--total {
 /**********************************/
 
 @media (max-width: 780px) {
-
   .modal-content {
     width: 95%;
   }
 }
 
 @media (max-width: 635px) {
-
   .crossel-button.cross__prods {
     flex-direction: column;
     gap: 0 !important;
   }
-  .product-inner-quantity {
-    width: 30%;
-    padding: 15px 0 !important;
-  }
+
+  //.product-inner-quantity {
+  //  width: 30%;
+  //  padding: 15px 0 !important;
+  //}
 
   .cross_btn.cross__prods {
     width: 100%;
@@ -3746,6 +3732,18 @@ thead .cart-table__column--total {
 }
 
 @media (max-width: 500px) {
+  .product__sidebar {
+    padding: 0 20px;
+  }
+
+  .product__actions {
+    flex-wrap: nowrap !important;
+    margin: 0 !important;
+  }
+
+  .inner-addtocart {
+    padding: 9px 10px !important;
+  }
 
   .short-description {
     table {
@@ -3753,7 +3751,6 @@ thead .cart-table__column--total {
       width: 100% !important;
     }
   }
-
 
   .upsell-content {
     margin: 0;
@@ -3804,30 +3801,28 @@ thead .cart-table__column--total {
       margin: 4px auto !important;
       width: 85% !important;
     }
-
   }
 
   .product-inner-long-description,
   .product__info {
-    padding: 0 20px !important
+    padding: 0 20px !important;
   }
 
   .product-card__symbol {
     margin-left: 0;
   }
 
-
   .product-gallery__featured .product-image {
     padding: 0 !important;
   }
+
   .modal-content.active.crossel,
   .modal-content.active.crossel2 {
     min-height: 400px !important;
   }
 
   .modal-content.active.upsell,
-  .modal-content.active.crossel
-  .modal-content.active.crossel2 {
+  .modal-content.active.crossel .modal-content.active.crossel2 {
     min-height: 0 !important;
     max-width: initial !important;
   }
@@ -3886,7 +3881,6 @@ thead .cart-table__column--total {
       display: block !important;
     }
 
-
     // .product-card-description {
     //   display: none;
     // }
@@ -3900,12 +3894,73 @@ thead .cart-table__column--total {
     margin: 10px 0;
     min-height: 0 !important;
   }
-
 }
-
 
 @media (max-width: 992px) {
   .modal-content.active.register {
     min-height: 0 !important;
   }
+}
+
+/*
+ Stripe Payment scss  
+*/
+
+.stripe-container {
+  padding: "3rem";
+
+  &-header {
+    max-width: 500px;
+    margin: 0 auto;
+
+    &__form {
+      display: block;
+      width: 100%;
+
+      &-items {
+        // display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .card {
+          background-color: white;
+          padding: 20px 20px 15px;
+          border-radius: 5px;
+          width: 100%;
+          border: 1px solid #afafaf;
+          box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+          margin: 0 0 10px 0;
+        }
+      }
+    }
+  }
+}
+
+.pay-button {
+  padding: 0.7rem 2rem;
+  width: 100%;
+  margin: 1rem 0;
+  color: white;
+  font-weight: bold;
+  font-size: medium;
+  background-color: #556cd6;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+  transition: box-shadow 500ms;
+  cursor: pointer;
+}
+
+.pay-button:disabled {
+  background-color: #afafaf;
+  box-shadow: none;
+  cursor: default;
+}
+
+.pay-button:disabled:hover {
+  box-shadow: none;
+}
+
+.pay-button:hover {
+  box-shadow: 2px 5px 15px 2px rgba(0, 0, 0, 0.2);
 }

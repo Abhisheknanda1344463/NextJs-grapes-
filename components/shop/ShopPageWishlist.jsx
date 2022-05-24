@@ -1,7 +1,7 @@
 // react
 import React from "react";
 //moment convertor
-import moment from 'moment'
+import moment from 'moment-timezone'
 // third-party
 import classNames from "classnames";
 import { connect } from "react-redux";
@@ -99,31 +99,30 @@ function ShopPageWishlist(props) {
       // console.log(item, 'itemitemitemitemitem')
       let price;
 
-      let newDate = new Date()
-      const date_from = moment.unix(item.special_price_from).format('YYYY-MM-DD')
-      const date_now = moment(newDate).format('YYYY-MM-DD')
-      const date_to = moment.unix(item.special_price_to).format('YYYY-MM-DD')
-
+      let newDate = new Date();
+      let date_from = moment(item.special_price_from * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+      let date_to = moment(item.special_price_to * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+      const date_now = moment(newDate * 1000).tz("Asia/Yerevan").format("YYYY-MM-DD");
       if (!item?.special_price && CONFIG === 'configurable') {
         price = (
           <div className="product-card__prices">
             <Currency value={item.formatted_price} />
           </div>
         );
-      }else if(item?.special_price && date_now >= date_from && date_now <= date_to) {
+      } else if (item?.special_price && date_now >= date_from && date_now <= date_to) {
         price = (
-            <div className="product-card__prices">
+          <div className="product-card__prices">
             <span className="product-card__new-price">
-               <span className="product-card__symbol">֏</span>
+              <span className="product-card__symbol">֏</span>
               <Currency value={Number(item.special_price).toFixed(0)} />
             </span>
-              {
-                <span className="product-card__old-price">
-                  <span className="product-card__symbol">֏</span>
-                 <Currency value={Number(item.price).toFixed(0)} />
+            {
+              <span className="product-card__old-price">
+                <span className="product-card__symbol">֏</span>
+                <Currency value={Number(item.price).toFixed(0)} />
               </span>
-              }
-            </div>
+            }
+          </div>
         )
       }
 
@@ -172,10 +171,10 @@ function ShopPageWishlist(props) {
         );
       } else {
         price = (
-            <div className="product-card__prices">
-              <span className="product-card__symbol">֏</span>
-              <Currency value={Number(item.price).toFixed(0)} />
-            </div>
+          <div className="product-card__prices">
+            <span className="product-card__symbol">֏</span>
+            <Currency value={Number(item.price).toFixed(0)} />
+          </div>
         );
       }
 
@@ -279,7 +278,7 @@ function ShopPageWishlist(props) {
           </h3>
           <div className="block-empty__actions">
             <Link href="/">
-              <a className="btn btn-orange rounded-pill f16">
+              <a className="btn btn-orange btn-primary f16">
                 <FormattedMessage id="continue" defaultMessage="Continue" />
               </a>
             </Link>

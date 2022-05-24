@@ -16,7 +16,7 @@ class FooterAccount extends React.Component {
   }
 
   componentDidMount() {
-    // console.log("this props in footer account",this.props)
+
     this.setState({
       footerLinks: this.props.menuList.filter((item) => item.type == "footer"),
     });
@@ -37,7 +37,6 @@ class FooterAccount extends React.Component {
         return 0;
       });
     }
-    console.log(navLinks)
     const trackingNumber = (
       <div className="trackingNumber-fms">
         <Link href="/tracking">

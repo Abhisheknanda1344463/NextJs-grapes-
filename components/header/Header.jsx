@@ -14,7 +14,7 @@ function Header(props) {
   const { layout, domain } = props;
 
   const schemaSiteHeader = {
-    "@context": "/",
+    "@context": `https://schema.org/`,
     "@type": "ItemList",
     "name": "Site Header Items",
     "description": "contact, change currency and language",
@@ -34,7 +34,8 @@ function Header(props) {
         "position": 2,
         "name": "Language"
       },
-    ]
+    ],
+    url:`/`,
   }
 
   return (

@@ -19,7 +19,7 @@ import { BackArrow } from '../../svg'
 import { url, removeCurrencyTemp } from '../../services/utils'
 import store from '../../store'
 //MOMENT
-import moment from 'moment'
+import moment from 'moment-timezone'
 // data stubs
 import theme from '../../data/theme'
 import { urlLink } from '../../helper'
@@ -164,16 +164,21 @@ const ShopPageCart = (props) => {
           }
           render={({ run, loading }) => {
             const classes = classNames(
-              'btn btn-light btn-sm btn-svg-icon del-icon-fms',
+              'btn text-light btn-orange btn-block  btn-sm cart__checkout-button f16',
               {
                 'btn-loading': loading,
               },
             )
 
             return (
-              <button type="button" onClick={run} className={classes}>
-                <CartTrash />
-              </button>
+              <div onClick={run}>
+                <a className={classes} style={{ marginRight: "40px", minWidth: "100px" }}>
+                  <FormattedMessage id="delete" defaultMessage="Delete" />
+                </a>
+              </div>
+              // <button type="button" onClick={run} className={classes}>
+              //   <CartTrash />
+              // </button>
             )
           }}
         />
@@ -209,16 +214,10 @@ const ShopPageCart = (props) => {
       const product = cart.items[index].product
       const CONFIG = 'simple'
       let price
-
-      let newDate = new Date()
-      const date_from = moment
-        .unix(product.special_price_from)
-        .format('YYYY-MM-DD')
-      const date_now = moment(newDate).format('YYYY-MM-DD')
-      const date_to = moment
-        .unix(product.special_price_to)
-        .format('YYYY-MM-DD')
-
+      let newDate = new Date();
+      let date_from = moment(product.special_price_from * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+      let date_to = moment(product.special_price_to * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+      const date_now = moment(newDate * 1000).tz("Asia/Yerevan").format("YYYY-MM-DD");
       if (!product?.special_price && CONFIG === 'configurable') {
         price = (
           <div className="product-card__prices">
@@ -610,7 +609,7 @@ const ShopPageCart = (props) => {
             </h3>
             <div className="block-empty__actions">
               <Link href="/">
-                <a className="btn btn-orange rounded-pill px-4 f16">
+                <a className="btn btn-orange btn-primary px-4 f16">
                   <FormattedMessage id="continue" defaultMessage="continue" />
                 </a>
               </Link>

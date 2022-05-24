@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 
 //moment convertor
-import moment from "moment";
+import moment from "moment-timezone";
 // third-party
 import classNames from "classnames";
 import { connect } from "react-redux";
@@ -91,11 +91,16 @@ function IndicatorCart(props) {
     let price;
 
     let newDate = new Date();
-    const date_from = moment
-      .unix(product.special_price_from)
-      .format("YYYY-MM-DD");
-    const date_now = moment(newDate).format("YYYY-MM-DD");
-    const date_to = moment.unix(product.special_price_to).format("YYYY-MM-DD");
+    let date_from = moment(product.special_price_from * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+    let date_to = moment(product.special_price_to * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+    const date_now = moment(newDate * 1000).tz("Asia/Yerevan").format("YYYY-MM-DD");
+
+    // let newDate = new Date();
+    // const date_from = moment
+    //   .unix(product.special_price_from)
+    //   .format("YYYY-MM-DD");
+    // const date_now = moment(newDate).format("YYYY-MM-DD");
+    // const date_to = moment.unix(product.special_price_to).format("YYYY-MM-DD");
 
     if (!product?.special_price && CONFIG === "configurable") {
       price = (

@@ -1,13 +1,14 @@
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+import {useEffect} from 'react'
+import {useRouter} from 'next/router'
 
-import store from "../../store";
-import shopApi from "../../api/shop";
-import allActions from "../../services/actionsArray";
-import { generalProcessForAnyPage } from "../../services/utils";
-import ShopPageProduct from "../../components/shop/ShopPageProduct";
+import store from '../../store'
+import shopApi from '../../api/shop'
+import allActions from '../../services/actionsArray'
+import {generalProcessForAnyPage} from '../../services/utils'
+import ShopPageProduct from '../../components/shop/ShopPageProduct'
+import {MetaWrapper} from '../../components/MetaWrapper'
 import Head from "next/head";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux"
 
 export default function ProductInnerPage(props) {
   const query = useRouter();
@@ -30,53 +31,25 @@ export default function ProductInnerPage(props) {
     }
 
     ///router.push(window.location.pathname, window.location.pathname);
-  }, [props.productSlug]);
+  }, [props.productSlug])
   useEffect(() => {
     for (let actionKey in props.dispatches) {
-      dispatch(allActions[actionKey](props.dispatches[actionKey]));
+      dispatch(allActions[actionKey](props.dispatches[actionKey]))
     }
-  }, [props.locale]);
+  }, [props.locale])
 
   // useEffect(() => {
   //
   // },[])
-  //// console.log(props, "prosp in product slug");
+
   return (
-    <>
-      <Head>
-        <meta
-          property="og:title"
-          name="title"
-          content={
-            props?.product?.data?.meta_title
-              ? props?.product?.data?.meta_title
-              : props?.product?.data?.name
-          }
-        />
-        <meta
-          property="og:description"
-          name="description"
-          content={
-            props?.product?.data?.meta_description
-              ? props?.product?.data?.meta_description
-              : props?.product?.data?.name
-          }
-        />
-        <meta
-          property="og:keywords"
-          name="keywords"
-          content={
-            props?.product?.data?.meta_keywords
-              ? props?.product?.data?.meta_keywords
-              : props?.product?.data?.name
-          }
-        />
-        <meta
-          property="og:image"
-          name="image"
-          content={`https://${dbName}/storage/${props?.product?.data?.base_imag?.path}`}
-        />
-      </Head>
+    <MetaWrapper
+      title={props?.product?.data?.name}
+      m_title={props?.product?.data?.meta_title ? props?.product?.data?.meta_title : props?.product?.data?.name}
+      m_desc={props?.product?.data?.meta_description ? props?.product?.data?.meta_description : props?.product?.data?.name}
+      m_key={props?.product?.data?.meta_keywords ? props?.product?.data?.meta_keywords : props?.product?.data?.name}
+      m_img={props.dbName && `https://${props.dbName}/storage/${props?.product?.data?.base_imag?.path}`}
+    >
       <ShopPageProduct
         rate={props.rate}
         layout="standard"
@@ -88,9 +61,42 @@ export default function ProductInnerPage(props) {
         locale={props.locale}
         loading={true}
         bundle={props.bundle}
+        dbName={props.dbName}
       />
-    </>
-  );
+    </MetaWrapper>
+    // <>
+    //   <Head>
+    //     <meta property="og:title" name="title"
+    //           content={props?.product?.data?.meta_title ? props?.product?.data?.meta_title : props?.product?.data?.name}/>
+    //     <meta property="og:description" name="description"
+    //           content={props?.product?.data?.meta_description ? props?.product?.data?.meta_description : props?.product?.data?.name}/>
+    //     <meta property="og:keywords" name="keywords"
+    //           content={props?.product?.data?.meta_keywords ? props?.product?.data?.meta_keywords : props?.product?.data?.name}/>
+    //     <meta
+    //       property="og:image"
+    //       name="image"
+    //       content={`https://${dbName}/storage/${props?.product?.data?.base_imag?.path}`}
+    //     />
+    //     <meta name="twitter:card" content="summary_large_image"/>
+    //     <meta name="twitter:title"
+    //           content={props?.product?.data?.meta_title ? props?.product?.data?.meta_title : props?.product?.data?.name}/>
+    //     <meta name="twitter:description"
+    //           content={props?.product?.data?.meta_description ? props?.product?.data?.meta_description : props?.product?.data?.name}/>
+    //     <meta name="twitter:image" content={`https://${dbName}/storage/${props?.product?.data?.base_imag?.path}`}/>
+    //   </Head>
+    //   <ShopPageProduct
+    //     layout="standard"
+    //     productSlug={props.productSlug}
+    //     relatedPproducts={checkRelatedProducts}
+    //     product={props.product}
+    //     dispatches={props.dispatches}
+    //     configurableVariantes={props.configurableVariantes}
+    //     locale={props.locale}
+    //     loading={true}
+    //     bundle={props.bundle}
+    //   />
+    // </>
+  )
 }
 
 export async function getServerSideProps({ locale, locales, req, res, query }) {
@@ -188,6 +194,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
       relatedPproducts: relatedPproducts,
       configurableVariantes: configurabelConfigProduct,
       bundle: bundleProduct,
+      dbName,
     },
   };
 }

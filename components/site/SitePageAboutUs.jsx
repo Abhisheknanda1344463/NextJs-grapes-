@@ -41,7 +41,7 @@ function SitePageAboutUs() {
   return (
     <div className="block about-us">
       <Helmet>
-        <title>{`About Us — ${theme.name}`}</title>
+        <title>{`About Us`}</title>
       </Helmet>
 
       <div

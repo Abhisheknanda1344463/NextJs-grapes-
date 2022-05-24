@@ -93,3 +93,4 @@ export { default as PagesSVG } from "./page.svg";
 export { default as ContactsSVG } from "./contacts.svg";
 export { default as IdramPosSVG } from "./idramSvg.svg";
 export { default as TelcellPosSVG } from "./telcell.svg";
+export { default as PaypalPosSVG } from "./paypal.svg";

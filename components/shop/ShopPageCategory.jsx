@@ -332,10 +332,9 @@ function ShopPageCategory(props) {
       // setDataFromQuery(buildQuery({...state.options, page: page}, state.filters))
       prevStateFiltersRef.current = state.filters;
       prevStateOptionsRef.current = state.options;
-      const location = `${window.location.pathname}${
-        query
-          ? `?cat_id=${props.categoryId}&${query}`
-          : `?cat_id=${props.categoryId}`
+      const location = `${window.location.pathname}${query
+        ? `?cat_id=${props.categoryId}&${query}`
+        : `?cat_id=${props.categoryId}`
       }`
       router.push(location, location);
     }
@@ -462,17 +461,17 @@ function ShopPageCategory(props) {
             />
           </div> */}
           <div>
-            {/*<WidgetFilters*/}
-            {/*  filters={brands}*/}
-            {/*  dispatch={dispatch}*/}
-            {/*  stateFilters={state}*/}
-            {/*  values={state.filters}*/}
-            {/*  catID={catID}*/}
-            {/*  maxPrice={maxPrice}*/}
-            {/*  minPrice={minPrice}*/}
-            {/*  initialMaxPrice={props.initialMaxPrice}*/}
-            {/*  initialMinPrice={props.initialMinPrice}*/}
-            {/*/>*/}
+            {/*<WidgetFilters
+              filters={brands}
+              dispatch={dispatch}
+              stateFilters={state}
+              values={state.filters}
+              catID={catID}
+              maxPrice={maxPrice}
+              minPrice={minPrice}
+              initialMaxPrice={props.initialMaxPrice}
+              initialMinPrice={props.initialMinPrice}
+            />*/}
           </div>
         </div>
       </CategorySidebarItem>
@@ -482,8 +481,8 @@ function ShopPageCategory(props) {
   if (columns > 3 && productsList.length > 0) {
     content = (
       <div className="container_fm">
-        {/*<div className="block">{productsView}</div>*/}
-        {/*{sidebarComponent}*/}
+        {/*<div className="block">{productsView}</div>
+        {sidebarComponent}*/}
       </div>
     );
   } else {
@@ -506,7 +505,7 @@ function ShopPageCategory(props) {
         </div>
 
         <div className={`shop-layout shop-layout--sidebar--${sidebarPosition}`}>
-          {console.log(brands.length, "brands length")}
+          {/*{console.log(brands.length, "brands length")}*/}
           {brands.length > 0 ? sidebarPosition === "start" && sidebar : " "}
           <div className="shop-layout__content">
             <div className="block block-fms">{productsView}</div>
@@ -519,21 +518,6 @@ function ShopPageCategory(props) {
 
   return (
     <React.Fragment>
-      <Helmet>
-        <title>{`Shop Category Page — ${categorySlug}`}</title>
-        <meta name="keywords" content={`Catalog, ${categorySlug}`}/>
-        <meta
-          name="description"
-          content={`Catalog ${categorySlug}`}
-        />
-        <meta
-          property="og:title"
-          content={`Shop Category Page — ${categorySlug}`}
-        />
-        {/*<meta property="og:description" content={`Zegashop ${categorySlug}`}/>*/}
-        {/*<meta property="og:image" content="Zegashop"/>*/}
-        <meta property="og:url" content={url + "/catalog/" + categorySlug}/>
-      </Helmet>
       <div className="cat_blocks_fms">
         <PageHeader header={pageTitle} breadcrumb={breadcrumb}/>
         {content}

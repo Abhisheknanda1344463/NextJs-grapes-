@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import ShopPageCategory from "../../components/shop/ShopPageCategory";
-import { useRouter } from "next/router";
+import {MetaWrapper} from "../../components/MetaWrapper";
+import {useRouter} from "next/router";
 import shopApi from "../../api/shop";
 import store from "../../store";
-import { ApiCustomSettingsAsync } from "../../services/utils";
+import moment from "moment"
+import m from "moment-timezone"
+import {ApiCustomSettingsAsync} from "../../services/utils";
 import serverSideActions from "../../services/serverSide";
 import allActions from "../../services/actionsArray";
+import Head from 'next/head'
 
 import clientSideActions from "../../services/clientSide";
 import { generalProcessForAnyPage } from "../../services/utils";
@@ -15,8 +19,7 @@ export default function Catlog(props) {
   const router = useRouter();
   const { dispatch } = store;
   const [change, setChange] = useState(false);
-  ////console.log(props.locale, "props.localeprops.locale");
-  // console.log(props, "props in categories");
+
   // useEffect(() => {
   //   /// window.history.replaceState(null, "", window.location.href);
   //   router.push(window.location.pathname, window.location.pathname);
@@ -27,22 +30,67 @@ export default function Catlog(props) {
       dispatch(allActions[actionKey](props.dispatches[actionKey]));
     }
   }, [props.locale]);
-
+  const logoPath = `configuration/logo/logo.webp`
+  console.log(props.metaOptions.image && `https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image}`, "dfkgsdkgkgjka")
   return (
-    <ShopPageCategory
-      columns={3}
-      viewMode="grid"
-      sidebarPosition="start"
-      categorySlug={query.slug}
-      locale={props.locale}
-      dbName={props.dbName}
-      setChange={setChange}
-      productsList={props.productsList}
-      data={props.productsList.data}
-      page={props.productsList.page}
-      rate={props.rate}
-      {...props}
-    />
+    <MetaWrapper
+      title={query.slug}
+      m_title={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}
+      m_desc={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}
+      m_key={props.metaOptions.meta_keywords ? props.metaOptions.meta_keywords : props.categoryTitle}
+      m_img={props.metaOptions.image && `https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image}`}
+    >
+      <ShopPageCategory
+        columns={3}
+        viewMode="grid"
+        sidebarPosition="start"
+        categorySlug={query.slug}
+        locale={props.locale}
+        dbName={props.dbName}
+        setChange={setChange}
+        productsList={props.productsList}
+        data={props.productsList.data}
+        page={props.productsList.page}
+        rate={props.rate}
+        {...props}
+      />
+    </MetaWrapper>
+    // <>
+    //   <Head>
+    //     <title>{query.slug}</title>
+    //     <meta property="og:title" name="title"
+    //           content={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}/>
+    //     <meta property="og:description" name="description"
+    //           content={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}/>
+    //     <meta property="og:keywords" name="keywords"
+    //           content={props.metaOptions.meta_keywords ? props.metaOptions.meta_keywords : props.categoryTitle}/>
+    //     <meta
+    //       property="og:image"
+    //       name="image"
+    //       content={`https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image ? props.metaOptions.image : logoPath}`}
+    //     />
+    //     <meta name="twitter:card" content="summary_large_image"/>
+    //     <meta name="twitter:title"
+    //           content={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}/>
+    //     <meta name="twitter:description"
+    //           content={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}/>
+    //     <meta name="twitter:image"
+    //           content={`https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image ? props.metaOptions.image : logoPath}`}/>
+    //   </Head>
+    //   <ShopPageCategory
+    //     columns={3}
+    //     viewMode="grid"
+    //     sidebarPosition="start"
+    //     categorySlug={query.slug}
+    //     locale={props.locale}
+    //     dbName={props.dbName}
+    //     setChange={setChange}
+    //     productsList={props.productsList}
+    //     data={props.productsList.data}
+    //     page={props.productsList.page}
+    //     {...props}
+    //   />
+    // </>
   );
 }
 
@@ -119,17 +167,12 @@ export async function getServerSideProps({
   const selectedLocale = locale != "catchAll" ? locale : defaultLocaleSelected;
   let categoryId,
     categoryTitle,
+    metaOptions,
     dispatches,
     brands = [],
     productsList = [],
     newdata = [];
   newdata = false;
-  // console.log(
-  //   selectedLocale,
-  //   locale,
-  //   defaultLocaleSelected,
-  //   "selectedLocaleselectedLocaleselectedLocale"
-  // );
 
   const settingsResponse = await ApiCustomSettingsAsync(selectedLocale);
 
@@ -139,6 +182,14 @@ export async function getServerSideProps({
 
   function getItems(array) {
     array.forEach((e, i) => {
+      if (e.slug == query.slug) {
+        metaOptions = {
+          meta_title: e.meta_title,
+          meta_description: e.meta_description,
+          meta_keywords: e.meta_keywords,
+        }
+
+      }
       if (e.slug == query.slug && e.children?.length === 0) {
         categoryId = e.id;
         categoryTitle = e.name;
@@ -156,11 +207,11 @@ export async function getServerSideProps({
   await fetch(`https://${dbName}/api/test?slug=${query.slug}`)
     .then((response) => response.json())
     .then((response) => {
-      console.log(response, "asdsad");
+
       categoryId = response.id;
+      metaOptions.image = response.image
     })
     .catch((err) => console.error(err));
-
   await shopApi
     .getFilters(categoryId ? categoryId : query.cat_id, {
       lang: selectedLocale,
@@ -181,14 +232,16 @@ export async function getServerSideProps({
       dbName: dbName,
       catID: categoryId,
       window: null,
-      limit: 6,
+      limit: 18,
     })
     .then((responseProductList) => {
       dispatches = {
         ...dispatches,
         ...responseProductList.dispatches,
       };
+      let currentDate = m(new Date()).tz("Asia/Yerevan").format('YYYY-MM-DD')
       if (Object.keys(filterValues).length > 0) {
+        let date = new Date()
         let checkedFiltres = [];
         newdata = responseProductList.data.map((el, value) => {
           let checkFiltre = [];
@@ -198,7 +251,22 @@ export async function getServerSideProps({
               checkFiltre[index] = Object.keys(el).filter((e) => {
                 if (e == key) {
                   let splited = filterValues[key].split(",");
-                  let checkData = splited.filter((s) => s == el[e]);
+                  let checkData = splited.filter((s) => {
+                    return s == el[e]
+                  });
+
+
+                  /*if (el.special_price && el.special_price_from && el.special_price_to) {
+                    let date_from = m(el.special_price_from * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+                    let date_to = m(el.special_price_to * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+                    if (currentDate >= date_from && currentDate <= date_to) {
+                      // checkData = splited.filter((s) => {
+                      //   return s >= el[e]
+                      // });
+                      // console.log(checkData, 'checkDatacheckDatacheckData');
+                    }
+                  }*/
+
                   if (checkData.length > 0) {
                     return true;
                   } else {
@@ -215,6 +283,7 @@ export async function getServerSideProps({
                 checkFiltre[index] = Object.keys(response).filter((e) => {
                   if (e == key) {
                     let splited = filterValues[key].split(",");
+
                     checkData[index][keyIndex] = splited.filter((s) => {
                       return s == response[e];
                     });
@@ -228,6 +297,7 @@ export async function getServerSideProps({
                   }
                 });
               });
+
             }
           });
           var result = checkFiltre.filter((e) => e.length);
@@ -283,9 +353,11 @@ export async function getServerSideProps({
       brandList: brands,
       categoryId: categoryId,
       dbName: dbName,
+      domain: databaseName,
       categoryTitle,
       dispatches: dispatchesNew,
       locale: selectedLocale,
+      metaOptions,
     },
   };
 }

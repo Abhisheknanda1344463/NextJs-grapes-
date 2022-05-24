@@ -4,11 +4,12 @@ import Router from 'next/router'
 import { url, apiUrlWithStore } from '../../helper'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
-import { Check9x7Svg, IdramPosSVG, TelcellPosSVG } from '../../svg'
+import { Check9x7Svg, IdramPosSVG, TelcellPosSVG, PaypalPosSVG } from '../../svg'
 import Currency from '../shared/Currency'
 import Collapse from '../shared/Collapse'
 import PageHeader from '../shared/PageHeader'
 import ShippingMethod from './ShippingMethod'
+import StripeInit from './StripeInit'
 // import payments from "../../data/shopPayments";
 import ShippingAddress from './ShippingAddress'
 import { FormattedMessage, injectIntl } from 'react-intl'
@@ -18,7 +19,7 @@ import { runFbPixelEvent } from '../../services/utils'
 import TextField from '@mui/material/TextField'
 import { removeCurrencyTemp } from '../../services/utils'
 //momemt js
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 
 
@@ -51,7 +52,7 @@ class ShopPageCheckout extends React.Component {
       checkbox: false,
       token: this.props.token,
       locale: this.props.locale,
-      payment: 'cashondelivery',
+      payment: '',
       payments: this.props.payments,
       inputsDataForParent: false,
       notes: '',
@@ -65,7 +66,7 @@ class ShopPageCheckout extends React.Component {
       shipingPhone: '',
       phone: '',
       email: '',
-      country: 'United States',
+      country: { code: 'US', name: 'United States' },
       states: '',
       city: '',
       apartment: '',
@@ -73,13 +74,14 @@ class ShopPageCheckout extends React.Component {
       defaultAddress: true,
       newBillingAddress: false,
       input: null,
+      isCallStripePayment: false,
 
       billStreet: '',
       billPhone: '',
       billApartment: '',
       billCity: '',
       billPost: '',
-      billCountry: 'United States',
+      billCountry: { code: 'US', name: 'United States' },
       billState: '',
 
       billCountryList: [],
@@ -88,6 +90,7 @@ class ShopPageCheckout extends React.Component {
       pastOrders: [],
       addressOption: {},
       addCupone: '',
+      stripeMethod: {},
       errors: {
         fullName: '',
         name: '',
@@ -110,6 +113,23 @@ class ShopPageCheckout extends React.Component {
     this.abortController = new AbortController()
     this.single = this.abortController
     runFbPixelEvent({ name: 'Checkout Page' })
+    this.setState({
+      payment: this.props.payments.length > 0 ? this.props.payments[0].key : ""
+    })
+    //Manvel
+    if (this.props.payments.length > 0) {
+      this.props.payments.map(el => {
+        if (el.method === "stripe") {
+          // fetch(apiUrlWithStore(`/api/checkout/getpk`))
+          //   .then((res) => res.json())
+          //   .then((response) => console.log(response, 'response'))
+          this.setState({
+            stripeMethod: el
+          })
+        }
+      })
+    }
+
 
     fetch(apiUrlWithStore(`/api/country-states?pagination=0`))
       .then((res) => res.json())
@@ -135,19 +155,20 @@ class ShopPageCheckout extends React.Component {
       )
         .then((res) => res.json())
         .then((res) => {
-          // console.log(res, 'res in shop page checkout')
-          this.setState({
-            pastOrders: res.data,
-            street: res.data[0]?.address1[0],
-            city: res.data[0]?.city,
-            country: res.data[0]?.country,
-            fullName: res.data[0]?.first_name,
-            lname: res.data[0]?.last_name,
-            phone: res.data[0]?.phone,
-            postal: res.data[0]?.postcode,
-            state: res.data[0]?.state,
-            apartment: res.data[0]?.address1[1],
-          })
+          if (res.data.length > 0) {
+            this.setState({
+              pastOrders: res.data,
+              street: res.data[0]?.address1[0],
+              city: res.data[0]?.city,
+              country: res.data[0]?.country,
+              fullName: res.data[0]?.first_name,
+              lname: res.data[0]?.last_name,
+              phone: res.data[0]?.phone,
+              postal: res.data[0]?.postcode,
+              state: res.data[0]?.state,
+              apartment: res.data[0]?.address1[1],
+            })
+          }
         })
 
     }
@@ -215,7 +236,7 @@ class ShopPageCheckout extends React.Component {
     if (shipingRate && total) {
       let value = convertSymbols.replace(/\s/g, '').slice(0, -3)
       let result = (Number(value) + Number(shipingRate))
-      return `֏ ${result}`
+      return `${result} ֏`
     } else {
       let current = convertSymbols.replace(/\s/g, '').slice(0, -3)
       return `${Number(current)} ֏`
@@ -281,7 +302,7 @@ class ShopPageCheckout extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         code: this.state.addCupone,
-        // token: this.state.customer.token,
+        token: this.state.customer.token || this.state.token.cartToken,
       }),
     }
     if (this.state.addCupone || methods == 'DELETE') {
@@ -445,7 +466,7 @@ class ShopPageCheckout extends React.Component {
   renderCart() {
     const { cart } = this.props
     let newDate = new Date()
-    const date_now = moment(newDate).format('YYYY-MM-DD')
+    const date_now = moment(newDate * 1000).tz("Asia/Yerevan").format("YYYY-MM-DD");
     const items = cart.items.map((item) => (
       <tr key={item.id}>
         <td>{`${item.product.name}`}</td>
@@ -499,6 +520,7 @@ class ShopPageCheckout extends React.Component {
               </th>
               <td className="responsive-checkout-text">
                 <Currency value={this.state.shippingMethodRate} />
+                <span className="product-card__symbol">֏</span>
               </td>
             </tr>
           ) : (
@@ -552,13 +574,14 @@ class ShopPageCheckout extends React.Component {
                 ? <CreditCartSvg />
                 : payment.method == 'idram_vpos' ? <IdramPosSVG />
                   : payment.method == 'telcell_vpos' ? <TelcellPosSVG />
-                    // : payment.method == "paypal_vpos" ? <PaypalPosSVG />
-                    : (
-                      <FormattedMessage
-                        id={payment.key}
-                        defaultMessage={payment.title}
-                      />
-                    )}
+                    : payment.method == "paypal_vpos" ? <PaypalPosSVG />
+                      : payment.method == "paypal_standard" ? <PaypalPosSVG />
+                        : (
+                          <FormattedMessage
+                            id={payment.key}
+                            defaultMessage={payment.title}
+                          />
+                        )}
             </span>
           </label>
           <div className="payment-methods__item-container" ref={setContentRef}>
@@ -597,6 +620,13 @@ class ShopPageCheckout extends React.Component {
             />
           </div>
           <ul className="payment-methods__list">{payments}</ul>
+          {
+            this.state.stripeMethod && this.state.stripeMethod.method === "stripe" ? (
+              <StripeInit isCallStripePayment={this.state.isCallStripePayment} callFuntionPay={this.callPayWithStripe} />
+            ) : (
+              ""
+            )
+          }
         </div>
       </div>
     )
@@ -632,6 +662,7 @@ class ShopPageCheckout extends React.Component {
       checkbox,
     } = this.state
     let object = {}
+    console.log(this.state, 'jdshfjhjghfjg')
 
     if (email === '' || validEmailRegex.test(this.state.email) == false) {
       object.email = 'Email is not valid!'
@@ -677,6 +708,9 @@ class ShopPageCheckout extends React.Component {
       object.checkbox = ''
     }
 
+
+
+
     if (Object.keys(object).length > 0) {
       this.setState(
         {
@@ -690,6 +724,7 @@ class ShopPageCheckout extends React.Component {
         },
       )
     }
+
     if (Object.keys(this.state.addressOption).length > 0) {
       this.setState({
         street: this.state.addressOption.address1[0],
@@ -697,7 +732,7 @@ class ShopPageCheckout extends React.Component {
         lname: this.state.addressOption.last_name,
         city: this.state.addressOption.city,
         country: this.state.addressOption.country,
-        states: this.state.state || 'no state',
+        states: this.state.state || this.state.country,
         postal: this.state.addressOption.postcode,
         phone: this.state.addressOption.phone,
         email: this.state.email,
@@ -718,6 +753,14 @@ class ShopPageCheckout extends React.Component {
       })
     }
   }
+
+
+  callPayWithStripe(value) { //boolean
+    this.setState({
+      isCallStripePayment: value
+    })
+  }
+
 
   requestOrder() {
     const headers = {
@@ -776,8 +819,8 @@ class ShopPageCheckout extends React.Component {
         first_name: this.state.addressOption.first_name,
         last_name: this.state.addressOption.last_name,
         city: this.state.addressOption.city,
-        country: this.state.addressOption.country,
-        state: this.state.state || 'no state',
+        country: this.state.addressOption.country.code,
+        state: this.state.state || this.state.country,
         postcode: this.state.addressOption.postcode,
         phone: this.state.addressOption.phone,
         // apartment: this.state.addressOption.apartment,
@@ -797,7 +840,6 @@ class ShopPageCheckout extends React.Component {
           state,
           apartment,
         } = this.state
-
         const {
           city: cityTwo,
           country: countryTwo,
@@ -842,8 +884,8 @@ class ShopPageCheckout extends React.Component {
             first_name: this.state.fullName,
             last_name: this.state.lname,
             city: this.state.city,
-            country: this.state.country,
-            state: this.state.state || 'no state',
+            country: this.state.country.code,
+            state: this.state.state || this.state.country,
             postcode: this.state.postal,
             phone: this.state.phone,
             // apartment: this.state.apartment,
@@ -860,8 +902,8 @@ class ShopPageCheckout extends React.Component {
             first_name: this.state.fullName,
             last_name: this.state.lname,
             city: this.state.city,
-            country: this.state.country,
-            state: this.state.state || 'no state',
+            country: this.state.country.code,
+            state: this.state.state || this.state.country,
             postcode: this.state.postal,
             phone: this.state.phone,
             // apartment: this.state.apartment,
@@ -879,8 +921,8 @@ class ShopPageCheckout extends React.Component {
           first_name: this.state.fullName,
           last_name: this.state.lname,
           city: this.state.city,
-          country: this.state.country,
-          state: this.state.state || 'no state',
+          country: this.state.country.code,
+          state: this.state.state || this.state.country,
           postcode: this.state.postal,
           phone: this.state.phone,
           // apartment: this.state.apartment,
@@ -946,7 +988,6 @@ class ShopPageCheckout extends React.Component {
           api_token: this.state.token.cartToken,
         }),
       }
-
       save_shipping = {
         method: 'POST',
         headers: headers,
@@ -999,21 +1040,28 @@ class ShopPageCheckout extends React.Component {
                         .then((res) => res.json())
                         .then((res) => {
                           if (res.success) {
+                            if (this.state.payment === 'stripe') {
+                              this.callPayWithStripe(true)
+
+                            }
                             if (res?.redirect_url?.backURL) {
                               window.location = res.redirect_url.backURL
                             } else {
                               let url = ''
                               if (res?.redirect_url) {
                                 url = res.redirect_url
+                                if (url === 'stripe') {
+                                  this.callPayWithStripe(true)
+                                }
                               } else if (res?.order?.id) {
                                 url = `/thanks?orderID=${res.order.id}`
                               } else {
                                 url = `/thanks?orderID=${res.id}`
                               }
-                              Router.push(url)
+                              url === 'stripe' ? '' : Router.push(url)
                             }
 
-                            this.props.cartRemoveAllItems()
+                            // this.props.cartRemoveAllItems()
                           }
                         })
                         .catch((err) => console.log(err, 'err'))
@@ -1051,9 +1099,23 @@ class ShopPageCheckout extends React.Component {
     value = object?.target?.value || object.value
 
     this.setState({
-      [name]: value,
+      state: value
     })
 
+    this.setState({
+      [name]: value,
+    })
+    this.state.billCountryList.forEach((item) => {
+      if (item.name === value) {
+        let obj = {
+          name: item.name,
+          code: item.code
+        }
+        this.setState({
+          country: obj,
+        })
+      }
+    })
     this.setState({
       errors: {
         ...this.state.errors,
@@ -1074,6 +1136,7 @@ class ShopPageCheckout extends React.Component {
       addressOption: { ...obj },
     })
   }
+
 
   render() {
     let selectCountry
@@ -1481,6 +1544,7 @@ class ShopPageCheckout extends React.Component {
                     <button
                       onClick={this.handleSubmit}
                       type="submit"
+                      disabled={this.props.payments.length <= 0}
                       style={{ width: '50%', fontSize: '18px' }}
                       className={
                         !this.state.loading

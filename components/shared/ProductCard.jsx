@@ -1,7 +1,7 @@
 // react
 import React, { useState, useEffect } from "react";
 //timezone
-import moment from "moment";
+import moment from "moment-timezone";
 // third-party
 import classNames from "classnames";
 import Link from "next/link";
@@ -162,7 +162,7 @@ function ProductCard(props) {
                   })}
                 >
                   {(product && product?.type === "configurable") ||
-                  product?.type === "bundle" ? (
+                    product?.type === "bundle" ? (
                     <Link href={url.product(product)}>
                       <button
                         type="button"
@@ -177,48 +177,48 @@ function ProductCard(props) {
                       </button>
                     </Link>
                   ) : (
-                      addcart() ? (
-                        <AsyncAction
-                          action={() =>
-                            cartAddItem(
-                              product,
-                              [],
-                              1,
-                              cartToken,
-                              customer,
-                              selectedData,
-                              null,
-                              "homePage"
-                            )
-                          }
-                          render={({ run, loading }) => (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                // alert("addcart()")
-                                e.preventDefault();
-                                setCrossValid(false);
-                                run();
-                              }}
-                              className={classNames(
-                                "btn btn-primary product-card__addtocart hide-for-tablet",
-                                {
-                                  "btn-loading": loading,
-                                }
-                              )}
-                            >
-                              <FormattedMessage
-                                id="add.tocart"
-                                defaultMessage="Add to cart"
-                              />
-                            </button>
-                          )}
-                        />
-                      ) : (
-                        product?.has_up_sell == 0 &&
-                        product?.has_cross_sell == 1
-                      )
-                    ) ? (
+                    addcart() ? (
+                      <AsyncAction
+                        action={() =>
+                          cartAddItem(
+                            product,
+                            [],
+                            1,
+                            cartToken,
+                            customer,
+                            selectedData,
+                            null,
+                            "homePage"
+                          )
+                        }
+                        render={({ run, loading }) => (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              // alert("addcart()")
+                              e.preventDefault();
+                              setCrossValid(false);
+                              run();
+                            }}
+                            className={classNames(
+                              "btn btn-primary product-card__addtocart hide-for-tablet",
+                              {
+                                "btn-loading": loading,
+                              }
+                            )}
+                          >
+                            <FormattedMessage
+                              id="add.tocart"
+                              defaultMessage="Add to cart"
+                            />
+                          </button>
+                        )}
+                      />
+                    ) : (
+                      product?.has_up_sell == 0 &&
+                      product?.has_cross_sell == 1
+                    )
+                  ) ? (
                     <AsyncAction
                       action={() =>
                         cartAddItem(
@@ -314,7 +314,7 @@ function ProductCard(props) {
                 <div className="item_overlay hide-for-tablet"></div>
                 <div className="img_btn_wrapper">
                   {(product && product?.type === "configurable") ||
-                  product?.type === "bundle" ? (
+                    product?.type === "bundle" ? (
                     <Link href={url.product(product)}>
                       <button
                         type="button"
@@ -499,11 +499,9 @@ function ProductCard(props) {
   };
 
   let newDate = new Date();
-  const date_from = moment
-    .unix(product.special_price_from)
-    .format("YYYY-MM-DD");
-  const date_now = moment(newDate).format("YYYY-MM-DD");
-  const date_to = moment.unix(product.special_price_to).format("YYYY-MM-DD");
+  let date_from = moment(product.special_price_from * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+  let date_to = moment(product.special_price_to * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+  const date_now = moment(newDate * 1000).tz("Asia/Yerevan").format("YYYY-MM-DD");
 
   if (!product?.special_price && CONFIG === "configurable") {
     price = (
@@ -519,12 +517,12 @@ function ProductCard(props) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__new-price">
-          <Currency value={Number(product.special_price).toFixed(0)} />
+          <Currency value={parseFloat(product.special_price).toFixed(0)} />
           <span className="product-card__symbol">֏</span>
         </span>
         {
           <span className="product-card__old-price">
-            <Currency value={Number(product.price).toFixed(0)} />
+            <Currency value={parseFloat(product.price).toFixed(0)} />
             <span className="product-card__symbol">֏</span>
           </span>
         }
@@ -534,12 +532,12 @@ function ProductCard(props) {
     price = (
       <div className="product-card__prices">
         <span className="product-card__new-price">
-          <Currency value={Number(product.special_price).toFixed(0)} />
+          <Currency value={parseFloat(product.special_price).toFixed(0)} />
           <span className="product-card__symbol">֏</span>
         </span>
         {
           <span className="product-card__old-price">
-            <Currency value={Number(product.price).toFixed(0)} />
+            <Currency value={parseFloat(product.price).toFixed(0)} />
             <span className="product-card__symbol">֏</span>
           </span>
         }
@@ -548,14 +546,14 @@ function ProductCard(props) {
   } else if (product?.type === "configurable") {
     price = (
       <div className="product-card__prices">
-        <Currency value={Number(product.min_price).toFixed(0)} />
+        <Currency value={parseFloat(product.min_price).toFixed(0)} />
         <span className="product-card__symbol">֏</span>
       </div>
     );
   } else {
     price = (
       <div className="product-card__prices">
-        <Currency value={Number(product.min_price).toFixed(0)} />
+        <Currency value={parseFloat(product.min_price).toFixed(0)} />
         <span className="product-card__symbol">֏</span>
       </div>
     );
@@ -652,7 +650,7 @@ function ProductCard(props) {
             </div>
 
             {(product && product?.type === "configurable") ||
-            product?.type === "bundle" ? (
+              product?.type === "bundle" ? (
               <Link href={url.product(product)}>
                 <button
                   type="button"

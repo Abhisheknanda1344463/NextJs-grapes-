@@ -48,7 +48,11 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
       .then((res) => setCountryStates(res));
   }, []);
 
+
+
+
   useEffect(() => {
+
     fetch(apiUrlWithStore(`/api/countries?pagination=0`))
       .then((res) => res.json())
       .then((res) => setCountryList(res.data.reverse()));
@@ -62,7 +66,7 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
     selectCountry = (
       <div className="select-container">
         <select
-          className={`checkout-select checkout-input custom-select-mark ${state.country ? "dark-opacity" : ""
+          className={`checkout-select checkout-input custom-select-mark ${state.country.name ? "dark-opacity" : ""
             }`}
           name="country"
           onChange={(e) => {
@@ -71,7 +75,7 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
             // check why it is working
             // setFree()
           }}
-          value={state.country}
+          value={state.country.name}
         >
           <FormattedMessage id="select.country" defaultMessage="Select Country">
             {(placeholder) => (
@@ -92,9 +96,9 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
     );
   }
   // shippingMethod
-  if (countryList && state.country) {
+  if (countryList && state.country.code) {
     for (let i = 0; i <= countryList.length; i++) {
-      if (countryList[i] && countryList[i].name == state.country) {
+      if (countryList[i] && countryList[i].name == state.country.name) {
         countryCode = countryList[i].code;
       }
     }
@@ -112,7 +116,7 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
           <select
             name="states"
             onChange={handleChange}
-            className={`checkout-select checkout-input custom-select-mark ${state.country ? "dark-opacity" : ""
+            className={`checkout-select checkout-input custom-select-mark ${state.country.name ? "dark-opacity" : ""
               }`}
           >
             <option selected="true" disabled="disabled">
@@ -416,4 +420,4 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
   );
 }
 
-export default memo(ShippingAddress);
+export default ShippingAddress;

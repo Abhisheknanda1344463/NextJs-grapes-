@@ -62,6 +62,7 @@ const AccountPageOrders = () => {
   }
 
   const ordersList = orders.data.map((order) => {
+    console.log(order, 'orderorderorderorder');
     let date = formatDate(order.created_at);
     return (
       <tr key={order.id}>

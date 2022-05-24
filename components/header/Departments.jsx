@@ -46,8 +46,7 @@ class Departments extends Component {
         root.classList.remove("departments--transition");
         root.classList.add("departments--fixed", "departments--opened");
 
-        const height =
-          areaBottom - (content.getBoundingClientRect().top + window.scrollY);
+        const height = areaBottom - (content.getBoundingClientRect().top + window.scrollY);
 
         content.style.height = `${height}px`;
         content.getBoundingClientRect(); // force reflow
@@ -75,6 +74,7 @@ class Departments extends Component {
         const content = root.querySelector(".departments__links-wrapper");
         const startHeight = content.getBoundingClientRect().height;
 
+
         content.style.height = `${startHeight}px`;
 
         root.classList.add("departments--transition");
@@ -85,10 +85,6 @@ class Departments extends Component {
       }
     }
   }
-
-  // changeColor() {
-  //   this.setState({ red: !this.state.red });
-  // }
 
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.handleOutsideClick);
@@ -107,15 +103,13 @@ class Departments extends Component {
   };
 
   handleButtonClick = () => {
-    console.log(this.state.open, " - state is open?")
     this.setState({open: !this.state.open});
     this.setState({active: !this.state.active});
   };
 
   handleTransitionEnd = (event) => {
     if (this.rootRef && event.propertyName === "height") {
-      this.rootRef.querySelector(".departments__links-wrapper").style.height =
-        "";
+      this.rootRef.querySelector(".departments__links-wrapper").style.height = "";
       this.rootRef.classList.remove("departments--transition");
     }
   };
@@ -139,7 +133,7 @@ class Departments extends Component {
           className="departments__button"
           onClick={() => {
             this.handleButtonClick()
-            // console.log("google core web vitals")
+
           }}
         >
           {/*<Menu18x14Svg className="departments__button-icon" />*/}

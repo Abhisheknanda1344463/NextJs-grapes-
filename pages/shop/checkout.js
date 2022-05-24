@@ -6,6 +6,7 @@ import { generalProcessForAnyPage } from "../../services/utils";
 import { url } from "../../helper";
 import store from "../../store";
 
+
 function Checkout({ locale, dispatches, payments }) {
   const { dispatch } = store;
   useEffect(() => {
@@ -38,6 +39,7 @@ export async function getServerSideProps({ locale, locales, req, res }) {
         };
       })
     );
+
   // const parsedMetas = await metas.data.json();
 
   const dispatches = {

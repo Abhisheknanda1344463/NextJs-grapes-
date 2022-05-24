@@ -28,10 +28,12 @@ export default function Page(props) {
         dbName={props.dbName}
         blog={props.blog}
         pageSlug={query.pageSlug}
+        domain={props.domain}
       />
     );
   } else {
-    return <SiteCustomPage pageSlug={query.pageSlug} content={props.content} />;
+    return <SiteCustomPage pageSlug={query.pageSlug} content={props.content} domain={props.domain} dbName={props.dbName}
+    />;
   }
 }
 
@@ -86,7 +88,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
 
   if (dbName.includes(".zegashop.com")) {
     var dataName = dbName.split(".zegashop.com");
-    //// console.log(dataName);
+
     databaseName = dataName[0];
     process.env.domainName = dbName;
 
@@ -103,7 +105,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     ...generalDispatches.clientSide,
     ...generalDispatches.serverSide,
   };
-  console.log(blog, "blog in blogslug");
+
 
   /////REMEBER NOT WORK
   // const metas = await fetch(
@@ -119,6 +121,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
       redirect,
       metas: [],
       dbName: databaseName,
+      domain: dbName,
       content: dataContent,
       blog: blog,
     },

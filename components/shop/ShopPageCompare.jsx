@@ -192,7 +192,7 @@ function ShopPageCompare(props) {
                     <div className="block-empty__body">
                         <div className="block-empty__message">You have not chosen any products to compare!</div>
                         <div className="block-empty__actions">
-                            <Link href="/" className="btn btn-orange rounded-pill f16" >
+                            <Link href="/" className="btn btn-orange btn-primary f16" >
                                 Continue
                             </Link>
                         </div>

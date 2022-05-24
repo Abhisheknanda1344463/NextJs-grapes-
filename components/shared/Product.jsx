@@ -25,10 +25,11 @@ import {
   InnerWishlist,
   Wishlist16Svg,
 } from '../../svg'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import ConfigurableFilters from '../configurableFilters'
 import BundleProducts from 'components/shop/productBundleFikter/BundleProducts'
 import {useRouter} from 'next/router'
+import Head from "next/head";
 
 
 class Product extends PureComponent {
@@ -189,7 +190,7 @@ class Product extends PureComponent {
   }
 
   handleTakeProd = (elem, type) => {
-    console.log(elem, "elem in handleTakeProd")
+    // console.log(elem, "elem in handleTakeProd")
     if (type === 'radio' || type === 'select') {
       this.setState({
         ...this.state,
@@ -198,7 +199,7 @@ class Product extends PureComponent {
           [type]: [{...elem, quantity: 1}],
         },
       })
-      console.log("iffffffffffffffffffffffffffffffffffff")
+      // console.log("iffffffffffffffffffffffffffffffffffff")
     } else {
       this.setState({
         ...this.state,
@@ -209,7 +210,7 @@ class Product extends PureComponent {
             : [{...elem, quantity: 1}],
         },
       })
-      console.log(this.state.bundleProducts, "bundle product in elseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+      // console.log(this.state.bundleProducts, "bundle product in elseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
       // console.log("elseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     }
     // console.log(this.state.bundleProducts, "bundle product in function handleTakeProd")
@@ -316,7 +317,7 @@ class Product extends PureComponent {
       },
     })
 
-    console.log(this.state.bundleProducts, "bundle product in function handleId")
+    // console.log(this.state.bundleProducts, "bundle product in function handleId")
   }
 
   openUpCrosProd = (product) => {
@@ -340,17 +341,38 @@ class Product extends PureComponent {
       ...this.state,
       desc: this.detailsRef.current.id
     })
-    console.log(this.detailsRef.current.id)
   }
   changeDescription = () => {
     this.setState({
       ...this.state,
       desc: this.descriptionRef.current.id
     })
-    console.log(this.descriptionRef.current.id)
+    // console.log(this.descriptionRef.current.id)
   }
 
   render() {
+
+    const {
+      signed,
+      layout,
+      cartAddItem,
+      wishlistAddItem,
+      wishlist,
+      wishlistRemoveItem,
+      dbName,
+      // setUpCrossProd,
+      // AddCartToken,
+    } = this.props
+
+
+    const schemaProduct = {
+      "@context": `https://schema.org/`,
+      "@type": "Product",
+      "image": `${this.state.product?.data?.images[0].medium_image_url}`,
+      "name": `${this.props.productSlug}`,
+      "description":`${this.state.product.data.description}`,
+      "url": `${dbName}/products/${this.props.productSlug}`,
+    };
 
     let desc, det;
     if (this.state.desc === "description") {
@@ -361,31 +383,16 @@ class Product extends PureComponent {
       det = true
     }
 
-
-    const {
-      signed,
-      layout,
-      cartAddItem,
-      wishlistAddItem,
-      wishlist,
-      wishlistRemoveItem,
-      // setUpCrossProd,
-      // AddCartToken,
-    } = this.props
-    console.log(this.props, "this pros in product")
-
     const {quantity, product} = this.state
     const maxQty = this.props.bOrder ? 50000 : product.data.qty
     // let Addtocartdisabled = this.props.bOrder ? "" : "disabled";
     let Addtocartdisabled = ''
-    let newDate = new Date()
-    const date_from = moment
-      .unix(product.data.special_price_from)
-      .format('YYYY-MM-DD')
-    const date_now = moment(newDate).format('YYYY-MM-DD')
-    const date_to = moment
-      .unix(product.data.special_price_to)
-      .format('YYYY-MM-DD')
+
+    let newDate = new Date();
+    let date_from = moment(product.data.special_price_from * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+    let date_to = moment(product.data.special_price_to * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
+    const date_now = moment(newDate * 1000).tz("Asia/Yerevan").format("YYYY-MM-DD");
+
     // if (product.data.qty) {
     //   Addtocartdisabled = "";
     // }
@@ -455,34 +462,39 @@ class Product extends PureComponent {
 
     return (
       <>
-        <Helmet>
-          <title>{product.data.name}</title>
-          <meta
-            name="description"
-            content={
-              product.data.description
-                ? product.data.description.replace(/(<([^>]+)>)/gi, '')
-                : ''
-            }
-            data-react-helmet={true}
+        <Head>
+          {/*  <title>{product.data.name}</title>*/}
+          {/*  <meta*/}
+          {/*    name="description"*/}
+          {/*    content={*/}
+          {/*      product.data.description*/}
+          {/*        ? product.data.description.replace(/(<([^>]+)>)/gi, '')*/}
+          {/*        : ''*/}
+          {/*    }*/}
+          {/*    data-react-helmet={true}*/}
+          {/*  />*/}
+          {/*  <meta*/}
+          {/*    name="name"*/}
+          {/*    content={product.data.name ? product.data.name : ''}*/}
+          {/*    data-react-helmet={true}*/}
+          {/*  />*/}
+          {/*  <meta property="og:url" content={product.data.name}/>*/}
+          {/*  <meta*/}
+          {/*    property="og:title"*/}
+          {/*    content={product.data.name}*/}
+          {/*    data-react-helmet={true}*/}
+          {/*  />*/}
+          {/*  <meta*/}
+          {/*    property="og:image"*/}
+          {/*    content={product.data.images}*/}
+          {/*    data-react-helmet={true}*/}
+          {/*  />*/}
+
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{__html: JSON.stringify(schemaProduct)}}
           />
-          <meta
-            name="name"
-            content={product.data.name ? product.data.name : ''}
-            data-react-helmet={true}
-          />
-          <meta property="og:url" content={product.data.name}/>
-          <meta
-            property="og:title"
-            content={product.data.name}
-            data-react-helmet={true}
-          />
-          <meta
-            property="og:image"
-            content={product.data.images}
-            data-react-helmet={true}
-          />
-        </Helmet>
+        </Head>
         <div className={`product product--layout--${layout}`}>
           <div className="product__content">
             <ProductGallery layout={layout} images={product.data.images} ups={false}/>
@@ -638,7 +650,7 @@ class Product extends PureComponent {
                   superCheck={null}
                 />
               )}
-              {console.log(this.props.product.data, "bundle in product.js!!!!!")}
+              {/*{console.log(this.props.product.data, "bundle in product.js!!!!!")}*/}
               {product.data.type == 'bundle' ? (
                 <BundleProducts
                   handleId={this.handleId}
@@ -731,16 +743,61 @@ class Product extends PureComponent {
                         disabled={Addtocartdisabled}
                       />
                     </div>
-                    <div style={{display: "flex", justifyContent: "space-between", margin: "auto"}}>
-                      <div className={classNames("product__actions-item product__actions-item--addtocart",
-                        {
-                          "button_disabled": product.data.qty === 0
-                            && this.props.backorders == 0
-                            && this.props.outOfStock == 1
-                        })}>
-                        {
-                          this.addcart()
-                            ? (
+                    <div className={classNames("product__actions-item product__actions-item--addtocart",
+                      {
+                        "button_disabled": product.data.qty === 0
+                          && this.props.backorders == 0
+                          && this.props.outOfStock == 1
+                      })}>
+                      {
+                        this.addcart()
+                          ? (
+                            <AsyncAction
+                              action={() =>
+                                cartAddItem(
+                                  product.data,
+                                  [],
+                                  quantity,
+                                  this.state.token,
+                                  this.state.customer,
+                                  this.state.locale,
+                                  product?.data?.type == 'bundle'
+                                    ? {
+                                      bundle_options: product.data.bundle_options,
+                                      selectedOptions: this.state.bundleProducts,
+                                    }
+                                    : null,
+                                )
+                              }
+                              render={({run, loading}) => (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    // alert("this.addcart()")
+                                    // alert(quantity)
+                                    this.props.setCrossValid(false)
+                                    run()
+                                  }}
+                                  disabled={Addtocartdisabled}
+                                  className={classNames(
+                                    'btn btn-orange inner-addtocart rounded-pills btn-lg',
+                                    {
+                                      'btn-loading': loading,
+                                    },
+                                  )}
+                                >
+                                  <FormattedMessage
+                                    id="add.tocart"
+                                    defaultMessage="Add to cart"
+                                  />
+                                </button>
+                              )
+                              }
+                            />
+                          )
+                          : product?.data?.has_up_sell == 0 && product?.data?.has_cross_sell == 1
+                            ?
+                            (
                               <AsyncAction
                                 action={() =>
                                   cartAddItem(
@@ -762,10 +819,12 @@ class Product extends PureComponent {
                                   <button
                                     type="button"
                                     onClick={() => {
-                                      // alert("this.addcart()")
-                                      // alert(quantity)
-                                      this.props.setCrossValid(false)
+                                      // alert("this.props?.upSell?.length === 0 && this.props?.crossSell?.length > 0")
                                       run()
+                                      this.props.setTempData([product.data])
+                                      this.props.setPopup(true);
+                                      this.props.setCrossValid(true)
+                                      this.openUpCrosProd(product)
                                     }}
                                     disabled={Addtocartdisabled}
                                     className={classNames(
@@ -780,144 +839,95 @@ class Product extends PureComponent {
                                       defaultMessage="Add to cart"
                                     />
                                   </button>
-                                )
-                                }
-                              />
-                            )
-                            : product?.data?.has_up_sell == 0 && product?.data?.has_cross_sell == 1
-                              ?
-                              (
-                                <AsyncAction
-                                  action={() =>
-                                    cartAddItem(
-                                      product.data,
-                                      [],
-                                      quantity,
-                                      this.state.token,
-                                      this.state.customer,
-                                      this.state.locale,
-                                      product?.data?.type == 'bundle'
-                                        ? {
-                                          bundle_options: product.data.bundle_options,
-                                          selectedOptions: this.state.bundleProducts,
-                                        }
-                                        : null,
-                                    )
-                                  }
-                                  render={({run, loading}) => (
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        // alert("this.props?.upSell?.length === 0 && this.props?.crossSell?.length > 0")
-                                        run()
-                                        this.props.setTempData([product.data])
-                                        this.props.setPopup(true);
-                                        this.props.setCrossValid(true)
-                                        this.openUpCrosProd(product)
-                                      }}
-                                      disabled={Addtocartdisabled}
-                                      className={classNames(
-                                        'btn btn-orange inner-addtocart rounded-pills btn-lg',
-                                        {
-                                          'btn-loading': loading,
-                                        },
-                                      )}
-                                    >
-                                      <FormattedMessage
-                                        id="add.tocart"
-                                        defaultMessage="Add to cart"
-                                      />
-                                    </button>
-                                  )}
-                                />
-                              )
-                              :
-                              (
-                                <AsyncAction
-                                  render={({run, loading}) => (
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        run()
-                                        // alert("else")
-                                        // this.props?.has_up_sell != 0
-                                        this.props.setTempData([product.data])
-                                        this.props.setPopup(true)
-                                        this.props.setCrossValid(false)
-
-                                        this.openUpCrosProd(product)
-
-
-                                      }}
-                                      disabled={Addtocartdisabled}
-                                      className={classNames(
-                                        'btn btn-orange inner-addtocart rounded-pills btn-lg',
-                                        {
-                                          'btn-loading': loading,
-                                        },
-                                      )}
-                                    >
-                                      <FormattedMessage
-                                        id="add.tocart"
-                                        defaultMessage="Add to cart"
-                                      />
-                                    </button>
-                                  )}
-                                />
-                              )
-                        }
-                      </div>
-                      {signed ? (
-                        <div className="product__actions-item product__actions-item--wishlist">
-                        <span onClick={addAndRemoveWishList}>
-                          <AsyncAction
-                            action={() =>
-                              wishlistAddItem(product.data, this.state.locale)
-                            }
-                            render={({run, loading}) => (
-                              <button
-                                type="button"
-                                data-toggle="tooltip"
-                                title="Wishlist"
-                                onClick={run}
-                                className={classNames(
-                                  'btn btn-secondary btn-svg-icon ',
-                                  {
-                                    'btn-loading': loading,
-                                  },
                                 )}
-                              >
-                                <InnerWishlist className="inner-wishlist"/>
-                              </button>
-                            )}
-                          />
-                        </span>
-                        </div>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault()
-                            toast(
-                              <span className="d-flex faild-toast-fms">
-                              <FailSvg/>
-                              <FormattedMessage
-                                id="sign-or-register"
-                                defaultMessage="Please sign in or register"
                               />
-                            </span>,
-                              {
-                                hideProgressBar: true,
-                                className: 'wishlist-toast',
-                              },
                             )
-                          }}
-                          className="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist"
-                        >
-                          <InnerWishlist className="inner-wishlist"/>
-                        </button>
-                      )}
+                            :
+                            (
+                              <AsyncAction
+                                render={({run, loading}) => (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      run()
+                                      // alert("else")
+                                      // this.props?.has_up_sell != 0
+                                      this.props.setTempData([product.data])
+                                      this.props.setPopup(true)
+                                      this.props.setCrossValid(false)
+
+                                      this.openUpCrosProd(product)
+
+
+                                    }}
+                                    disabled={Addtocartdisabled}
+                                    className={classNames(
+                                      'btn btn-orange inner-addtocart rounded-pills btn-lg',
+                                      {
+                                        'btn-loading': loading,
+                                      },
+                                    )}
+                                  >
+                                    <FormattedMessage
+                                      id="add.tocart"
+                                      defaultMessage="Add to cart"
+                                    />
+                                  </button>
+                                )}
+                              />
+                            )
+                      }
                     </div>
+                    {signed ? (
+                      <div className="product__actions-item product__actions-item--wishlist">
+                          <span onClick={addAndRemoveWishList}>
+                            <AsyncAction
+                              action={() =>
+                                wishlistAddItem(product.data, this.state.locale)
+                              }
+                              render={({run, loading}) => (
+                                <button
+                                  type="button"
+                                  data-toggle="tooltip"
+                                  title="Wishlist"
+                                  onClick={run}
+                                  className={classNames(
+                                    'btn btn-secondary btn-svg-icon ',
+                                    {
+                                      'btn-loading': loading,
+                                    },
+                                  )}
+                                >
+                                  <InnerWishlist className="inner-wishlist"/>
+                                </button>
+                              )}
+                            />
+                          </span>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          toast(
+                            <span className="d-flex faild-toast-fms">
+                                <FailSvg/>
+                                <FormattedMessage
+                                  id="sign-or-register"
+                                  defaultMessage="Please sign in or register"
+                                />
+                              </span>,
+                            {
+                              hideProgressBar: true,
+                              className: 'wishlist-toast',
+                            },
+                          )
+                        }}
+                        className="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist"
+                      >
+                        <InnerWishlist className="inner-wishlist"/>
+                      </button>
+                    )}
                     <div className="product__actions-item product__actions-item--compare"></div>
                   </div>
                 </div>

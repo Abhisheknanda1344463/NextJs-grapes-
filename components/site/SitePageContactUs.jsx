@@ -22,7 +22,7 @@ function SitePageContactUs() {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{`Contact Us — ${theme.name}`}</title>
+        <title>{`Contact Us `}</title>
       </Helmet>
 
       <BlockMap />
