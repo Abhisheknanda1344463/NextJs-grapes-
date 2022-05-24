@@ -51,7 +51,6 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
 
 
 
-  console.log(countryList, ';countryListcountryListcountryList');
   useEffect(() => {
 
     fetch(apiUrlWithStore(`/api/countries?pagination=0`))

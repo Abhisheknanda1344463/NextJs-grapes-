@@ -9,6 +9,7 @@ import Currency from '../shared/Currency'
 import Collapse from '../shared/Collapse'
 import PageHeader from '../shared/PageHeader'
 import ShippingMethod from './ShippingMethod'
+import StripeInit from './StripeInit'
 // import payments from "../../data/shopPayments";
 import ShippingAddress from './ShippingAddress'
 import { FormattedMessage, injectIntl } from 'react-intl'
@@ -73,6 +74,7 @@ class ShopPageCheckout extends React.Component {
       defaultAddress: true,
       newBillingAddress: false,
       input: null,
+      isCallStripePayment: false,
 
       billStreet: '',
       billPhone: '',
@@ -88,6 +90,7 @@ class ShopPageCheckout extends React.Component {
       pastOrders: [],
       addressOption: {},
       addCupone: '',
+      stripeMethod: {},
       errors: {
         fullName: '',
         name: '',
@@ -113,6 +116,20 @@ class ShopPageCheckout extends React.Component {
     this.setState({
       payment: this.props.payments.length > 0 ? this.props.payments[0].key : ""
     })
+    //Manvel
+    if (this.props.payments.length > 0) {
+      this.props.payments.map(el => {
+        if (el.method === "stripe") {
+          // fetch(apiUrlWithStore(`/api/checkout/getpk`))
+          //   .then((res) => res.json())
+          //   .then((response) => console.log(response, 'response'))
+          this.setState({
+            stripeMethod: el
+          })
+        }
+      })
+    }
+
 
     fetch(apiUrlWithStore(`/api/country-states?pagination=0`))
       .then((res) => res.json())
@@ -285,7 +302,7 @@ class ShopPageCheckout extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         code: this.state.addCupone,
-        // token: this.state.customer.token,
+        token: this.state.customer.token || this.state.token.cartToken,
       }),
     }
     if (this.state.addCupone || methods == 'DELETE') {
@@ -603,6 +620,13 @@ class ShopPageCheckout extends React.Component {
             />
           </div>
           <ul className="payment-methods__list">{payments}</ul>
+          {
+            this.state.stripeMethod && this.state.stripeMethod.method === "stripe" ? (
+              <StripeInit isCallStripePayment={this.state.isCallStripePayment} callFuntionPay={this.callPayWithStripe} />
+            ) : (
+              ""
+            )
+          }
         </div>
       </div>
     )
@@ -729,6 +753,14 @@ class ShopPageCheckout extends React.Component {
       })
     }
   }
+
+
+  callPayWithStripe(value) { //boolean
+    this.setState({
+      isCallStripePayment: value
+    })
+  }
+
 
   requestOrder() {
     const headers = {
@@ -1008,18 +1040,25 @@ class ShopPageCheckout extends React.Component {
                         .then((res) => res.json())
                         .then((res) => {
                           if (res.success) {
+                            if (this.state.payment === 'stripe') {
+                              this.callPayWithStripe(true)
+
+                            }
                             if (res?.redirect_url?.backURL) {
                               window.location = res.redirect_url.backURL
                             } else {
                               let url = ''
                               if (res?.redirect_url) {
                                 url = res.redirect_url
+                                if (url === 'stripe') {
+                                  this.callPayWithStripe(true)
+                                }
                               } else if (res?.order?.id) {
                                 url = `/thanks?orderID=${res.order.id}`
                               } else {
                                 url = `/thanks?orderID=${res.id}`
                               }
-                              Router.push(url)
+                              url === 'stripe' ? '' : Router.push(url)
                             }
 
                             // this.props.cartRemoveAllItems()
