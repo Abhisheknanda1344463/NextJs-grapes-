@@ -40,6 +40,7 @@ export default function Catlog(props) {
       productsList={props.productsList}
       data={props.productsList.data}
       page={props.productsList.page}
+      rate={props.rate}
       {...props}
     />
   );
@@ -58,13 +59,47 @@ export async function getServerSideProps({
     "public, s-maxage=10, stale-while-revalidate=59"
   );
   const dbName = req.headers["x-forwarded-host"];
+  console.log(req.params, "queryquery");
+  var selectedCurency;
+  var databaseName;
+  var selectedCurency;
+  var selectedRate;
+  ////CHECKING CURRENCY
+  if (req.query.currencies != "") {
+    selectedCurency = req.query.currencies;
+  } else {
+    selectedCurency = currency;
+  }
+
+  ////GETTING DOMAIN
+  if (dbName.includes(".zegashop.com")) {
+    var dataName = dbName.split(".zegashop.com");
+    databaseName = dataName[0];
+    process.env.domainName = dbName;
+    process.env.databaseName = databaseName;
+  } else {
+    process.env.domainName = dbName;
+    databaseName =
+      dbName.split(".")[0] == "www"
+        ? dbName.split(".")[1]
+        : dbName.split(".")[0];
+
+    process.env.databaseName = databaseName;
+  }
   /////FIXME WE DONT NEED ALL THIS DATA
   const {
     locale: defaultLocaleSelected,
     currency,
+    rate,
     dispatches: generalDispatches,
   } = await generalProcessForAnyPage(locale);
 
+  ////GETTING RATE FOR CURRENCY
+  if (req.query.currencies != "") {
+    selectedRate = rate.currencies_new.find(
+      (item) => item.code == selectedCurency
+    );
+  }
   const filterValues = {};
   Object.keys(query).forEach((param) => {
     if (param == "page") {
@@ -117,7 +152,7 @@ export async function getServerSideProps({
   if (categoriesResponse?.categories) {
     getItems(categoriesResponse.categories[0].children);
   }
-  console.log(dbName, query.slug, "dbName");
+
   await fetch(`https://${dbName}/api/test?slug=${query.slug}`)
     .then((response) => response.json())
     .then((response) => {
@@ -125,7 +160,7 @@ export async function getServerSideProps({
       categoryId = response.id;
     })
     .catch((err) => console.error(err));
-  console.log(categoryId, "categoryId");
+
   await shopApi
     .getFilters(categoryId ? categoryId : query.cat_id, {
       lang: selectedLocale,
@@ -135,7 +170,7 @@ export async function getServerSideProps({
     .then((data) => {
       brands = data;
     });
-
+  var selectedExchangeRate = selectedRate?.exchange_rate.rate || 1;
   await shopApi
     .getProductsList({
       options: {
@@ -159,7 +194,6 @@ export async function getServerSideProps({
           let checkFiltre = [];
           let checkFiltreConfig = [];
           checkedFiltres = Object.keys(filterValues).map((key, index) => {
-            // console.log(el, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeellllllllllllllll")
             if (el.type == "simple") {
               checkFiltre[index] = Object.keys(el).filter((e) => {
                 if (e == key) {
@@ -176,24 +210,14 @@ export async function getServerSideProps({
               });
             } else if (el.type == "configurable") {
               let checkData = [];
-              // console.log(el, "asasa");
               el.variants.map((response, keyIndex) => {
-                // console.log(response, "response________________________")
                 checkData[index] = [];
-                // console.log(index,"index in checkdata")
                 checkFiltre[index] = Object.keys(response).filter((e) => {
-                  // console.log(e + " = e", key + " = key")
                   if (e == key) {
                     let splited = filterValues[key].split(",");
-
-                    // console.log(splited, "splited ------------")
                     checkData[index][keyIndex] = splited.filter((s) => {
-                      // console.log(s, "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-                      // console.log(e, "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-                      // console.log(response, "responseresponseresponseresponseresponseresponse")
                       return s == response[e];
                     });
-                    // console.log(checkData, "checkdata____-----____");
                     if (checkData[index][keyIndex].length > 0) {
                       return true;
                     } else {
@@ -204,8 +228,6 @@ export async function getServerSideProps({
                   }
                 });
               });
-
-              // console.log(checkData, "asd");
             }
           });
           var result = checkFiltre.filter((e) => e.length);
@@ -214,11 +236,18 @@ export async function getServerSideProps({
           } else {
             var resultConfig = false;
           }
-          // console.log(resultConfig, "resultConfig");
           if (
             result.length == Object.keys(filterValues).length ||
             resultConfig.length == Object.keys(filterValues).length
           ) {
+            el = JSON.parse(JSON.stringify(el));
+            console.log(el.price);
+            el.min_price = parseFloat(el.min_price) * selectedExchangeRate;
+            el.max_price = parseFloat(el.max_price) * selectedExchangeRate;
+            el.special_price =
+              parseFloat(el.special_price) * selectedExchangeRate;
+            el.price = parseFloat(el.price) * selectedExchangeRate;
+
             return el;
           }
         });
@@ -228,6 +257,14 @@ export async function getServerSideProps({
         productsList = responseProductList;
         productsList.data = results;
       } else {
+        responseProductList.data.map((el) => {
+          el.min_price = parseFloat(el.min_price) * selectedExchangeRate;
+          el.max_price = parseFloat(el.max_price) * selectedExchangeRate;
+          el.special_price =
+            parseFloat(el.special_price) * selectedExchangeRate;
+          el.price = parseFloat(el.price) * selectedExchangeRate;
+          return el;
+        });
         productsList = responseProductList;
       }
     });
@@ -241,6 +278,7 @@ export async function getServerSideProps({
   return {
     props: {
       currency: { code: settingsResponse.data.currency.code },
+      rate: selectedExchangeRate,
       productsList: productsList,
       brandList: brands,
       categoryId: categoryId,

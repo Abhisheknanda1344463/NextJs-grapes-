@@ -1,5 +1,5 @@
 // react
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 
 // third-party
 import Link from "next/link";
@@ -11,10 +11,10 @@ import Menu from "./Menu";
 import { ArrowRoundedRight6x9Svg } from "../../svg";
 import { FormattedMessage } from "react-intl";
 import { url } from "../../services/utils";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 function DepartmentsLinks(props) {
-  const router = useRouter()
+  const router = useRouter();
   const selectedData = useSelector((state) => state.locale.code);
   // const slugID = useSelector((state) => state.general.categories && state.general.categories[0].children.map(item => item.slug));
   const dispatch = useDispatch();
@@ -27,9 +27,8 @@ function DepartmentsLinks(props) {
     description: "Categories description",
     hasMenuSection: [],
   };
-  useEffect(() => {
-  },[router.pathname])
-
+  useEffect(() => {}, [router.pathname]);
+  console.log(router.query, "asdsad");
   const linksList =
     depart &&
     depart[0].children.map((department, index) => {
@@ -41,10 +40,13 @@ function DepartmentsLinks(props) {
         itemClass = "departments__item--menu";
         submenu = (
           <div className="departments__menu">
-            <Menu items={department.children} onClick={()=> {
-              props.func()
-              console.log(props.func(), "props in ")
-            }} />
+            <Menu
+              items={department.children}
+              onClick={() => {
+                props.func();
+                console.log(props.func(), "props in ");
+              }}
+            />
           </div>
         );
       }
@@ -64,12 +66,14 @@ function DepartmentsLinks(props) {
       return (
         <React.Fragment>
           <li key={index} className={`departments__item ${itemClass}`}>
-            <Link href={url.category(department)}>
-              <a onClick={() => {
-                props.func()
-                console.log(props.func, "props func onclick")
-              }}>
-                 {/*<FormattedMessage id={department.slug} defaultMessage={department.name} />*/}
+            <Link href={url.category(department, router.query)}>
+              <a
+                onClick={() => {
+                  props.func();
+                  ////console.log(props.func, "props func onclick")
+                }}
+              >
+                {/*<FormattedMessage id={department.slug} defaultMessage={department.name} />*/}
                 {department.name}
                 {arrow}
               </a>
@@ -83,7 +87,6 @@ function DepartmentsLinks(props) {
         </React.Fragment>
       );
     });
-
 
   return (
     <React.Fragment>

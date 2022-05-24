@@ -48,59 +48,61 @@ function HomePageOne(props) {
   const homepage_intro_text = (
     <FormattedMessage id="homepage_intro_text" defaultMessage="Home Page" />
   );
+
+  console.log(props.rate, "props.rateprops.rateprops.rate");
   const history = useRouter();
   const prevCurrencyCodeRef = useRef();
   const prevLocaleCodeRef = useRef();
   const metaTags = props?.metas ? JSON.parse(props.metas[0].home_seo) : "";
   const messageTitle = homepage_title_text.props.defaultMessage;
   const messageIntro = homepage_intro_text.props.defaultMessage;
-  dispatch(setMetaPath(dbName))
-  dispatch(setMetaTags(metaTags))
+  dispatch(setMetaPath(dbName));
+  dispatch(setMetaTags(metaTags));
   const upDomain = domainName.charAt(0).toUpperCase() + domainName.slice(1);
-  const getHomeProducts = () => {
-    try {
-      fetch(
-        apiUrlWithStore(
-          `/db/home-products?locale=${router.locale}&currency=AMD&limit=6`
-        )
-      )
-        .then((response) => response.json())
-        .then((res) => {
-          if (res && res.newProduct) {
-            const setBestArray = Object.values(res.newProduct).filter(
-              (product) => {
-                if (product?.name && product?.description) {
-                  return product;
-                }
-              }
-            );
-            setBest(setBestArray);
-          }
-          if (res && res.featuredProducts) {
-            const setfeaturedArray = Object.values(res.featuredProducts).filter(
-              (product) => {
-                if (product?.name && product?.description) {
-                  return product;
-                }
-              }
-            );
-            setfeatured(setfeaturedArray);
-          }
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const getHomeProducts = () => {
+  //   try {
+  //     fetch(
+  //       apiUrlWithStore(
+  //         `/db/home-products?locale=${router.locale}&currency=AMD&limit=6`
+  //       )
+  //     )
+  //       .then((response) => response.json())
+  //       .then((res) => {
+  //         if (res && res.newProduct) {
+  //           const setBestArray = Object.values(res.newProduct).filter(
+  //             (product) => {
+  //               if (product?.name && product?.description) {
+  //                 return product;
+  //               }
+  //             }
+  //           );
+  //           setBest(setBestArray);
+  //         }
+  //         if (res && res.featuredProducts) {
+  //           const setfeaturedArray = Object.values(res.featuredProducts).filter(
+  //             (product) => {
+  //               if (product?.name && product?.description) {
+  //                 return product;
+  //               }
+  //             }
+  //           );
+  //           setfeatured(setfeaturedArray);
+  //         }
+  //       });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   useEffect(() => {
     if (prevCurrencyCodeRef.current != "AMD") {
       prevCurrencyCodeRef.current = "AMD";
       prevLocaleCodeRef.current = router.locale;
     }
-    if (!firstLoad) {
-      getHomeProducts();
-    }
-    setFirstLoad(false);
+    // if (!firstLoad) {
+    //   getHomeProducts();
+    // }
+    // setFirstLoad(false);
     ////  getFeaturedProducts();
   }, [router.locale]);
 
@@ -115,8 +117,16 @@ function HomePageOne(props) {
         <meta name="description" content={metaTags.meta_description} />
         <meta name="keywords" content={metaTags.meta_keywords} />
         <meta property="og:title" name="title" content={metaTags.meta_title} />
-        <meta property="og:description" name="description" content={metaTags.meta_description} />
-        <meta property="og:keywords" name="keywords" content={metaTags.meta_keywords} />
+        <meta
+          property="og:description"
+          name="description"
+          content={metaTags.meta_description}
+        />
+        <meta
+          property="og:keywords"
+          name="keywords"
+          content={metaTags.meta_keywords}
+        />
         <meta
           property="og:image"
           name="image"
@@ -137,6 +147,7 @@ function HomePageOne(props) {
           customer={customer}
           title={newCollection}
           dbName={dbName}
+          rate={props.rate}
           // homepage_title_text={homepage_title_text}
           // homepage_intro_text={homepage_intro_text}
           products={bestsellers}
@@ -158,6 +169,7 @@ function HomePageOne(props) {
           layout="large-first"
           customer={customer}
           dbName={dbName}
+          rate={props.rate}
           products={featured}
           title={saleCollection}
           addInClass={featured.length <= 4 ? "small" : "larg"}

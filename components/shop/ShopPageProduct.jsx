@@ -1,61 +1,71 @@
 // react
-import React, { useEffect, useState, useRef } from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect, useState, useRef } from "react";
+import PropTypes from "prop-types";
 import Head from "next/head";
-import { useSelector } from 'react-redux'
-import { Helmet } from 'react-helmet-async'
-import { FormattedMessage } from 'react-intl'
-import theme from '../../data/theme'
-import shopApi from '../../api/shop'
-import Product from '../shared/Product'
-import { url } from '../../services/utils'
-import PageHeader from '../shared/PageHeader'
-import BlockLoader from '../blocks/BlockLoader'
-import WidgetProducts from '../widgets/WidgetProducts'
-import categories from '../../data/shopWidgetCategories'
-import WidgetCategories from '../widgets/WidgetCategories'
-import BlockProductsCarousel from '../blocks/BlockProductsCarousel'
-import { useRouter } from 'next/router'
-
+import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
+import { FormattedMessage } from "react-intl";
+import theme from "../../data/theme";
+import shopApi from "../../api/shop";
+import Product from "../shared/Product";
+import { url } from "../../services/utils";
+import PageHeader from "../shared/PageHeader";
+import BlockLoader from "../blocks/BlockLoader";
+import WidgetProducts from "../widgets/WidgetProducts";
+import categories from "../../data/shopWidgetCategories";
+import WidgetCategories from "../widgets/WidgetCategories";
+import BlockProductsCarousel from "../blocks/BlockProductsCarousel";
+import { useRouter } from "next/router";
 
 function ShopPageProduct(props) {
-
-  const {productSlug, layout, product, sidebarPosition, locale, loading, up_sell, cross_sell, bundle} = props
-  const [isLoading, setIsLoading] = useState(loading)
-  const [relatedProducts, setRelatedProducts] = useState(props.relatedPproducts)
-  const router = useRouter()
-  console.log(bundle, "bundle in ShopPageProduct.js")
+  const {
+    productSlug,
+    layout,
+    product,
+    sidebarPosition,
+    locale,
+    loading,
+    up_sell,
+    cross_sell,
+    bundle,
+  } = props;
+  const [isLoading, setIsLoading] = useState(loading);
+  const [relatedProducts, setRelatedProducts] = useState(
+    props.relatedPproducts
+  );
+  const router = useRouter();
+  console.log(bundle, "bundle in ShopPageProduct.js");
   ////const [product, setProduct] = useState(data);
 
-  const customer = useSelector((state) => state.customer)
-  const currency = useSelector((state) => state.currency.current)
-  const selectedData = locale
-  const prevProductSlugRef = useRef()
-  const prevLocaleRef = useRef()
+  const customer = useSelector((state) => state.customer);
+  const currency = useSelector((state) => state.currency.current);
+  const selectedData = locale;
+  const prevProductSlugRef = useRef();
+  const prevLocaleRef = useRef();
 
   useEffect(() => {
-    setIsLoading(false)
-    prevProductSlugRef.current = productSlug
-    prevLocaleRef.current = props.locale
+    setIsLoading(false);
+    prevProductSlugRef.current = productSlug;
+    prevLocaleRef.current = props.locale;
     /// setProduct(data);
-  }, [])
+  }, []);
 
   useEffect(() => {
     // const location = `/products/${productSlug}`;
     // window.history.replaceState(null, "", location);
-    prevProductSlugRef.current = productSlug
-    prevLocaleRef.current = props.locale
-    setRelatedProducts(props.relatedPproducts)
+    prevProductSlugRef.current = productSlug;
+    prevLocaleRef.current = props.locale;
+    setRelatedProducts(props.relatedPproducts);
 
     /// setProduct(data);
-  }, [productSlug, router.locale, relatedProducts])
+  }, [productSlug, router.locale, relatedProducts]);
 
   // useEffect(() => {
   //   setProduct(data);
   // }, [router.locale, productSlug]);
 
   if (isLoading) {
-    return <BlockLoader />
+    return <BlockLoader />;
   }
   const breadcrumb = [
     {
@@ -63,15 +73,15 @@ function ShopPageProduct(props) {
       url: url.home(),
     },
     { title: product.data.name, url: url.product(product.data) },
-  ]
+  ];
 
   const related = (
     <FormattedMessage id="relatedProducts" defaultMessage="Related products" />
-  )
+  );
 
-  let content
+  let content;
 
-  if (layout === 'sidebar') {
+  if (layout === "sidebar") {
     const sidebar = (
       <div className="shop-layout__sidebar">
         <div className="block block-sidebar">
@@ -83,11 +93,11 @@ function ShopPageProduct(props) {
           </div>
         </div>
       </div>
-    )
+    );
     content = (
       <div className="container">
         <div className={`shop-layout shop-layout--sidebar--${sidebarPosition}`}>
-          {sidebarPosition === 'start' && sidebar}
+          {sidebarPosition === "start" && sidebar}
           <div className=" shop-layout__content">
             <div className=" block">
               <Product
@@ -99,7 +109,7 @@ function ShopPageProduct(props) {
                 up_sell={up_sell ? up_sell : []}
                 cross_sell={cross_sell ? cross_sell : []}
                 bundle={bundle}
-
+                rate={props.rate}
               />
               {/*<ProductTabs withSidebar />*/}
             </div>
@@ -110,14 +120,14 @@ function ShopPageProduct(props) {
                 layout="grid-4-sm"
                 products={Object.values(props.relatedPproducts)}
                 locale={router.locale}
-              // withSidebar
+                // withSidebar
               />
             )}
           </div>
-          {sidebarPosition === 'end' && sidebar}
+          {sidebarPosition === "end" && sidebar}
         </div>
       </div>
-    )
+    );
   } else {
     content = (
       <React.Fragment>
@@ -133,6 +143,7 @@ function ShopPageProduct(props) {
               up_sell={up_sell ? up_sell : []}
               cross_sell={cross_sell ? cross_sell : []}
               bundle={bundle}
+              rate={props.rate}
             />
           </div>
         </div>
@@ -147,7 +158,7 @@ function ShopPageProduct(props) {
           />
         )}
       </React.Fragment>
-    )
+    );
   }
   return (
     <React.Fragment>
@@ -167,30 +178,27 @@ function ShopPageProduct(props) {
       {/*</Head>*/}
       <PageHeader breadcrumb={breadcrumb} />
 
-      <div className="take-product-page">
-        {content}
-      </div>
+      <div className="take-product-page">{content}</div>
     </React.Fragment>
-  )
+  );
 }
-
 
 ShopPageProduct.propTypes = {
   /** Product slug. */
   productSlug: PropTypes.string,
   /** one of ['standard', 'sidebar', 'columnar', 'quickview'] (default: 'standard') */
-  layout: PropTypes.oneOf(['standard', 'sidebar', 'columnar', 'quickview']),
+  layout: PropTypes.oneOf(["standard", "sidebar", "columnar", "quickview"]),
   /**
    * sidebar position (default: 'start')
    * one of ['start', 'end']
    * for LTR scripts "start" is "left" and "end" is "right"
    */
-  sidebarPosition: PropTypes.oneOf(['start', 'end']),
-}
+  sidebarPosition: PropTypes.oneOf(["start", "end"]),
+};
 
 ShopPageProduct.defaultProps = {
-  layout: 'standard',
-  sidebarPosition: 'start',
-}
+  layout: "standard",
+  sidebarPosition: "start",
+};
 
-export default ShopPageProduct
+export default ShopPageProduct;

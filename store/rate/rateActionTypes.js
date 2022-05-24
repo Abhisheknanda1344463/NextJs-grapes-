@@ -1,0 +1,2 @@
+export const SET_RATE_LIST = "SET_RATE_LIST";
+export const CHANGE_CURRENCY = "CHANGE_CURRENCY";

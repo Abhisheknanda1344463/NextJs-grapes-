@@ -135,10 +135,11 @@ const shopApi = {
     if (options.token) {
       token = `?token=${options.token}`;
     }
+
     // console.log(lang, "langlanglanglanglanglanglanglanglanglang");
-    return fetch(`${url}/db/product/${slug}${token}?locale=${lang}`).then(
-      (res) => res.json()
-    );
+    return fetch(
+      `${url}/db/product/${slug}${token}?locale=${lang}&rate=${options.selectedRate}`
+    ).then((res) => res.json());
   },
   /**
    * Returns array of related products.
@@ -161,7 +162,7 @@ const shopApi = {
       string += `&${key}=${value}`;
     }
 
-    console.log(string, slug, "stringstringstring");
+    ////  console.log(string, slug, "stringstringstring");
     return fetch(`${url}/db/filters?category_id=${slug}${string}`).then(
       (response) => response.json()
     );
@@ -178,7 +179,7 @@ const shopApi = {
       currency = options.currency.code;
     }
     return fetch(
-      `${url}/db/related-products?limit=8&category_id=${categoryId}&product_id=${productId}&locale=${lang}&currency=${currency}`
+      `${url}/db/related-products?limit=8&category_id=${categoryId}&product_id=${productId}&locale=${lang}&currency=${currency}&rate=${options.selectedRate}`
     ).then((response) => response.json());
   },
 
@@ -196,7 +197,7 @@ const shopApi = {
       `${megaUrl}/db/up-sell-products?limit=8&product_id=${productId}&locale=${lang}&currency=${currency}`
     )
       .then((response) => {
-        console.log(response, "response in get upsel prods________");
+        /////  console.log(response, "response in get upsel prods________");
         return response.json();
       })
       .catch((err) => console.log(err));
@@ -230,11 +231,6 @@ const shopApi = {
       currency = options.currency.code;
     }
 
-    console.log(
-      lang,
-      "langlanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglanglang"
-    );
-
     return fetch(
       `${megaUrl}/db/bundle-product/${productId}?locale=${lang}&currency=${currency}`
     )
@@ -265,7 +261,7 @@ const shopApi = {
     if (options.currency) {
       currency = options.currency.code;
     }
-    console.log(query, url, options.dbName, "queryqueryquery");
+    /// console.log(query, url, options.dbName, "queryqueryquery");
     return fetch(
       `/db/products?search=${query}&locale=${locale}&currency=${currency}`
     ).then((response) => response.json());
@@ -366,19 +362,11 @@ const shopApi = {
    *
    * @return {Promise<Array<object>>}
    */
-  getHomeProducts: (options = {}) => {
+  getHomeProducts: (lang, curency, rate, dbName) => {
     let limit = 10;
-    let lang = "en";
-    let currency = "USD";
 
-    if (options.lang) {
-      lang = options.lang;
-    }
-    if (options.currency) {
-      currency = options.currency.current.currentcode;
-    }
     return fetch(
-      `/db/home-products?locale=${lang}&currency=${currency}&limit=${limit}`
+      `https://${dbName}/db/home-products?locale=${lang}&currency=${curency}&rate=${rate}&limit=${limit}`
     )
       .then((response) => response.json())
       .catch((err) => console.error(err));
@@ -578,7 +566,7 @@ const shopApi = {
       .catch((err) => console.error(err));
   },
   translations: (locale, dbName) => {
-    console.log(domainUrl(`${dbName}/db/translations?locale=${locale}`));
+    //// console.log(domainUrl(`${dbName}/db/translations?locale=${locale}`));
     return fetch(domainUrl(`${dbName}/db/translations?locale=${locale}`))
       .then((response) => response.json())
       .catch((err) => console.error(err));

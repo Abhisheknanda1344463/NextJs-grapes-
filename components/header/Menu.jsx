@@ -14,6 +14,8 @@ function Menu(props) {
   const {layout, withIcons, items, onClick, symbol} = props;
   console.log(props, "onClickonClick");
   const domain = useSelector((state) => state.general.domain);
+  const rate = useSelector((state) => state.rate);
+  console.log(rate, "taaaaaaaaaateeeee in menu")
 
   const renderLink = (item, content) => {
     let link;

@@ -4,21 +4,46 @@ import Dropdown from "./Dropdown";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { changeCurrency } from "../../store/currency";
+import { useRouter } from "next/router";
 
 function DropdownCurrency(props) {
-
   const {
     // locale: code,
     current,
     currency,
-    changeCurrency,
+    ///  changeCurrency,
     currencies,
   } = props;
 
-  if (!props.currency || currencies.length < 2) {
+  if (currencies.length < 2) {
     return null;
   }
+  const router = useRouter();
+  const { currencies: currenciesRouter } = router.query;
+  const handleRoute = (currencies) => {
+    ///  changeLocale(locale);
+    ////changeCurrency(currencies);
+    console.log(window.history, "window history");
+    let checkUrl = window.location.href.indexOf("?");
+    if (checkUrl > 0) {
+      router.query.currencies = currencies;
+      router.push(router);
+    } else {
+      window.history.replaceState(
+        null,
+        "",
+        window.location.href + "?currencies=" + currencies
+      );
+    }
 
+    // router.push(
+    //   router.asPath != "/" ? router.asPath : "",
+    //   router.asPath != "/" ? router.asPath : "",
+    //   {
+    //     currencies: currencies,
+    //   }
+    // );
+  };
   const title = (
     <React.Fragment>
       <span>
@@ -35,13 +60,15 @@ function DropdownCurrency(props) {
     return currencyList[0]?.code === e.code ? null : e;
   });
 
+  console.log(currencyL, "currency _____ ");
+
   return (
     <Dropdown
       for={"currency"}
       title={currencyList}
       current={current}
       items={currencyL}
-      onClick={(item) => changeCurrency(item.id)}
+      onClick={(item) => handleRoute(item.code)}
     />
   );
 }

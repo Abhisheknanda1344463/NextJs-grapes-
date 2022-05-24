@@ -63,10 +63,11 @@ function ProductCard(props) {
   });
 
   const getUpCrosselProd = (prodID, type) => {
+    console.log(props.rate, "props.rateprops.rateprops.rate");
     switch (type) {
       case "upsel":
         fetch(
-          `${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=${locale}&currency=USD`
+          `${megaUrl}/db/up-sell-products?limit=8&product_id=${prodID}&locale=${locale}&currency=${props.currency}&rate=${props.rate}`
         )
           .then((res) => res.json())
           .then((data) => {
@@ -76,7 +77,7 @@ function ProductCard(props) {
         break;
       case "crossel":
         fetch(
-          `${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=${locale}&currency=USD`
+          `${megaUrl}/db/cross-sell-products?limit=8&product_id=${prodID}&locale=${locale}&currency=${props.currency}&rate=${props.rate}`
         )
           .then((res) => res.json())
           .then((data) => {
