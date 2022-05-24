@@ -1,35 +1,38 @@
 import React, { useEffect } from "react";
-import Head from "next/head";
+//import Head from "next/head";
 import store from "../store";
 import { domainUrl } from "../helper";
-import { useSelector } from "react-redux"
-import serverSideActions from "../services/serverSide";
-import clientSideActions from "../services/clientSide";
+// import { useSelector } from "react-redux"
+// import serverSideActions from "../services/serverSide";
+// import clientSideActions from "../services/clientSide";
 import HomePageOne from "../components/home/HomePageOne";
 import { generalProcessForAnyPage } from "../services/utils";
 import allActions from "../services/actionsArray";
 import shopApi from "../api/shop";
-import {MetaWrapper} from "../components/MetaWrapper"
-function Home({
-                locale,
-                newProducts,
-                featuredProducts,
-                metas,
-                dbName,
-                dispatches: dispatchesNew,
-                currency,
-                domain,
-                rate,
-              }) {
-  const {dispatch} = store;
+import { MetaWrapper } from "../components/MetaWrapper";
+import { useRouter } from "next/router";
+function Home(props) {
+  const {
+    locale,
+    ///  newProducts,
+    featuredProducts,
+    metas,
+    dbName,
+    dispatches: dispatchesNew,
+    currency,
+    domain,
+    rate,
+  } = props;
+  const router = useRouter();
+  const { dispatch } = store;
   const firstLoad = true;
   // const domain = useSelector((state) => state.general.domain);
   useEffect(() => {
     for (let actionKey in dispatchesNew) {
       dispatch(allActions[actionKey](dispatchesNew[actionKey]));
     }
-  }, [locale,rate]);
-
+  }, [locale, currency]);
+  //// console.log(props.newProducts, "router.queryrouter.query");
   const metaTags = metas ? JSON.parse(metas[0].home_seo) : "";
   return (
     <MetaWrapper
@@ -43,7 +46,7 @@ function Home({
         locale={locale}
         currency={currency}
         headerLayout="default"
-        newProducts={newProducts}
+        newProducts={props.newProducts}
         featuredProducts={featuredProducts}
         metas={metas}
         firstLoad={firstLoad}
@@ -52,43 +55,10 @@ function Home({
         domain={domain}
       />
     </MetaWrapper>
-    // <>
-    //   <Head>
-    //     <title>{dbName}</title>
-    //     <meta name="title" content={metaTags.meta_title || dbName}/>
-    //     <meta name="description" content={metaTags.meta_description || dbName}/>
-    //     <meta name="keywords" content={metaTags.meta_keywords || dbName}/>
-    //     <meta property="og:title" name="title" content={metaTags.meta_title || dbName}/>
-    //     <meta property="og:description" name="description" content={metaTags.meta_description || dbName}/>
-    //     <meta property="og:keywords" name="keywords" content={metaTags.meta_keywords || dbName}/>
-    //     <meta
-    //       property="og:image"
-    //       name="image"
-    //       content={`https://${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}
-    //     />
-    //     <meta property="og:type" content="website"/>
-    //     <meta name="twitter:card" content="summary_large_image"/>
-    //     <meta name="twitter:title" content={metaTags.meta_title || dbName}/>
-    //     <meta name="twitter:description" content={metaTags.meta_description || dbName}/>
-    //     <meta name="twitter:image"
-    //           content={`https://${dbName}/storage/${domain}/configuration/share_pic/share_pic.webp`}/>
-    //   </Head>
-    //   <HomePageOne
-    //     locale={locale}
-    //     currency={currency}
-    //     headerLayout="default"
-    //     newProducts={newProducts}
-    //     featuredProducts={featuredProducts}
-    //     metas={metas}
-    //     firstLoad={firstLoad}
-    //     dbName={dbName}
-    //     domain={domain}
-    //   />
-    // </>
   );
 }
 
-export async function getServerSideProps({locale, locales, req, res}) {
+export async function getServerSideProps({ locale, locales, req, res }) {
   // res.setHeader(
   //   "Cache-Control",
   //   "public, s-maxage=10, stale-while-revalidate=59"
@@ -143,7 +113,7 @@ export async function getServerSideProps({locale, locales, req, res}) {
       dbName
     )
     .then((data) => {
-      console.log(data, "datadatadata");
+      ////  console.log(data, "datadatadata");
       parsed = data;
     });
 

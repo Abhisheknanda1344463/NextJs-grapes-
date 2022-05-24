@@ -7,28 +7,32 @@ export const url = {
 
   catalog: () => "/catalog",
 
-  category: (category, query) =>
-    `/catalog/${category.slug}?cat_id=${category.id}`,
-  // category: (category, query) => {
-  //   var newUrl = "";
-  //   console.log(
-  //     query,
+  // category: (category, query) =>
+  //   `/catalog/${category.slug}?cat_id=${category.id}`,
+  category: (category) => {
+    var newUrl = "";
+    console.log(
+      category,
 
-  //     "queryqueryquery"
-  //   );
-  //   if (typeof query !== "undefined" && Object.values(query).length > 0) {
-  //     query.map((el, index) => {
-  //       if (index == 0) {
-  //         newUrl = `?${Object.keys(el)}=${Object.values(el)}`;
-  //       } else {
-  //         newUrl += `&${Object.keys(el)}=${Object.values(el)}`;
-  //       }
-  //     });
-  //     return `/catalog/${category.slug}${newUrl}`;
-  //   } else {
-  //     return `/catalog/${category.slug}`;
-  //   }
-  // },
+      "queryqueryquery"
+    );
+    if (category.query) {
+      // query.map((el, index) => {
+      //   if (index == 0) {
+      //     newUrl = `?${Object.keys(el)}=${Object.values(el)}`;
+      //   } else {
+      //     newUrl += `&${Object.keys(el)}=${Object.values(el)}`;
+      //   }
+      // });
+      return `/catalog/${
+        category.slug ? category.slug : category.department.slug
+      }?currencies=${category.query}`;
+    } else {
+      return `/catalog/${
+        category.slug ? category.slug : category.department.slug
+      }`;
+    }
+  },
 
   product: (product) => {
     return `/products/${product.url_key}`;

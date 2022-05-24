@@ -54,61 +54,28 @@ function HomePageOne(props) {
   const metaTags = props?.metas ? JSON.parse(props.metas[0].home_seo) : "";
   const messageTitle = homepage_title_text.props.defaultMessage;
   const messageIntro = homepage_intro_text.props.defaultMessage;
-  dispatch(setMetaPath(dbName))
-  dispatch(setMetaTags(metaTags))
-  // const upDomain = domainName.charAt(0).toUpperCase() + domainName.slice(1);
-  const getHomeProducts = () => {
-    try {
-      fetch(
-        apiUrlWithStore(
-          `/db/home-products?locale=${router.locale}&currency=AMD&limit=6`
-        )
-      )
-        .then((response) => response.json())
-        .then((res) => {
-          if (res && res.newProduct) {
-            const setBestArray = Object.values(res.newProduct).filter(
-              (product) => {
-                if (product?.name && product?.description) {
-                  return product;
-                }
-              }
-            );
-            setBest(setBestArray);
-          }
-          if (res && res.featuredProducts) {
-            const setfeaturedArray = Object.values(res.featuredProducts).filter(
-              (product) => {
-                if (product?.name && product?.description) {
-                  return product;
-                }
-              }
-            );
-            setfeatured(setfeaturedArray);
-          }
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  dispatch(setMetaPath(dbName));
+  dispatch(setMetaTags(metaTags));
 
   useEffect(() => {
-    if (prevCurrencyCodeRef.current != "AMD") {
-      prevCurrencyCodeRef.current = "AMD";
-      prevLocaleCodeRef.current = router.locale;
+    if (prevCurrencyCodeRef.current != props.currency) {
+      prevCurrencyCodeRef.current = props.currency;
+      setBest(props.newProducts);
+      setfeatured(props.featuredProducts);
+      // prevLocaleCodeRef.current = router.locale;
     }
     // if (!firstLoad) {
     //   getHomeProducts();
     // }
     // setFirstLoad(false);
     ////  getFeaturedProducts();
-  }, [router.locale]);
+  }, [router.locale, props.currency]);
 
   // const domName = dbName.split(".")[0];
   // console.log(domName, "dom name in reactr")
   return (
     <React.Fragment>
-      <BlockSlideShow history={history}/>
+      <BlockSlideShow history={history} />
       {messageTitle || messageIntro ? (
         <div className="container welcome-title">
           <h1>{homepage_title_text}</h1>

@@ -1,15 +1,15 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import ShopPageCategory from "../../components/shop/ShopPageCategory";
-import {MetaWrapper} from "../../components/MetaWrapper";
-import {useRouter} from "next/router";
+import { MetaWrapper } from "../../components/MetaWrapper";
+import { useRouter } from "next/router";
 import shopApi from "../../api/shop";
 import store from "../../store";
-import moment from "moment"
-import m from "moment-timezone"
-import {ApiCustomSettingsAsync} from "../../services/utils";
+import moment from "moment";
+import m from "moment-timezone";
+import { ApiCustomSettingsAsync } from "../../services/utils";
 import serverSideActions from "../../services/serverSide";
 import allActions from "../../services/actionsArray";
-import Head from 'next/head'
+import Head from "next/head";
 
 import clientSideActions from "../../services/clientSide";
 import { generalProcessForAnyPage } from "../../services/utils";
@@ -30,15 +30,30 @@ export default function Catlog(props) {
       dispatch(allActions[actionKey](props.dispatches[actionKey]));
     }
   }, [props.locale]);
-  const logoPath = `configuration/logo/logo.webp`
-  console.log(props.metaOptions.image && `https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image}`, "dfkgsdkgkgjka")
+  const logoPath = `configuration/logo/logo.webp`;
+  //// console.log(props.metaOptions.image && `https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image}`, "dfkgsdkgkgjka")
   return (
     <MetaWrapper
       title={query.slug}
-      m_title={props.metaOptions.meta_title ? props.metaOptions.meta_title : props.dbName}
-      m_desc={props.metaOptions.meta_description ? props.metaOptions.meta_description : props.categoryTitle}
-      m_key={props.metaOptions.meta_keywords ? props.metaOptions.meta_keywords : props.categoryTitle}
-      m_img={props.metaOptions.image && `https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image}`}
+      m_title={
+        props.metaOptions.meta_title
+          ? props.metaOptions.meta_title
+          : props.dbName
+      }
+      m_desc={
+        props.metaOptions.meta_description
+          ? props.metaOptions.meta_description
+          : props.categoryTitle
+      }
+      m_key={
+        props.metaOptions.meta_keywords
+          ? props.metaOptions.meta_keywords
+          : props.categoryTitle
+      }
+      m_img={
+        props.metaOptions.image &&
+        `https://${props.dbName}/storage/${props.domain}/${props.metaOptions.image}`
+      }
     >
       <ShopPageCategory
         columns={3}
@@ -187,8 +202,7 @@ export async function getServerSideProps({
           meta_title: e.meta_title,
           meta_description: e.meta_description,
           meta_keywords: e.meta_keywords,
-        }
-
+        };
       }
       if (e.slug == query.slug && e.children?.length === 0) {
         categoryId = e.id;
@@ -207,9 +221,8 @@ export async function getServerSideProps({
   await fetch(`https://${dbName}/api/test?slug=${query.slug}`)
     .then((response) => response.json())
     .then((response) => {
-
       categoryId = response.id;
-      metaOptions.image = response.image
+      metaOptions.image = response.image;
     })
     .catch((err) => console.error(err));
   await shopApi
@@ -239,9 +252,9 @@ export async function getServerSideProps({
         ...dispatches,
         ...responseProductList.dispatches,
       };
-      let currentDate = m(new Date()).tz("Asia/Yerevan").format('YYYY-MM-DD')
+      let currentDate = m(new Date()).tz("Asia/Yerevan").format("YYYY-MM-DD");
       if (Object.keys(filterValues).length > 0) {
-        let date = new Date()
+        let date = new Date();
         let checkedFiltres = [];
         newdata = responseProductList.data.map((el, value) => {
           let checkFiltre = [];
@@ -252,9 +265,8 @@ export async function getServerSideProps({
                 if (e == key) {
                   let splited = filterValues[key].split(",");
                   let checkData = splited.filter((s) => {
-                    return s == el[e]
+                    return s == el[e];
                   });
-
 
                   /*if (el.special_price && el.special_price_from && el.special_price_to) {
                     let date_from = m(el.special_price_from * 1000).tz("Asia/Yerevan").format('YYYY-MM-DD')
@@ -297,7 +309,6 @@ export async function getServerSideProps({
                   }
                 });
               });
-
             }
           });
           var result = checkFiltre.filter((e) => e.length);
