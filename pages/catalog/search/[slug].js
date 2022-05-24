@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import SearchedProducts from "../../../components/shop/SearchedProducts";
+import {MetaWrapper} from "../../../components/MetaWrapper";
 import { useRouter } from "next/router";
 import store from "../../../store";
 import allActions from "../../../services/actionsArray";
@@ -18,28 +19,13 @@ export default function Catlog(props) {
 
   const logoPath = `configuration/logo/logo.webp`
   return (
-    <>
-      <Head>
-        <title>{query.slug}</title>
-        <meta property="og:title" name="title"
-              content={query.slug}/>
-        <meta property="og:description" name="description"
-              content={props.dbName}/>
-        <meta property="og:keywords" name="keywords"
-              content={query.slug}/>
-        <meta
-          property="og:image"
-          name="image"
-          content={`https://${props.dbName}/storage/${props.domain}/${logoPath}`}
-        />
-        <meta name="twitter:card" content="summary_large_image"/>
-        <meta name="twitter:title"
-              content={query.slug}/>
-        <meta name="twitter:description"
-              content={props.dbName}/>
-        <meta name="twitter:image"
-              content={`https://${props.dbName}/storage/${props.domain}/${logoPath}`}/>
-      </Head>
+    <MetaWrapper
+      title={query.slug}
+      m_title={query.slug}
+      m_desc={props.dbName}
+      m_key={query.slug}
+      m_img={false}
+    >
       <SearchedProducts
         columns={3}
         dbName={props.dbName}
@@ -47,7 +33,37 @@ export default function Catlog(props) {
         sidebarPosition="start"
         searchedItem={query.slug}
       />
-    </>
+    </MetaWrapper>
+    // <>
+    //   <Head>
+    //     <title>{query.slug}</title>
+    //     <meta property="og:title" name="title"
+    //           content={query.slug}/>
+    //     <meta property="og:description" name="description"
+    //           content={props.dbName}/>
+    //     <meta property="og:keywords" name="keywords"
+    //           content={query.slug}/>
+    //     <meta
+    //       property="og:image"
+    //       name="image"
+    //       content={`https://${props.dbName}/storage/${props.domain}/${logoPath}`}
+    //     />
+    //     <meta name="twitter:card" content="summary_large_image"/>
+    //     <meta name="twitter:title"
+    //           content={query.slug}/>
+    //     <meta name="twitter:description"
+    //           content={props.dbName}/>
+    //     <meta name="twitter:image"
+    //           content={`https://${props.dbName}/storage/${props.domain}/${logoPath}`}/>
+    //   </Head>
+    //   <SearchedProducts
+    //     columns={3}
+    //     dbName={props.dbName}
+    //     viewMode="grid"
+    //     sidebarPosition="start"
+    //     searchedItem={query.slug}
+    //   />
+    // </>
   );
 }
 

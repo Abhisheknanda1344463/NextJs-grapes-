@@ -6,11 +6,11 @@ import PropTypes from "prop-types";
 import Link from "next/link";
 
 // application
-import { ArrowRoundedRight6x9Svg } from "../../svg";
+import {ArrowRoundedRight6x9Svg} from "../../svg";
 import Head from "next/head";
 
 function PageHeader(props) {
-  let { header, breadcrumb } = props;
+  let {header, breadcrumb} = props;
   if (header) {
     header = (
       <div className="page-header__title">
@@ -23,19 +23,21 @@ function PageHeader(props) {
     const lastIndex = breadcrumb.length - 1;
 
     const schemaPageHeader = {
-      "@context": "/",
+      "@context": `https://schema.org/`,
       "@type": "BreadcrumbList",
-      name: "Breadcrumb",
-      itemListElement: [],
+      "name": "Breadcrumb",
+      "url": `/`,
+      "itemListElement": [],
     };
 
     breadcrumb = breadcrumb.map((item, index) => {
+      console.log(item.title, "item in pageHeader")
       let link;
 
       schemaPageHeader.itemListElement.push({
         "@type": "ListItem",
-        position: breadcrumb.indexOf(item),
-        item: {
+        "position": breadcrumb.indexOf(item),
+        "item": {
           "@id": item.url,
         },
       });
@@ -66,7 +68,7 @@ function PageHeader(props) {
             <Link href={item.url}>
               <a>{item.title}</a>
             </Link>
-            <ArrowRoundedRight6x9Svg className="breadcrumb-arrow" />
+            <ArrowRoundedRight6x9Svg className="breadcrumb-arrow"/>
           </li>
         );
       }
