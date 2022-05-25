@@ -1,17 +1,40 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
-import { storeName } from "../helper";
+import Document, {Html, Head, Main, NextScript} from "next/document";
+import {storeName} from "../helper";
+
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
-
+    let domainName = null;
+    if(ctx.req && Object.keys(ctx.req.headers)?.length > 0) {
+      domainName = ctx.req.headers.host.split(".")[0]
+      if (domainName == "www") {
+        domainName = ctx.req.headers.host.split(".")[1];
+      }
+    }
     return {
       ...initialProps,
-      domainName:
-        ctx.req && Object.keys(ctx.req.headers)?.length > 0
-          ? ctx.req.headers.host.split(".")[0]
-          : "zegashop",
+      domainName: domainName
+        // ctx.req && Object.keys(ctx.req.headers)?.length > 0
+        //   ? ctx.req.headers.host.split(".")[0]
+        //   : "zegashop",
     };
   }
+
+//   if (dbName.includes(".zegashop.com")) {
+//   var dataName = dbName.split(".zegashop.com");
+//   //// console.log(dataName);
+//   databaseName = dataName[0];
+//   process.env.domainName = dbName;
+//
+//   process.env.databaseName = databaseName;
+// } else {
+//   process.env.domainName = dbName;
+//   databaseName = dbName.split(".")[0];
+//   if (databaseName == "www") {
+//     databaseName = dbName.split(".")[1];
+//   }
+//   process.env.databaseName = databaseName;
+// }
 
   render() {
     return (
@@ -43,8 +66,8 @@ class MyDocument extends Document {
                     /> */}
         </Head>
         <body>
-          <Main />
-          <NextScript />
+        <Main/>
+        <NextScript/>
         </body>
       </Html>
     );
