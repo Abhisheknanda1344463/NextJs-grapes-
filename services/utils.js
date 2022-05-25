@@ -1,7 +1,8 @@
 import store from "../store";
 import shopApi from "../api/shop";
-import { url as originalUrl } from "../helper";
-import { changeLocale } from "../store/locale";
+import {url as originalUrl} from "../helper";
+import {changeLocale} from "../store/locale";
+
 export const url = {
   home: () => "/",
 
@@ -11,12 +12,13 @@ export const url = {
   //   `/catalog/${category.slug}?cat_id=${category.id}`,
   category: (category) => {
     var newUrl = "";
-    console.log(
-      category,
-
-      "queryqueryquery"
-    );
+    // console.log(
+    //   category,
+    //
+    //   "queryqueryquery"
+    // );
     if (category.query) {
+
       // query.map((el, index) => {
       //   if (index == 0) {
       //     newUrl = `?${Object.keys(el)}=${Object.values(el)}`;
@@ -35,6 +37,7 @@ export const url = {
   },
 
   product: (product) => {
+    // console.log(product, "plplplplplplplplppllplplplplplpplp")
     return `/products/${product.url_key}`;
     // return `/products/${product.product_id || product.id}`
   },
@@ -48,7 +51,7 @@ export function getCategoryParents(category) {
 
 export function runFbPixelEvent(eventData) {
   const {
-    general: { fbPixel },
+    general: {fbPixel},
   } = store.getState();
   setTimeout(() => {
     if (fbPixel) {
@@ -68,7 +71,7 @@ export async function ApiCustomSettingsAsync(locale, dbName, selectedCurency) {
   );
   let data = {};
   const seettingDataCore = await seettingData.json();
-  const { channel_info } = customSettingsData;
+  const {channel_info} = customSettingsData;
   //// console.log(customSettingsData?.translations, "aaaaaaaaaaaaaaa");
   let dispatches = {
     serverSide: {
@@ -96,11 +99,16 @@ export async function ApiCustomSettingsAsync(locale, dbName, selectedCurency) {
       base_currency_id,
       default_locale_id,
     } = channel_info[0];
+
+    // console.log(channel_info, "ApiCustomSettingsAsync(locale, dbName, selectedCurency)")
+
     dispatches["clientSide"]["setLocaleList"] = locales || false;
     dispatches["clientSide"]["changeLocale"] =
       locale != "catchAll" ? locale : default_locale_id;
     dispatches["clientSide"]["setCurrencies"] = currencies || false;
-    dispatches["clientSide"]["changeCurrency"] = base_currency_id || false;
+    /* ******* REMEBER TO FIX IT ********/
+    /***** this part is commented because it's overwrites the store // need changeRate *******/
+    // dispatches["clientSide"]["changeCurrency"] = base_currency_id || false;
     ///   console.log(currencies_new, "currencies_newcurrencies_new");
     dispatches["clientSide"]["setRate"] =
       {
@@ -152,13 +160,17 @@ export function ApiCustomSettings(customSettingsData) {
   };
 
   if (channel_info) {
-    const { locales, currencies, base_currency_id, default_locale_id } =
+    const {locales, currencies, base_currency_id, default_locale_id} =
       channel_info;
+    // console.log(channel_info, "ApiCustomSettings(customSettingsData)")
 
     dispatches["setLocaleList"] = locales || false;
     dispatches["changeLocale"] = default_locale_id || false;
     dispatches["setCurrencies"] = currencies || false;
-    dispatches["changeCurrency"] = base_currency_id || false;
+
+    /* ******* REMEBER TO FIX IT ********/
+    /***** this part is commented because it's overwrites the store // need changeRate *******/
+    // dispatches["changeCurrency"] = base_currency_id || false;
   }
 
   return {
@@ -169,8 +181,8 @@ export function ApiCustomSettings(customSettingsData) {
 export async function ApiCategoriesAndMenues(locale) {
   // console.log(locale, "locale");
   if (locale !== "catchAll") {
-    const getCategories = await shopApi.getCategories({ locale: locale });
-    const getMenues = await shopApi.getMenues({ locale: locale });
+    const getCategories = await shopApi.getCategories({locale: locale});
+    const getMenues = await shopApi.getMenues({locale: locale});
     const pageIds = getMenues.data.map((e) => e.page_id).join();
 
     const getPages = await shopApi.getPagesByIdsArray({
@@ -221,7 +233,7 @@ export async function generalProcessForAnyPage(
     dbName,
     selectedCurency
   );
-  const { setCatgoies, setMenuList } = await ApiCategoriesAndMenues(
+  const {setCatgoies, setMenuList} = await ApiCategoriesAndMenues(
     locale !== "catchAll" ? locale : settingsResponse.data.locale.code
   );
   dispatches = {
