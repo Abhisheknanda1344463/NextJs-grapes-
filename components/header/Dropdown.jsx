@@ -323,7 +323,7 @@ const Dropdown = (props) => {
   } else if (props.for == 'currency') {
     const curr = currencyList.find(item => item?.code == props.current)
     // console.log(props, "pROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO+++++++")
-    // console.log(curr, "currcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurr+++++++")
+    console.log(curr, "currcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurr+++++++")
     return (
       <div className={classes} ref={setWrapperRef}>
         <button
