@@ -94,3 +94,5 @@ export { default as ContactsSVG } from "./contacts.svg";
 export { default as IdramPosSVG } from "./idramSvg.svg";
 export { default as TelcellPosSVG } from "./telcell.svg";
 export { default as PaypalPosSVG } from "./paypal.svg";
+export { default as CreditCardStripe } from "./credit_card.svg";
+export { default as CVV } from "./cvv.svg";
