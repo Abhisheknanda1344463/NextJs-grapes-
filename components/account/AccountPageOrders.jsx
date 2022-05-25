@@ -62,8 +62,8 @@ const AccountPageOrders = () => {
   }
 
   const ordersList = orders.data.map((order) => {
-    console.log(order, 'orderorderorderorder');
     let date = formatDate(order.created_at);
+    console.log(order,);
     return (
       <tr key={order.id}>
         <td>
@@ -75,6 +75,14 @@ const AccountPageOrders = () => {
         <td>{order.formated_sub_total}</td>
         <td>{order.formated_tax_amount}</td>
         <td>{order.formated_shipping_amount}</td>
+        {
+          order.formated_base_discount_amount !== "$0.00" ? (
+            <td>{order.formated_base_discount_amount}</td>
+          ) : (
+            <td></td>
+          )
+        }
+        <td>{order.formated_grand_total || 0}</td>
         <td>
           {" "}
           <FormattedMessage
@@ -123,6 +131,24 @@ const AccountPageOrders = () => {
             </th>
             <td>{order.formated_shipping_amount}</td>
           </tr>
+          {
+            order.formated_base_discount_amount !== "$0.00" ? (
+              <tr>
+                <th>
+                  <FormattedMessage id="discount.cupon" defaultMessage="Discount" />
+                </th>
+                <td>{order.formated_base_discount_amount}</td>
+              </tr>
+            ) : (
+              <td></td>
+            )
+          }
+          <tr>
+            <th>
+              <FormattedMessage id="total" defaultMessage="Total" />
+            </th>
+            <td>{order.formated_grand_total || 0}</td>
+          </tr>
           <tr>
             <th>
               <FormattedMessage id="status" defaultMessage="Status" />
@@ -163,6 +189,12 @@ const AccountPageOrders = () => {
                         id="shipping"
                         defaultMessage="Shipping"
                       />
+                    </th>
+                    <th>
+                      <FormattedMessage id="discount.cupon" defaultMessage="Discount" />
+                    </th>
+                    <th>
+                      <FormattedMessage id="total" defaultMessage="Total" />
                     </th>
                     <th>
                       <FormattedMessage id="status" defaultMessage="Status" />
