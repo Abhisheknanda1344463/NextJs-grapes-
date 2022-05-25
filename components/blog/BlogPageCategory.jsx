@@ -118,7 +118,7 @@ const BlogPageCategory = (props) => {
 
     schemaBlog.offers.push({
       "@type": "BlogPosting",
-      "id": post.id.toString(),
+      // "id": post.id.toString(),
       "image": `https://${props.domain}/storage/${props.dbName}/${logoPath}`,
       "name": post.blog_title,
       "description": post.html_content,

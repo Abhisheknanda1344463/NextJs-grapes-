@@ -15,9 +15,12 @@ const initialState = {
 export default function currencyReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_CURRENCY:
+
       return {
         ...state,
-        current: state.list.find(carrency => carrency.id === action.payload)
+        current: state.list.find(carrency => {
+          return carrency.code === action.payload
+        })
       }
     case SET_CURRENCY_LIST:
       return {

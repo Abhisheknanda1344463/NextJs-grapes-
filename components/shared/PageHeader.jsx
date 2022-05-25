@@ -31,7 +31,7 @@ function PageHeader(props) {
     };
 
     breadcrumb = breadcrumb.map((item, index) => {
-      console.log(item.title, "item in pageHeader")
+      // console.log(item.title, "item in pageHeader")
       let link;
 
       schemaPageHeader.itemListElement.push({

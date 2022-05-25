@@ -9,9 +9,12 @@ import NavPanel from "./NavPanel";
 import Image from "components/hoc/Image";
 import { apiImageUrl, url } from "../../helper";
 import Head from "next/head";
+import {useRouter} from "next/router";
 
 function Header(props) {
   const { layout, domain } = props;
+  const route = useRouter();
+  console.log(route, "route in header jsx")
 
   const schemaSiteHeader = {
     "@context": `https://schema.org/`,

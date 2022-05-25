@@ -53,7 +53,7 @@ function BlockProducts(props) {
   }
   if (products.length > 0) {
     const productsList = products.map((product, index) => {
-      console.log(product, "proucts in lock products");
+      // console.log(product, "proucts in lock products");
       //these arrayMetas were commented for some reason....
       // arrayMeta.push(<meta name="name" content={product.name}/>)
       // arrayMeta.push(<meta name="description" content={product.meta_description}/>)

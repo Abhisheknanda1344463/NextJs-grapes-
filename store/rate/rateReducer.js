@@ -13,6 +13,7 @@ export default function currencyReducer(state = initialState, action) {
         ...action.payload,
       };
     case CHANGE_CURRENCY:
+      console.log(action.payload,"action payload in ")
       return {
         ...state,
         current: state.list.find(
