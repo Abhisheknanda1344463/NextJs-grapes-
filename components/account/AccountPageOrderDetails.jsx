@@ -201,6 +201,15 @@ function AccountPageOrderDetails({ orderId, dbName }) {
           <span className="order-details-title">
             <FormattedMessage id="price" defaultMessage="Price" />
           </span>
+          {
+            order.formated_base_discount_amount !== "$0.00" ? (
+              <span className="order-details-title">
+                <FormattedMessage id="discount.cupon" defaultMessage="Discount" />
+              </span>
+            ) : (
+              ""
+            )
+          }
           <span className="order-details-title">
             <FormattedMessage id="qty" defaultMessage="Quantity" />
           </span>
@@ -213,6 +222,13 @@ function AccountPageOrderDetails({ orderId, dbName }) {
         <div className="order-details-2nd-layer-title">
           <span className="">{order.items[0].name}</span>
           <span className="">{order.formated_sub_total}</span>
+          {
+            order.formated_base_discount_amount !== "$0.00" ? (
+              <span className="">{order.formated_base_discount_amount || 0}</span>
+            ) : (
+              ""
+            )
+          }
           <span className="">{order.total_qty_ordered}</span>
           <span className="">{order.formated_grand_total}</span>
         </div>

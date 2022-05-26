@@ -1,33 +1,43 @@
 // react
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Dropdown from "./Dropdown";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { FormattedMessage } from "react-intl";
-import { changeCurrency } from "../../store/currency";
+import { changeRate, getExchangeRate } from "../../store/rate";
+import { getExchange } from "../../store/selector";
 import { useRouter } from "next/router";
-
+import { useSelector } from "react-redux";
 function DropdownCurrency(props) {
-  const {
-    // locale: code,
-    current,
-    currency,
-    ///  changeCurrency,
-    currencies,
-  } = props;
-
+  const [currentCurrency, setCurrentCurrency] = useState("USD");
+  const { current, currency, changeRate, currencies } = props;
+  const dispatch = useDispatch();
+  /// var nreData = useSelector(getExchange);
   if (currencies.length < 2) {
     return null;
   }
+
+  const nreData = true;
+  // if (nreData) {
+  //   dispatch(getExchangeRate(currencies));
+  // }
+  // useEffect(() => {
+  //   /// const nreData = useSelector(getExchange);
+  //   return () => {};
+  // }, []);
   const router = useRouter();
-  const { currencies: currenciesRouter } = router.query;
+
   const handleRoute = (currencies) => {
-    ///  changeLocale(locale);
-    ////changeCurrency(currencies);
-    console.log(window.history, "window history");
+    setCurrentCurrency(currencies);
+    changeRate(currencies);
+    /// dispatch(getExchangeRate(currencies));
+
+    console.log(nreData);
     let checkUrl = window.location.href.indexOf("?");
-    if (checkUrl > 0) {
+    if (checkUrl > 0 && nreData) {
       router.query.currencies = currencies;
       router.push(router);
+    } else if (!nreData) {
+      window.history.replaceState(null, "", window.location.href);
     } else {
       window.history.replaceState(
         null,
@@ -35,14 +45,6 @@ function DropdownCurrency(props) {
         window.location.href + "?currencies=" + currencies
       );
     }
-
-    // router.push(
-    //   router.asPath != "/" ? router.asPath : "",
-    //   router.asPath != "/" ? router.asPath : "",
-    //   {
-    //     currencies: currencies,
-    //   }
-    // );
   };
   const title = (
     <React.Fragment>
@@ -53,20 +55,18 @@ function DropdownCurrency(props) {
   );
 
   const currencyList = currencies.filter((e) => {
-    return e.code == currency.code;
+    return e.code == currency?.code;
   });
 
   const currencyL = currencies.filter((e) => {
     return currencyList[0]?.code === e.code ? null : e;
   });
 
-  console.log(currencyL, "currency _____ ");
-
   return (
     <Dropdown
       for={"currency"}
       title={currencyList}
-      current={current}
+      current={currentCurrency}
       items={currencyL}
       onClick={(item) => handleRoute(item.code)}
     />
@@ -82,7 +82,7 @@ const mapStateToProps = ({ currency: { current, list } }) => {
 };
 
 const mapDispatchToProps = {
-  changeCurrency,
+  changeRate,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DropdownCurrency);

@@ -190,23 +190,25 @@
 
 // *************** Functional Component ******************** //
 
-import React, { useState, useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import React, {useState, useEffect, useRef} from 'react'
+import {useSelector} from 'react-redux'
 
 // third-party
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
-import { apiImageUrl } from '../../helper'
+import {apiImageUrl} from '../../helper'
 
 // application
 import Menu from './Menu'
 import Image from 'components/hoc/Image'
-import { ArrowRoundedDown7x5Svg } from '../../svg'
+import {ArrowRoundedDown7x5Svg} from '../../svg'
 
 
 const Dropdown = (props) => {
+  // console.log(props, "props in dropdown")
   const [open, setOpen] = useState(false)
   const domain = useSelector(state => state.general.domain)
+  const currencyList = useSelector(state => state.rate.list)
   const selectedData = useSelector((state) => state.locale.code);
   const wrapperRef = useRef(null)
 
@@ -237,7 +239,7 @@ const Dropdown = (props) => {
   const handleItemClick = (item) => {
     // console.log(domain, "domain")
 
-    const { onClick } = props
+    const {onClick} = props
 
     setOpen(() => false)
 
@@ -246,7 +248,7 @@ const Dropdown = (props) => {
     }
   }
 
-  const { title, withIcons, items, locale, newLocal } = props
+  const {title, withIcons, items, locale, newLocal} = props
   let local = null
   const classes = classNames('topbar-dropdown', {
     'topbar-dropdown--opened': open,
@@ -270,7 +272,7 @@ const Dropdown = (props) => {
             onClick={handleButtonClick}
           >
 
-            <span style={{ paddingBottom: '3px', paddingRight: '10px' }}>
+            <span style={{paddingBottom: '3px', paddingRight: '10px'}}>
               {local && local?.name}
             </span>
             <Image
@@ -283,7 +285,7 @@ const Dropdown = (props) => {
                   : `../../vendor/webkul/ui/assets/images/flag_${newLocal}.svg`
               }
             />
-            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow" />
+            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow"/>
           </button>
         ) : (
           <button
@@ -291,7 +293,7 @@ const Dropdown = (props) => {
             type="button"
             onClick={handleButtonClick}
           >
-            <span style={{ paddingBottom: '3px', paddingRight: '10px' }}>
+            <span style={{paddingBottom: '3px', paddingRight: '10px'}}>
               {local && local?.name}
             </span>
             <Image
@@ -319,6 +321,9 @@ const Dropdown = (props) => {
       </div>
     )
   } else if (props.for == 'currency') {
+    const curr = currencyList.find(item => item?.code == props.current)
+    // console.log(props, "pROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO+++++++")
+    console.log(curr, "currcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurrcurr+++++++")
     return (
       <div className={classes} ref={setWrapperRef}>
         <button
@@ -326,18 +331,20 @@ const Dropdown = (props) => {
           type="button"
           onClick={handleButtonClick}
         >
-          <span style={{ paddingBottom: '3px' }}>
-            {props.current.name}
+          <span style={{paddingBottom: '3px'}}>
+            {curr?.name}
           </span>
-          <span style={{ paddingBottom: '3px' }}>
-            {props.current.symbol}
+          <span style={{paddingBottom: '3px'}}>
+            {curr?.symbol}
           </span>
           {items.length > 0 ? (
-            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow" />
+            <ArrowRoundedDown7x5Svg className="language-dropdown-arrow"/>
           ) : null}
         </button>
         {items.length > 0 && (
           <div className="topbar-dropdown__body">
+            {/*{console.log(items.filter((e) => e.code != local?.code), "items in drop")}*/}
+            {/*{console.log(props.items[0].symbol, "props.items[0].symbol in drop")}*/}
             <Menu
               layout="topbar"
               withIcons={withIcons}

@@ -15,7 +15,7 @@ function Menu(props) {
 
   const domain = useSelector((state) => state.general.domain);
   const rate = useSelector((state) => state.rate);
-  console.log(rate, "taaaaaaaaaateeeee in menu")
+  // console.log(rate, "taaaaaaaaaateeeee in menu")
 
   const renderLink = (item, content) => {
     let link;
@@ -70,7 +70,7 @@ function Menu(props) {
         </div>
       );
     }
-
+// console.log(item,"item item tkkkkkkkkkk")
     return (
       <li key={index}>
         {renderLink(

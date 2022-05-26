@@ -100,14 +100,14 @@ const BlogPageCategory = (props) => {
 
   const schemaBlog = {
     "@context": `https://schema.org/`,
-    "@type": "ItemList",
+    "@type": "Blog",
     "name": "Page blogs",
     "url": `${url}/page/blogs`,
-    "itemListElement": [],
+    "offers": [],
   };
   const logoPath = `configuration/logo/logo.webp`;
   const postsList = props.blog.data.map((post) => {
-    // console.log(post, "post in  blog page category")
+    console.log(post, "post in  blog page category")
     // let pos = post.translations.find(item => item.locale === selectedData);
     // pos.image=post.image
     const postLayout = {
@@ -116,14 +116,12 @@ const BlogPageCategory = (props) => {
       list: "list-nl",
     }[layout];
 
-    schemaBlog.itemListElement.push({
-      "@type": "ListItem",
-      "position": props.blog.data.indexOf(post),
-      "item": {
-        "id": post.id.toString(),
-        "name": post.meta_title,
-        "image": `https://${props.domain}/storage/${props.dbName}/${logoPath}`
-      },
+    schemaBlog.offers.push({
+      "@type": "BlogPosting",
+      // "id": post.id.toString(),
+      "image": `https://${props.domain}/storage/${props.dbName}/${logoPath}`,
+      "name": post.blog_title,
+      "description": post.html_content,
     });
 
     return (

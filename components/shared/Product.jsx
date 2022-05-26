@@ -48,7 +48,6 @@ class Product extends PureComponent {
         Memory: null,
         color: null,
       },
-      locale: this.props.locale,
       size: null,
       imagesData: null,
       simpleProduct: null,
@@ -59,6 +58,7 @@ class Product extends PureComponent {
       product: this.props.product,
       customer: this.props.customer,
       wishlist: this.props.wishlist,
+      currencyCode:this.props.currencyCode,
       IsOpen: 'product-inner-long-description-click',
       desc: "description"
     }
@@ -107,7 +107,8 @@ class Product extends PureComponent {
   componentDidUpdate(prProps, prState) {
     if (
       prProps.productSlug !== this.props.productSlug ||
-      prProps.locale !== this.props.product.data.locale
+      prProps.locale !== this.props.product.data.locale ||
+      prProps.currencyCode !== this.props.currencyCode
     ) {
       this.renderProduct()
     }
@@ -363,7 +364,8 @@ class Product extends PureComponent {
       // setUpCrossProd,
       // AddCartToken,
     } = this.props
-
+console.log(window.location.href.includes("?currencies="), "location ")
+console.log(this.props, "propsssss")
 
     const schemaProduct = {
       "@context": `https://schema.org/`,
@@ -1005,6 +1007,7 @@ const mapStateToProps = (state) => ({
   signed: state.customer.authenticated,
   wishlist: state.wishlist,
   oldProduct: state.general.temporaryData[0],
+  currencyCode: state.rate.current.code,
 })
 
 const mapDispatchToProps = {

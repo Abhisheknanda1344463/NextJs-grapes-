@@ -91,6 +91,7 @@ class ShopPageCheckout extends React.Component {
       addressOption: {},
       addCupone: '',
       stripeMethod: {},
+      publik_key: "",
       errors: {
         fullName: '',
         name: '',
@@ -109,7 +110,11 @@ class ShopPageCheckout extends React.Component {
     }
   }
 
+
+
+
   componentDidMount() {
+    console.log(this.props, '5454545454545');
     this.abortController = new AbortController()
     this.single = this.abortController
     runFbPixelEvent({ name: 'Checkout Page' })
@@ -120,9 +125,9 @@ class ShopPageCheckout extends React.Component {
     if (this.props.payments.length > 0) {
       this.props.payments.map(el => {
         if (el.method === "stripe") {
-          // fetch(apiUrlWithStore(`/api/checkout/getpk`))
-          //   .then((res) => res.json())
-          //   .then((response) => console.log(response, 'response'))
+          fetch(apiUrlWithStore(`/api/checkout/getpk`))
+            .then((res) => res.json())
+            .then((response) => this.setState({ publik_key: response.pk }))
           this.setState({
             stripeMethod: el
           })
@@ -295,6 +300,7 @@ class ShopPageCheckout extends React.Component {
     }
   }
 
+
   addCuponeCode = (methods) => {
     //  this.getCartCustomer();
     const requestOptions = {
@@ -347,6 +353,7 @@ class ShopPageCheckout extends React.Component {
 
   renderTotals() {
     const { cart } = this.props
+
 
     if (cart.extraLines.length <= 0) {
       return null
@@ -621,8 +628,14 @@ class ShopPageCheckout extends React.Component {
           </div>
           <ul className="payment-methods__list">{payments}</ul>
           {
-            this.state.stripeMethod && this.state.stripeMethod.method === "stripe" ? (
-              <StripeInit isCallStripePayment={this.state.isCallStripePayment} callFuntionPay={this.callPayWithStripe} />
+            this.state.payment === 'stripe'
+              && this.state.stripeMethod
+              && this.state.stripeMethod.method === "stripe" ? (
+              <StripeInit
+                isCallStripePayment={this.state.isCallStripePayment}
+                callFunctionPay={this.stopLoadingToPayButtonForChilde}
+                publicKey={this.state.publik_key}
+              />
             ) : (
               ""
             )
@@ -755,10 +768,14 @@ class ShopPageCheckout extends React.Component {
   }
 
 
-  callPayWithStripe(value) { //boolean
+  callPayWithStripe = (value) => { //boolean
     this.setState({
       isCallStripePayment: value
     })
+  }
+
+  stopLoadingToPayButtonForChilde = () => {
+    this.setState({ loading: false })
   }
 
 
@@ -1040,10 +1057,6 @@ class ShopPageCheckout extends React.Component {
                         .then((res) => res.json())
                         .then((res) => {
                           if (res.success) {
-                            if (this.state.payment === 'stripe') {
-                              this.callPayWithStripe(true)
-
-                            }
                             if (res?.redirect_url?.backURL) {
                               window.location = res.redirect_url.backURL
                             } else {
@@ -1051,6 +1064,7 @@ class ShopPageCheckout extends React.Component {
                               if (res?.redirect_url) {
                                 url = res.redirect_url
                                 if (url === 'stripe') {
+
                                   this.callPayWithStripe(true)
                                 }
                               } else if (res?.order?.id) {
