@@ -257,7 +257,9 @@ export async function getServerSideProps({
         let date = new Date();
         let checkedFiltres = [];
         newdata = responseProductList.data.map((el, value) => {
+          console.log(el, "111111111111");
           let checkFiltre = [];
+
           let checkFiltreConfig = [];
           checkedFiltres = Object.keys(filterValues).map((key, index) => {
             if (el.type == "simple") {

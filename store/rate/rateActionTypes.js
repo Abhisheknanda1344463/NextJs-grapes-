@@ -1,2 +1,3 @@
 export const SET_RATE_LIST = "SET_RATE_LIST";
 export const CHANGE_CURRENCY = "CHANGE_CURRENCY";
+export const GET_EXACHGE_RATE = "GET_EXACHGE_RATE";

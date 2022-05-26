@@ -66,16 +66,13 @@ export async function getServerSideProps({ locale, locales, req, res }) {
   const dbName = req.headers["x-forwarded-host"];
   var databaseName;
   var selectedCurency;
-  var selectedCurency;
+
   var selectedRate;
   var parsed;
   ////CHECKING CURRENCY
   if (req.query.currencies != "") {
     selectedCurency = req.query.currencies;
-  } else {
-    selectedCurency = currency;
   }
-
   ////GETTING DOMAIN
   if (dbName.includes(".zegashop.com")) {
     var dataName = dbName.split(".zegashop.com");
@@ -98,6 +95,9 @@ export async function getServerSideProps({ locale, locales, req, res }) {
     rate,
     dispatches: generalDispatches,
   } = await generalProcessForAnyPage(locale, dbName, selectedCurency);
+  if (req.query.currencies != "") {
+    selectedCurency = currency;
+  }
   ////GETTING RATE FOR CURRENCY
   if (req.query.currencies != "") {
     selectedRate = rate.currencies_new.find(
@@ -109,7 +109,7 @@ export async function getServerSideProps({ locale, locales, req, res }) {
     .getHomeProducts(
       selectedLocale,
       selectedCurency,
-      selectedRate?.exchange_rate.rate || 1,
+      selectedRate?.exchange_rate?.rate || 1,
       dbName
     )
     .then((data) => {
@@ -131,7 +131,7 @@ export async function getServerSideProps({ locale, locales, req, res }) {
       locale: selectedLocale,
       currency: selectedCurency,
       dbName,
-      rate: selectedRate?.exchange_rate.rate || 1,
+      rate: selectedRate?.exchange_rate?.rate || 1,
       metas: data.data,
       featuredProducts: parsed.featuredProducts,
       newProducts: parsed.newProduct,

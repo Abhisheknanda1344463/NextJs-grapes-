@@ -18,17 +18,12 @@ export default function localeReducer(state = initialState, action) {
           (locale) => locale.id === action.payload
         );
       }
-      // console.log(
-      //   curentLocale,
-      //   action.payload,
-      //   "11111111111111111111111111111111111"
-      // );
       return {
         ...state,
         defaultLocale: curentLocale,
         code: curentLocale.code,
       };
-      return state;
+    /// return state;
     case SET_LOCALE_LIST:
       return {
         ...state,
