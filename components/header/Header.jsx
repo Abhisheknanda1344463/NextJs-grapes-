@@ -9,12 +9,11 @@ import NavPanel from "./NavPanel";
 import Image from "components/hoc/Image";
 import { apiImageUrl, url } from "../../helper";
 import Head from "next/head";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
 function Header(props) {
   const { layout, domain } = props;
   const route = useRouter();
-  console.log(route, "route in header jsx")
 
   const schemaSiteHeader = {
     "@context": `https://schema.org/`,
@@ -38,8 +37,9 @@ function Header(props) {
         "name": "Language"
       },
     ],
-    url:`/`,
+    url: `/`,
   }
+
 
   return (
     <React.Fragment>
@@ -75,17 +75,19 @@ function Header(props) {
                   </a>
                 </Link>
               ) : (
-                <Link href="/">
-                  <a>
-                    <Image
-                      style={{ objectFit: "contain", cursor: "pointer" }}
-                      alt="logoSVG"
-                      width={150}
-                      height={45}
-                      src={`${apiImageUrl}/vendor/webkul/ui/assets/images/stores-logo.svg`}
-                    />
-                  </a>
-                </Link>
+                ""
+                //Need to check
+                // <Link href="/">
+                //   <a>
+                //     <Image
+                //       style={{ objectFit: "contain", cursor: "pointer" }}
+                //       alt="logoSVG"
+                //       width={150}
+                //       height={45}
+                //       src={`${apiImageUrl}/vendor/webkul/ui/assets/images/stores-logo.svg`}
+                //     />
+                //   </a>
+                // </Link>
               )}
             </div>
             <div className="site-header__search">

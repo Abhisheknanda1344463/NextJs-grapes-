@@ -17,6 +17,7 @@ const AccountPageNewAddresses = (props) => {
   const [successData, setSuucessData] = useState();
   const [input, setInput] = useState({});
   const [countryList, setCountryList] = useState();
+  const [code, setCode] = useState({})
   const history = useRouter();
 
   useEffect(() => {
@@ -39,6 +40,14 @@ const AccountPageNewAddresses = (props) => {
   }, []);
 
   const handleChange = (e) => {
+    countryList.forEach(element => {
+      if (element.name === e.target.value) {
+        let codeValue = {
+          value: element.code
+        }
+        setCode(codeValue)
+      }
+    });
     setInput({
       ...input,
       [e.target.name]: e.target.value,
@@ -52,6 +61,7 @@ const AccountPageNewAddresses = (props) => {
   const handleChangeApp = (e) => {
     setAppartment(e.target.value)
   };
+
 
   let selectCountry;
 
@@ -98,7 +108,7 @@ const AccountPageNewAddresses = (props) => {
         token: customer.token,
         first_name: input.first_name,
         last_name: input.last_name,
-        address1: [address,appartment],
+        address1: [address, appartment],
         // adres: input.adres,
         // apartment: input.apartment,
         city: input.city,
@@ -107,6 +117,7 @@ const AccountPageNewAddresses = (props) => {
         phone: input.phone,
         postcode: input.postcode,
         state: input.state || "no state",
+        additional: JSON.stringify(code.value) || ""
       }),
     };
 

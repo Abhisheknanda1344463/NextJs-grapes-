@@ -120,14 +120,14 @@ function AccountPageOrderDetails({ orderId, dbName }) {
   );
 
   const productNamesForMobile = order.items.map((item, index) => {
+    console.log(item.formated_price, 'itemitemitem');
     return (
       <div key={index} className="d-flex flex-row justify-content-between">
         <span className="order-details-name-width">{item.name}</span>
         <span>
           {item.qty_ordered} <span className="mx-1">x</span>
         </span>
-        <span>{item.formatted_price}</span>
-        <span>{item.formatted_total}</span>
+        <span>{item.formated_price}</span>
       </div>
     );
   });

@@ -1,7 +1,7 @@
 // react
 import React, { useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { url } from "../../helper";
+import { apiUrlWithStore } from "../../helper";
 import TextField from "@mui/material/TextField";
 export default function FooterNewsletter(props) {
   const [email, Setemail] = useState();
@@ -13,14 +13,17 @@ export default function FooterNewsletter(props) {
   const handlerClick = (event) => {
     event.preventDefault();
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-      fetch(`${url}/api/subscribe`, {
+
+      let option = {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ subscriber_email: email })
-      })
+      }
+
+      fetch(apiUrlWithStore(`/api/subscribe`), option)
         .then((response) => response.json())
         .then((data) => {
           if (data.success) {

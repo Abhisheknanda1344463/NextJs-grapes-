@@ -49,7 +49,6 @@ class Indicator extends Component {
 
   handleOutsideClick = (event) => {
     const { open } = this.state;
-
     if (this.wrapperRef && !this.wrapperRef.contains(event.target) && open) {
       this.close();
     }

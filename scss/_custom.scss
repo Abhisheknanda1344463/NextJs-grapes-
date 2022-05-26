@@ -2129,6 +2129,14 @@
   }
 }
 
+@media (min-width: 320px) and (max-width: 766px) {
+  .cart-table__column--quantity .cart-quantity-responsive {
+    border: 1px solid #e3e3e3;
+    box-shadow: none;
+    border-radius: 5px;
+  }
+}
+
 @media screen and(max-width: 767px) {
   .cart-table__column--total {
     &::before {
