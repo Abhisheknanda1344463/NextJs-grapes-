@@ -78,7 +78,7 @@ export default function IndicatorAccount() {
               .catch((err) => console.error(err));
           } else {
             // alert(res.error);
-            toast (
+            toast(
               <span className="d-flex chek-fms">
                 <FailSvg />
                 <FormattedMessage
@@ -94,14 +94,14 @@ export default function IndicatorAccount() {
         });
     } else {
       // alert("Type valid data");
-      toast (
+      toast(
         <span className="d-flex chek-fms">
-                {/*<FailSvg />*/}
-                <FormattedMessage
-                  id=""
-                  defaultMessage="Type valid data"
-                />
-              </span>,
+          {/*<FailSvg />*/}
+          <FormattedMessage
+            id=""
+            defaultMessage="Type valid data"
+          />
+        </span>,
         {
           hideProgressBar: true,
         }
@@ -117,10 +117,8 @@ export default function IndicatorAccount() {
         );
         if (pro == undefined) {
           fetch(
-            `${url}/api/checkout/cart/add/${product.product.id}?product_id=${
-              product.product.id
-            }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${
-              token ? `&token=${token}` : ""
+            `${url}/api/checkout/cart/add/${product.product.id}?product_id=${product.product.id
+            }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${token ? `&token=${token}` : ""
             }`,
             { method: "POST" }
           )
@@ -134,15 +132,13 @@ export default function IndicatorAccount() {
     } else if (cart.items.length > 0 && products.data === null) {
       cart.items.map((product) => {
         fetch(
-          `${url}/api/checkout/cart/add/${product.product.id}?product_id=${
-            product.product.id
-          }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${
-            token ? `&token=${token}` : ""
+          `${url}/api/checkout/cart/add/${product.product.id}?product_id=${product.product.id
+          }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${token ? `&token=${token}` : ""
           }`,
           { method: "POST" }
         )
           .then((responce) => responce.json())
-          .then((res) => {})
+          .then((res) => { })
           .catch((err) => console.error(err));
       });
     }
@@ -170,11 +166,12 @@ export default function IndicatorAccount() {
     return "false";
   };
 
-  const dropdown = <IndicatoDropDownBody setOpen={setOpen} />;
-
   const func = (bool) => {
     setOpen(bool);
   };
+
+
+  const dropdown = <IndicatoDropDownBody setOpen={setOpen} func={func} />;
 
   return (
     <Indicator

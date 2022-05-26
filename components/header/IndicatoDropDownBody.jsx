@@ -14,7 +14,7 @@ import { cartAddItemAfterLogin } from "../../store/cart";
 import { cartRemoveItemAfterLogin } from "../../store/cart";
 import { FailSvg } from "../../svg";
 import TextField from "@mui/material/TextField";
-function IndicatoDropDownBody(props) {
+function IndicatoDropDownBody({ setOpen, func }) {
   const history = useRouter();
   const dispatch = useDispatch();
 
@@ -23,10 +23,9 @@ function IndicatoDropDownBody(props) {
   const cartToken = useSelector((state) => state.cartToken);
   const cart = useSelector((state) => state.cart);
   const selectedData = useSelector((state) => state.locale.code);
-  const { setPopup } = props;
+
   const [email, SetEmail] = useState();
   const [pass, SetPass] = useState();
-  const [open, setOpen] = useState(false);
 
   const handlerChange = (event) => {
     SetEmail(event.target.value);
@@ -73,7 +72,7 @@ function IndicatoDropDownBody(props) {
               })
               .catch((err) => console.error(err));
           } else {
-            toast (
+            toast(
               <span className="d-flex chek-fms">
                 <FailSvg />
                 <FormattedMessage
@@ -89,14 +88,14 @@ function IndicatoDropDownBody(props) {
         });
     } else {
       // alert("Type valid data");
-      toast (
+      toast(
         <span className="d-flex chek-fms">
-                {/*<FailSvg />*/}
-                <FormattedMessage
-                  id="type_valid_data"
-                  defaultMessage="Type valid data"
-                />
-              </span>,
+          {/*<FailSvg />*/}
+          <FormattedMessage
+            id="type_valid_data"
+            defaultMessage="Type valid data"
+          />
+        </span>,
         {
           hideProgressBar: true,
         }
@@ -112,10 +111,8 @@ function IndicatoDropDownBody(props) {
         );
         if (pro == undefined) {
           fetch(
-            `${url}/api/checkout/cart/add/${product.product.id}?product_id=${
-              product.product.id
-            }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${
-              token ? `&token=${token}` : ""
+            `${url}/api/checkout/cart/add/${product.product.id}?product_id=${product.product.id
+            }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${token ? `&token=${token}` : ""
             }`,
             { method: "POST" }
           )
@@ -129,15 +126,13 @@ function IndicatoDropDownBody(props) {
     } else if (cart.items.length > 0 && products.data === null) {
       cart.items.map((product) => {
         fetch(
-          `${url}/api/checkout/cart/add/${product.product.id}?product_id=${
-            product.product.id
-          }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${
-            token ? `&token=${token}` : ""
+          `${url}/api/checkout/cart/add/${product.product.id}?product_id=${product.product.id
+          }&quantity=${product.quantity}&api_token=${cartToken.cartToken}${token ? `&token=${token}` : ""
           }`,
           { method: "POST" }
         )
           .then((responce) => responce.json())
-          .then((res) => {})
+          .then((res) => { })
           .catch((err) => console.error(err));
       });
     }
@@ -200,7 +195,7 @@ function IndicatoDropDownBody(props) {
               href="/forgot/password"
               className="account-menu__form-forgot-link"
             >
-              <a onClick={() => setPopup(false)}>
+              <a onClick={() => func(false)}>
                 <FormattedMessage
                   id="login.forgot.password"
                   defaultMessage="Forgot password?"
@@ -228,7 +223,7 @@ function IndicatoDropDownBody(props) {
           <Link href="/account/login">
             <span
               onClick={() => {
-                setPopup(false);
+                func(false);
               }}
             >
               <FormattedMessage
