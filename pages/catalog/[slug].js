@@ -257,7 +257,6 @@ export async function getServerSideProps({
         let date = new Date();
         let checkedFiltres = [];
         newdata = responseProductList.data.map((el, value) => {
-          console.log(el, "111111111111");
           let checkFiltre = [];
 
           let checkFiltreConfig = [];
@@ -330,7 +329,6 @@ export async function getServerSideProps({
             el.special_price =
               parseFloat(el.special_price) * selectedExchangeRate;
             el.price = parseFloat(el.price) * selectedExchangeRate;
-
             return el;
           }
         });

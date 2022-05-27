@@ -92,6 +92,7 @@ class ShopPageCheckout extends React.Component {
       addCupone: '',
       stripeMethod: {},
       publik_key: "",
+      country_name: '',
       errors: {
         fullName: '',
         name: '',
@@ -160,7 +161,6 @@ class ShopPageCheckout extends React.Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.data.length > 0) {
-            console.log(res.data, 'res.datares.datares.data');
             this.setState({
               pastOrders: res.data,
               street: res.data[0]?.address1[0],
@@ -172,6 +172,7 @@ class ShopPageCheckout extends React.Component {
               postal: res.data[0]?.postcode,
               state: res.data[0]?.state,
               apartment: res.data[0]?.address1[1],
+              country_name: res.data[0]?.country_name
             })
           }
         })
@@ -844,7 +845,6 @@ class ShopPageCheckout extends React.Component {
         company_name: '',
         additional: this.state.notes,
       }
-      console.log(billing, 'billingbillingbillingbilling__________11111111111');
     } else {
       if (this.state.pastOrders.length > 0) {
         const {
@@ -869,7 +869,6 @@ class ShopPageCheckout extends React.Component {
           apartment: apartmentTwo,
         } = this.state.pastOrders[0]
 
-        console.log(this.state.pastOrders[0], 'this.state.pastOrders[0]');
 
         const aJson = JSON.stringify({
           street,
@@ -882,7 +881,6 @@ class ShopPageCheckout extends React.Component {
           state,
           apartment,
         })
-        console.log(aJson, 'aJsonaJsonaJsonaJsonaJson');
 
 
         const bJson = JSON.stringify({
@@ -896,7 +894,6 @@ class ShopPageCheckout extends React.Component {
           state: stateTwo,
           apartment: apartmentTwo,
         })
-        console.log(bJson, 'bJsonbJsonbJsonbJsonbJsonbJsonbJsonbJsonbJsonbJsonbJsonbJsonbJsonbJsonbJsonbJsonbJsonbJson');
         if (aJson == bJson) {
           billing = {
             use_for_shipping: true,
@@ -915,9 +912,7 @@ class ShopPageCheckout extends React.Component {
             company_name: '',
             additional: this.state.notes,
           }
-          console.log(billing, '________________________55555555555555555555555');
         } else {
-          console.log(this.state, 'this.statethis.statethis.state');
           billing = {
             use_for_shipping: true,
             save_as_address: true,
@@ -927,7 +922,7 @@ class ShopPageCheckout extends React.Component {
             first_name: this.state.fullName,
             last_name: this.state.lname,
             city: this.state.city,
-            country: "US",
+            country: this.state.country.code || this.state.country_name,
             state: this.state.state || this.state.country,
             postcode: this.state.postal,
             phone: this.state.phone,
@@ -935,7 +930,6 @@ class ShopPageCheckout extends React.Component {
             company_name: '',
             additional: this.state.notes,
           }
-          console.log(billing, '______________________444444444444444');
         }
       } else {
         billing = {

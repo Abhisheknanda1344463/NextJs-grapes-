@@ -2,6 +2,7 @@ import {
   SET_RATE_LIST,
   CHANGE_CURRENCY,
   GET_EXACHGE_RATE,
+  SET_DEFAULT_CURRENCY,
 } from "./rateActionTypes";
 
 // eslint-disable-next-line import/prefer-default-export
@@ -18,3 +19,9 @@ export const setRate = (list) => ({
   type: SET_RATE_LIST,
   payload: list,
 });
+
+export const setDefaultCurrency = (defaultCurrency) => ({
+  type: SET_DEFAULT_CURRENCY,
+  payload: defaultCurrency,
+});
+

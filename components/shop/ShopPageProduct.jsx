@@ -20,11 +20,12 @@ import { useRouter } from 'next/router'
 
 function ShopPageProduct(props) {
 
-  const {productSlug, layout, product, sidebarPosition, locale, loading, bundle, dbName} = props
+  const { productSlug, layout, product, sidebarPosition, locale, loading, bundle, dbName } = props
   const [isLoading, setIsLoading] = useState(loading)
   const [relatedProducts, setRelatedProducts] = useState(props.relatedPproducts)
   const router = useRouter()
   ////const [product, setProduct] = useState(data);
+
 
   const customer = useSelector((state) => state.customer)
   const currency = useSelector((state) => state.currency.current)
@@ -54,18 +55,18 @@ function ShopPageProduct(props) {
   // }, [router.locale, productSlug]);
 
   if (isLoading) {
-    return <BlockLoader/>
+    return <BlockLoader />
   }
   const breadcrumb = [
     {
-      title: <FormattedMessage id="home" defaultMessage="Home"/>,
+      title: <FormattedMessage id="home" defaultMessage="Home" />,
       url: url.home(),
     },
-    {title: product.data.name, url: url.product(product.data)},
+    { title: product.data.name, url: url.product(product.data) },
   ]
 
   const related = (
-    <FormattedMessage id="relatedProducts" defaultMessage="Related products"/>
+    <FormattedMessage id="relatedProducts" defaultMessage="Related products" />
   )
 
   let content
@@ -163,7 +164,7 @@ function ShopPageProduct(props) {
       {/*    content={`https://blabla.zegashop.com${product?.data?.base_imag?.url}`}*/}
       {/*  />*/}
       {/*</Head>*/}
-      <PageHeader breadcrumb={breadcrumb}/>
+      <PageHeader breadcrumb={breadcrumb} />
 
       <div className="take-product-page">
         {content}

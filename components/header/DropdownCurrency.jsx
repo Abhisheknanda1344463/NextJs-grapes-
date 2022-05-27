@@ -1,37 +1,32 @@
 // react
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Dropdown from "./Dropdown";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { changeRate, getExchangeRate } from "../../store/rate";
-import { getExchange } from "../../store/selector";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
 function DropdownCurrency(props) {
-  const [currentCurrency, setCurrentCurrency] = useState("USD");
-  const { current, currency, changeRate, currencies } = props;
+  const router = useRouter();
+  const rateList = useSelector(state => state.rate.list)
+  const defaultCurrencyValue = useSelector(state => state.rate.defaultCurrency)
+  const { currency, changeRate, currencies } = props;
   const dispatch = useDispatch();
-  /// var nreData = useSelector(getExchange);
+
+  const [currentCurrency, setCurrentCurrency] = useState(router.query.currencies || defaultCurrencyValue);
+
   if (currencies.length < 2) {
     return null;
   }
 
   const nreData = true;
-  // if (nreData) {
-  //   dispatch(getExchangeRate(currencies));
-  // }
-  // useEffect(() => {
-  //   /// const nreData = useSelector(getExchange);
-  //   return () => {};
-  // }, []);
-  const router = useRouter();
-
   const handleRoute = (currencies) => {
     setCurrentCurrency(currencies);
-    changeRate(currencies);
-    /// dispatch(getExchangeRate(currencies));
-
-    console.log(nreData);
+    dispatch(changeRate(currencies));
+    rateList.forEach((item) => {
+      if (item.code === currencies) {
+        dispatch(getExchangeRate(item))
+      }
+    })
     let checkUrl = window.location.href.indexOf("?");
     if (checkUrl > 0 && nreData) {
       router.query.currencies = currencies;
@@ -66,7 +61,7 @@ function DropdownCurrency(props) {
     <Dropdown
       for={"currency"}
       title={currencyList}
-      current={currentCurrency}
+      current={currentCurrency || defaultCurrencyValue}
       items={currencyL}
       onClick={(item) => handleRoute(item.code)}
     />
