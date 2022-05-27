@@ -1,3 +1,4 @@
 export const getExchange = (state) => {
-  return state.rate.exchange_rate;
+  console.log(state, 'statestatestate');
+  return state.exchange_rate.rate;
 };

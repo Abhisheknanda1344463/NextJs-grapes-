@@ -265,7 +265,6 @@ function Get_New_And_Futured_Products({
           }));
         })
         .then(() => {
-          console.log(changedData, "changedData");
           build({
             flatProducts: changedData,
             locale,

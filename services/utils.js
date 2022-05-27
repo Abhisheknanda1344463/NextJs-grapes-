@@ -1,7 +1,7 @@
 import store from "../store";
 import shopApi from "../api/shop";
-import {url as originalUrl} from "../helper";
-import {changeLocale} from "../store/locale";
+import { url as originalUrl } from "../helper";
+import { changeLocale } from "../store/locale";
 
 export const url = {
   home: () => "/",
@@ -26,13 +26,11 @@ export const url = {
       //     newUrl += `&${Object.keys(el)}=${Object.values(el)}`;
       //   }
       // });
-      return `/catalog/${
-        category.slug ? category.slug : category.department.slug
-      }?currencies=${category.query}`;
+      return `/catalog/${category.slug ? category.slug : category.department.slug
+        }?currencies=${category.query}`;
     } else {
-      return `/catalog/${
-        category.slug ? category.slug : category.department.slug
-      }`;
+      return `/catalog/${category.slug ? category.slug : category.department.slug
+        }`;
     }
   },
 
@@ -51,7 +49,7 @@ export function getCategoryParents(category) {
 
 export function runFbPixelEvent(eventData) {
   const {
-    general: {fbPixel},
+    general: { fbPixel },
   } = store.getState();
   setTimeout(() => {
     if (fbPixel) {
@@ -71,8 +69,7 @@ export async function ApiCustomSettingsAsync(locale, dbName, selectedCurency) {
   );
   let data = {};
   const seettingDataCore = await seettingData.json();
-  const {channel_info} = customSettingsData;
-  //// console.log(customSettingsData?.translations, "aaaaaaaaaaaaaaa");
+  const { channel_info } = customSettingsData;
   let dispatches = {
     serverSide: {
       setDomain: customSettingsData?.folder_name || false,
@@ -100,7 +97,6 @@ export async function ApiCustomSettingsAsync(locale, dbName, selectedCurency) {
       default_locale_id,
     } = channel_info[0];
 
-    // console.log(channel_info, "ApiCustomSettingsAsync(locale, dbName, selectedCurency)")
 
     dispatches["clientSide"]["setLocaleList"] = locales || false;
     dispatches["clientSide"]["changeLocale"] =
@@ -109,7 +105,6 @@ export async function ApiCustomSettingsAsync(locale, dbName, selectedCurency) {
     /* ******* REMEBER TO FIX IT ********/
     /***** this part is commented because it's overwrites the store // need changeRate *******/
     // dispatches["clientSide"]["changeCurrency"] = base_currency_id || false;
-    ///   console.log(currencies_new, "currencies_newcurrencies_new");
     dispatches["clientSide"]["setRate"] =
       {
         list: currencies_new,
@@ -117,6 +112,7 @@ export async function ApiCustomSettingsAsync(locale, dbName, selectedCurency) {
           ? currencies_new.find((item) => item.code == selectedCurency)
           : currencies_new.find((item) => item.id === base_currency_id),
       } || false;
+
 
     data = {
       locale: locales.find((item) => {
@@ -160,7 +156,7 @@ export function ApiCustomSettings(customSettingsData) {
   };
 
   if (channel_info) {
-    const {locales, currencies, base_currency_id, default_locale_id} =
+    const { locales, currencies, base_currency_id, default_locale_id } =
       channel_info;
     // console.log(channel_info, "ApiCustomSettings(customSettingsData)")
 
@@ -181,8 +177,8 @@ export function ApiCustomSettings(customSettingsData) {
 export async function ApiCategoriesAndMenues(locale) {
   // console.log(locale, "locale");
   if (locale !== "catchAll") {
-    const getCategories = await shopApi.getCategories({locale: locale});
-    const getMenues = await shopApi.getMenues({locale: locale});
+    const getCategories = await shopApi.getCategories({ locale: locale });
+    const getMenues = await shopApi.getMenues({ locale: locale });
     const pageIds = getMenues.data.map((e) => e.page_id).join();
 
     const getPages = await shopApi.getPagesByIdsArray({
@@ -233,7 +229,7 @@ export async function generalProcessForAnyPage(
     dbName,
     selectedCurency
   );
-  const {setCatgoies, setMenuList} = await ApiCategoriesAndMenues(
+  const { setCatgoies, setMenuList } = await ApiCategoriesAndMenues(
     locale !== "catchAll" ? locale : settingsResponse.data.locale.code
   );
   dispatches = {

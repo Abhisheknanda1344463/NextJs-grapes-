@@ -8,6 +8,7 @@ import { domainUrl } from "../helper";
 import HomePageOne from "../components/home/HomePageOne";
 import { generalProcessForAnyPage } from "../services/utils";
 import allActions from "../services/actionsArray";
+import { setDefaultCurrency } from '../store/rate'
 import shopApi from "../api/shop";
 import { MetaWrapper } from "../components/MetaWrapper";
 import { useRouter } from "next/router";
@@ -26,13 +27,15 @@ function Home(props) {
   const router = useRouter();
   const { dispatch } = store;
   const firstLoad = true;
-  // const domain = useSelector((state) => state.general.domain);
+
+
+
   useEffect(() => {
+    dispatch(setDefaultCurrency(currency))
     for (let actionKey in dispatchesNew) {
       dispatch(allActions[actionKey](dispatchesNew[actionKey]));
     }
   }, [locale, currency]);
-  //// console.log(props.newProducts, "router.queryrouter.query");
   const metaTags = metas ? JSON.parse(metas[0].home_seo) : "";
   return (
     <MetaWrapper
@@ -89,15 +92,18 @@ export async function getServerSideProps({ locale, locales, req, res }) {
     process.env.databaseName = databaseName;
   }
 
+
   const {
     locale: defaultLocaleSelected,
     currency,
     rate,
     dispatches: generalDispatches,
   } = await generalProcessForAnyPage(locale, dbName, selectedCurency);
+
   if (req.query.currencies != "") {
     selectedCurency = currency;
   }
+
   ////GETTING RATE FOR CURRENCY
   if (req.query.currencies != "") {
     selectedRate = rate.currencies_new.find(
@@ -113,7 +119,6 @@ export async function getServerSideProps({ locale, locales, req, res }) {
       dbName
     )
     .then((data) => {
-      ////  console.log(data, "datadatadata");
       parsed = data;
     });
 
@@ -126,6 +131,17 @@ export async function getServerSideProps({ locale, locales, req, res }) {
     ...generalDispatches.clientSide,
     ...generalDispatches.serverSide,
   };
+
+
+  // product.map((el) => {
+  //   el.min_price = parseFloat(el.min_price) * selectedExchangeRate;
+  //   el.max_price = parseFloat(el.max_price) * selectedExchangeRate;
+  //   el.special_price =
+  //     parseFloat(el.special_price) * selectedExchangeRate;
+  //   el.price = parseFloat(el.price) * selectedExchangeRate;
+  //   return el;
+  // });
+
   return {
     props: {
       locale: selectedLocale,

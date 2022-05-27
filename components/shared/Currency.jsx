@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 function Currency(props) {
     let { value } = props;
 
+
     if (value) {
         value = value + '';
         if (value?.indexOf('.00') != -1) {

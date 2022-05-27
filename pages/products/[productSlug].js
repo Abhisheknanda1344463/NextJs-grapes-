@@ -1,14 +1,14 @@
-import {useEffect} from 'react'
-import {useRouter} from 'next/router'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 import store from '../../store'
 import shopApi from '../../api/shop'
 import allActions from '../../services/actionsArray'
-import {generalProcessForAnyPage} from '../../services/utils'
+import { generalProcessForAnyPage } from '../../services/utils'
 import ShopPageProduct from '../../components/shop/ShopPageProduct'
-import {MetaWrapper} from '../../components/MetaWrapper'
+import { MetaWrapper } from '../../components/MetaWrapper'
 import Head from "next/head";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux"
 
 export default function ProductInnerPage(props) {
   const query = useRouter();
@@ -30,17 +30,16 @@ export default function ProductInnerPage(props) {
       );
     }
 
-    ///router.push(window.location.pathname, window.location.pathname);
   }, [props.productSlug])
+
   useEffect(() => {
+    console.log(props.dispatches, ' props.dispatches props.dispatches');
     for (let actionKey in props.dispatches) {
       dispatch(allActions[actionKey](props.dispatches[actionKey]))
     }
-  }, [props.locale])
+  }, [props.locale, props.currencies])
 
-  // useEffect(() => {
-  //
-  // },[])
+
 
   return (
     <MetaWrapper
