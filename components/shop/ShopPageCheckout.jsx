@@ -949,7 +949,6 @@ class ShopPageCheckout extends React.Component {
           company_name: '',
           additional: this.state.notes,
         }
-        console.log(billing, 'lasttttttttttttttttttttt');
       }
     }
 
@@ -1115,6 +1114,13 @@ class ShopPageCheckout extends React.Component {
     let name, value
     name = object?.target?.name || object.name
     value = object?.target?.value || object.value
+
+
+    // if (name === "country" || name === "postal" || name === "states") {
+    //   fetch(apiUrlWithStore('/api/checkout/save-address'), options)
+    //     .then((res) => res.json())
+    //     .then((response) => console.log(response, '45454545454545'))
+    // }
 
     this.setState({
       state: value

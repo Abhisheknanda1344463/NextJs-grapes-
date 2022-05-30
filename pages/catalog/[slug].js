@@ -323,7 +323,6 @@ export async function getServerSideProps({
             resultConfig.length == Object.keys(filterValues).length
           ) {
             el = JSON.parse(JSON.stringify(el));
-            console.log(el.price);
             el.min_price = parseFloat(el.min_price) * selectedExchangeRate;
             el.max_price = parseFloat(el.max_price) * selectedExchangeRate;
             el.special_price =
