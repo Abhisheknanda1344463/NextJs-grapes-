@@ -63,6 +63,8 @@ export async function ApiCustomSettingsAsync(locale, dbName, selectedCurency) {
   // const translations = await shopApi.translations;
   // await fetch(`${originalUrl}/db/translations`);
   const customSettingsData = await settingsResponse.json();
+
+
   // store.createStore();
   const seettingData = await fetch(
     `${originalUrl}/db/core-conf?locale=${locale}`

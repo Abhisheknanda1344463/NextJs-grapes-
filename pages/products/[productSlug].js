@@ -33,7 +33,6 @@ export default function ProductInnerPage(props) {
   }, [props.productSlug])
 
   useEffect(() => {
-    console.log(props.dispatches, ' props.dispatches props.dispatches');
     for (let actionKey in props.dispatches) {
       dispatch(allActions[actionKey](props.dispatches[actionKey]))
     }
@@ -114,6 +113,8 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
   } else {
     selectedCurency = currency;
   }
+
+  console.log(req.query.currencies, ' req.query.currencies______________________________');
 
   ////GETTING DOMAIN
   if (dbName.includes(".zegashop.com")) {

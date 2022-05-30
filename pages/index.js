@@ -76,9 +76,10 @@ export async function getServerSideProps({ locale, locales, req, res }) {
   if (req.query.currencies != "") {
     selectedCurency = req.query.currencies;
   }
+
   ////GETTING DOMAIN
-  if (dbName.includes(".zegashop.com")) {
-    var dataName = dbName.split(".zegashop.com");
+  if (dbName.includes(process.env.URL_NAME)) {
+    var dataName = dbName.split(process.env.URL_NAME);
     databaseName = dataName[0];
     process.env.domainName = dbName;
     process.env.databaseName = databaseName;
@@ -133,14 +134,6 @@ export async function getServerSideProps({ locale, locales, req, res }) {
   };
 
 
-  // product.map((el) => {
-  //   el.min_price = parseFloat(el.min_price) * selectedExchangeRate;
-  //   el.max_price = parseFloat(el.max_price) * selectedExchangeRate;
-  //   el.special_price =
-  //     parseFloat(el.special_price) * selectedExchangeRate;
-  //   el.price = parseFloat(el.price) * selectedExchangeRate;
-  //   return el;
-  // });
 
   return {
     props: {
