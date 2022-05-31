@@ -114,6 +114,7 @@ class ShopPageCheckout extends React.Component {
 
 
 
+
   componentDidMount() {
     this.abortController = new AbortController()
     this.single = this.abortController
@@ -174,55 +175,67 @@ class ShopPageCheckout extends React.Component {
               apartment: res.data[0]?.address1[1],
               country_name: res.data[0]?.country_name
             })
+            const headers = {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            }
+
+            if (
+              res.data[0]?.address1[0] && res.data[0]?.city && res.data[0]?.country &&
+              res.data[0]?.first_name && res.data[0]?.last_name && res.data[0]?.state &&
+              res.data[0]?.state && res.data[0]?.address1[1]
+            ) {
+
+              let billing = {
+                use_for_shipping: true,
+                save_as_address: true,
+                address1: [res.data[0]?.address1[0]],
+                address2: [res.data[0]?.address1[1]],
+                email: this.state.email,
+                first_name: res.data[0]?.first_name,
+                last_name: res.data[0]?.last_name,
+                city: res.data[0]?.city,
+                country: res.data[0]?.country_name,
+                state: res.data[0]?.state || res.data[0]?.country,
+                postcode: res.data[0]?.postcode,
+                phone: res.data[0]?.phone,
+                company_name: "",
+                additional: "",
+              }
+              const shipping = {
+                address1: [res.data[0]?.address1[0]],
+                address2: [res.data[0]?.address1[1]],
+              }
+
+
+              let options = {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                  billing: billing,
+                  shipping: shipping,
+                  token: this.state.customer.token,
+                }),
+              }
+              console.log(options, '55695656565');
+
+              fetch(apiUrlWithStore('/api/checkout/save-address'), options)
+                .then((res) => res.json())
+                .then((response) => {
+                  this.props.cartUpdateData({
+                    total: response.data.cart.grand_total,
+                    tax: response.data.cart.tax_total,
+                    sub_total: response.data.cart.sub_total,
+                  })
+                }).catch(err => {
+                  console.log(err);
+                })
+            }
           }
         })
 
     }
   }
-
-  //***************** OLD CODE ******************
-  // componentDidUpdate(prevState) {
-  //   if (this.props.locale !== prevState.locale) {
-  //     alert(5)
-  //
-  //     shopApi
-  //       .getPaymentsMethods({
-  //         local: this.props.locale,
-  //       })
-  //       .then((res) => {
-  //         console.log(res, "resultTTTTTTTT")
-  //         const data = res.map((e) => {
-  //           return {
-  //             ...e,
-  //             key: e.method,
-  //           };
-  //         });
-  //         this.setState({ payments: data });
-  //       })
-  //       .catch((err) => console.error(err));
-  //   }
-  // }
-  //****************** NEW CHANGE CODE ******************
-  //   componentWillReceiveProps(nextProps) {
-  //     if (nextProps) {
-  //       shopApi
-  //         .getPaymentsMethods({
-  //           local: this.props.locale,
-  //         })
-  //         .then((res) => {
-  //           console.log(res, 'resultTTTTTTTT')
-  //           const data = res.map((e) => {
-  //             return {
-  //               ...e,
-  //               key: e.method,
-  //             }
-  //           })
-  //           this.setState({ payments: data })
-  //         })
-  //         .catch((err) => console.error(err));
-  //   }
-  // }
-
   handlePaymentChange = (event) => {
     if (event.target.checked) {
       this.setState({ payment: event.target.value })
@@ -676,7 +689,6 @@ class ShopPageCheckout extends React.Component {
       checkbox,
     } = this.state
     let object = {}
-    console.log(this.state, 'jdshfjhjghfjg')
 
     if (email === '' || validEmailRegex.test(this.state.email) == false) {
       object.email = 'Email is not valid!'
@@ -688,9 +700,6 @@ class ShopPageCheckout extends React.Component {
     if (lname === '') {
       object.lname = 'Last Name must be 3 characters long!'
     }
-    // if (email === "" || validEmailRegex.test(this.state.email) == false) {
-    //   object.email = "Email is not valid!";
-    // }
 
     if (street === '') {
       object.street = 'Street is not valid!'
@@ -795,38 +804,7 @@ class ShopPageCheckout extends React.Component {
       }
     }
 
-    // const billing = {
-    //     use_for_shipping: true,
-    //     address1: street,
-    //     email: this.state.email,
-    //     first_name: this.state.fullName,
-    //     last_name: this.state.lname,
-    //     city: this.state.city,
-    //     country: "AM",
-    //     state: "Yerevan",
-    //     postcode: "75017",
-    //     phone: this.state.phone,
-    //     company_name: 'FIdem',
-    // }
-    //
-    // if (this.state.ShippingAddress) {
-    //     let street1 = this.state.shipingStreet
-    //     if (typeof street1 == 'string')
-    //         street1 = [street1]
-    //     shipping = {
-    //         email: this.state.shipingEmail,
-    //         last_name: this.state.shipingLname,
-    //         city: this.state.shipingCity,
-    //         first_name: this.state.name,
-    //         country: "AM",
-    //         state: "Yerevan",
-    //         postcode: "75017",
-    //         // company_name: '',
-    //         address1: street1,
-    //         phone: this.state.shipingPhone
-    //     }
-
-    let billing
+    var billing
     if (Object.keys(this.state.addressOption).length > 0) {
       billing = {
         use_for_shipping: true,
@@ -1096,31 +1074,198 @@ class ShopPageCheckout extends React.Component {
     //   return <Redirect to="/thanks" />;
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault()
-    new Promise((resolve) => {
-      this.setState({ loading: true })
-      this.chacking(resolve)
-    }).then(() => {
-      if (validateForm(this.state.errors)) {
-        this.requestOrder()
-      } else {
-        this.setState({ loading: false })
-      }
-    })
-  }
+
+
 
   handleInputChange = (object) => {
     let name, value
     name = object?.target?.name || object.name
     value = object?.target?.value || object.value
+    //Sorry For Duplicate  in this Part I duiscuss with Artur and He appreoved. NEED TO REFACTOR all COMPONENTS 
+
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }
+    let billing
+    let options
+    if (Object.keys(this.state.addressOption).length > 0) {
+      billing = {
+        use_for_shipping: true,
+        save_as_address: false,
+        address1: [this.state.addressOption.address1[0]],
+        address2: [this.state.addressOption.apartment],
+        email: this.state.email,
+        first_name: this.state.addressOption.first_name,
+        last_name: this.state.addressOption.last_name,
+        city: this.state.addressOption.city,
+        country: this.state.addressOption.country.code,
+        state: this.state.state || this.state.country,
+        postcode: this.state.addressOption.postcode,
+        phone: this.state.addressOption.phone,
+        // apartment: this.state.addressOption.apartment,
+        company_name: '',
+        additional: this.state.notes,
+      }
+    } else {
+      if (this.state.pastOrders.length > 0) {
+        const {
+          street,
+          city,
+          country,
+          fullName,
+          lname,
+          phone,
+          postal,
+          state,
+          apartment,
+        } = this.state
+        const {
+          city: cityTwo,
+          country: countryTwo,
+          first_name: fullNameTwo,
+          last_name: lnameTwo,
+          phone: phoneTwo,
+          postcode: postalTwo,
+          state: stateTwo,
+          apartment: apartmentTwo,
+        } = this.state.pastOrders[0]
 
 
-    // if (name === "country" || name === "postal" || name === "states") {
-    //   fetch(apiUrlWithStore('/api/checkout/save-address'), options)
-    //     .then((res) => res.json())
-    //     .then((response) => console.log(response, '45454545454545'))
-    // }
+        const aJson = JSON.stringify({
+          street,
+          city,
+          country,
+          fullName,
+          lname,
+          phone,
+          postal,
+          state,
+          apartment,
+        })
+
+
+        const bJson = JSON.stringify({
+          street: this.state.pastOrders[0].address1[0],
+          city: cityTwo,
+          country: countryTwo,
+          fullName: fullNameTwo,
+          lname: lnameTwo,
+          phone: phoneTwo,
+          postal: postalTwo,
+          state: stateTwo,
+          apartment: apartmentTwo,
+        })
+        if (aJson == bJson) {
+          billing = {
+            use_for_shipping: true,
+            save_as_address: false,
+            address1: [this.state.street],
+            address2: [this.state.apartment],
+            email: this.state.email,
+            first_name: this.state.fullName,
+            last_name: this.state.lname,
+            city: this.state.city,
+            country: this.state.country.code,
+            state: this.state.state || this.state.country,
+            postcode: this.state.postal,
+            phone: this.state.phone,
+            // apartment: this.state.apartment,
+            company_name: '',
+            additional: this.state.notes,
+          }
+        } else {
+          billing = {
+            use_for_shipping: true,
+            save_as_address: true,
+            address1: [this.state.street],
+            address2: [this.state.apartment],
+            email: this.state.email,
+            first_name: this.state.fullName,
+            last_name: this.state.lname,
+            city: this.state.city,
+            country: this.state.country.code || this.state.country_name,
+            state: this.state.state || this.state.country,
+            postcode: this.state.postal,
+            phone: this.state.phone,
+            // apartment: this.state.apartment,
+            company_name: '',
+            additional: this.state.notes,
+          }
+        }
+      } else {
+        billing = {
+          use_for_shipping: true,
+          save_as_address: true,
+          address1: [this.state.street],
+          address2: [this.state.apartment],
+          email: this.state.email,
+          first_name: this.state.fullName,
+          last_name: this.state.lname,
+          city: this.state.city,
+          country: this.state.country.code,
+          state: this.state.state || this.state.country,
+          postcode: this.state.postal,
+          phone: this.state.phone,
+          // apartment: this.state.apartment,
+          company_name: '',
+          additional: this.state.notes,
+        }
+      }
+    }
+
+    //hereeeeeeeeeeeeee
+    const shipping = {
+      address1: [this.state.shipingStreet],
+      address2: [this.state.apartment || this.state.addressOption.apartment],
+      name: this.state.name,
+      phone: this.state.shipingPhone,
+    }
+
+    if (this.state.customer.token) {
+      options = {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({
+          billing: billing,
+          shipping: shipping,
+          api_token: this.state.token.cartToken,
+          token: this.state.customer.token,
+        }),
+      }
+    } else {
+      options = {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({
+          billing: billing,
+          shipping: shipping,
+          api_token: this.state.token.cartToken,
+        }),
+      }
+    }
+
+    //PLEAUSE REFACTOR THAT CODE WHEN WE CAN DO IT SORRY FOR THAT TACKLE I did not want to do this
+    let info = JSON.parse(options.body)
+
+    if (
+      (info.billing.address1.length > 0 || info.shipping.address1.length > 0) && info.billing.address2.length && info.billing.city != "" &&
+      info.billing.country != "" && info.billing.email != "" && info.billing.first_name != "" &&
+      info.billing.last_name != "" && (info.billing.phone != "" || info.shipping.phone != "") && info.billing.save_as_address &&
+      info.billing.state != "" && info.billing.use_for_shipping
+    ) {
+      fetch(apiUrlWithStore('/api/checkout/save-address'), options)
+        .then((res) => res.json())
+        .then((response) => {
+          this.props.cartUpdateData({
+            total: response.data.cart.grand_total,
+            tax: response.data.cart.tax_total,
+            sub_total: response.data.cart.sub_total,
+          })
+        }).catch(err => {
+          console.log(err);
+        })
+    }
 
     this.setState({
       state: value
@@ -1147,13 +1292,24 @@ class ShopPageCheckout extends React.Component {
       },
     })
 
-    //// old logic for update input values
-    // let errors = this.state.errors;
-    // this.setState({
-    //   [event.target.name]: event.target.value,
-    //   [name]: value,
-    // });
   }
+
+
+  handleSubmit = (event) => {
+    event.preventDefault()
+    new Promise((resolve) => {
+      this.setState({ loading: true })
+      this.chacking(resolve)
+    }).then(() => {
+      if (validateForm(this.state.errors)) {
+        this.requestOrder()
+      } else {
+        this.setState({ loading: false })
+      }
+    })
+  }
+
+
 
   chosenAddress = (obj) => {
     this.setState({

@@ -20,7 +20,7 @@ function Search(props) {
 
   const [query, setQuery] = useState("");
 
-  const [cancelFn, setCancelFn] = useState(() => () => {});
+  const [cancelFn, setCancelFn] = useState(() => () => { });
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
   const [suggestedProducts, setSuggestedProducts] = useState([]);
@@ -83,7 +83,7 @@ function Search(props) {
     const query = event.target.value;
 
     setQuery(query);
-    if(query.length >= 3) {
+    if (query.length >= 3) {
       timer = setTimeout(() => {
         const options = {
           limit: 10,
@@ -100,12 +100,11 @@ function Search(props) {
             return;
           }
           let newProduct = products.data.filter(item => {
-            if(item.length === 0 ) {
+            if (item.length === 0) {
               return
             }
             return item
           });
-          console.log(newProduct,"ttttttttt")
           if (newProduct.length > 0) {
             setSuggestedProducts(newProduct);
             setHasSuggestions(newProduct.length > 0);
