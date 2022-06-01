@@ -101,6 +101,7 @@ function Get_Core_Config() {
           "theme.contact_us.active",
           "sales.tracking.tracking.active",
           "theme.subscription.active",
+          "catalog.products.guest-checkout.allow-guest-checkout"
         ],
       },
     })
@@ -108,7 +109,8 @@ function Get_Core_Config() {
         const core_conf = res
           .map(({ code, value = "1" }) => {
             let key = code.replace(/\./g, "_");
-            return { [key]: value };
+            let replaceSlash = key.replace(/\-/g, "_");
+            return { [replaceSlash]: value };
           })
           .reduce((acc, next) => {
             return {

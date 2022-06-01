@@ -11,7 +11,6 @@ const { listenerCount } = require("process");
 
 function ApiMenuAndCategories(CategoryesMenus) {
   return new Promise((resolve, reject) => {
-    console.log(menus, "CategoryesMenus");
     CategoryControllers.Get_Categoryes(CategoryesMenus).then((category) => {
       CategoryControllers.Get_Menus(CategoryesMenus).then((menus) => {
         // console.log(menus, 'menusmenusmenusmenus');
@@ -120,7 +119,6 @@ router.get("/productFlat/:id", function (req, res) {
 router.get("/bundle-product/:id", function (req, res) {
   const { locale } = req.query;
   const { id } = req.params;
-  console.log(locale, "req.queryreq.queryreq.query");
 
   ProductControllers.Get_Bundle_Prods({
     locale,
@@ -227,6 +225,7 @@ router.get("/getProductIdBySlug/:slug/:locale", function (req, res) {
     res.send(rep)
   );
 });
+
 
 // ProductControllers.Get_New_Products(productsOptions).then(
 //   (newProduct) => {

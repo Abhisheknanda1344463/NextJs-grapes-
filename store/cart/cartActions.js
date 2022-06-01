@@ -1,4 +1,4 @@
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import {
   CART_ADD_ITEM,
   CART_REMOVE_ITEM,
@@ -9,11 +9,11 @@ import {
   SET_POPUP,
 
 } from "./cartActionTypes";
-import {url, apiUrlWithStore} from "../../helper";
+import { url, apiUrlWithStore } from "../../helper";
 import React from "react";
-import {FormattedMessage} from "react-intl";
-import {CheckToastSvg, FailSvg} from "svg";
-import {runFbPixelEvent} from "../../services/utils";
+import { FormattedMessage } from "react-intl";
+import { CheckToastSvg, FailSvg } from "svg";
+import { runFbPixelEvent } from "../../services/utils";
 
 // const translations = {
 //     product: {
@@ -77,7 +77,7 @@ export function cartAddItemSuccess(
   cartItems,
   locale
 ) {
-  runFbPixelEvent({name: "Add To Cart"});
+  runFbPixelEvent({ name: "Add To Cart" });
   let overWriteProductName = cartItems.items.map((item) => {
     if (item.product.id === product.product_id) {
       product.name = item.product.name;
@@ -88,12 +88,11 @@ export function cartAddItemSuccess(
 
   toast.success(
     <span className="d-flex chek-fms">
-      <CheckToastSvg/>
+      <CheckToastSvg />
       <FormattedMessage
         id="add-cart"
-        defaultMessage={`Product "${
-          newProduct.name ? newProduct.name : ""
-        }" added to cart`}
+        defaultMessage={`Product "${newProduct.name ? newProduct.name : ""
+          }" added to cart`}
       />
     </span>,
     {
@@ -180,7 +179,6 @@ export function cartAddItem(
   bundleProductInfo = null,
   pageFrom = ""
 ) {
-  console.log(product, "product in cart action___________________________________________________________________")
   let body;
   if (customer && customer.token) {
     body = {
@@ -198,10 +196,10 @@ export function cartAddItem(
       quantity: quantity,
     };
   }
-// console.log(product, "product in cart action")
+  // console.log(product, "product in cart action")
 
   if (bundleProductInfo) {
-    const {options, selectedOptions} = bundleProductInfo;
+    const { options, selectedOptions } = bundleProductInfo;
     const keys = Object.keys(selectedOptions);
     const collection = keys
       .map((key) => {
@@ -227,10 +225,9 @@ export function cartAddItem(
     fetch(
       apiUrlWithStore(
         "/api/checkout/cart/add/" +
-        `${
-          pageFrom == "homePage" && product.product_id !== undefined
-            ? product.product_id
-            : product.product_id
+        `${pageFrom == "homePage" && product.product_id !== undefined
+          ? product.product_id
+          : product.product_id
         }`
       ),
       {
@@ -253,7 +250,7 @@ export function cartAddItem(
           if (body.quantity >= product.qty) {
             toast(
               <span className="d-flex faild-toast-fms">
-                <FailSvg/>
+                <FailSvg />
                 <FormattedMessage
                   id="sign-or-register"
                   defaultMessage="This product is not available"
@@ -279,8 +276,7 @@ export function cartTranslation(cartToken, customer, locale) {
   return (dispatch) =>
     fetch(
       apiUrlWithStore(
-        `/api/checkout/cart?api_token=${cartToken.cartToken}${
-          customer && customer.token ? "&token=" + customer.token : ""
+        `/api/checkout/cart?api_token=${cartToken.cartToken}${customer && customer.token ? "&token=" + customer.token : ""
         }&locale=${locale}`
       )
     )
@@ -318,8 +314,7 @@ export function cartRemoveItem(itemId, item, cartToken, customer) {
   return (dispatch) =>
     fetch(
       apiUrlWithStore(
-        `/api/checkout/cart/remove-item/${itemId}?api_token=${
-          cartToken.cartToken
+        `/api/checkout/cart/remove-item/${itemId}?api_token=${cartToken.cartToken
         }${customer.token ? "&token=" + customer.token : ""}`
       )
     )

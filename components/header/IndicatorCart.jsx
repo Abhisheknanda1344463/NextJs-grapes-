@@ -1,12 +1,13 @@
 // react
 import React, { useState, useEffect } from "react";
-
+import { toast } from "react-toastify";
 //moment convertor
 import moment from "moment-timezone";
 // third-party
 import classNames from "classnames";
 import { connect } from "react-redux";
 import Link from "next/link";
+import { FailSvg } from "svg";
 
 // application
 import AsyncAction from "../shared/AsyncAction";
@@ -15,23 +16,45 @@ import Indicator from "./Indicator";
 import { CartFill, Cross10Svg } from "../../svg";
 import { cartRemoveItem } from "../../store/cart";
 import { url } from "../../services/utils";
-import { apiImageUrl, apiUrlWithStore } from "../../helper";
-import { useSelector, useDispatch } from "react-redux";
+import { apiImageUrl } from "../../helper";
+import { useSelector } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { removeCurrencyTemp } from '../../services/utils'
 import Image from "components/hoc/Image";
-import { cartUpdateQuantitiesSuccess } from "../../store/cart";
 function IndicatorCart(props) {
   const cartToken = useSelector((state) => state.cartToken);
   const customer = useSelector((state) => state.customer);
   const cart = useSelector((state) => state.cart);
   const selectedData = useSelector((state) => state.locale.code);
+  const coreConfigs = useSelector((state) => state.general.coreConfigs);
+
   const { cartRemoveItem } = props;
   const [open, setOpen] = useState(false);
+  const [isAllow, setIsAllow] = useState(true)
   let dropdown;
   let totals;
   const CONFIG = "simple";
   useEffect(() => { }, [selectedData]);
+
+  const isCheckAllow = () => {
+    setOpen(!open)
+    if(coreConfigs.catalog_products_guest_checkout_allow_guest_checkout == "0" && customer.token === "") {
+      toast(
+          <span className="d-flex faild-toast-fms">
+                <FailSvg />
+                <FormattedMessage
+                    id="sign-or-register"
+                    defaultMessage="This product is not available"
+                />
+              </span>,
+          {
+            hideProgressBar: true,
+            className: "wishlist-toast product-not-available-fms",
+          }
+      );
+    }
+  }
+
   const items = cart?.items.map((item, I) => {
     let image;
     // commented by David
@@ -251,11 +274,11 @@ function IndicatorCart(props) {
               </span>
             </a>
           </Link>
-          <Link href="/shop/checkout">
+          <Link href={coreConfigs.catalog_products_guest_checkout_allow_guest_checkout == "0" && customer.token === "" ? "" :  "/shop/checkout"}>
             <a>
               <span
                 className="btn btn-orange rounded-pills dropcart__buttons-link"
-                onClick={() => setOpen(!open)}
+                onClick={isCheckAllow}
               >
                 <FormattedMessage id="checkout" defaultMessage="Checkout" />
               </span>
