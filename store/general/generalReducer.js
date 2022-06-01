@@ -159,6 +159,7 @@ export default function generalReducer(state = initialState, action) {
       };
 
     case SET_CONFIGS:
+      console.log(action.payload, 'action.payloadaction.payloadaction.payload');
       return {
         ...state,
         coreConfigs: action.payload,

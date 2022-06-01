@@ -45,6 +45,7 @@ function Layout(props) {
   const router = useRouter();
   const dispatch = useDispatch();
   const width = useWindowWidth();
+  const [suspend, setSuspend] = useState(false);
   const customer = useSelector((state) => state.customer);
   const dbName = useSelector((state) => state.general.dbName);
   const selectedData = useSelector((state) => state.locale.code);
@@ -116,13 +117,17 @@ function Layout(props) {
   useEffect(() => {
     if (!props?.cartToken?.cartToken) {
       fetch(`/api/checkout/cart/token`)
-        .then((responce) => responce.json())
-        .then((res) => {
-          if (res.api_token) {
-            props.AddCartToken(res.api_token);
-          }
-        })
-        .catch((err) => console.error(err));
+          .then((responce) => {
+            if (responce.status === 469) {
+              setSuspend((suspend) => !suspend);
+            } else responce.json();
+          })
+          .then((res) => {
+            if (res.api_token) {
+              props.AddCartToken(res.api_token);
+            }
+          })
+          .catch((err) => console.error(err));
     }
   }, []);
 
@@ -134,53 +139,63 @@ function Layout(props) {
   }
 
   return (
-    <div>
-      {/*<Head>*/}
-      {/*<title>{`${upDomain}`}</title>*/}
-      {/*<meta*/}
-      {/*  name="description"*/}
-      {/*  content={theme.fullName}*/}
-      {/*  data-react-helmet={true}*/}
-      {/*/>*/}
-      {/*<link rel="canonical" href={`${upDomain}`} />*/}
-      {/*<meta name="twitter:card" content="summary_large_image" />*/}
-      {/*<meta property="og:description" content={`${theme.fullName}`} />*/}
-      {/*<meta property="og:title" name="title" content={`${theme.fullName}`} />*/}
-      {/*<meta*/}
-      {/*  property="og:keywords"*/}
-      {/*  name="keywords"*/}
-      {/*  content={`${theme.fullName}`}*/}
-      {/*/>*/}
+      <>
+        {suspend ? (
+            <>
+              <Suspend DomainName={`${dbName}`} />
+            </>
+        ) : (
+            <>
+              <div>
+                {/*<Head>*/}
+                {/*<title>{`${upDomain}`}</title>*/}
+                {/*<meta*/}
+                {/*  name="description"*/}
+                {/*  content={theme.fullName}*/}
+                {/*  data-react-helmet={true}*/}
+                {/*/>*/}
+                {/*<link rel="canonical" href={`${upDomain}`} />*/}
+                {/*<meta name="twitter:card" content="summary_large_image" />*/}
+                {/*<meta property="og:description" content={`${theme.fullName}`} />*/}
+                {/*<meta property="og:title" name="title" content={`${theme.fullName}`} />*/}
+                {/*<meta*/}
+                {/*  property="og:keywords"*/}
+                {/*  name="keywords"*/}
+                {/*  content={`${theme.fullName}`}*/}
+                {/*/>*/}
 
-      {/*<meta*/}
-      {/*  property="og:image"*/}
-      {/*  name="image"*/}
-      {/*  content={`${dbName}/storage${domain}/configuration/share_pic/share_pic.webp`}*/}
-      {/*/>*/}
-      {/*</Head>*/}
-      <ToastContainer autoClose={3000} />
-      {isMobile && <MobileMenu />}
-      <div className="site">
-        {isMobile && (
-          <header className="site__header d-lg-none">
-            <MobileHeader />
-          </header>
+                {/*<meta*/}
+                {/*  property="og:image"*/}
+                {/*  name="image"*/}
+                {/*  content={`${dbName}/storage${domain}/configuration/share_pic/share_pic.webp`}*/}
+                {/*/>*/}
+                {/*</Head>*/}
+                <ToastContainer autoClose={3000} />
+                {isMobile && <MobileMenu />}
+                <div className="site">
+                  {isMobile && (
+                      <header className="site__header d-lg-none">
+                        <MobileHeader />
+                      </header>
+                  )}
+                  <Topbar />
+                  <header className="site__header d-lg-block d-none postition-sticky">
+                    <Header layout={headerLayout} />
+                  </header>
+
+                  <div className="site__body">{children}</div>
+
+                  <footer className="site__footer">
+                    {isMobile && <MobileFooter />}
+                    <Footer />
+                  </footer>
+
+                  <PopupModal active={popUp} upCrosProd={upCrosProd} />
+                </div>
+              </div>
+            </>
         )}
-        <Topbar />
-        <header className="site__header d-lg-block d-none postition-sticky">
-          <Header layout={headerLayout} />
-        </header>
-
-        <div className="site__body">{children}</div>
-
-        <footer className="site__footer">
-          {isMobile && <MobileFooter />}
-          <Footer />
-        </footer>
-
-        <PopupModal active={popUp} upCrosProd={upCrosProd} />
-      </div>
-    </div>
+      </>
   );
 }
 

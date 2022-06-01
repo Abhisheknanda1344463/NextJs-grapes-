@@ -1656,6 +1656,7 @@ function GetFiltreConfig(id) {
   });
 }
 
+
 exports.Get_Product_Type = Get_Product_Type;
 exports.GetFiltreConfig = GetFiltreConfig;
 exports.Get_Configurable_Config = Get_Configurable_Config;
