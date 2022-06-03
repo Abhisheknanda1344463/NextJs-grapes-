@@ -262,6 +262,6 @@ export function removeCurrencyTemp(total) {
     .replace("$", "")
     .replace(",", "")
     .replace("֏", "");
-  let result = convertSymbols.replace(/\s/g, "").slice(0, -2);
+  let result = convertSymbols.replace(/\s/g, "");
   return `${Number(result)} ֏`;
 }

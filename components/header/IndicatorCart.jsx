@@ -1,26 +1,27 @@
 // react
-import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import React, {useState, useEffect} from "react";
+import {toast} from "react-toastify";
 //moment convertor
 import moment from "moment-timezone";
 // third-party
 import classNames from "classnames";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import Link from "next/link";
-import { FailSvg } from "svg";
+import {FailSvg} from "svg";
 
 // application
 import AsyncAction from "../shared/AsyncAction";
 import Currency from "../shared/Currency";
 import Indicator from "./Indicator";
-import { CartFill, Cross10Svg } from "../../svg";
-import { cartRemoveItem } from "../../store/cart";
-import { url } from "../../services/utils";
-import { apiImageUrl } from "../../helper";
-import { useSelector } from "react-redux";
-import { FormattedMessage } from "react-intl";
-import { removeCurrencyTemp } from '../../services/utils'
+import {CartFill, Cross10Svg} from "../../svg";
+import {cartRemoveItem} from "../../store/cart";
+import {url} from "../../services/utils";
+import {apiImageUrl} from "../../helper";
+import {useSelector} from "react-redux";
+import {FormattedMessage} from "react-intl";
+import {removeCurrencyTemp} from '../../services/utils'
 import Image from "components/hoc/Image";
+
 function IndicatorCart(props) {
   const cartToken = useSelector((state) => state.cartToken);
   const customer = useSelector((state) => state.customer);
@@ -28,31 +29,40 @@ function IndicatorCart(props) {
   const selectedData = useSelector((state) => state.locale.code);
   const coreConfigs = useSelector((state) => state.general.coreConfigs);
 
-  const { cartRemoveItem } = props;
+  const {cartRemoveItem} = props;
   const [open, setOpen] = useState(false);
   const [isAllow, setIsAllow] = useState(true)
   let dropdown;
   let totals;
   const CONFIG = "simple";
-  useEffect(() => { }, [selectedData]);
+  useEffect(() => {
+  }, [selectedData]);
 
   const isCheckAllow = () => {
     setOpen(!open)
-    if(coreConfigs.catalog_products_guest_checkout_allow_guest_checkout == "0" && customer.token === "") {
+    if (coreConfigs.catalog_products_guest_checkout_allow_guest_checkout == "0" && customer.token === "") {
       toast(
-          <span className="d-flex faild-toast-fms">
-                <FailSvg />
+        <span className="d-flex faild-toast-fms">
+                <FailSvg/>
                 <FormattedMessage
-                    id="sign-or-register"
-                    defaultMessage="This product is not available"
+                  id="sign-or-register"
+                  defaultMessage="This product is not available"
                 />
               </span>,
-          {
-            hideProgressBar: true,
-            className: "wishlist-toast product-not-available-fms",
-          }
+        {
+          hideProgressBar: true,
+          className: "wishlist-toast product-not-available-fms",
+        }
       );
     }
+  }
+
+  const calcCartTotal = (total) => {/* retur current total or caclulate current total with shipingRate |calcCartTotal()|*/
+    let convertSymbols = total.toString().replace("$", "").replace(",", '')
+
+    let current = convertSymbols.replace(/\s/g, '').slice(0, -2)
+    return `${Number(current)} ֏`
+
   }
 
   const items = cart?.items.map((item, I) => {
@@ -93,7 +103,7 @@ function IndicatorCart(props) {
         action={() => {
           return cartRemoveItem(cartItemId, item, cartToken, customer); // cartItemId
         }}
-        render={({ run, loading }) => {
+        render={({run, loading}) => {
           const classes = classNames(
             "dropcart__product-remove btn-light btn-sm btn-svg-icon",
             {
@@ -103,7 +113,7 @@ function IndicatorCart(props) {
 
           return (
             <button type="button" onClick={run} className={classes}>
-              <Cross10Svg />
+              <Cross10Svg/>
             </button>
           );
         }}
@@ -128,7 +138,7 @@ function IndicatorCart(props) {
     if (!product?.special_price && CONFIG === "configurable") {
       price = (
         <div className="product-card__prices">
-          <Currency value={product.formatted_price} />
+          <Currency value={product.formatted_price}/>
         </div>
       );
     } else if (
@@ -139,12 +149,12 @@ function IndicatorCart(props) {
       price = (
         <div className="product-card__prices">
           <span className="product-card__new-price">
-            <Currency value={Number(product.special_price).toFixed(0)} />
+            <Currency value={Number(product.special_price).toFixed(0)}/>
             <span className="product-card__symbol">֏</span>
           </span>
           {
             <span className="product-card__old-price">
-              <Currency value={Number(product.price).toFixed(0)} />
+              <Currency value={Number(product.price).toFixed(0)}/>
               <span className="product-card__symbol">֏</span>
             </span>
           }
@@ -154,63 +164,63 @@ function IndicatorCart(props) {
       price = (
         <div className="product-card__prices">
           <span className="product-card__new-price">
-            <Currency value={Number(product.special_price).toFixed(0)} />
+            <Currency value={Number(product.special_price).toFixed(0)}/>
             <span className="product-card__symbol">֏</span>
           </span>
           {
             <span className="product-card__old-price">
-              <Currency value={Number(product.price).toFixed(0)} />
+              <Currency value={Number(product.price).toFixed(0)}/>
               <span className="product-card__symbol">֏</span>
             </span>
           }
         </div>
       );
     }
-    //comented by Manvel in David code tis code actual in this case in my working time
-    // else if (
-    //   (date_now > date_from &&
-    //     date_now < date_to &&
-    //     product.special_price < product.price &&
-    //     product.special_price) ||
-    //   (product.special_price_to == null &&
-    //     date_from < date_now &&
-    //     product.special_price < product.price &&
-    //     product.special_price) ||
-    //   (product.special_price_from == null &&
-    //     date_to > date_now &&
-    //     product.special_price < product.price &&
-    //     product.special_price) ||
-    //   (product.special_price_to == null &&
-    //     product.special_price_from == null &&
-    //     product.special_price < product.price &&
-    //     product.special_price) ||
-    //   (product.special_price &&
-    //     product.special_price_to == null &&
-    //     product.special_price_from == null)
-    // ) {
-    //   /*
-    //   need to refactor this is temporary version
-    //  */
-    //   price = (
-    //       <div className="product-card__prices">
-    //         <span className="product-card__new-price_old_value">
-    //          <span className="product-card__symbol">֏</span>
-    //            <Currency value={Number(product.price).toFixed(0)} />
-    //         </span>
-    //       </div>
-    //   );
+      //comented by Manvel in David code tis code actual in this case in my working time
+      // else if (
+      //   (date_now > date_from &&
+      //     date_now < date_to &&
+      //     product.special_price < product.price &&
+      //     product.special_price) ||
+      //   (product.special_price_to == null &&
+      //     date_from < date_now &&
+      //     product.special_price < product.price &&
+      //     product.special_price) ||
+      //   (product.special_price_from == null &&
+      //     date_to > date_now &&
+      //     product.special_price < product.price &&
+      //     product.special_price) ||
+      //   (product.special_price_to == null &&
+      //     product.special_price_from == null &&
+      //     product.special_price < product.price &&
+      //     product.special_price) ||
+      //   (product.special_price &&
+      //     product.special_price_to == null &&
+      //     product.special_price_from == null)
+      // ) {
+      //   /*
+      //   need to refactor this is temporary version
+      //  */
+      //   price = (
+      //       <div className="product-card__prices">
+      //         <span className="product-card__new-price_old_value">
+      //          <span className="product-card__symbol">֏</span>
+      //            <Currency value={Number(product.price).toFixed(0)} />
+      //         </span>
+      //       </div>
+      //   );
     // }
     else if (product?.product?.type === "configurable") {
       price = (
         <div className="product-card__prices">
-          <Currency value={Number(product.min_price).toFixed(0)} />
+          <Currency value={Number(product.min_price).toFixed(0)}/>
           <span className="product-card__symbol">֏</span> {/* temporary version */}
         </div>
       );
     } else {
       price = (
         <div className="product-card__prices">
-          <Currency value={Number(product.price).toFixed(0)} />
+          <Currency value={Number(product.price).toFixed(0)}/>
           <span className="product-card__symbol">֏</span>{/* temporary version */}
         </div>
       );
@@ -241,7 +251,7 @@ function IndicatorCart(props) {
           className={`${cart.items.length > 3
             ? "dropcart__products-list_scroll"
             : "dropcart__products-list"
-            }`}
+          }`}
         >
           {items}
         </div>
@@ -249,16 +259,16 @@ function IndicatorCart(props) {
         <div className="dropcart__totals">
           <table>
             <tbody>
-              {totals}
-              <tr>
-                <th>
-                  <FormattedMessage id="total" defaultMessage="Total" />{" "}
-                </th>
-                <td>
-                  {removeCurrencyTemp(cart.total)}  {/* temporary version */}
-                  {/* <Currency value={cart.total} /> */}
-                </td>
-              </tr>
+            {totals}
+            <tr>
+              <th>
+                <FormattedMessage id="total" defaultMessage="Total"/>{" "}
+              </th>
+              <td>
+                {calcCartTotal(cart.total)} {/* temporary version */}
+                {/* <Currency value={cart.total} /> */}
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -270,17 +280,18 @@ function IndicatorCart(props) {
                 className="btn btn-orange rounded-pills"
                 onClick={() => setOpen(!open)}
               >
-                <FormattedMessage id="cart" defaultMessage="Cart" />
+                <FormattedMessage id="cart" defaultMessage="Cart"/>
               </span>
             </a>
           </Link>
-          <Link href={coreConfigs.catalog_products_guest_checkout_allow_guest_checkout == "0" && customer.token === "" ? "" :  "/shop/checkout"}>
+          <Link
+            href={coreConfigs.catalog_products_guest_checkout_allow_guest_checkout == "0" && customer.token === "" ? "" : "/shop/checkout"}>
             <a>
               <span
                 className="btn btn-orange rounded-pills dropcart__buttons-link"
                 onClick={isCheckAllow}
               >
-                <FormattedMessage id="checkout" defaultMessage="Checkout" />
+                <FormattedMessage id="checkout" defaultMessage="Checkout"/>
               </span>
             </a>
           </Link>
@@ -313,8 +324,8 @@ function IndicatorCart(props) {
       open={open}
       dropdown={dropdown}
       value={cart.quantity}
-      icon={<CartFill />}
-      title={<FormattedMessage id="cart" defaultMessage="Cart" />}
+      icon={<CartFill/>}
+      title={<FormattedMessage id="cart" defaultMessage="Cart"/>}
     />
   );
 }
