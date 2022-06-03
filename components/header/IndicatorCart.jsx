@@ -60,7 +60,7 @@ function IndicatorCart(props) {
   const calcCartTotal = (total) => {/* retur current total or caclulate current total with shipingRate |calcCartTotal()|*/
     let convertSymbols = total.toString().replace("$", "").replace(",", '')
 
-    let current = convertSymbols.replace(/\s/g, '').slice(0, -2)
+    let current = convertSymbols.replace(/\s/g, '').slice(0, -3)
     return `${Number(current)} ֏`
 
   }
