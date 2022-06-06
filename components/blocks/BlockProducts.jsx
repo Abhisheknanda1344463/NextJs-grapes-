@@ -61,7 +61,7 @@ function BlockProducts(props) {
       schemaProducts.offers.push({
         "@type": "Offer",
         sku: product.sku,
-        image: product.base_imag.medium_image_url,
+        image: product?.base_imag?.medium_image_url,
         name: product.name,
         description: product.meta_description || product.description,
         price: product.special_price || product.price,
@@ -93,7 +93,7 @@ function BlockProducts(props) {
             schemaProducts.offers.push({
               "@type": "Offer",
               sku: product.sku,
-              image: product.base_imag.medium_image_url,
+              image: product?.base_imag?.medium_image_url,      
               name: product.name,
               description: product.meta_description || product.description,
               price: product.special_price || product.price,
