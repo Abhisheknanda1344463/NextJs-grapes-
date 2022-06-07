@@ -265,8 +265,8 @@ function IndicatorCart(props) {
                 <FormattedMessage id="total" defaultMessage="Total"/>{" "}
               </th>
               <td>
-                {calcCartTotal(cart.total)} {/* temporary version */}
-                {/* <Currency value={cart.total} /> */}
+                {/*{calcCartTotal(cart.total)} /!* temporary version *!/*/}
+                 <Currency value={cart.total} />
               </td>
             </tr>
             </tbody>

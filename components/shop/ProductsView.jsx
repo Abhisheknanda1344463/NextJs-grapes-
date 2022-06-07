@@ -85,7 +85,7 @@ function ProductsView(props) {
   }
 
   // const arrayMeta = []
-  const productsListItems = productsList['data'].map((product, index) => {
+  const productsListItems = productsList.map((product, index) => {
     // console.log(productsList.data, "productList data in category")
     // arrayMeta.push(<meta name="description" content={product.description}/>)
     // arrayMeta.push(<meta name="name" content={product.name}/>)
@@ -159,7 +159,7 @@ function ProductsView(props) {
             defaultMessage="Try to reset filters"
           />
         </div>
-        {productsList.data.length == 0 &&
+        {productsList.length == 0 &&
         Object.keys(filters).length == 0 ? null : (
           <button
             type="button"

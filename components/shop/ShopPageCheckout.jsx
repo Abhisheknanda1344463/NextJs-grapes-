@@ -75,6 +75,7 @@ class ShopPageCheckout extends React.Component {
       newBillingAddress: false,
       input: null,
       isCallStripePayment: false,
+      texCode: '',
 
       billStreet: '',
       billPhone: '',
@@ -185,7 +186,6 @@ class ShopPageCheckout extends React.Component {
               res.data[0]?.first_name && res.data[0]?.last_name && res.data[0]?.state &&
               res.data[0]?.state && res.data[0]?.address1[1]
             ) {
-
               let billing = {
                 use_for_shipping: true,
                 save_as_address: true,
@@ -196,12 +196,13 @@ class ShopPageCheckout extends React.Component {
                 last_name: res.data[0]?.last_name,
                 city: res.data[0]?.city,
                 country: res.data[0]?.country_name,
-                state: res.data[0]?.state || res.data[0]?.country,
+                state: res.data[0]?.state_code || res.data[0]?.country,
                 postcode: res.data[0]?.postcode,
                 phone: res.data[0]?.phone,
                 company_name: "",
                 additional: "",
               }
+
               const shipping = {
                 address1: [res.data[0]?.address1[0]],
                 address2: [res.data[0]?.address1[1]],
@@ -217,7 +218,6 @@ class ShopPageCheckout extends React.Component {
                   token: this.state.customer.token,
                 }),
               }
-              console.log(options, '55695656565');
 
               fetch(apiUrlWithStore('/api/checkout/save-address'), options)
                 .then((res) => res.json())
@@ -344,25 +344,6 @@ class ShopPageCheckout extends React.Component {
         })
         .catch((error) => console.log(error))
     }
-    // if (this.state.addCupone || methods == 'DELETE') {
-    //   fetch(apiUrlWithStore(`/api/checkout/cart/coupon`, requestOptions))
-    //     .then((response) => response.json())
-    //     .then((res) => {
-    //       if (res.message) {
-    //         if (res.success) {
-    //           toast.success(`${res.message}`, { hideProgressBar: true })
-    //           this.props.cartUpdateData({
-    //             coupon_name: res.CouponName,
-    //           })
-
-    //           this.getCartCustomer()
-    //         } else {
-    //           toast.error(`${res.message}`, { hideProgressBar: true })
-    //         }
-    //       }
-    //     })
-    //     .catch((error) => console.log(error))
-    // }
   }
 
   renderTotals() {
@@ -400,26 +381,6 @@ class ShopPageCheckout extends React.Component {
     return (
       <div className="coupon-code">
         <div className="coupon-code__list">
-          {/* <FormattedMessage id="coupon.code" defaultMessage="Coupon Code">
-            {(placeholder) => (
-              <input
-                type="text"
-                name="couponcode"
-                placeholder={placeholder}
-                value={
-                  this.props.cart.coupon_code
-                    ? this.props.cart.coupon_code
-                    : this.state.addCupone
-                }
-                className={
-                  this.props.cart.coupon_code || this.state.addCupone
-                    ? "dark-opacity form-control checkout-input"
-                    : "form-control checkout-input cupon-input-fms "
-                }
-                onChange={(e) => this.setState({ addCupone: e.target.value })}
-              />
-            )}
-          </FormattedMessage> */}
           <TextField
             id="outlined-email-input"
             label={
@@ -444,7 +405,6 @@ class ShopPageCheckout extends React.Component {
             }
             className="coupon-code-button-apply"
           >
-            {/* <FormattedMessage id="Apply" defaultMessage="Apply" /> */}
             {this.props.cart.coupon_code ? (
               <FormattedMessage id="remove" defaultMessage="Remove" />
             ) : (
@@ -457,11 +417,6 @@ class ShopPageCheckout extends React.Component {
   }
 
   renderCuponeName() {
-    // let couponname = this.props.cart.coupon_code ? (
-    //   <th>{this.props.cart.coupon_name}</th>
-    // ) : (
-    //   ''
-    // )
     let coupondiscount = this.props.cart.coupon_code && this.props.cart.coupon_discount > 0 ? (
       <td className="coupon-content" colSpan={2}>
         <div className="coupon-content-block">
@@ -560,7 +515,7 @@ class ShopPageCheckout extends React.Component {
             <td className="responsive-checkout-text">
               {this.calcCartTotal(cart.total, this.state.shippingMethodRate)}
               {/*comented Ny Manvel We can use this component when check currency */}
-              {/* <Currency value={cart.total} /> */}
+              {/* <Currency value={cart.total} />*/}
             </td>
           </tr>
         </tfoot>
@@ -1078,10 +1033,11 @@ class ShopPageCheckout extends React.Component {
 
 
   handleInputChange = (object) => {
-    let name, value
+    let name, value, code
     name = object?.target?.name || object.name
     value = object?.target?.value || object.value
-    //Sorry For Duplicate  in this Part I duiscuss with Artur and He appreoved. NEED TO REFACTOR all COMPONENTS 
+
+    //Sorry For Duplicate  in this Part I duiscuss with Artur and He appreoved. NEED TO REFACTOR all COMPONENTS
 
     const headers = {
       Accept: 'application/json',
@@ -1100,7 +1056,7 @@ class ShopPageCheckout extends React.Component {
         last_name: this.state.addressOption.last_name,
         city: this.state.addressOption.city,
         country: this.state.addressOption.country.code,
-        state: this.state.state || this.state.country,
+        state: this.state.texCode || this.state.country.code,
         postcode: this.state.addressOption.postcode,
         phone: this.state.addressOption.phone,
         // apartment: this.state.addressOption.apartment,
@@ -1167,7 +1123,7 @@ class ShopPageCheckout extends React.Component {
             last_name: this.state.lname,
             city: this.state.city,
             country: this.state.country.code,
-            state: this.state.state || this.state.country,
+            state: this.state.texCode || this.state.country.code,
             postcode: this.state.postal,
             phone: this.state.phone,
             // apartment: this.state.apartment,
@@ -1185,7 +1141,7 @@ class ShopPageCheckout extends React.Component {
             last_name: this.state.lname,
             city: this.state.city,
             country: this.state.country.code || this.state.country_name,
-            state: this.state.state || this.state.country,
+            state: this.state.texCode || this.state.country.code,
             postcode: this.state.postal,
             phone: this.state.phone,
             // apartment: this.state.apartment,
@@ -1204,7 +1160,7 @@ class ShopPageCheckout extends React.Component {
           last_name: this.state.lname,
           city: this.state.city,
           country: this.state.country.code,
-          state: this.state.state || this.state.country,
+          state: this.state.texCode || this.state.country.code,
           postcode: this.state.postal,
           phone: this.state.phone,
           // apartment: this.state.apartment,
@@ -1244,15 +1200,13 @@ class ShopPageCheckout extends React.Component {
         }),
       }
     }
-
     //PLEAUSE REFACTOR THAT CODE WHEN WE CAN DO IT SORRY FOR THAT TACKLE I did not want to do this
     let info = JSON.parse(options.body)
-
     if (
       (info.billing.address1.length > 0 || info.shipping.address1.length > 0) && info.billing.address2.length && info.billing.city != "" &&
       info.billing.country != "" && info.billing.email != "" && info.billing.first_name != "" &&
       info.billing.last_name != "" && (info.billing.phone != "" || info.shipping.phone != "") && info.billing.save_as_address &&
-      info.billing.state != "" && info.billing.use_for_shipping
+      info.billing.use_for_shipping
     ) {
       fetch(apiUrlWithStore('/api/checkout/save-address'), options)
         .then((res) => res.json())
@@ -1266,11 +1220,9 @@ class ShopPageCheckout extends React.Component {
           console.log(err);
         })
     }
-
     this.setState({
       state: value
     })
-
     this.setState({
       [name]: value,
     })
@@ -1285,6 +1237,11 @@ class ShopPageCheckout extends React.Component {
         })
       }
     })
+    if(object.code && object.code != undefined) {
+        this.setState({
+          texCode: object.code
+        })
+    }
     this.setState({
       errors: {
         ...this.state.errors,

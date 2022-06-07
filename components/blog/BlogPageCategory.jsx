@@ -1,17 +1,16 @@
 // react
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useMemo} from "react";
 import {useEffect} from "react";
 import {useSelector} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {Helmet} from "react-helmet-async";
 import queryString from "query-string";
 import Head from "next/head";
-
+import Pagination from "../NewPagination";
 // application
 import shopApi from "../../api/shop";
 import BlockLoader from "../blocks/BlockLoader";
 import PageHeader from "../shared/PageHeader";
-import Pagination from "../shared/Pagination";
 import PostCard from "../shared/PostCard";
 import theme from "../../data/theme";
 import {url, apiUrlWithStore} from "../../helper";
@@ -30,7 +29,8 @@ const BlogPageCategory = (props) => {
   const [page, setPage] = useState(props.blog.current_page);
   const [blogs, setBlogs] = useState(props.blog.data);
   const [total, setTotal] = useState(props.blog.total);
-  // console.log(props, "props in blopg page category")
+  const [currentPage, setCurrentPage] = useState(1);
+  let PageSize = 9;
 
   const prevLocaleCodeRef = useRef();
   const prevPageRef = useRef();
@@ -86,6 +86,7 @@ const BlogPageCategory = (props) => {
   const handlePageChange = (page) => {
     setPage(page);
   };
+  console.log(props.blog.data.length, 'props.blog.data.length')
 
   const {layout, sidebarPosition, dbName, domain} = props;
 
@@ -105,9 +106,14 @@ const BlogPageCategory = (props) => {
     "url": `${url}/page/blogs`,
     "offers": [],
   };
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return props.blog.data.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
+
   const logoPath = `configuration/logo/logo.webp`;
-  const postsList = props.blog.data.map((post) => {
-    console.log(post, "post in  blog page category")
+  const postsList = currentTableData.map((post) => {
     // let pos = post.translations.find(item => item.locale === selectedData);
     // pos.image=post.image
     const postLayout = {
@@ -161,16 +167,25 @@ const BlogPageCategory = (props) => {
                     <div className="posts-list__body">{postsList}</div>
                   </div>
                   <div className="posts-view__pagination">
-                    {postsList && postsList.length < 20 ? (
-                      <></>
-                    ) : (
-                      <Pagination
-                        current={+page}
-                        siblings={2}
-                        total={total}
-                        onPageChange={handlePageChange}
-                      />
-                    )}
+                    { currentTableData &&
+                        <Pagination
+                            className="pagination-bar"
+                            currentPage={currentPage}
+                            totalCount={props.blog.data.length}
+                            pageSize={PageSize}
+                            onPageChange={page => setCurrentPage(page)}
+                        />
+                    }
+                    {/*{postsList && postsList.length < 20 ? (*/}
+                    {/*  <></>*/}
+                    {/*) : (*/}
+                    {/*  <Pagination*/}
+                    {/*    current={+page}*/}
+                    {/*    siblings={2}*/}
+                    {/*    total={total}*/}
+                    {/*    onPageChange={handlePageChange}*/}
+                    {/*  />*/}
+                    {/*)}*/}
                   </div>
                 </div>
               </div>

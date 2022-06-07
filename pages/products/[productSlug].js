@@ -114,7 +114,6 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     selectedCurency = currency;
   }
 
-  console.log(req.query.currencies, ' req.query.currencies______________________________');
 
   ////GETTING DOMAIN
   if (dbName.includes(".zegashop.com")) {

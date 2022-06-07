@@ -5,6 +5,7 @@ import React, {
   useState,
   useRef,
   useLayoutEffect,
+  useMemo,
 } from "react";
 
 // third-party
@@ -19,7 +20,7 @@ import { FormattedMessage } from "react-intl";
 import shopApi from "../../api/shop";
 import { url } from "../../services/utils";
 import ProductsView from "./ProductsView";
-import Pagination from "../shared/Pagination";
+import Pagination from "../NewPagination";
 import PageHeader from "../shared/PageHeader";
 import BlockLoader from "../blocks/BlockLoader";
 import CategorySidebar from "./CategorySidebar";
@@ -278,7 +279,8 @@ function ShopPageCategory(props) {
   const [catTitle, setTitle] = useState(props.categoryTitle);
   const { page: selectedPage } = router.query;
   const [page, setPage] = useState(selectedPage);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  let PageSize = 16;
   const offcanvas = columns === 3 ? "mobile" : "always";
   const prevPageRef = useRef();
   const prevCatIdRef = useRef();
@@ -353,6 +355,13 @@ function ShopPageCategory(props) {
     setMinPrice(allProduct.dispatches.setInitialMinPrice);
   }, [router.locale, categorySlug, state.options]);
 
+
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return productsList.data.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
+
   if (state.productsListIsLoading && !productsList) {
     return <BlockLoader />;
   }
@@ -415,7 +424,7 @@ function ShopPageCategory(props) {
       catID={catID}
       categorySlug={categorySlug}
       /// isLoading={state.productsListIsLoading}
-      productsList={productsList}
+      productsList={currentTableData}
       options={state.options}
       filters={state.filters}
       dispatch={dispatch}
@@ -525,19 +534,21 @@ function ShopPageCategory(props) {
         <div className="block">
           <div className="posts-view">
             <div className="posts-view__pagination">
-              {productsList &&
-              //////FIXME CHANGE TO LIMIT
-              productsList.data.length < 20 &&
-              page == 1 ? (
-                <></>
-              ) : (
-                <Pagination
-                  current={page}
-                  siblings={2}
-                  total={props.productsList.total}
-                  onPageChange={(nextPage) => setPage(nextPage)}
+              { currentTableData &&
+                  <Pagination
+                    className="pagination-bar"
+                    currentPage={currentPage}
+                    totalCount={productsList.data.length}
+                    pageSize={PageSize}
+                    onPageChange={page => setCurrentPage(page)}
                 />
-              )}
+              }
+              {/*  // <Pagination*/}
+              {/*  //   current={page}*/}
+              {/*  //   siblings={2}*/}
+              {/*  //   total={props.productsList.total}*/}
+              {/*  //   onPageChange={(nextPage) => setPage(nextPage)}*/}
+              {/*  // />*/}
               {/*<Pagination*/}
               {/*  current={page}*/}
               {/*  siblings={2}*/}
