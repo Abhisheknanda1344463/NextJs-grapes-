@@ -120,14 +120,15 @@ function Layout(props) {
           .then((responce) => {
             if (responce.status === 469) {
               setSuspend((suspend) => !suspend);
-            } else responce.json();
-          })
-          .then((res) => {
-            if (res.api_token) {
-              props.AddCartToken(res.api_token);
-            }
-          })
-          .catch((err) => console.error(err));
+            } else {
+              let data = responce.json()
+              data.then(res => {
+                if (res.api_token) {
+                  props.AddCartToken(res.api_token);
+                }
+              })
+            };
+          }) .catch((err) => console.error(err));
     }
   }, []);
 

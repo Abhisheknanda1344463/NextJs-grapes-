@@ -245,7 +245,7 @@ export async function getServerSideProps({
       dbName: dbName,
       catID: categoryId,
       window: null,
-      limit: 18,
+      limit: 100,
     })
     .then((responseProductList) => {
       dispatches = {

@@ -68,7 +68,7 @@ export async function getServerSideProps({ locale, locales, req, res, query }) {
     // });
     content = await fetch(
       domainUrl(
-        `${dbName}/db/cms/blogs?locale=${selectedLocale}&page=${page}&limit=${18}`
+        `${dbName}/db/cms/blogs?locale=${selectedLocale}&page=${page}&limit=${100}`
       )
     );
 

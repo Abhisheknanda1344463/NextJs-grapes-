@@ -30,7 +30,22 @@ function ShippingAddress({ passOption, handleInputChange, state }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    handleInputChange({ name, value });
+    let countryCode;
+    let code;
+    if (countryList && state.country.code) {
+      for (let i = 0; i <= countryList.length; i++) {
+        if (countryList[i] && countryList[i].name == state.country.name) {
+          countryCode = countryList[i].code;
+        }
+      }
+    }
+      countryStates.data[countryCode].forEach(item => {
+        if (item.default_name === value) {
+          code = item.code
+          handleInputChange({ name, value, code});
+        }
+      })
+      handleInputChange({ name, value });
 
     // setInput({
     //   ...input,

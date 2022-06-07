@@ -518,8 +518,8 @@ const ShopPageCart = (props) => {
                   />{' '}
                 </div>
                 <div>
-                  {removeCurrencyTemp(cart.total)}  {/* temporary version */}
-                  {/* <Currency value={cart.total} /> */}
+                  {/*{removeCurrencyTemp(cart.total)}  /!* temporary version *!/*/}
+                   <Currency value={cart.total} />
                 </div>
               </div>
 

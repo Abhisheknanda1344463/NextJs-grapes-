@@ -57,7 +57,7 @@ const shopApi = {
   },
   getBlogs: ({ locale, page, limit }) => {
     return fetch(
-      `${url}/db/cms/blogs?locale=${locale}&page=${page}&limit=${limit}`
+      `${url}/db/cms/blogs?locale=${locale}&page=${page}&limit=${100}`
     ).then((responce) => responce.json());
   },
   getPagesWithoutBlog: ({ pageSlug, locale }) => {
@@ -312,12 +312,12 @@ const shopApi = {
       return fetch(
         `${
           dbName ? `https://` + dbName : url
-        }/db/products?limit=20&currency=${currency}&limit=20&locale=${
+        }/db/products?limit=100&currency=${currency}&limit=100&locale=${
           options.locale
         }${categoryId ? `&category_id=${categoryId}` : ""}`
       ).then((responce) => responce.json());
     } else {
-      let string = `limit=20`;
+      let string = `limit=100`;
 
       if (index > 0 && options?.page) {
         string += `&page=${options?.page}`;
