@@ -32,6 +32,8 @@ import Suspend from '../pages/suspend'
 // import ReactGA from "react-ga";
 // import { ModalFooter } from "reactstrap";
 
+let a = "tiko";
+
 function Layout(props) {
   const {
     headerLayout,
