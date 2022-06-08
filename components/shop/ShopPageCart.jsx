@@ -13,7 +13,7 @@ import Currency from '../shared/Currency'
 import InputNumber from '../shared/InputNumber'
 import PageHeader from '../shared/PageHeader'
 import { cartRemoveItem, cartUpdateQuantities } from '../../store/cart'
-import { Cross12Svg } from '../../svg'
+import { Cross12Svg, FailSvg } from '../../svg'
 import { ArrowBackSvg, CartTrash } from '../../svg'
 import { BackArrow } from '../../svg'
 import { url, removeCurrencyTemp } from '../../services/utils'
@@ -24,7 +24,7 @@ import moment from 'moment-timezone'
 import theme from '../../data/theme'
 import { urlLink } from '../../helper'
 import Image from 'components/hoc/Image'
-
+import {toast} from "react-toastify";
 
 
 const ShopPageCart = (props) => {
@@ -36,6 +36,24 @@ const ShopPageCart = (props) => {
   const customer = useSelector(state => state.customer)
   const cartToken = useSelector(state => state.cartToken)
   const bOrder = useSelector(state => state.general.bOrder)
+  const coreConfigs = useSelector((state) => state.general.coreConfigs);
+  const isCheckAllow = () => {
+    if (coreConfigs.catalog_products_guest_checkout_allow_guest_checkout == "0" && customer.token === "") {
+      toast(
+          <span className="d-flex faild-toast-fms">
+                <FailSvg/>
+                <FormattedMessage
+                    id="sign-or-register"
+                    defaultMessage="Please sign in or register"
+                />
+              </span>,
+          {
+            hideProgressBar: true,
+            className: "wishlist-toast product-not-available-fms",
+          }
+      );
+    }
+  }
 
   const dispatch = useDispatch()
 
@@ -528,10 +546,12 @@ const ShopPageCart = (props) => {
           </div>
           <div className="cart__totals-td">
             <Link
-              href="/shop/checkout"
+              href={coreConfigs.catalog_products_guest_checkout_allow_guest_checkout == "0" && customer.token === "" ? "/shop/cart" : "/shop/checkout"}
               className="btn text-light btn-orange btn-block  btn-lg cart__checkout-button f16"
             >
-              <a className="btn text-light btn-orange btn-block  btn-lg cart__checkout-button f16">
+
+
+              <a className="btn text-light btn-orange btn-block  btn-lg cart__checkout-button f16" onClick={isCheckAllow}>
                 <FormattedMessage id="checkout" defaultMessage="Checkout" />
               </a>
             </Link>
