@@ -23,6 +23,7 @@ import { useRouter } from "next/router";
 import useWindowWidth from "../hooks/useWindowWidth";
 import AccountResetPassword from "./account/AccountResetPassword";
 import PopupModal from "./popupComponents/PopupModal";
+import Suspend from '../pages/suspend'
 // import UpSell from "./popupComponents/UpSellCrossel";
 // import UpSellCrossel from "./popupComponents/UpSellCrossel";
 
@@ -50,6 +51,7 @@ function Layout(props) {
   const dbName = useSelector((state) => state.general.dbName);
   const selectedData = useSelector((state) => state.locale.code);
   const upDomain = domain.charAt(0).toUpperCase() + domain.slice(1);
+  const [isPageLoading, setIsPageLoading] = useState(false)
   useEffect(() => {
     if (customJs) {
       const jsCode = scriptsfm(customJs);
@@ -115,12 +117,15 @@ function Layout(props) {
   //fix this bug after checking issue
 
   useEffect(() => {
+    setIsPageLoading(true)
     if (!props?.cartToken?.cartToken) {
       fetch(`/api/checkout/cart/token`)
           .then((responce) => {
             if (responce.status === 469) {
+              setIsPageLoading(false)
               setSuspend((suspend) => !suspend);
             } else {
+              setIsPageLoading(false)
               let data = responce.json()
               data.then(res => {
                 if (res.api_token) {
@@ -139,11 +144,12 @@ function Layout(props) {
     isMobile = true;
   }
 
+  
   return (
       <>
         {suspend ? (
             <>
-              <Suspend DomainName={`${dbName}`} />
+              <Suspend domainName={`${dbName}`} />
             </>
         ) : (
             <>

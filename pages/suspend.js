@@ -1,8 +1,10 @@
 import suspendImage from "../images/suspend.png";
 import Image from "next/image";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
-const Suspend = ({ DomainName }) => {
+const Suspend = ({domainName}) => {
+    const dbName = useSelector((state) => state.general.dbName);
     return (
         <div className="SuspendMain">
             <div className="SuspendBody container p-0">
@@ -14,7 +16,7 @@ const Suspend = ({ DomainName }) => {
                     </div>
 
                     <h1>
-                        {DomainName} <br />
+                        {domainName} <br />
                         is no longer aviable
                     </h1>
 

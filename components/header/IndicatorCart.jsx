@@ -46,7 +46,7 @@ function IndicatorCart(props) {
                 <FailSvg/>
                 <FormattedMessage
                   id="sign-or-register"
-                  defaultMessage="This product is not available"
+                  defaultMessage="Please sign in or register"
                 />
               </span>,
         {
