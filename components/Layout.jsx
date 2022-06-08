@@ -32,6 +32,10 @@ import Suspend from '../pages/suspend'
 // import ReactGA from "react-ga";
 // import { ModalFooter } from "reactstrap";
 
+
+
+let b = 'TEST'
+
 function Layout(props) {
   const {
     headerLayout,
@@ -120,20 +124,20 @@ function Layout(props) {
     setIsPageLoading(true)
     if (!props?.cartToken?.cartToken) {
       fetch(`/api/checkout/cart/token`)
-          .then((responce) => {
-            if (responce.status === 469) {
-              setIsPageLoading(false)
-              setSuspend((suspend) => !suspend);
-            } else {
-              setIsPageLoading(false)
-              let data = responce.json()
-              data.then(res => {
-                if (res.api_token) {
-                  props.AddCartToken(res.api_token);
-                }
-              })
-            };
-          }) .catch((err) => console.error(err));
+        .then((responce) => {
+          if (responce.status === 469) {
+            setIsPageLoading(false)
+            setSuspend((suspend) => !suspend);
+          } else {
+            setIsPageLoading(false)
+            let data = responce.json()
+            data.then(res => {
+              if (res.api_token) {
+                props.AddCartToken(res.api_token);
+              }
+            })
+          };
+        }).catch((err) => console.error(err));
     }
   }, []);
 
@@ -144,65 +148,65 @@ function Layout(props) {
     isMobile = true;
   }
 
-  
+
   return (
-      <>
-        {suspend ? (
-            <>
-              <Suspend domainName={`${dbName}`} />
-            </>
-        ) : (
-            <>
-              <div>
-                {/*<Head>*/}
-                {/*<title>{`${upDomain}`}</title>*/}
-                {/*<meta*/}
-                {/*  name="description"*/}
-                {/*  content={theme.fullName}*/}
-                {/*  data-react-helmet={true}*/}
-                {/*/>*/}
-                {/*<link rel="canonical" href={`${upDomain}`} />*/}
-                {/*<meta name="twitter:card" content="summary_large_image" />*/}
-                {/*<meta property="og:description" content={`${theme.fullName}`} />*/}
-                {/*<meta property="og:title" name="title" content={`${theme.fullName}`} />*/}
-                {/*<meta*/}
-                {/*  property="og:keywords"*/}
-                {/*  name="keywords"*/}
-                {/*  content={`${theme.fullName}`}*/}
-                {/*/>*/}
+    <>
+      {suspend ? (
+        <>
+          <Suspend domainName={`${dbName}`} />
+        </>
+      ) : (
+        <>
+          <div>
+            {/*<Head>*/}
+            {/*<title>{`${upDomain}`}</title>*/}
+            {/*<meta*/}
+            {/*  name="description"*/}
+            {/*  content={theme.fullName}*/}
+            {/*  data-react-helmet={true}*/}
+            {/*/>*/}
+            {/*<link rel="canonical" href={`${upDomain}`} />*/}
+            {/*<meta name="twitter:card" content="summary_large_image" />*/}
+            {/*<meta property="og:description" content={`${theme.fullName}`} />*/}
+            {/*<meta property="og:title" name="title" content={`${theme.fullName}`} />*/}
+            {/*<meta*/}
+            {/*  property="og:keywords"*/}
+            {/*  name="keywords"*/}
+            {/*  content={`${theme.fullName}`}*/}
+            {/*/>*/}
 
-                {/*<meta*/}
-                {/*  property="og:image"*/}
-                {/*  name="image"*/}
-                {/*  content={`${dbName}/storage${domain}/configuration/share_pic/share_pic.webp`}*/}
-                {/*/>*/}
-                {/*</Head>*/}
-                <ToastContainer autoClose={3000} />
-                {isMobile && <MobileMenu />}
-                <div className="site">
-                  {isMobile && (
-                      <header className="site__header d-lg-none">
-                        <MobileHeader />
-                      </header>
-                  )}
-                  <Topbar />
-                  <header className="site__header d-lg-block d-none postition-sticky">
-                    <Header layout={headerLayout} />
-                  </header>
+            {/*<meta*/}
+            {/*  property="og:image"*/}
+            {/*  name="image"*/}
+            {/*  content={`${dbName}/storage${domain}/configuration/share_pic/share_pic.webp`}*/}
+            {/*/>*/}
+            {/*</Head>*/}
+            <ToastContainer autoClose={3000} />
+            {isMobile && <MobileMenu />}
+            <div className="site">
+              {isMobile && (
+                <header className="site__header d-lg-none">
+                  <MobileHeader />
+                </header>
+              )}
+              <Topbar />
+              <header className="site__header d-lg-block d-none postition-sticky">
+                <Header layout={headerLayout} />
+              </header>
 
-                  <div className="site__body">{children}</div>
+              <div className="site__body">{children}</div>
 
-                  <footer className="site__footer">
-                    {isMobile && <MobileFooter />}
-                    <Footer />
-                  </footer>
+              <footer className="site__footer">
+                {isMobile && <MobileFooter />}
+                <Footer />
+              </footer>
 
-                  <PopupModal active={popUp} upCrosProd={upCrosProd} />
-                </div>
-              </div>
-            </>
-        )}
-      </>
+              <PopupModal active={popUp} upCrosProd={upCrosProd} />
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 }
 
